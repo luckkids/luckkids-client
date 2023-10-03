@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": ".",
+    "paths": {
+      "@components": ["src/components/index"],
+      "@constants": ["src/constants/index"],
+      "@design-system": ["src/design-system/index"],
+      "@queries": ["src/queries/index"],
+      "@utils": ["src/utils/index"],
+      "@types": ["src/types/index"],
+      "@recoil": ["src/recoil/index"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "App.tsx", "src/**/*.d.ts"],
+  "extends": "@tsconfig/react-native/tsconfig.json"
+}
