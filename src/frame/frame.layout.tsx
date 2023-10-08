@@ -1,8 +1,8 @@
 import React, { JSX } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, Text } from 'react-native';
+import { RecoilRoot } from 'recoil';
 import { Layout as L } from '@design-system';
 import { QueryClientProvider } from '@queries';
-import { RecoilRoot } from 'recoil';
 
 function FrameLayout(): JSX.Element {
   return (
