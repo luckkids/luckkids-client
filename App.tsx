@@ -8,17 +8,34 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import FrameLayout from './src/frame/frame.layout';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { QueryClientProvider } from '@queries';
+import { RecoilRoot } from 'recoil';
+import { RouteTabNavigator } from './src/route/route.tab.navigator';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={FrameLayout} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RecoilRoot>
+      <QueryClientProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={RouteTabNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Misstion"
+              component={RouteTabNavigator}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </QueryClientProvider>
+    </RecoilRoot>
   );
 }
 
