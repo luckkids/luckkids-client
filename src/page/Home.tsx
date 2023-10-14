@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
-import { FrameLayout } from '../frame/frame.layout';
 import { L } from '@design-system';
+import { FrameLayout } from '../frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
