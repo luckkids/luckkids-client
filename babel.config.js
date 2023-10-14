@@ -13,8 +13,11 @@ module.exports = {
           '@utils': './src/utils',
           '@types': './src/types',
           '@recoil': './src/recoil',
+          '@global-components': './src/global-components',
+          '@hooks': './src/hooks',
         },
       },
     ],
+    'react-native-reanimated/plugin',
   ],
 };
