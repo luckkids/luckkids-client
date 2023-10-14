@@ -9,9 +9,19 @@
       "@queries": ["src/queries/index"],
       "@utils": ["src/utils/index"],
       "@types": ["src/types/index"],
-      "@recoil": ["src/recoil/index"]
-    }
+      "@recoil": ["src/recoil/index"],
+      "@global-components/*": ["src/global-components/*"],
+      "@hooks/*": ["src/hooks/*"]
+    },
+    "types": ["styled-components-react-native"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "App.tsx", "src/**/*.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "App.tsx",
+    "src/**/*.d.ts",
+    "theme.d.ts"
+  ],
+  "exclude": ["node_modules", "babel.config.js"],
   "extends": "@tsconfig/react-native/tsconfig.json"
 }
