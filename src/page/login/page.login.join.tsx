@@ -1,6 +1,6 @@
 import React from 'react';
-import { FrameLayout } from '../../frame/frame.layout';
 import styled from 'styled-components/native';
+import { FrameLayout } from '../../frame/frame.layout';
 import { IPage } from '../../types/common/page.types';
 
 const S = {
