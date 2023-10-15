@@ -12,33 +12,33 @@ import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
-import { RouteTabNavigator } from './src/route/route.tab.navigator';
+import { DataStackScreen } from './src/data/data.stack.screen';
+import { IPage } from './src/types/common/page.types';
 
-const Stack = createNativeStackNavigator();
-
-function App(): JSX.Element {
+const App: React.FC<IPage> = () => {
+  const Stack = createNativeStackNavigator();
   return (
     <RecoilRoot>
       <ThemeProvider theme={Colors}>
         <QueryClientProvider>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen
-                name="Home"
-                component={RouteTabNavigator}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Misstion"
-                component={RouteTabNavigator}
-                options={{ headerShown: false }}
-              />
+              {DataStackScreen.map((item, i) => {
+                return (
+                  <Stack.Screen
+                    name={item.name}
+                    component={item.component}
+                    options={item.options}
+                    key={i}
+                  />
+                );
+              })}
             </Stack.Navigator>
           </NavigationContainer>
         </QueryClientProvider>
       </ThemeProvider>
     </RecoilRoot>
   );
-}
+};
 
 export default App;

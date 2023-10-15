@@ -4,9 +4,10 @@ import { Garden } from '../page/Garden';
 import { Home } from '../page/Home';
 import { Mission } from '../page/Mission';
 import { My } from '../page/My';
+import { IPage } from '../types/common/page.types';
 
 const Tab = createBottomTabNavigator();
-export const RouteTabNavigator = () => {
+export const RouteTabNavigator: React.FC<IPage> = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name={'홈'} component={Home} />

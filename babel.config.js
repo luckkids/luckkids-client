@@ -6,15 +6,7 @@ module.exports = {
       {
         root: ['./'],
         alias: {
-          '@components': './src/components',
-          '@constants': './src/constants',
-          '@design-system': './src/design-system',
-          '@queries': './src/queries',
-          '@utils': './src/utils',
-          '@types': './src/types',
-          '@recoil': './src/recoil',
-          '@global-components': './src/global-components',
-          '@hooks': './src/hooks',
+          '@': './src',
         },
       },
     ],
