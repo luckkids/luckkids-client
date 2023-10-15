@@ -6,29 +6,31 @@ import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 
-const handlePressBottomSheet = () => {
-  BottomSheet.show({
-    component: <Text>내용</Text>,
-  });
-};
-
-const handlePressAlertPopup = () => {
-  AlertPopup.show({
-    title: '제목',
-    body: '내용',
-    noText: '취소',
-    yesText: '확인',
-  });
-};
-
-const handlePressLoadingIndicator = () => {
-  LoadingIndicator.show({});
-  setTimeout(() => {
-    LoadingIndicator.hide();
-  }, 3000);
-};
-
 export const Home = () => {
+  // EXAMPLE: BottomSheet
+  const handlePressBottomSheet = () => {
+    BottomSheet.show({
+      component: <Text>내용</Text>,
+    });
+  };
+
+  // EXAMPLE: Alert Popup
+  const handlePressAlertPopup = () => {
+    AlertPopup.show({
+      title: '제목',
+      body: '내용',
+      noText: '취소',
+      yesText: '확인',
+    });
+  };
+
+  // EXAMPLE: Loading Indicator
+  const handlePressLoadingIndicator = () => {
+    LoadingIndicator.show({});
+    setTimeout(() => {
+      LoadingIndicator.hide();
+    }, 1000);
+  };
   return (
     <FrameLayout>
       <L.Row p={24}>
