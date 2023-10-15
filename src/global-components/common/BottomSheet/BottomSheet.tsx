@@ -23,7 +23,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const bgStyle = useRef({ backgroundColor: theme.BASIC_WHITE }).current;
+  const bgStyle = useRef({ backgroundColor: theme.WHITE }).current;
 
   const snapPoints = useRef([400]).current;
 
