@@ -16,7 +16,7 @@ type ButtonProps = {
   status?: ButtonStatus;
   onPress?: (status: ButtonStatus) => void;
   iconName?: IconNames;
-  iconPosition?: 'leading' | 'tailing';
+  iconPosition?: 'leading' | 'trailing';
   iconGap?: number;
   disabled?: boolean;
 };
@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
   bgColor = 'WHITE',
   textColor = 'BLACK',
   iconPosition = 'leading',
-  iconGap = 4,
+  iconGap = 7,
   disabled = false,
 }) => {
   const [pressed, setPressed] = useState<boolean>(false);
@@ -58,7 +58,7 @@ const Button: React.FC<ButtonProps> = ({
         <Font type={'BODY_SEMIBOLD'} color={textColor}>
           {text}
         </Font>
-        {!!iconName && iconPosition === 'tailing' && (
+        {!!iconName && iconPosition === 'trailing' && (
           <L.Row pl={iconGap}>
             <SvgIcon name={iconName} size={20} color={textColor} />
           </L.Row>

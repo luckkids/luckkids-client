@@ -53,6 +53,26 @@ export const Home = () => {
           bgColor={'BG_TERTIARY'}
           textColor={'WHITE'}
         />
+        <Button
+          type={'action'}
+          text={'친구 더 부르기'}
+          onPress={() => {}}
+          sizing="stretch"
+          bgColor={'BG_TERTIARY'}
+          textColor={'WHITE'}
+          iconName="bell"
+          iconPosition="leading"
+        />
+        <Button
+          type={'action'}
+          text={'친구 더 부르기'}
+          onPress={() => {}}
+          sizing="stretch"
+          bgColor={'BG_TERTIARY'}
+          textColor={'WHITE'}
+          iconName="bell"
+          iconPosition="trailing"
+        />
       </L.Col>
       <L.Row>
         <TouchableWithoutFeedback onPress={handlePressBottomSheet}>
