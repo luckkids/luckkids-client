@@ -1,18 +1,40 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useRef } from 'react';
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import { Garden } from '../page/Garden';
 import { Home } from '../page/Home';
 import { Mission } from '../page/Mission';
 import { My } from '../page/My';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
-export const RouteTabNavigator = () => {
+const Stack = createNativeStackNavigator();
+
+export const BottomTabNavigator = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name={'홈'} component={Home} />
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Screen name={'홈'} component={HomeStackScreen} />
       <Tab.Screen name={'미션'} component={Mission} />
       <Tab.Screen name={'가든'} component={Garden} />
       <Tab.Screen name={'마이'} component={My} />
     </Tab.Navigator>
+  );
+};
+
+// HomeStack 스크린
+// 이쪽에 HomeTab이 활성화 되었을 때의 스크린들을 넣어주면 됨
+const HomeStackScreen = () => {
+  const HomeTestComponent = () => {
+    return <Text>with bottomtab</Text>;
+  };
+
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="HomeTest" component={HomeTestComponent} />
+    </Stack.Navigator>
   );
 };
