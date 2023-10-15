@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
-import { Font, L } from '@design-system';
+import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '../frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
@@ -36,6 +36,23 @@ export const Home = () => {
       <L.Col p={24}>
         <Font type={'LARGE_TITLE_REGULAR'}>큰타이틀</Font>
         <Font type={'LARGE_TITLE_BOLD'}>큰타이틀</Font>
+      </L.Col>
+      <L.Col p={24} g={20}>
+        <Button
+          type={'action'}
+          text={'버튼'}
+          onPress={() => {}}
+          sizing="stretch"
+          bgColor={'LUCK_GREEN'}
+        />
+        <Button
+          type={'action'}
+          text={'버튼'}
+          onPress={() => {}}
+          sizing="stretch"
+          bgColor={'BG_TERTIARY'}
+          textColor={'WHITE'}
+        />
       </L.Col>
       <L.Row>
         <TouchableWithoutFeedback onPress={handlePressBottomSheet}>
