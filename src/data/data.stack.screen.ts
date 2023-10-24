@@ -1,11 +1,10 @@
 import { PageTutorialStart } from '../page/tutorial/page.tutorial.start';
-import { PageTutorialSurvey } from '../page/tutorial/page.tutorial.survey';
 import { RouteTabNavigator } from '../route/route.tab.navigator';
 import { AppScreens, IStackScreen } from '../types/common/page.types';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
-    name: AppScreens.TutorialStart,
+    name: AppScreens.Tutorial,
     options: { headerShown: true, headerTitle: '튜토리얼' },
     component: PageTutorialStart,
   },
@@ -16,11 +15,6 @@ export const DataStackScreen: Array<IStackScreen> = [
   },*/
   {
     name: AppScreens.Home,
-    options: { headerShown: false },
-    component: RouteTabNavigator,
-  },
-  {
-    name: AppScreens.Calendar,
     options: { headerShown: false },
     component: RouteTabNavigator,
   },
