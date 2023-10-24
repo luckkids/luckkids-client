@@ -9,13 +9,18 @@ export const DataStackScreen: Array<IStackScreen> = [
     options: { headerShown: true, headerTitle: '튜토리얼' },
     component: PageTutorialStart,
   },
-  {
+  /*{
     name: AppScreens.TutorialSurvey,
     options: { headerShown: true, headerTitle: '시작하기' },
     component: PageTutorialSurvey,
-  },
+  },*/
   {
     name: AppScreens.Home,
+    options: { headerShown: false },
+    component: RouteTabNavigator,
+  },
+  {
+    name: AppScreens.Calendar,
     options: { headerShown: false },
     component: RouteTabNavigator,
   },
