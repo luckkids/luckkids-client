@@ -29,6 +29,13 @@ export const PageMissionRepair: React.FC<IPage> = (props) => {
         sizing="stretch"
         bgColor={'LUCK_GREEN'}
       />
+      <Button
+        type={'action'}
+        text={'홈'}
+        onPress={() => props.navigation.navigate(AppScreens.Home)}
+        sizing="stretch"
+        bgColor={'LUCK_GREEN'}
+      />
     </FrameLayout>
   );
 };
