@@ -1,11 +1,15 @@
 import React from 'react';
-import { Platform, StyleSheet, Text } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {
   createPopup,
   FullScreenOverlay,
   KeyboardAvoidingLayout,
   useFadeAnimationStyle,
-  useHideOnAndroidBackPress,
   useSlideAnimationStyle,
   usePopupContext,
 } from 'react-native-global-components';
@@ -22,11 +26,9 @@ interface AlertPopupProps {
   onPressNo?: () => void;
   headerComponent?: React.ReactElement;
   footerComponent?: React.ReactElement;
-  androidBackHandler?: () => void;
-  blockAndroidBackPress?: boolean;
 }
 
-const AlertPopupUI: React.FC<AlertPopupProps> = ({
+const AlertPopupContent: React.FC<AlertPopupProps> = ({
   title,
   body,
   noText,
@@ -35,8 +37,6 @@ const AlertPopupUI: React.FC<AlertPopupProps> = ({
   yesText = '확인',
   headerComponent,
   footerComponent,
-  androidBackHandler,
-  blockAndroidBackPress,
 }) => {
   const { hide } = usePopupContext();
 
@@ -44,22 +44,15 @@ const AlertPopupUI: React.FC<AlertPopupProps> = ({
 
   const { style: slide } = useSlideAnimationStyle({ translateY: -30 });
 
-  //TODO connect with yes button
   const handlePressYes = async () => {
     if (onPressYes) await onPressYes();
     hide();
   };
 
-  //TODO connect with no button
   const handlePressNo = async () => {
     if (onPressNo) onPressNo();
     hide();
   };
-
-  useHideOnAndroidBackPress({
-    enabled: !blockAndroidBackPress,
-    backHandler: androidBackHandler,
-  });
 
   return (
     <KeyboardAvoidingLayout
@@ -81,6 +74,16 @@ const AlertPopupUI: React.FC<AlertPopupProps> = ({
             </L.Layout>
           )}
           {footerComponent}
+          <L.Row w={'100%'} justify={'space-evenly'}>
+            {!!noText && (
+              <TouchableWithoutFeedback onPress={handlePressNo}>
+                <Text>{noText}</Text>
+              </TouchableWithoutFeedback>
+            )}
+            <TouchableWithoutFeedback onPress={handlePressYes}>
+              <Text>{yesText}</Text>
+            </TouchableWithoutFeedback>
+          </L.Row>
         </PopupContainer>
       </Animated.View>
     </KeyboardAvoidingLayout>
@@ -104,6 +107,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const AlertPopup = createPopup(AlertPopupUI);
+const AlertPopup = createPopup(AlertPopupContent);
 
 export default AlertPopup;

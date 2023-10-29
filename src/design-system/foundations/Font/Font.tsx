@@ -1,10 +1,71 @@
-import React from 'react';
-import { useTheme } from 'styled-components/native';
+import React, { PropsWithChildren } from 'react';
+import { TextProps } from 'react-native';
+import styled, { css } from 'styled-components/native';
+import { ColorKeys } from '@design-system';
+import fontSettings from './Font.constants';
+import { MarginStyle } from '../Layout/Layout.types';
+import { toMarginPaddingStyle, toStyle } from '../Layout/Layout.utils';
 
-const Font: React.FC = () => {
-  const theme = useTheme();
-
-  return <></>;
+const Font: React.FC<PropsWithChildren<FontProps>> = ({
+  children,
+  type,
+  ...props
+}) => {
+  return (
+    <StyledFont
+      {...fontSettings[type]}
+      {...props}
+      lineBreakStrategyIOS={'hangul-word'}
+    >
+      {children}
+    </StyledFont>
+  );
 };
+
+type FontType = keyof typeof fontSettings;
+
+export interface FontProps extends FontStyle, TextProps, MarginStyle {
+  type: FontType;
+  underline?: boolean;
+}
+
+interface FontStyle {
+  color?: ColorKeys;
+  hexColor?: string;
+  underline?: boolean;
+  textAlign?: 'left' | 'center' | 'right';
+}
+
+const StyledFont = styled.Text<
+  {
+    fontSize: number;
+    lineHeight: number;
+    fontFamily: string;
+  } & MarginStyle &
+    FontStyle
+>`
+  letter-spacing: -0.5px;
+  font-size: ${({ fontSize }) => fontSize}px;
+  font-family: ${({ fontFamily }) => fontFamily};
+  ${({ m, mh, mv, mt, mr, mb, ml }) =>
+    toStyle('margin', toMarginPaddingStyle(m, mh, mv, mt, mr, mb, ml))}
+  line-height: ${({ lineHeight }) => lineHeight}px;
+  text-align: ${({ textAlign = 'left' }) => textAlign};
+  color: ${({ color, theme, hexColor }) => {
+    if (hexColor) return hexColor;
+    return theme[color || 'BLACK'];
+  }};
+  ${({ theme, color, underline = false }) =>
+    underline
+      ? css`
+          text-decoration-style: solid;
+          text-decoration-line: underline;
+          text-decoration-color: ${theme[color || 'BLACK']};
+        `
+      : undefined}
+`;
+
+export { fontSettings };
+export type { FontType };
 
 export default Font;

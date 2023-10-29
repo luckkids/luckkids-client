@@ -23,7 +23,8 @@
     "src/**/*.tsx",
     "App.tsx",
     "src/**/*.d.ts",
-    "theme.d.ts"
+    "theme.d.ts",
+    "global.d.ts"
   ],
   "exclude": ["node_modules", "babel.config.js"],
   "extends": "@tsconfig/react-native/tsconfig.json"

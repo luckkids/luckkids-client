@@ -1,14 +1,13 @@
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
-import { IconNames } from './SvgIcon.types';
 import * as icons from './icons';
+import { IconNames } from './SvgIcon.types';
 
 const SvgIcon = React.memo((props: SvgIconProps) => {
   const { name, color, width, height, size } = props;
-  const Icon: any = Icons[name];
   return (
     <SvgXml
-      xml={Icon || null}
+      xml={Icons[name]}
       color={color}
       width={size || width || 0}
       height={size || height || 0}
