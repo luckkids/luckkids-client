@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { FrameLayout } from '@frame/frame.layout';
-import { IPage } from '@types-common/page.types';
+import { AppScreens, IPage } from '@types-common/page.types';
 
 const S = {
   Text: styled.Text({
@@ -13,12 +13,11 @@ const S = {
 export const PageSettingProfile: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
-      <S.Text>Luck Kids(로그인메인)</S.Text>
+      <S.Text>프로필수</S.Text>
       <S.Button
-        title={'가입하기'}
-        onPress={() => props.navigation.navigate('page.login.join')}
+        title={'저장/취소'}
+        onPress={() => props.navigation.navigate(AppScreens.Setting)}
       />
-      <S.Button title={'로그인하기'} />
     </FrameLayout>
   );
 };

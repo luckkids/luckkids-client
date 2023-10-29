@@ -19,8 +19,11 @@ export enum AppScreens {
   CharacterSelect = 'character.select',
   CharacterName = 'character.name',
   HomeCalendar = 'home.calendar',
+  HomeAlarm = 'home.alarm',
   HomeLevel = 'home.level',
+  HomeComment = 'home.Comment',
   MissionRepair = 'mission.repair',
+  MissionAdd = 'mission.add',
   GardenAlbum = 'garden.album',
   GardenRank = 'garden.rank',
   Setting = 'setting',
@@ -29,6 +32,7 @@ export enum AppScreens {
   SettingInfo = 'setting.info',
   SettingSecurity = 'setting.security',
   SettingSecurityPass = 'setting.security.pass',
+  SettingNotice = 'setting.notice',
   SettingAccount = 'setting.account',
 }
 

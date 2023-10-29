@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
-import { Button } from '@design-system';
 
 const S = {
   Text: styled.Text({
@@ -11,16 +10,13 @@ const S = {
   Button: styled.Button({}),
 };
 
-export const PageHomeCalendar: React.FC<IPage> = (props) => {
+export const PageSettingNotice: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
-      <S.Text>캘린더</S.Text>
-      <Button
-        type={'action'}
-        text={'홈으로'}
-        onPress={() => props.navigation.navigate(AppScreens.Home)}
-        sizing="stretch"
-        bgColor={'LUCK_GREEN'}
+      <S.Text>공지사항</S.Text>
+      <S.Button
+        title={'뒤로가기'}
+        onPress={() => props.navigation.navigate(AppScreens.Setting)}
       />
     </FrameLayout>
   );

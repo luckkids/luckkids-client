@@ -11,10 +11,14 @@ const S = {
   Button: styled.Button({}),
 };
 
-export const PageHomeCalendar: React.FC<IPage> = (props) => {
+export const PageHomeAlarm: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
-      <S.Text>캘린더</S.Text>
+      <S.Text>알림 (push)</S.Text>
+      <S.Text>알림을 놓치지 마세요!</S.Text>
+      <S.Text>새로운 미션이 추가 되었습니다 (13시간전)</S.Text>
+      <S.Text>새로운 미션이 추가 되었습니다 (13시간전)</S.Text>
+      <S.Text>새로운 미션이 추가 되었습니다 (13시간전)</S.Text>
       <Button
         type={'action'}
         text={'홈으로'}

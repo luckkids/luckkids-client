@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { FrameLayout } from '@frame/frame.layout';
-import { IPage } from '@types-common/page.types';
+import { AppScreens, IPage } from '@types-common/page.types';
+import { Button } from '@design-system';
 
 const S = {
   Text: styled.Text({
@@ -13,12 +14,14 @@ const S = {
 export const PageHomeLevel: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
-      <S.Text>Luck Kids(로그인메인)</S.Text>
-      <S.Button
-        title={'가입하기'}
-        onPress={() => props.navigation.navigate('page.login.join')}
+      <S.Text>두군두근, 럭키즈가 한단계 성장해요!</S.Text>
+      <Button
+        type={'action'}
+        text={'홈으로'}
+        onPress={() => props.navigation.navigate(AppScreens.Home)}
+        sizing="stretch"
+        bgColor={'LUCK_GREEN'}
       />
-      <S.Button title={'로그인하기'} />
     </FrameLayout>
   );
 };

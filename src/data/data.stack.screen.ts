@@ -1,31 +1,32 @@
-import { PageTutorial } from '../page/tutorial/page.tutorial';
-import { RouteTabNavigator } from '../route/route.tab.navigator';
-import { AppScreens, IStackScreen } from '../types/common/page.types';
-import { PageLogin } from '@page/login/page.login';
-import { PageLoginId } from '@page/login/page.login.id';
-import { PageLoginJoinPass } from '@page/login/join/page.login.join.pass';
-import { PageLoginJoinId } from '@page/login/join/page.login.join.id';
 import { PageCharacterMake } from '@page/character/page.character.make';
-import { PageCharacterSelect } from '@page/character/page.character.select';
 import { PageCharacterName } from '@page/character/page.character.name';
-import { PageHomeCalendar } from '@page/home/page.home.calendar';
-import { PageHomeLevel } from '@page/home/page.home.level';
-import { PageMissionRepair } from '@page/mission/page.mission.repair';
+import { PageCharacterSelect } from '@page/character/page.character.select';
 import { PageGardenAlbum } from '@page/garden/page.garden.album';
 import { PageGardenRank } from '@page/garden/page.garden.rank';
+import { PageHomeCalendar } from '@page/home/page.home.calendar';
+import { PageHomeLevel } from '@page/home/page.home.level';
+import { PageLoginJoinId } from '@page/login/join/page.login.join.id';
+import { PageLoginJoinPass } from '@page/login/join/page.login.join.pass';
+import { PageLogin } from '@page/login/page.login';
+import { PageLoginId } from '@page/login/page.login.id';
+import { PageMissionRepair } from '@page/mission/page.mission.repair';
 import { PageSetting } from '@page/setting/page.setting';
-import { PageSettingProfile } from '@page/setting/page.setting.profile';
+import { PageSettingAccount } from '@page/setting/page.setting.account';
 import { PageSettingAlarm } from '@page/setting/page.setting.alarm';
 import { PageSettingInfo } from '@page/setting/page.setting.info';
+import { PageSettingProfile } from '@page/setting/page.setting.profile';
 import { PageSettingSecurity } from '@page/setting/page.setting.security';
 import { PageSettingSecurityPass } from '@page/setting/security/page.setting.security.pass';
-import { PageSettingAccount } from '@page/setting/page.setting.account';
+import { PageTutorial } from '@page/tutorial/page.tutorial';
+import { AppScreens, IStackScreen } from '@types-common/page.types';
+import { BottomTabNavigator } from '../route/route.tab.navigator';
+import { PageHomeAlarm } from '@page/home/page.home.alarm';
+import { PageMissionAdd } from '@page/mission/page.mission.add';
+import { PageSettingNotice } from '@page/setting/page.setting.notice';
+import { PageHomeComment } from '@page/home/page.home.comment';
+import { Mission } from '@page/Mission';
 
 export const DataStackScreen: Array<IStackScreen> = [
-  {
-    name: AppScreens.Home,
-    component: RouteTabNavigator,
-  },
   {
     name: AppScreens.Tutorial,
     component: PageTutorial,
@@ -59,6 +60,14 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageCharacterName,
   },
   {
+    name: AppScreens.Home,
+    component: BottomTabNavigator,
+  },
+  {
+    name: AppScreens.HomeAlarm,
+    component: PageHomeAlarm,
+  },
+  {
     name: AppScreens.HomeCalendar,
     component: PageHomeCalendar,
   },
@@ -67,8 +76,20 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageHomeLevel,
   },
   {
+    name: AppScreens.HomeComment,
+    component: PageHomeComment,
+  },
+  {
+    name: AppScreens.Mission,
+    component: Mission,
+  },
+  {
     name: AppScreens.MissionRepair,
     component: PageMissionRepair,
+  },
+  {
+    name: AppScreens.MissionAdd,
+    component: PageMissionAdd,
   },
   {
     name: AppScreens.GardenAlbum,
@@ -97,6 +118,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: AppScreens.SettingSecurity,
     component: PageSettingSecurity,
+  },
+  {
+    name: AppScreens.SettingNotice,
+    component: PageSettingNotice,
   },
   {
     name: AppScreens.SettingSecurityPass,

@@ -10,18 +10,18 @@ import { My } from '../page/My';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text } from 'react-native';
 import { IPage } from '../types/common/page.types';
+import { PageSetting } from '@page/setting/page.setting';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 export const BottomTabNavigator = () => {
-export const RouteTabNavigator: React.FC<IPage> = () => {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen name={'홈'} component={HomeStackScreen} />
       <Tab.Screen name={'미션'} component={Mission} />
       <Tab.Screen name={'가든'} component={Garden} />
-      <Tab.Screen name={'마이'} component={My} />
+      <Tab.Screen name={'설정'} component={PageSetting} />
     </Tab.Navigator>
   );
 };
