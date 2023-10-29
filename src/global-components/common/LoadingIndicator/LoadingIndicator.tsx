@@ -19,7 +19,7 @@ const LoadingIndicator = () => {
         rounded={16}
         style={{ backgroundColor: 'black', opacity: 0.8 }}
       >
-        <ActivityIndicator size="large" color={theme.BASIC_BLACK} />
+        <ActivityIndicator size="large" color={theme.BASIC_WHITE} />
       </L.Row>
     </FullScreenLayout>
   );
