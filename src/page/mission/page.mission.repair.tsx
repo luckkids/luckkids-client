@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { Button } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
-import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import { AppScreens, IPage } from '@types-common/page.types';
 
 const S = {
