@@ -9,7 +9,7 @@
       "@queries": ["src/queries/index"],
       "@utils": ["src/utils/index"],
       "@types-index": ["src/types/index"],
-      "@types-common*": ["src/types/common/*"],
+      "@types-common/*": ["src/types/common/*"],
       "@recoil": ["src/recoil/index"],
       "@global-components/*": ["src/global-components/*"],
       "@hooks/*": ["src/hooks/*"],
