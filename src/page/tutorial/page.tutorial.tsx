@@ -10,7 +10,7 @@ const S = {
   Button: styled.Button({}),
 };
 
-export const PageTutorialStart: React.FC<IPage> = (props) => {
+export const PageTutorial: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
       <S.Text>

@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { InfiniteQueryHookOptions } from '@types';
+import { InfiniteQueryHookOptions } from '@types-index';
 import { getNextPageParam, withTypedInfiniteLoad } from '@utils';
 import getQueryKey from './getQueryKey';
 

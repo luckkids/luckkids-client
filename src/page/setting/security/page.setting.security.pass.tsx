@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { FrameLayout } from '../../frame/frame.layout';
-import { IPage } from '../../types/common/page.types';
+import { FrameLayout } from '@frame/frame.layout';
+import { IPage } from '@types-common/page.types';
 
 const S = {
   Text: styled.Text({
@@ -10,7 +10,7 @@ const S = {
   Button: styled.Button({}),
 };
 
-export const PageLoginMain: React.FC<IPage> = (props) => {
+export const PageSettingSecurityPass: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
       <S.Text>Luck Kids(로그인메인)</S.Text>

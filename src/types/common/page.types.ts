@@ -44,7 +44,7 @@ type AppScreensParamList = ParamListBase & {
 export interface IStackScreen {
   name: AppScreens;
   component: React.FC<IPage>;
-  options: NativeStackNavigationOptions | undefined;
+  options?: NativeStackNavigationOptions | undefined;
 }
 
 export interface IPage {
