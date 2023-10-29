@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text } from 'react-native';
+import { Button } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
-import { Button } from '@design-system';
 
 export const Mission: React.FC<IPage> = (props) => {
   return (

@@ -1,15 +1,10 @@
-import React, { useRef } from 'react';
-import {
-  BottomTabBarProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
-import { Garden } from '../page/Garden';
-import { Home } from '../page/Home';
-import { Mission } from '../page/Mission';
-import { My } from '../page/My';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 import { Text } from 'react-native';
-import { IPage } from '../types/common/page.types';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Garden } from '@page/Garden';
+import { Home } from '@page/Home';
+import { Mission } from '@page/Mission';
 import { PageSetting } from '@page/setting/page.setting';
 
 const Tab = createBottomTabNavigator();

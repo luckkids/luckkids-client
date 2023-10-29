@@ -1,24 +1,15 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
 import { Button } from '@design-system';
+import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
+import { AppScreens, IPage } from '@types-common/page.types';
 
 const S = {
   Text: styled.Text({
     textAlign: 'center',
   }),
   Button: styled.Button({}),
-};
-
-const handlePressAlertPopup = () => {
-  AlertPopup.show({
-    title: '알림설정',
-    body: '내용',
-    noText: '취소',
-    yesText: '확인',
-  });
 };
 
 export const PageMissionRepair: React.FC<IPage> = (props) => {

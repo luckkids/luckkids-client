@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { Button } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
-import { Button } from '@design-system';
-import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 
 const S = {
   Text: styled.Text({
