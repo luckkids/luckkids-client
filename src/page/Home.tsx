@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '../frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 export const Home = () => {
   // EXAMPLE: BottomSheet
