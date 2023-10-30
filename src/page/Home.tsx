@@ -1,9 +1,17 @@
-import React, { createElement } from 'react';
+import React, { createElement, useState } from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
 import { FrameLayout } from '@frame/frame.layout';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AppScreens, IPage } from '@types-common/page.types';
-import { Button, Font, L, SvgIcon, Toggle } from '@design-system';
+import {
+  Button,
+  Font,
+  L,
+  SimpleTextInput,
+  SvgIcon,
+  TextInputField,
+  Toggle,
+} from '@design-system';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
@@ -14,6 +22,7 @@ import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 
 export const Home: React.FC<IPage> = (props) => {
   const [toggle, setToggle] = React.useState(false);
+  const [text, setText] = useState('');
 
   // EXAMPLE: BottomSheet
   const handlePressBottomSheet = () => {
@@ -69,6 +78,41 @@ export const Home: React.FC<IPage> = (props) => {
         <L.Col p={24}>
           <Font type={'LARGE_TITLE_REGULAR'}>큰타이틀</Font>
           <Font type={'LARGE_TITLE_BOLD'}>큰타이틀</Font>
+        </L.Col>
+        <L.Col p={24}>
+          <TextInputField
+            text={text}
+            title={'이메일 주소가 무엇인가요?'}
+            description="나중에 이 이메일 주소를 확인해야 합니다."
+            onChangeText={setText}
+            placeholder="email"
+            RightComponent={<SvgIcon name={'validation_check'} size={20} />}
+          />
+          <TextInputField
+            text={text}
+            title={'이메일 주소가 무엇인가요?'}
+            description="나중에 이 이메일 주소를 확인해야 합니다."
+            onChangeText={setText}
+            placeholder="email"
+          />
+          <TextInputField
+            text={text}
+            title={'비밀번호 만들기'}
+            description="8자 이상을 사용하세요."
+            onChangeText={setText}
+            placeholder="password"
+            secureTextEntry
+            RightComponent={
+              <SvgIcon name={'password_visibility_on'} size={20} />
+            }
+          />
+        </L.Col>
+        <L.Col p={24}>
+          <SimpleTextInput
+            text={text}
+            onChangeText={setText}
+            placeholder="email"
+          />
         </L.Col>
         <L.Col p={24} g={20}>
           <Button

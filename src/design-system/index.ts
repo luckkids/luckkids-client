@@ -15,3 +15,6 @@ export { default as TopNavigation } from './components/TopNavigation/TopNavigati
 export type { TopNavigationProps } from './components/TopNavigation/TopNavigation';
 
 export { default as CONSTANTS } from './constants';
+
+export { default as TextInputField } from './components/TextInputField/TextInputField';
+export { default as SimpleTextInput } from './components/SimpleTextInput/SimpleTextInput';
