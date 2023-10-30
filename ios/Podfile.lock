@@ -487,6 +487,8 @@ PODS:
     - React-jsi (= 0.72.5)
     - React-logger (= 0.72.5)
     - React-perflogger (= 0.72.5)
+  - RNBootSplash (5.0.4):
+    - React-Core
   - RNGestureHandler (2.13.2):
     - React-Core
   - RNReanimated (3.5.4):
@@ -592,6 +594,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -695,6 +698,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNBootSplash:
+    :path: "../node_modules/react-native-bootsplash"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -758,6 +763,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cc32add98c45c5df18436a6a52a7e1f6edec102c
   React-utils: 7a9918a1ffdd39aba67835d42386f592ea3f8e76
   ReactCommon: 91ece8350ebb3dd2be9cef662abd78b6948233c0
+  RNBootSplash: 334668c563e44287ca39d03aa3f738a3c35a74a6
   RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
@@ -768,4 +774,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1cef0cf26a47643a3868dba37a6ac05ee9cce3c4
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0
