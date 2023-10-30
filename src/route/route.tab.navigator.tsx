@@ -1,14 +1,11 @@
-import React, { useRef } from 'react';
-import {
-  BottomTabBarProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
-import { Garden } from '../page/Garden';
-import { Home } from '../page/Home';
-import { Mission } from '../page/Mission';
-import { My } from '../page/My';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 import { Text } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Garden } from '@page/Garden';
+import { Home } from '@page/Home';
+import { Mission } from '@page/Mission';
+import { PageSetting } from '@page/setting/page.setting';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -19,7 +16,7 @@ export const BottomTabNavigator = () => {
       <Tab.Screen name={'홈'} component={HomeStackScreen} />
       <Tab.Screen name={'미션'} component={Mission} />
       <Tab.Screen name={'가든'} component={Garden} />
-      <Tab.Screen name={'마이'} component={My} />
+      <Tab.Screen name={'설정'} component={PageSetting} />
     </Tab.Navigator>
   );
 };

@@ -8,10 +8,13 @@
       "@design-system": ["src/design-system/index"],
       "@queries": ["src/queries/index"],
       "@utils": ["src/utils/index"],
-      "@types": ["src/types/index"],
+      "@types-index": ["src/types/index"],
+      "@types-common/*": ["src/types/common/*"],
       "@recoil": ["src/recoil/index"],
       "@global-components/*": ["src/global-components/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@page/*": ["src/page/*"],
+      "@frame/*": ["src/frame/*"]
     },
     "types": ["styled-components-react-native"]
   },

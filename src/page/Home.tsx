@@ -2,12 +2,13 @@ import React from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Button, Font, L } from '@design-system';
-import { FrameLayout } from '../frame/frame.layout';
+import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
+import { AppScreens, IPage } from '@types-common/page.types';
 
-export const Home = () => {
+export const Home: React.FC<IPage> = (props) => {
   // EXAMPLE: BottomSheet
   const handlePressBottomSheet = () => {
     BottomSheet.show({
@@ -82,6 +83,34 @@ export const Home = () => {
           textColor={'WHITE'}
           iconName="bell"
           iconPosition="trailing"
+        />
+        <Button
+          type={'action'}
+          text={'달력'}
+          onPress={() => props.navigation.navigate(AppScreens.HomeCalendar)}
+          sizing="stretch"
+          bgColor={'LUCK_GREEN'}
+        />
+        <Button
+          type={'action'}
+          text={'알림'}
+          onPress={() => props.navigation.navigate(AppScreens.HomeAlarm)}
+          sizing="stretch"
+          bgColor={'LUCK_GREEN'}
+        />
+        <Button
+          type={'action'}
+          text={'행운문구수정'}
+          onPress={() => props.navigation.navigate(AppScreens.HomeComment)}
+          sizing="stretch"
+          bgColor={'LUCK_GREEN'}
+        />
+        <Button
+          type={'action'}
+          text={'홈/레벨업'}
+          onPress={() => props.navigation.navigate(AppScreens.HomeLevel)}
+          sizing="stretch"
+          bgColor={'LUCK_GREEN'}
         />
       </L.Col>
       <L.Row>

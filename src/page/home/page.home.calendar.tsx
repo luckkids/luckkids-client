@@ -1,17 +1,24 @@
 import React from 'react';
-import { Text } from 'react-native';
+import styled from 'styled-components/native';
 import { Button } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
 
-export const Mission: React.FC<IPage> = (props) => {
+const S = {
+  Text: styled.Text({
+    textAlign: 'center',
+  }),
+  Button: styled.Button({}),
+};
+
+export const PageHomeCalendar: React.FC<IPage> = (props) => {
   return (
     <FrameLayout>
-      <Text>Mission</Text>
+      <S.Text>캘린더</S.Text>
       <Button
         type={'action'}
-        text={'습관편집'}
-        onPress={() => props.navigation.navigate(AppScreens.MissionRepair)}
+        text={'홈으로'}
+        onPress={() => props.navigation.navigate(AppScreens.Home)}
         sizing="stretch"
         bgColor={'LUCK_GREEN'}
       />
