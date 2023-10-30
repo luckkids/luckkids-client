@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { createElement } from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { AppScreens, IPage } from '@types-common/page.types';
+import { Button, Font, L, SvgIcon } from '@design-system';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
-import { AppScreens, IPage } from '@types-common/page.types';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
 
 export const Home: React.FC<IPage> = (props) => {
   // EXAMPLE: BottomSheet
@@ -31,6 +32,21 @@ export const Home: React.FC<IPage> = (props) => {
     LoadingIndicator.show({});
     setTimeout(() => {
       LoadingIndicator.hide();
+    }, 1000);
+  };
+
+  // EXAMPLE: SnackBar
+  const handlePressSnackBar = () => {
+    SnackBar.show({
+      leftElement: createElement(SvgIcon, {
+        name: 'lucky_check',
+        size: 20,
+      }),
+      title: '링크가 복사됐어요',
+      position: 'bottom',
+    });
+    setTimeout(() => {
+      SnackBar.hide();
     }, 1000);
   };
 
@@ -126,6 +142,11 @@ export const Home: React.FC<IPage> = (props) => {
       <L.Row>
         <TouchableWithoutFeedback onPress={handlePressLoadingIndicator}>
           <Text>Loading Indicator</Text>
+        </TouchableWithoutFeedback>
+      </L.Row>
+      <L.Row>
+        <TouchableWithoutFeedback onPress={handlePressSnackBar}>
+          <Text>SnackBar</Text>
         </TouchableWithoutFeedback>
       </L.Row>
 
