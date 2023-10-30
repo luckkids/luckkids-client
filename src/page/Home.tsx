@@ -1,8 +1,6 @@
 import React, { createElement, useState } from 'react';
 import { Text, TouchableWithoutFeedback } from 'react-native';
-import { FrameLayout } from '@frame/frame.layout';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { AppScreens, IPage } from '@types-common/page.types';
 import {
   Button,
   Font,
@@ -12,15 +10,16 @@ import {
   TextInputField,
   Toggle,
 } from '@design-system';
+import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import StackNavbar from '@components/common/StackNavBar/StackNavBar';
+import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import StackNavbar from '@components/common/StackNavBar/StackNavBar';
-import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import { IPage } from '@types-common/page.types';
 
-export const Home: React.FC<IPage> = (props) => {
+export const Home: React.FC<IPage> = () => {
   const [toggle, setToggle] = React.useState(false);
   const [text, setText] = useState('');
 

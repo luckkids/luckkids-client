@@ -6,10 +6,9 @@
  */
 
 import React, { useEffect } from 'react';
-import { StatusBar, Text } from 'react-native';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { IPage } from '@types-common/page.types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RecoilRoot } from 'recoil';
@@ -18,10 +17,9 @@ import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
+import { IPage } from '@types-common/page.types';
 
 const App: React.FC<IPage> = () => {
-  const Stack = createNativeStackNavigator();
-
   useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
   }, []);
