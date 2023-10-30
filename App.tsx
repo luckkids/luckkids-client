@@ -5,7 +5,8 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { StatusBar, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { IPage } from '@types-common/page.types';
@@ -19,6 +20,12 @@ import { DataStackScreen } from './src/data/data.stack.screen';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 
 const App: React.FC<IPage> = () => {
+  const Stack = createNativeStackNavigator();
+
+  useEffect(() => {
+    StatusBar.setBarStyle('light-content', true);
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <RecoilRoot>

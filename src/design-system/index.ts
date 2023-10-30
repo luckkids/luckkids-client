@@ -10,3 +10,8 @@ export type { ColorKeys, ColorType } from './colors';
 export { default as Button } from './components/Button/Button';
 
 export { default as Toggle } from './components/Toggle/Toggle';
+
+export { default as TopNavigation } from './components/TopNavigation/TopNavigation';
+export type { TopNavigationProps } from './components/TopNavigation/TopNavigation';
+
+export { default as CONSTANTS } from './constants';
