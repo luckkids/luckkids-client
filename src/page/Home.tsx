@@ -3,13 +3,15 @@ import { Text, TouchableWithoutFeedback } from 'react-native';
 import { FrameLayout } from '@frame/frame.layout';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { AppScreens, IPage } from '@types-common/page.types';
-import { Button, Font, L, SvgIcon } from '@design-system';
+import { Button, Font, L, SvgIcon, Toggle } from '@design-system';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 
 export const Home: React.FC<IPage> = (props) => {
+  const [toggle, setToggle] = React.useState(false);
+
   // EXAMPLE: BottomSheet
   const handlePressBottomSheet = () => {
     BottomSheet.show({
@@ -128,6 +130,7 @@ export const Home: React.FC<IPage> = (props) => {
           sizing="stretch"
           bgColor={'LUCK_GREEN'}
         />
+        <Toggle value={toggle} onChange={setToggle} />
       </L.Col>
       <L.Row>
         <TouchableWithoutFeedback onPress={handlePressBottomSheet}>

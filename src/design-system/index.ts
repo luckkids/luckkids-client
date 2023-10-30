@@ -8,3 +8,5 @@ export { default as Colors } from './colors';
 export type { ColorKeys, ColorType } from './colors';
 
 export { default as Button } from './components/Button/Button';
+
+export { default as Toggle } from './components/Toggle/Toggle';
