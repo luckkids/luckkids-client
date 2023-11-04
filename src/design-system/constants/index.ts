@@ -11,7 +11,7 @@ const { width: _WINDOW_WIDTH, height: _WINDOW_HEIGHT } =
   Dimensions.get('window');
 
 // TO BE FIXED
-const BOTTOM_TABBAR_HEIGHT = 56;
+const BOTTOM_TABBAR_HEIGHT = 70;
 const TOP_NAVIGATION_HEIGHT = 52;
 const DEFAULT_MARGIN = 20;
 const MIN_PADDING_BOTTOM = 8;
@@ -49,7 +49,7 @@ const SCREEN_HEIGHT = Math.max(_SCREEN_WIDTH, _SCREEN_HEIGHT);
 const WINDOW_WIDTH = Math.min(_WINDOW_WIDTH, _WINDOW_HEIGHT);
 const WINDOW_HEIGHT = Math.max(_WINDOW_WIDTH, _WINDOW_HEIGHT);
 
-export {
+export default {
   SCREEN_WIDTH,
   SCREEN_HEIGHT,
   WINDOW_WIDTH,

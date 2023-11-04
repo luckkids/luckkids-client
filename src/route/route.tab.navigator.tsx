@@ -1,18 +1,34 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Garden } from '@page/Garden';
 import { Home } from '@page/Home';
 import { Mission } from '@page/Mission';
 import { PageSetting } from '@page/setting/page.setting';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTheme } from 'styled-components/native';
+import { CONSTANTS, FontSettings } from '@design-system';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 export const BottomTabNavigator = () => {
+  const theme = useTheme();
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: theme.BG_PRIMARY,
+          height: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
+        },
+        tabBarActiveTintColor: theme.LUCK_GREEN,
+        tabBarInactiveTintColor: theme.GREY1,
+        tabBarLabelStyle: {
+          ...FontSettings['CAPTION2_SEMIBOLD'],
+        },
+      }}
+    >
       <Tab.Screen name={'홈'} component={HomeStackScreen} />
       <Tab.Screen name={'미션'} component={Mission} />
       <Tab.Screen name={'가든'} component={Garden} />

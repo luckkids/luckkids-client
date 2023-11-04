@@ -5,27 +5,35 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { IPage } from '@types-common/page.types';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
+import { IPage } from '@types-common/page.types';
 
 const App: React.FC<IPage> = () => {
+  useEffect(() => {
+    StatusBar.setBarStyle('light-content', true);
+  }, []);
+
   return (
-    <GestureHandlerRootView style={{ flexGrow: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <RecoilRoot>
-        <ThemeProvider theme={Colors}>
-          <QueryClientProvider>
-            <RootNavigator />
-          </QueryClientProvider>
-        </ThemeProvider>
+        <SafeAreaProvider>
+          <ThemeProvider theme={Colors}>
+            <QueryClientProvider>
+              <RootNavigator />
+            </QueryClientProvider>
+          </ThemeProvider>
+        </SafeAreaProvider>
       </RecoilRoot>
     </GestureHandlerRootView>
   );
