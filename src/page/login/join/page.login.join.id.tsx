@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { Button, L, SvgIcon, TextInputField } from '@design-system';
+import { Button, L, TextInputField } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
 
