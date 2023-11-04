@@ -53,14 +53,14 @@ const StyledFont = styled.Text<
   text-align: ${({ textAlign = 'left' }) => textAlign};
   color: ${({ color, theme, hexColor }) => {
     if (hexColor) return hexColor;
-    return theme[color || 'BLACK'];
+    return theme[color || 'WHITE'];
   }};
   ${({ theme, color, underline = false }) =>
     underline
       ? css`
           text-decoration-style: solid;
           text-decoration-line: underline;
-          text-decoration-color: ${theme[color || 'BLACK']};
+          text-decoration-color: ${theme[color || 'WHITE']};
         `
       : undefined}
 `;

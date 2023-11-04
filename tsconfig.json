@@ -3,7 +3,7 @@
     "baseUrl": "./",
     "rootDir": ".",
     "paths": {
-      "@components": ["src/components/index"],
+      "@components/*": ["src/components/*"],
       "@constants": ["src/constants/index"],
       "@design-system": ["src/design-system/index"],
       "@queries": ["src/queries/index"],
