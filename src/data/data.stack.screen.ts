@@ -25,6 +25,7 @@ import { PageSettingSecurity } from '@page/setting/page.setting.security';
 import { PageSettingSecurityPass } from '@page/setting/security/page.setting.security.pass';
 import { PageTutorial } from '@page/tutorial/page.tutorial';
 import { AppScreens, IStackScreen } from '@types-common/page.types';
+import { PageLoginJoin } from '@page/login/page.login.join';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
@@ -37,7 +38,7 @@ export const DataStackScreen: Array<IStackScreen> = [
   },
   {
     name: AppScreens.LoginJoinId,
-    component: PageLoginJoinId,
+    component: PageLoginJoin,
   },
   {
     name: AppScreens.LoginJoinPass,
