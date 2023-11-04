@@ -4,8 +4,8 @@
  *
  * @format
  */
-
-import React, { useEffect } from 'react';
+import BootSplash from 'react-native-bootsplash';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,6 +17,7 @@ import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
+import useAsyncEffect from '@hooks/useAsyncEffect';  
 import { IPage } from '@types-common/page.types';
 
 const App: React.FC<IPage> = () => {
@@ -42,6 +43,22 @@ const App: React.FC<IPage> = () => {
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = withGlobalComponents(() => {
+  const [initializing, setInitializing] = useState(true);
+
+  useAsyncEffect(async () => {
+    try {
+      if (!initializing) {
+        return console.log('App Reload');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setInitializing(false);
+
+      await BootSplash.hide({ fade: true });
+    }
+  }, [initializing]);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
