@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Button, L, SvgIcon, TextInputField } from '@design-system';
+import { L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
 import DeviceInfo from 'react-native-device-info';
@@ -8,13 +8,6 @@ import { ComponentLoginJoinId } from '@components/page/login/join/component.logi
 import { ComponentLoginJoinPass } from '@components/page/login/join/component.login.join.pass';
 
 const deviceId = DeviceInfo.getDeviceId();
-
-const S = {
-  Text: styled.Text({
-    textAlign: 'center',
-  }),
-  Button: styled.Button({}),
-};
 
 export const LoginData = {
   email: 'tkdrl8908@naver.com',
@@ -24,7 +17,6 @@ export const LoginData = {
 };
 
 export const PageLoginJoin: React.FC<IPage> = (props) => {
-  console.log(deviceId);
   const [isRegPass, setIsRegPass] = useState<boolean>(false);
   return (
     <FrameLayout>

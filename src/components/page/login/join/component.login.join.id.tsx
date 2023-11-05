@@ -1,6 +1,6 @@
-import { Button, TextInputField } from '@design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
+import { Button, TextInputField } from '@design-system';
 
 const S = {
   Text: styled.Text({

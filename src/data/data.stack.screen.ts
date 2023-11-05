@@ -10,6 +10,7 @@ import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
 import { PageLoginId } from '@page/login/page.login.id';
+import { PageLoginJoin } from '@page/login/page.login.join';
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
 import { PageMissionRepair } from '@page/mission/page.mission.repair';
@@ -23,7 +24,6 @@ import { PageSettingSecurity } from '@page/setting/page.setting.security';
 import { PageSettingSecurityPass } from '@page/setting/security/page.setting.security.pass';
 import { PageTutorial } from '@page/tutorial/page.tutorial';
 import { AppScreens, IStackScreen } from '@types-common/page.types';
-import { PageLoginJoin } from '@page/login/page.login.join';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
