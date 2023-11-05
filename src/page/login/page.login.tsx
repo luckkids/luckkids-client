@@ -16,7 +16,7 @@ export const PageLogin: React.FC<IPage> = (props) => {
       <S.Text>Luck Kids(로그인메인)</S.Text>
       <S.Button
         title={'가입하기'}
-        onPress={() => props.navigation.navigate(AppScreens.LoginJoinId)}
+        onPress={() => props.navigation.navigate(AppScreens.LoginJoin)}
       />
       <S.Button
         title={'로그인하기'}
