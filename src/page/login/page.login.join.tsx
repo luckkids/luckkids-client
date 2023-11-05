@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components/native';
-import { L } from '@design-system';
-import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
 import DeviceInfo from 'react-native-device-info';
+import { L } from '@design-system';
 import { ComponentLoginJoinId } from '@components/page/login/join/component.login.join.id';
 import { ComponentLoginJoinPass } from '@components/page/login/join/component.login.join.pass';
+import { FrameLayout } from '@frame/frame.layout';
+import { AppScreens, IPage } from '@types-common/page.types';
 
 const deviceId = DeviceInfo.getDeviceId();
 
