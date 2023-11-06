@@ -90,7 +90,6 @@ const Container = styled.View<{
     sizing === 'stretch'
       ? css`
           align-self: stretch;
-          flex: 1;
         `
       : css`
           padding: 0 100px;
