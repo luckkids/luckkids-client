@@ -1,12 +1,8 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
-
-interface IProps {
-  children: React.ReactNode;
-}
 
 interface FrameLayoutProps {
   NavBar?: React.ReactNode;
@@ -27,14 +23,13 @@ export const FrameLayout = ({ NavBar, children }: FrameLayoutProps) => {
       }}
     >
       {NavBar}
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
+      <View
         style={{
-          backgroundColor: theme.BG_PRIMARY,
+          flex: 1,
         }}
       >
         {children}
-      </ScrollView>
+      </View>
     </View>
   );
 };
