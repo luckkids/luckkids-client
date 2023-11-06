@@ -2,7 +2,7 @@ import * as shadow from './shadow';
 
 const Colors = {
   // LUCK
-  LUCK_GREEN: '#BAFD50',
+  LUCK_GREEN: '#80F466',
 
   // SYSTEM
   BLACK: '#000000',

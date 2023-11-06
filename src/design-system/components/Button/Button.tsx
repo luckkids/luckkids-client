@@ -19,6 +19,7 @@ type ButtonProps = {
   iconPosition?: 'leading' | 'trailing';
   iconGap?: number;
   disabled?: boolean;
+  outline?: ColorKeys;
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -33,6 +34,7 @@ const Button: React.FC<ButtonProps> = ({
   iconPosition = 'leading',
   iconGap = 7,
   disabled = false,
+  outline,
 }) => {
   const [pressed, setPressed] = useState<boolean>(false);
 
@@ -49,6 +51,7 @@ const Button: React.FC<ButtonProps> = ({
         bgColor={bgColor}
         status={status}
         pressed={pressed}
+        outline={outline}
       >
         {!!iconName && iconPosition === 'leading' && (
           <L.Row pr={iconGap}>
@@ -74,6 +77,7 @@ const Container = styled.View<{
   sizing: ButtonSizing;
   status: ButtonStatus;
   pressed: boolean;
+  outline?: ColorKeys;
 }>`
   flex-direction: row;
   align-items: center;
@@ -85,6 +89,8 @@ const Container = styled.View<{
     return status === 'normal' ? 1 : 0.8;
   }};
   height: 52px;
+  border: ${({ theme, outline }) =>
+    outline ? `1px solid ${theme[outline]}` : 'none'};
   border-radius: 15px;
   ${({ sizing }) =>
     sizing === 'stretch'

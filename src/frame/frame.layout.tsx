@@ -11,7 +11,7 @@ interface FrameLayoutProps {
 
 export const FrameLayout = ({ NavBar, children }: FrameLayoutProps) => {
   const theme = useTheme();
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
 
   return (
     <View
@@ -19,6 +19,7 @@ export const FrameLayout = ({ NavBar, children }: FrameLayoutProps) => {
         backgroundColor: theme.BG_PRIMARY,
         width: SCREEN_WIDTH,
         paddingTop: top,
+        paddingBottom: bottom,
         flex: 1,
       }}
     >
