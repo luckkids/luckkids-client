@@ -18,7 +18,7 @@ export const PageLoginJoinPass: React.FC<IPage> = ({ navigation }) => {
     // TODO 약관 동의 바텀시트
 
     // 약관 동의 모두 끝나면 로그인 화면으로 이동
-    navigation.navigate(AppScreens.Login);
+    navigation.navigate(AppScreens.LoginId);
   };
 
   return (
