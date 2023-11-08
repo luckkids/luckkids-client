@@ -15,6 +15,7 @@ export enum AppScreens {
   LoginJoinId = 'login.join.id',
   LoginJoinPass = 'login.join.pass',
   LoginId = 'login.id',
+  LoginRemember = 'login.remember',
   CharacterMake = 'character.make',
   CharacterSelect = 'character.select',
   CharacterName = 'character.name',
