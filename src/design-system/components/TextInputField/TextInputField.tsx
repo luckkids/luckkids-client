@@ -47,7 +47,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
   }, []);
 
   return (
-    <L.Col w={'100%'} mb={25}>
+    <L.Col w={'100%'}>
       {!!title && (
         <L.Layout pv={8}>
           <Font type="TITLE2_BOLD" color="WHITE">

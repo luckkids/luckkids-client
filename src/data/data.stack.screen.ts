@@ -10,6 +10,7 @@ import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
 import { PageLoginId } from '@page/login/page.login.id';
+import { PageLoginRemember } from '@page/login/page.login.remember';
 import { PageLoginJoin } from '@page/login/page.login.join';
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
@@ -41,6 +42,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: AppScreens.LoginId,
     component: PageLoginId,
+  },
+  {
+    name: AppScreens.LoginRemember,
+    component: PageLoginRemember,
   },
   {
     name: AppScreens.CharacterMake,
