@@ -1,7 +1,7 @@
 import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { useCallback, useState } from 'react';
 import { RecoilToken } from '@recoil/recoil.token';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 // let isRefreshing = false;
 const host = 'http://218.155.95.66:8777';

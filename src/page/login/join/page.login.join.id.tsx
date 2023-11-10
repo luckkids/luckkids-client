@@ -5,7 +5,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
-import { AppScreens, IPage } from '@types-common/page.types';
+import { IPage } from '@types-common/page.types';
 
 export const PageLoginJoinId: React.FC<IPage> = ({ navigation }) => {
   const [email, setEmail] = useState('');
