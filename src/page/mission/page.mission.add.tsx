@@ -6,9 +6,11 @@ import { AppScreens, IPage } from '@types-common/page.types';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import BootSplash from 'react-native-bootsplash';
 import { audit } from 'rxjs';
-import { RecoilLoadable } from 'recoil';
+import { RecoilLoadable, useRecoilValue } from 'recoil';
 import error = RecoilLoadable.error;
 import DeviceInfo from 'react-native-device-info';
+import { UseFetch } from '@hooks/useFetch';
+import { RecoilToken } from '@recoil/recoil.token';
 
 const S = {
   Text: styled.Text({
@@ -18,41 +20,13 @@ const S = {
 };
 
 export const PageMissionAdd: React.FC<IPage> = (props) => {
-  const [initializing, setInitializing] = useState(true);
-  const [deviceID, setDeviceID] = useState('');
+  const { onFetch } = UseFetch({
+    method: 'GET',
+    url: '/api/v1/missions',
+  });
+
   useEffect(() => {
-    DeviceInfo.getUniqueId().then((uniqueId) => {
-      setDeviceID(uniqueId);
-    });
-  }, []);
-  const getData = useCallback(() => {
-    const loadData = async () => {
-      try {
-        const rtnData = await fetch(
-          'http://218.155.95.66:8777/api/v1/auth/login',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email: 'test@daum.net',
-              password: 'test1234',
-              deviceId: 'testdeviceId',
-              pushKey: 'tessPushKey',
-            }),
-          },
-        );
-
-        return await rtnData.json();
-      } catch (e) {
-        return false;
-      }
-    };
-
-    loadData().then((rtnData) => {
-      console.log(rtnData);
-    });
+    onFetch();
   }, []);
   return (
     <FrameLayout>
@@ -64,7 +38,7 @@ export const PageMissionAdd: React.FC<IPage> = (props) => {
         bgColor={'LUCK_GREEN'}
         onPress={() => props.navigation.navigate(AppScreens.MissionRepair)}
       />
-      <Button type={'action'} text={'데이터'} onPress={getData} />
+      {/*<Button type={'action'} text={'데이터'} onPress={getData} />*/}
     </FrameLayout>
   );
 };

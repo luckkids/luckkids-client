@@ -1,57 +1,99 @@
 import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { RecoilToken } from '@recoil/recoil.token';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 let isRefreshing = false;
+const host = 'http://218.155.95.66:8777';
 
 export const UseFetch = (args: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   url: string;
-  value: IStringDictionary;
+  value?: IStringDictionary;
+  result?: () => void;
 }) => {
+  const [token, setToken] = useRecoilState(RecoilToken);
   const { accessToken, refreshToken } = useRecoilValue(RecoilToken);
-  /*const requestHeaders: HeadersInit_ = new Headers();
-  requestHeaders.set('Content-Type', 'application/json');
-  requestHeaders.set('Authorization', '');*/
+  const [isSuccess, setIsSuccess] = useState(false);
   const onFetch = useCallback(() => {
     const loadData = async () => {
       try {
-        const rtnData: IResponse = await fetch(args.url, {
-          method: args.method,
-          headers: {
-            Authorization: accessToken,
-          },
-          body: JSON.stringify(args.value),
-        });
-
-        if (rtnData.statusCode === 200) return await rtnData.json();
-        if (rtnData.statusCode === 401) {
+        switch (args.method) {
+          case 'POST': {
+            const rtnData: IResponse = await fetch(host + args.url, {
+              method: args.method,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              body: JSON.stringify(args.value),
+            });
+            return rtnData.json();
+          }
+          case 'GET': {
+            const rtnData: IResponse = await fetch(host + args.url, {
+              method: args.method,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            return rtnData.json();
+          }
+          default: {
+            const rtnData: IResponse = await fetch(host + args.url, {
+              method: args.method,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            return rtnData.json();
+          }
         }
       } catch (e) {
         console.log(e);
       }
     };
 
-    loadData().then((data) => {
-      return data;
+    loadData().then((result) => {
+      if (result.statusCode === 401) {
+        return setExpiredAccessToken();
+      }
+      if (result.data.refreshToken) {
+        setToken({
+          accessToken: result.data.accessToken,
+          refreshToken: result.data.refreshToken,
+        });
+      }
+      if (result.statusCode === 200) {
+        setIsSuccess(true);
+        args.result && args.result();
+      }
+      return result.data;
     });
   }, []);
 
   const setExpiredAccessToken = async () => {
     try {
-      if (!isRefreshing) {
+      /*if (!isRefreshing) {
         isRefreshing = true;
-      }
-    } catch (e) {}
+        await reIsueedAccessToken(refreshToken);
+        isRefreshing = false;
+      }*/
+      return await reIsueedAccessToken(refreshToken);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const reIsueedAccessToken = async (refreshToken: string) => {
     try {
-      const rtnData: IResponse = await fetch(args.url, {
+      const rtnData: IResponse = await fetch(host + args.url, {
         method: args.method,
         headers: {
-          Authorization: refreshToken,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${refreshToken}`,
         },
         body: JSON.stringify(args.value),
       });
@@ -65,5 +107,6 @@ export const UseFetch = (args: {
 
   return {
     onFetch: onFetch,
+    isSuccess: isSuccess,
   };
 };

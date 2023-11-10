@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
+import { UseFetch } from '@hooks/useFetch';
+import DeviceInfo from 'react-native-device-info';
 
 const S = {
   Text: styled.Text({
@@ -14,6 +16,26 @@ const S = {
 export const PageLoginId: React.FC<IPage> = (props) => {
   const [userId, setUserId] = useState<string>('');
   const [userPassword, setUserPassword] = useState<string>('');
+  const [deviceID, setDeviceID] = useState('');
+  useEffect(() => {
+    DeviceInfo.getUniqueId().then((uniqueId) => {
+      setDeviceID(uniqueId);
+    });
+  }, []);
+  const setResult = useCallback(() => {
+    return props.navigation.navigate(AppScreens.CharacterMake);
+  }, []);
+  const { onFetch } = UseFetch({
+    method: 'POST',
+    url: '/api/v1/auth/login',
+    value: {
+      email: 'test@daum.net',
+      password: 'test1234',
+      deviceId: deviceID,
+      pushKey: 'tessPushKey',
+    },
+    result: setResult,
+  });
   return (
     <FrameLayout>
       <S.Text>로그인 하기</S.Text>
@@ -38,7 +60,7 @@ export const PageLoginId: React.FC<IPage> = (props) => {
       <Button
         type={'action'}
         text={'로그인하기'}
-        onPress={() => props.navigation.navigate(AppScreens.CharacterMake)}
+        onPress={onFetch}
         sizing="stretch"
         bgColor={'LUCK_GREEN'}
       />
