@@ -13,10 +13,10 @@ interface IProps {
 export const ComponentLoginJoinId: React.FC<IProps> = ({ regPass }) => {
   const [email, setEmail] = useState('');
   const { bottom } = useSafeAreaInsets();
-  const [idRegPass, setIdRegPass] = useState<boolean>(true);
+  const [isRegPass, setIsRegPass] = useState<boolean>(true);
   useEffect(() => {
     const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    setIdRegPass(reg.test(email));
+    setIsRegPass(reg.test(email));
   }, [email]);
 
   return (
@@ -28,6 +28,8 @@ export const ComponentLoginJoinId: React.FC<IProps> = ({ regPass }) => {
             title="이메일 주소가 무엇인가요?"
             text={email}
             placeholder="luckkids.official@gmail.com"
+            notice={'올바른 이메일 형식이 아닙니다.'}
+            reg={isRegPass}
             onChangeText={setEmail}
             description="나중에 이 이메일 주소를 확인해야 합니다."
           />
@@ -38,7 +40,7 @@ export const ComponentLoginJoinId: React.FC<IProps> = ({ regPass }) => {
               type={'action'}
               text={'다음'}
               onPress={() => {
-                if (idRegPass) regPass(true);
+                if (isRegPass) regPass(true);
               }}
               sizing="stretch"
               bgColor={'LUCK_GREEN'}

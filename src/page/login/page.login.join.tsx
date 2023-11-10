@@ -18,16 +18,14 @@ export const LoginData = {
 export const PageLoginJoin: React.FC<IPage> = (props) => {
   const [isRegPass, setIsRegPass] = useState<boolean>(false);
   return (
-    <FrameLayout>
-      <L.Col p={24}>
-        {!isRegPass ? (
-          <ComponentLoginJoinId regPass={setIsRegPass} />
-        ) : (
-          <ComponentLoginJoinPass
-            navigation={() => props.navigation.navigate(AppScreens.LoginId)}
-          />
-        )}
-      </L.Col>
-    </FrameLayout>
+    <>
+      {!isRegPass ? (
+        <ComponentLoginJoinId regPass={setIsRegPass} />
+      ) : (
+        <ComponentLoginJoinPass
+          navigation={() => props.navigation.navigate(AppScreens.LoginId)}
+        />
+      )}
+    </>
   );
 };
