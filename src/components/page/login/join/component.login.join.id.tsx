@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/native';
 import { Button, L, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { DEFAULT_MARGIN } from '@constants';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { IPage } from '@types-common/page.types';
-
-const S = {
-  Text: styled.Text({
-    textAlign: 'center',
-  }),
-};
 
 interface IProps {
   regPass: React.Dispatch<React.SetStateAction<boolean>>;

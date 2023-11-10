@@ -13,7 +13,7 @@ export const PageLoginJoinId: React.FC<IPage> = ({ navigation }) => {
   const { bottom } = useSafeAreaInsets();
 
   const handleNext = () => {
-    navigation.navigate(AppScreens.LoginJoinPass);
+    // navigation.navigate(AppScreens.LoginJoinPass);
   };
 
   // 중복확인 여부 추가
