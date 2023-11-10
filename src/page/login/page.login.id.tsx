@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
@@ -9,47 +9,41 @@ import { UseFetch } from '@hooks/useFetch';
 import DeviceInfo from 'react-native-device-info';
 
 export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
-    const [userId, setUserId] = useState<string>('');
-    const [userPassword, setUserPassword] = useState<string>('');
-    const [deviceID, setDeviceID] = useState('');
-    useEffect(() => {
-        DeviceInfo.getUniqueId().then((uniqueId) => {
-            setDeviceID(uniqueId);
-        });
-    }, []);
-    const setResult = useCallback(() => {
-        return props.navigation.navigate(AppScreens.CharacterMake);
-    }, []);
-    const { onFetch } = UseFetch({
-        method: 'POST',
-        url: '/api/v1/auth/login',
-        value: {
-            email: 'test@daum.net',
-            password: 'test1234',
-            deviceId: deviceID,
-            pushKey: 'tessPushKey',
-        },
-        result: setResult,
+  const [deviceID, setDeviceID] = useState('');
+  useEffect(() => {
+    DeviceInfo.getUniqueId().then((uniqueId) => {
+      setDeviceID(uniqueId);
     });
-    const [loginInfo, setLoginInfo] = useState<{
-        email: string;
-        password: string;
-    }>({
-        email: '',
-        password: '',
-    });
+  }, []);
+  const setResult = useCallback(() => {
+    return navigation.navigate(AppScreens.LoginRemember);
+  }, []);
+  const { onFetch } = UseFetch({
+    method: 'POST',
+    url: '/api/v1/auth/login',
+    value: {
+      email: 'test@daum.net',
+      password: 'test1234',
+      deviceId: deviceID,
+      pushKey: 'tessPushKey',
+    },
+    result: setResult,
+  });
+  const [loginInfo, setLoginInfo] = useState<{
+    email: string;
+    password: string;
+  }>({
+    email: '',
+    password: '',
+  });
 
-    const [visiblityMode, setVisiblityMode] = useState(false);
+  const [visiblityMode, setVisiblityMode] = useState(false);
 
-    const handlePressForgotPassword = () => {
-        //
-    };
+  const handlePressForgotPassword = () => {
+    //
+  };
 
-    const handlePressConfirmLogin = () => {
-        onFetch();
-        navigation.navigate(AppScreens.LoginRemember);
-    };
-    return (
+  return (
     <FrameLayout NavBar={<StackNavbar title={'로그인하기'} useBackButton />}>
       <L.Col w={'100%'} h={'100%'} justify="space-between" ph={DEFAULT_MARGIN}>
         <L.Col w={'100%'} g={10} mt={40}>
@@ -85,7 +79,7 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           <Button
             type={'action'}
             text={'로그인하기'}
-            onPress={handlePressConfirmLogin}
+            onPress={onFetch}
             sizing="stretch"
             bgColor={'LUCK_GREEN'}
           />
@@ -101,7 +95,7 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           <Button
             type={'action'}
             text={'새 계정 만들기'}
-            onPress={() => navigation.navigate(AppScreens.LoginId)}
+            onPress={() => navigation.navigate(AppScreens.LoginJoin)}
             sizing="stretch"
             textColor="LUCK_GREEN"
             bgColor={'TRANSPARENT'}
