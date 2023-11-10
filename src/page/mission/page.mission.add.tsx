@@ -25,15 +25,16 @@ export const PageMissionAdd: React.FC<IPage> = (props) => {
       setDeviceID(uniqueId);
     });
   }, []);
-
-  /*const dataCallBack = useCallback(() => {
+  const getData = useCallback(() => {
     const loadData = async () => {
       try {
-        console.log('try');
         const rtnData = await fetch(
           'http://218.155.95.66:8777/api/v1/auth/login',
           {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
               email: 'test@daum.net',
               password: 'test1234',
@@ -44,33 +45,14 @@ export const PageMissionAdd: React.FC<IPage> = (props) => {
         );
 
         return await rtnData.json();
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        return false;
       }
     };
 
-    loadData()
-      .then((rtnData) => {
-        const data = rtnData;
-        console.log(data);
-      })
-      .catch(() => {
-        console.log('error');
-      });
-  }, []);*/
-  const getData = useCallback(async () => {
-    await fetch('http://218.155.95.66:8777/api/v1/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: 'test@daum.net',
-        password: 'test1234',
-        deviceId: 'testdeviceId',
-        pushKey: 'tessPushKey',
-      }),
-    })
-      .then((res) => console.log('res', res.status))
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
+    loadData().then((rtnData) => {
+      console.log(rtnData);
+    });
   }, []);
   return (
     <FrameLayout>
