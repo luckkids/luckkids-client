@@ -6,8 +6,6 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AppScreens, IPage } from '@types-common/page.types';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 interface IProps {
   onSuccess: () => void;
