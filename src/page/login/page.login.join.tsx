@@ -6,15 +6,6 @@ import { ComponentLoginJoinPass } from '@components/page/login/join/component.lo
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
 
-const deviceId = DeviceInfo.getDeviceId();
-
-export const LoginData = {
-  email: 'tkdrl8908@naver.com',
-  password: '1234',
-  deviceId: 'testdeviceId',
-  pushKey: deviceId,
-};
-
 export const PageLoginJoin: React.FC<IPage> = (props) => {
   const [isRegPass, setIsRegPass] = useState<boolean>(false);
   return (
@@ -23,7 +14,7 @@ export const PageLoginJoin: React.FC<IPage> = (props) => {
         <ComponentLoginJoinId regPass={setIsRegPass} />
       ) : (
         <ComponentLoginJoinPass
-          navigation={() => props.navigation.navigate(AppScreens.LoginId)}
+          onSuccess={() => props.navigation.navigate(AppScreens.LoginId)}
         />
       )}
     </>

@@ -29,7 +29,7 @@ export const ComponentLoginJoinId: React.FC<IProps> = ({ regPass }) => {
             text={email}
             placeholder="luckkids.official@gmail.com"
             notice={'올바른 이메일 형식이 아닙니다.'}
-            reg={isRegPass}
+            isValidated={isRegPass}
             onChangeText={setEmail}
             description="나중에 이 이메일 주소를 확인해야 합니다."
           />

@@ -5,29 +5,32 @@ import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
-import { UseFetch } from '@hooks/useFetch';
 import DeviceInfo from 'react-native-device-info';
+import { useFetch } from '@hooks/useFetch';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 
 export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
   const [deviceID, setDeviceID] = useState('');
-  useEffect(() => {
-    DeviceInfo.getUniqueId().then((uniqueId) => {
-      setDeviceID(uniqueId);
-    });
+  useAsyncEffect(async () => {
+    try {
+      await DeviceInfo.getUniqueId().then(setDeviceID);
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
   const setResult = useCallback(() => {
     return navigation.navigate(AppScreens.LoginRemember);
   }, []);
-  const { onFetch } = UseFetch({
+  const { onFetch } = useFetch({
     method: 'POST',
-    url: '/api/v1/auth/login',
+    url: '/auth/login',
     value: {
       email: 'test@daum.net',
       password: 'test1234',
       deviceId: deviceID,
       pushKey: 'tessPushKey',
     },
-    result: setResult,
+    onSuccessCallback: setResult,
   });
   const [loginInfo, setLoginInfo] = useState<{
     email: string;

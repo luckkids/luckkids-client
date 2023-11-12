@@ -6,9 +6,11 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppScreens, IPage } from '@types-common/page.types';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 interface IProps {
-  navigation: () => void;
+  onSuccess: () => void;
 }
 
 export const ComponentLoginJoinPass: React.FC<IProps> = (props) => {
@@ -53,7 +55,7 @@ export const ComponentLoginJoinPass: React.FC<IProps> = (props) => {
               type={'action'}
               text={'계정 만들기'}
               onPress={() => {
-                if (password.length >= 8) props.navigation();
+                if (password.length >= 8) props.onSuccess();
               }}
               sizing="stretch"
               bgColor={'LUCK_GREEN'}
