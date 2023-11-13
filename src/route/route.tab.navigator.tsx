@@ -30,7 +30,7 @@ export const BottomTabNavigator = () => {
       }}
     >
       <Tab.Screen name={'홈'} component={HomeStackScreen} />
-      <Tab.Screen name={'미션'} component={Mission} />
+      <Tab.Screen name={'습관'} component={Mission} />
       <Tab.Screen name={'가든'} component={Garden} />
       <Tab.Screen name={'설정'} component={PageSetting} />
     </Tab.Navigator>
