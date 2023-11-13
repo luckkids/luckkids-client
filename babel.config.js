@@ -18,7 +18,7 @@ module.exports = {
           '@queries': './src/queries',
           '@utils': './src/utils',
           '@types': './src/types',
-          '@recoil': './src/recoil',
+          '@recoil': './src/recoil/',
           '@types-common': './src/types/common',
           '@global-components': './src/global-components',
           '@hooks': './src/hooks',

@@ -10,7 +10,9 @@ interface TextInputFieldProps extends TextInputProps {
   title?: string;
   description?: string;
   focusDelay?: number;
+  notice?: string;
   RightComponent?: React.ReactNode;
+  isValidated?: boolean;
 }
 
 const TextInputField: React.FC<TextInputFieldProps> = ({
@@ -19,6 +21,8 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
   title,
   placeholder,
   description,
+  notice,
+  isValidated,
   autoFocus = false,
   focusDelay = 600,
   RightComponent,
@@ -81,6 +85,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
       </L.Row>
       {!!description && (
         <L.Layout pv={10}>
+          {!isValidated && <Font type="FOOTNOTE_REGULAR">{notice}</Font>}
           <Font type="FOOTNOTE_REGULAR" color="WHITE">
             {description}
           </Font>

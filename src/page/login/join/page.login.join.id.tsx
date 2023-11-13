@@ -5,7 +5,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
-import { AppScreens, IPage } from '@types-common/page.types';
+import { IPage } from '@types-common/page.types';
 
 export const PageLoginJoinId: React.FC<IPage> = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ export const PageLoginJoinId: React.FC<IPage> = ({ navigation }) => {
   const { bottom } = useSafeAreaInsets();
 
   const handleNext = () => {
-    navigation.navigate(AppScreens.LoginJoinPass);
+    // navigation.navigate(AppScreens.LoginJoinPass);
   };
 
   // 중복확인 여부 추가

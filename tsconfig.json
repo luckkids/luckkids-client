@@ -10,7 +10,7 @@
       "@utils": ["src/utils/index"],
       "@types-index": ["src/types/index"],
       "@types-common/*": ["src/types/common/*"],
-      "@recoil": ["src/recoil/index"],
+      "@recoil/*": ["src/recoil/*"],
       "@global-components/*": ["src/global-components/*"],
       "@hooks/*": ["src/hooks/*"],
       "@page/*": ["src/page/*"],

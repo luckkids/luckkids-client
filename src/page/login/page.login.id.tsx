@@ -1,12 +1,37 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
+import DeviceInfo from 'react-native-device-info';
+import { useFetch } from '@hooks/useFetch';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 
 export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
+  const [deviceID, setDeviceID] = useState('');
+  useAsyncEffect(async () => {
+    try {
+      await DeviceInfo.getUniqueId().then(setDeviceID);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const setResult = useCallback(() => {
+    return navigation.navigate(AppScreens.LoginRemember);
+  }, []);
+  const { onFetch } = useFetch({
+    method: 'POST',
+    url: '/auth/login',
+    value: {
+      email: 'test@daum.net',
+      password: 'test1234',
+      deviceId: deviceID,
+      pushKey: 'tessPushKey',
+    },
+    onSuccessCallback: setResult,
+  });
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
     password: string;
@@ -19,10 +44,6 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
 
   const handlePressForgotPassword = () => {
     //
-  };
-
-  const handlePressConfirmLogin = () => {
-    navigation.navigate(AppScreens.LoginRemember);
   };
 
   return (
@@ -61,7 +82,7 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           <Button
             type={'action'}
             text={'로그인하기'}
-            onPress={handlePressConfirmLogin}
+            onPress={onFetch}
             sizing="stretch"
             bgColor={'LUCK_GREEN'}
           />
@@ -77,7 +98,7 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           <Button
             type={'action'}
             text={'새 계정 만들기'}
-            onPress={() => navigation.navigate(AppScreens.LoginId)}
+            onPress={() => navigation.navigate(AppScreens.LoginJoin)}
             sizing="stretch"
             textColor="LUCK_GREEN"
             bgColor={'TRANSPARENT'}

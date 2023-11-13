@@ -12,7 +12,7 @@ export const PageLogin: React.FC<IPage> = ({ navigation }) => {
   const handlePressApple = () => {};
 
   const handlePressJoin = () => {
-    navigation.navigate(AppScreens.LoginJoinId);
+    navigation.navigate(AppScreens.LoginJoin);
   };
 
   const handlePressLogin = () => {
