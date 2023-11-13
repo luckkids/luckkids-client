@@ -82,7 +82,13 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           <Button
             type={'action'}
             text={'로그인하기'}
-            onPress={onFetch}
+            onPress={() => {
+              /**
+               * TODO: 현재 포스트맨으로도 확인했는데, 500에러 떠서 일단 페이지만 넘어가게 해두었습니다.
+               * */
+              onFetch();
+              navigation.navigate(AppScreens.LoginRemember);
+            }}
             sizing="stretch"
             bgColor={'LUCK_GREEN'}
           />
