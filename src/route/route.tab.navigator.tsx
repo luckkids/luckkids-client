@@ -1,13 +1,13 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { Garden } from '@page/Garden';
-import { Home } from '@page/Home';
-import { Mission } from '@page/Mission';
-import { PageSetting } from '@page/setting/page.setting';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'styled-components/native';
 import { CONSTANTS, FontSettings } from '@design-system';
+import { Garden } from '@page/Garden';
+import { Home } from '@page/Home';
+import { Mission } from '@page/Mission';
+import { PageSetting } from '@page/setting/page.setting';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

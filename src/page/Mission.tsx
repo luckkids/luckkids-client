@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Colors, Font, L, SvgIcon } from '@design-system';
+import styled from 'styled-components/native';
+import { Colors, Font, L } from '@design-system';
+import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
-import FloatingButton from '@components/common/FloatingButton/FloatingButton';
-import { Text, View } from 'react-native';
-import styled from 'styled-components/native';
 
 const S = {
   item: styled.View({
