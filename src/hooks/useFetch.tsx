@@ -5,6 +5,13 @@ import { useRecoilState } from 'recoil';
 
 // let isRefreshing = false;
 const host = 'http://218.155.95.66:8777/api/v1';
+const STATUS = {
+  SUCCESS: 200,
+  CREATED: 201,
+  UNAUTHORIZED: 401,
+  BADREQUEST: 400,
+  SERVERERROR: 500,
+};
 
 export const useFetch = (args: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -33,7 +40,7 @@ export const useFetch = (args: {
     };
 
     loadData().then((result) => {
-      if (result.statusCode === 401) {
+      if (result.statusCode === STATUS.UNAUTHORIZED) {
         //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
         return setExpiredAccessToken();
       }
@@ -44,7 +51,7 @@ export const useFetch = (args: {
           refreshToken: result.data.refreshToken,
         });
       }
-      if (result.statusCode === 200) {
+      if (result.statusCode === STATUS.SUCCESS) {
         //3. 결과가 200일경우 isSuccess 불리언값 참조 가능
         setIsSuccess(true);
         //4. 완료 후 컴퍼넌트에서 던져주는 결과후 실행할 함수 실행
@@ -81,7 +88,8 @@ export const useFetch = (args: {
         body: JSON.stringify(args.value),
       });
 
-      if (rtnData.statusCode !== 200) return new Error(rtnData.statusText);
+      if (rtnData.statusCode !== STATUS.SUCCESS)
+        return new Error(rtnData.statusText);
       return await rtnData.json();
     } catch (error) {
       console.log(error);
