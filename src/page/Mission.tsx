@@ -22,11 +22,11 @@ const S = {
     borderRadius: '22px',
     border: `2px solid ${Colors.GREY1}`,
     marginRight: '16px',
+    justifyContent: 'center',
+    alignItems: 'center',
   }),
   dot: styled.View({
     position: 'absolute',
-    left: '50%',
-    top: '50%',
     width: '12px',
     height: '12px',
     borderRadius: '12px',
