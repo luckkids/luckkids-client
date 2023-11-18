@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Colors, Font, L } from '@design-system';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
+import ButtonText from '../design-system/components/Button/ButtonText';
 
 const S = {
   item: styled.View({
@@ -35,6 +36,7 @@ const S = {
 };
 
 export const Mission: React.FC<IPage> = (props) => {
+  const [hide, setHide] = useState<boolean>(false);
   return (
     <>
       <FrameLayout>
@@ -47,6 +49,17 @@ export const Mission: React.FC<IPage> = (props) => {
           <Font type={'LARGE_TITLE_REGULAR'} color={'LUCK_GREEN'}>
             3/10
           </Font>
+        </L.Row>
+        <L.Row ph={24} pt={48} justify={'space-between'}>
+          <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
+            지금까지 N개 완료했어요!
+          </Font>
+          <ButtonText
+            text={hide ? '보기' : '숨기기'}
+            onPress={() => setHide(!hide)}
+            fontType={'SUBHEADLINE_REGULAR'}
+            textColor={'LUCK_GREEN'}
+          />
         </L.Row>
         <L.Row ph={25} pv={20} justify={'space-between'}>
           <S.Title>
