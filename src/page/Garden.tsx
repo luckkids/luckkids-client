@@ -1,10 +1,10 @@
 import React from 'react';
-import { Font, L, SvgIcon } from '@design-system';
-import { FrameLayout } from '../frame/frame.layout';
-import { TouchableWithoutFeedback, View } from 'react-native';
-import { AppScreens, IPage } from '@types-common/page.types';
-import { GardenItem } from '@components/page/garden/garden.item';
+import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
+import { Font, L, SvgIcon } from '@design-system';
+import { GardenItem } from '@components/page/garden/garden.item';
+import { FrameLayout } from '@frame/frame.layout';
+import { AppScreens, IPage } from '@types-common/page.types';
 
 const S = {
   listWrap: styled.View({

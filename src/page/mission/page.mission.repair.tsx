@@ -1,19 +1,11 @@
 import React from 'react';
-import styled from 'styled-components/native';
+import { TouchableWithoutFeedback } from 'react-native';
 import { Font, L, SvgIcon } from '@design-system';
+import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import StackNavBar from '@components/common/StackNavBar/StackNavBar';
+import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import { AppScreens, IPage } from '@types-common/page.types';
-import StackNavBar from '@components/common/StackNavBar/StackNavBar';
-import FloatingButton from '@components/common/FloatingButton/FloatingButton';
-import { TouchableWithoutFeedback } from 'react-native';
-import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
-
-const S = {
-  Text: styled.Text({
-    textAlign: 'center',
-  }),
-  Button: styled.Button({}),
-};
 
 export const PageMissionRepair: React.FC<IPage> = (props) => {
   return (
