@@ -12,8 +12,8 @@ const S = {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
-    gap: 8,
-    paddingHorizontal: 25,
+    rowGap: 8,
+    paddingHorizontal: 17,
   }),
 };
 

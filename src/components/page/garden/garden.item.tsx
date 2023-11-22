@@ -9,14 +9,18 @@ interface GardenItem {
 
 const S = {
   Container: styled.View({
-    aspectRatio: '1',
-    borderRadius: 12,
+    aspectRatio: '1.075',
     flexGrow: 0,
     flexShrink: 1,
-    flexBasis: '31.6%',
-    background: Colors.BG_TERTIARY,
+    flexBasis: '33.33%',
+    paddingHorizontal: 4,
   }),
-  Wrapper: styled.View({}),
+  Wrapper: styled.View({
+    width: '100%',
+    height: '100%',
+    background: Colors.BG_TERTIARY,
+    borderRadius: 12,
+  }),
 };
 export const GardenItem: React.FC<GardenItem> = (props) => {
   return (
