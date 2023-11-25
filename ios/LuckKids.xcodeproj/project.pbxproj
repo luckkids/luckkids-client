@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* LuckKidsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LuckKidsTests.m */; };
+		078912732B128835000D6C5D /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078912722B128835000D6C5D /* SwiftBridge.swift */; };
 		0789C3D52AF072B100285C72 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0789C3D32AF072B000285C72 /* Images.xcassets */; };
 		0789C3D62AF072B100285C72 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0789C3D42AF072B100285C72 /* BootSplash.storyboard */; };
 		07CF01462B12162200DC9A66 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07CF01452B12162200DC9A66 /* GoogleService-Info.plist */; };
@@ -38,6 +39,8 @@
 		00E356EE1AD99517003FC87E /* LuckKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LuckKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* LuckKidsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LuckKidsTests.m; sourceTree = "<group>"; };
+		078912712B128834000D6C5D /* LuckKids-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LuckKids-Bridging-Header.h"; sourceTree = "<group>"; };
+		078912722B128835000D6C5D /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
 		0789C3D32AF072B000285C72 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LuckKids/Images.xcassets; sourceTree = "<group>"; };
 		0789C3D42AF072B100285C72 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = LuckKids/BootSplash.storyboard; sourceTree = "<group>"; };
 		07CF01452B12162200DC9A66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -102,6 +105,7 @@
 		13B07FAE1A68108700A75B9A /* LuckKids */ = {
 			isa = PBXGroup;
 			children = (
+				078912722B128835000D6C5D /* SwiftBridge.swift */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				0789C3D42AF072B100285C72 /* BootSplash.storyboard */,
@@ -142,6 +146,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				EE075F3FFD614AAF9AA5C994 /* Resources */,
+				078912712B128834000D6C5D /* LuckKids-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -240,7 +245,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -468,6 +473,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				078912732B128835000D6C5D /* SwiftBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +492,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5B7EB9410499542E8C5724F5 /* Pods-LuckKids-LuckKidsTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -513,6 +520,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C6BE57DB24E9ADA2F236DE /* Pods-LuckKids-LuckKidsTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = LuckKidsTests/Info.plist;
@@ -555,6 +563,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.app.luck-kids";
 				PRODUCT_NAME = LuckKids;
+				SWIFT_OBJC_BRIDGING_HEADER = "LuckKids-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -582,6 +591,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.app.luck-kids";
 				PRODUCT_NAME = LuckKids;
+				SWIFT_OBJC_BRIDGING_HEADER = "LuckKids-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -662,6 +672,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
 					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
@@ -735,6 +747,8 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
 					"-Wl",

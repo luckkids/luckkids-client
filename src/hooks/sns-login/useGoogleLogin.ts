@@ -12,7 +12,7 @@ export function useGoogleLogin() {
     });
   }, []);
 
-  const signIn = useCallback(async () => {
+  const handleGoogleLogin = useCallback(async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -23,7 +23,7 @@ export function useGoogleLogin() {
     }
   }, []);
 
-  const signOut = useCallback(async () => {
+  const handleGoogleLogout = useCallback(async () => {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
@@ -34,7 +34,7 @@ export function useGoogleLogin() {
   }, []);
 
   return {
-    handleGoogleLogin: signIn,
-    signOut,
+    handleGoogleLogin,
+    handleGoogleLogout,
   };
 }

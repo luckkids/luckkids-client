@@ -69,8 +69,15 @@ export function useAppleLogin() {
     });
   }, [fetchAndUpdateCredentialState]);
 
+  const handleAppleLogout = useCallback(() => {
+    setUser(null);
+    setCredentialState('N/A');
+    console.warn('Apple Logout Completed');
+  }, []);
+
   return {
     credentialState,
     handleAppleLogin,
+    handleAppleLogout,
   };
 }
