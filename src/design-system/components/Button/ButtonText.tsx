@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import { ColorKeys, Font, IconNames, L, SvgIcon } from '@design-system';
 import { FontType } from '../../foundations/Font/Font';
-import { CSSObject } from 'styled-components';
 
 type ButtonTextProps = {
   text?: string;
