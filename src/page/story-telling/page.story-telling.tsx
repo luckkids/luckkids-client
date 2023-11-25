@@ -5,10 +5,11 @@ import { DEFAULT_MARGIN, STORY_TELLING_CONTENTS } from '@constants';
 import { Button, Font, L } from '@design-system';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
-export const PageStoryTelling: React.FC<IPage> = ({ navigation }) => {
+export const PageStoryTelling: React.FC = () => {
   const [step, setStep] = useState(1);
+  const navigation = useNavigationService();
 
   timer(5000)
     .pipe(
@@ -18,7 +19,7 @@ export const PageStoryTelling: React.FC<IPage> = ({ navigation }) => {
     .subscribe();
 
   const handlePressStart = () => {
-    navigation.navigate(AppScreens.Login);
+    navigation.navigate('Login');
   };
 
   return (

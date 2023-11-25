@@ -2,6 +2,7 @@ import { BottomTabNavigator } from '../route/route.tab.navigator';
 import { PageCharacterMake } from '@page/character/page.character.make';
 import { PageCharacterName } from '@page/character/page.character.name';
 import { PageCharacterSelect } from '@page/character/page.character.select';
+import { PageWebView } from '@page/common/page.common.webview';
 import { PageGardenAlbum } from '@page/garden/page.garden.album';
 import { PageGardenRank } from '@page/garden/page.garden.rank';
 import { PageHomeAlarm } from '@page/home/page.home.alarm';
@@ -9,9 +10,9 @@ import { PageHomeCalendar } from '@page/home/page.home.calendar';
 import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
+import { PageLoginAgreement } from '@page/login/page.login.agreement';
 import { PageLoginId } from '@page/login/page.login.id';
 import { PageLoginJoin } from '@page/login/page.login.join';
-import { PageLoginRemember } from '@page/login/page.login.remember';
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
 import { PageMissionRepair } from '@page/mission/page.mission.repair';
@@ -24,111 +25,115 @@ import { PageSettingProfile } from '@page/setting/page.setting.profile';
 import { PageSettingSecurity } from '@page/setting/page.setting.security';
 import { PageSettingSecurityPass } from '@page/setting/security/page.setting.security.pass';
 import { PageStoryTelling } from '@page/story-telling/page.story-telling';
-import { AppScreens, IStackScreen } from '@types-common/page.types';
+import { IStackScreen } from '@types-common/page.types';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
-    name: AppScreens.StoryTelling,
+    name: 'StoryTelling',
     component: PageStoryTelling,
   },
   {
-    name: AppScreens.Login,
+    name: 'Login',
     component: PageLogin,
   },
   {
-    name: AppScreens.LoginJoin,
+    name: 'LoginJoin',
     component: PageLoginJoin,
   },
   {
-    name: AppScreens.LoginId,
+    name: 'LoginId',
     component: PageLoginId,
   },
   {
-    name: AppScreens.LoginRemember,
-    component: PageLoginRemember,
+    name: 'LoginAgreement',
+    component: PageLoginAgreement,
   },
   {
-    name: AppScreens.CharacterMake,
+    name: 'CharacterMake',
     component: PageCharacterMake,
   },
   {
-    name: AppScreens.CharacterSelect,
+    name: 'CharacterSelect',
     component: PageCharacterSelect,
   },
   {
-    name: AppScreens.CharacterName,
+    name: 'CharacterName',
     component: PageCharacterName,
   },
   {
-    name: AppScreens.Home,
+    name: 'Home',
     component: BottomTabNavigator,
   },
   {
-    name: AppScreens.HomeAlarm,
+    name: 'HomeAlarm',
     component: PageHomeAlarm,
   },
   {
-    name: AppScreens.HomeCalendar,
+    name: 'HomeCalendar',
     component: PageHomeCalendar,
   },
   {
-    name: AppScreens.HomeLevel,
+    name: 'HomeLevel',
     component: PageHomeLevel,
   },
   {
-    name: AppScreens.HomeComment,
+    name: 'HomeComment',
     component: PageHomeComment,
   },
   {
-    name: AppScreens.Mission,
+    name: 'Mission',
     component: Mission,
   },
   {
-    name: AppScreens.MissionRepair,
+    name: 'MissionRepair',
     component: PageMissionRepair,
   },
   {
-    name: AppScreens.MissionAdd,
+    name: 'MissionAdd',
     component: PageMissionAdd,
   },
   {
-    name: AppScreens.GardenAlbum,
+    name: 'GardenAlbum',
     component: PageGardenAlbum,
   },
   {
-    name: AppScreens.GardenRank,
+    name: 'GardenRank',
     component: PageGardenRank,
   },
   {
-    name: AppScreens.Setting,
+    name: 'Setting',
     component: PageSetting,
   },
   {
-    name: AppScreens.SettingProfile,
+    name: 'SettingProfile',
     component: PageSettingProfile,
   },
   {
-    name: AppScreens.SettingAlarm,
+    name: 'SettingAlarm',
     component: PageSettingAlarm,
   },
   {
-    name: AppScreens.SettingInfo,
+    name: 'SettingInfo',
     component: PageSettingInfo,
   },
   {
-    name: AppScreens.SettingSecurity,
+    name: 'SettingSecurity',
     component: PageSettingSecurity,
   },
   {
-    name: AppScreens.SettingNotice,
+    name: 'SettingNotice',
     component: PageSettingNotice,
   },
   {
-    name: AppScreens.SettingSecurityPass,
+    name: 'SettingSecurityPass',
     component: PageSettingSecurityPass,
   },
   {
-    name: AppScreens.SettingAccount,
+    name: 'SettingAccount',
     component: PageSettingAccount,
+  },
+  {
+    name: 'WebView',
+    component: PageWebView,
   },
 ];
