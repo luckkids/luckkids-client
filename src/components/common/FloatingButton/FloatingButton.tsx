@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -24,23 +25,21 @@ function FloatingButton({
   paddingBottom = 38,
 }: FloatingButtonProps) {
   return (
-    <View
-      style={StyleSheet.flatten([
-        styles.container,
-        {
-          bottom: paddingBottom,
-          backgroundColor: Colors['GREY3'],
-        },
-        containerStyle,
-      ])}
-    >
-      <TouchableWithoutFeedback onPress={onPress}>
-        <>
-          {text && <Font type={'BODY_REGULAR'}>{text}</Font>}
-          {children}
-        </>
-      </TouchableWithoutFeedback>
-    </View>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View
+        style={StyleSheet.flatten([
+          styles.container,
+          {
+            bottom: paddingBottom,
+            backgroundColor: Colors['GREY3'],
+          },
+          containerStyle,
+        ])}
+      >
+        {text && <Font type={'BODY_REGULAR'}>{text}</Font>}
+        {children}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

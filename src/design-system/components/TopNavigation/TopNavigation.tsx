@@ -43,8 +43,7 @@ const TopNavigation = ({
             <Icon
               onPress={onBackPress}
               color={'LUCK_GREEN'}
-              // TODO : change icon name
-              name={'lucky_check'}
+              name={'arrow_left'}
               size={24}
             />
           </TouchableWithoutFeedback>

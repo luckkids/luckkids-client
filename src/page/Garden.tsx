@@ -1,11 +1,47 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { FrameLayout } from '../frame/frame.layout';
+import { TouchableWithoutFeedback } from 'react-native';
+import styled from 'styled-components/native';
+import { Font, L, SvgIcon } from '@design-system';
+import { GardenItem } from '@components/page/garden/garden.item';
+import { FrameLayout } from '@frame/frame.layout';
+import { AppScreens, IPage } from '@types-common/page.types';
 
-export const Garden = () => {
+const S = {
+  listWrap: styled.View({
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    rowGap: 8,
+    paddingHorizontal: 17,
+  }),
+};
+
+export const Garden: React.FC<IPage> = ({ navigation }) => {
   return (
     <FrameLayout>
-      <Text>Garden</Text>
+      <L.Row ph={20} pv={10} justify={'space-between'}>
+        <Font type={'TITLE3_SEMIBOLD'} color={'GREY0'}>
+          Luck Kids
+        </Font>
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate(AppScreens.HomeAlarm)}
+        >
+          <SvgIcon name={'bell_badge'} size={20} />
+        </TouchableWithoutFeedback>
+      </L.Row>
+      <L.Row pt={20} pb={24} ph={25} justify={'space-between'}>
+        <Font type={'TITLE1_BOLD'}>가든</Font>
+        <TouchableWithoutFeedback onPress={() => console.log('ranking')}>
+          <SvgIcon name={'album'} size={22} />
+        </TouchableWithoutFeedback>
+      </L.Row>
+      <S.listWrap>
+        <GardenItem onPress={() => console.log('list')} />
+        <GardenItem onPress={() => console.log('list')} />
+        <GardenItem onPress={() => console.log('list')} />
+        <GardenItem onPress={() => console.log('list')} />
+      </S.listWrap>
     </FrameLayout>
   );
 };
