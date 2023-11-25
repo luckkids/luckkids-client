@@ -36,7 +36,7 @@ export enum AppScreens {
   SettingAccount = 'setting.account',
 }
 
-type AppScreensParamList = ParamListBase & {
+export type AppScreensParamList = ParamListBase & {
   Home: undefined;
   Mission: undefined;
   Garden: undefined;
