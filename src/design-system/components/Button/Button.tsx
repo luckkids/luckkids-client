@@ -96,10 +96,9 @@ const Container = styled.View<{
       ? css`
           align-self: stretch;
           width: 100%;
+          flex: 1;
         `
-      : css`
-          padding: 0 100px;
-        `}
+      : css``}
 `;
 
 export default Button;
