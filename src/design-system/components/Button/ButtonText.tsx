@@ -1,7 +1,13 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import {
+  StyleProp,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { ColorKeys, Font, IconNames, L, SvgIcon } from '@design-system';
 import { FontType } from '../../foundations/Font/Font';
+import { CSSObject } from 'styled-components';
 
 type ButtonTextProps = {
   text?: string;
@@ -13,6 +19,7 @@ type ButtonTextProps = {
   iconGap?: number;
   disabled?: boolean;
   children?: React.ReactNode;
+  cssProp?: StyleProp<ViewStyle>;
 };
 
 const ButtonText: React.FC<ButtonTextProps> = ({
@@ -25,13 +32,14 @@ const ButtonText: React.FC<ButtonTextProps> = ({
   iconGap = 7,
   disabled = false,
   children,
+  cssProp,
 }) => {
   return (
     <TouchableWithoutFeedback disabled={disabled} onPress={onPress}>
       {children ? (
         children
       ) : (
-        <View>
+        <View style={cssProp}>
           {!!iconName && iconPosition === 'leading' && (
             <L.Row pr={iconGap}>
               <SvgIcon name={iconName} size={22} color={textColor} />

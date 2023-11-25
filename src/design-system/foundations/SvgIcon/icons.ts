@@ -1,5 +1,6 @@
 import album from '../../assets/icons/album.svg';
 import arrow_left from '../../assets/icons/arrow_left.svg';
+import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
@@ -20,6 +21,7 @@ export {
   password_visibility_off,
   password_visibility_on,
   arrow_left,
+  arrow_right_gray,
   album,
   list,
 };
