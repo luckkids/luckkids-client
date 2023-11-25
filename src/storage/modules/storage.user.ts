@@ -20,7 +20,7 @@ class SafeUserStorage<
 
   public static setUser(userId: number): void {
     SafeUserStorage.storage = new MMKV({
-      id: `ct-user-${userId}-storage`,
+      id: `luck-kids-user-${userId}-storage`,
       encryptionKey: 'hunter2',
     });
 
@@ -29,7 +29,7 @@ class SafeUserStorage<
 
   public static removeUser(): void {
     SafeUserStorage.storage = LuckKidsStorage;
-    console.log('[SafeUserStorage] use CtStorage');
+    console.log('[SafeUserStorage] use LuckKidsStorage');
   }
 
   private type: T;
