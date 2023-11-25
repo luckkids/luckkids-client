@@ -1,9 +1,5 @@
 import React from 'react';
-import { RouteProp } from '@react-navigation/native';
-import {
-  NativeStackNavigationOptions,
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 export type AppScreens = keyof AppScreensParamList;
 
@@ -43,11 +39,4 @@ export interface IStackScreen {
   name: AppScreens;
   component: React.FC;
   options?: NativeStackNavigationOptions | undefined;
-}
-
-export interface IPage<
-  T extends keyof AppScreensParamList = keyof AppScreensParamList,
-> {
-  navigation: NativeStackNavigationProp<AppScreensParamList, T>;
-  route: RouteProp<AppScreensParamList, T>;
 }

@@ -17,9 +17,8 @@ import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
-import { IPage } from '@types-common/page.types';
 
-export const Home: React.FC<IPage> = () => {
+export const Home: React.FC = () => {
   const [toggle, setToggle] = React.useState(false);
   const [text, setText] = useState('');
 
