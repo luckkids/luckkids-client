@@ -18,6 +18,7 @@ export const useFetch = (args: {
   url: string;
   value?: IStringDictionary;
   onSuccessCallback?: () => void;
+  onFailCallback?: () => void;
 }) => {
   const [token, setToken] = useRecoilState(RecoilToken);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -65,9 +66,10 @@ export const useFetch = (args: {
       })
       .catch(() => {
         setIsSuccess(false);
+        args.onFailCallback && args.onFailCallback();
         console.log('서버 통신 에러');
       });
-  }, []);
+  }, [args]);
 
   const setExpiredAccessToken = async () => {
     try {

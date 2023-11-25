@@ -5,30 +5,14 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
 
   const navigation = useNavigationService();
-
-  const setResult = useCallback(() => {
-    return navigation.navigate('Home');
-  }, []);
-
-  const { onFetch } = useFetch({
-    method: 'POST',
-    url: '/auth/login',
-    value: {
-      email: 'test@daum.net',
-      password: 'test1234',
-      deviceId: deviceID,
-      pushKey: 'tessPushKey',
-    },
-    onSuccessCallback: setResult,
-  });
 
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
@@ -45,6 +29,20 @@ export const PageLoginId: React.FC = () => {
   const handlePressForgotPassword = () => {
     //
   };
+
+  const { onFetch: login } = useFetch({
+    method: 'POST',
+    url: '/auth/login',
+    value: {
+      email: loginInfo.email,
+      password: loginInfo.password,
+      deviceId: deviceID,
+      pushKey: 'testPushKey',
+    },
+    onSuccessCallback: () => {
+      navigation.navigate('Home');
+    },
+  });
 
   useAsyncEffect(async () => {
     const deviceId = await DeviceInfo.getUniqueId();
@@ -87,13 +85,7 @@ export const PageLoginId: React.FC = () => {
           <Button
             type={'action'}
             text={'로그인 할게요'}
-            onPress={() => {
-              /**
-               * TODO: 현재 포스트맨으로도 확인했는데, 500에러 떠서 일단 페이지만 넘어가게 해두었습니다.
-               * */
-              onFetch();
-              navigation.navigate('Home');
-            }}
+            onPress={login}
             sizing="stretch"
             status={isButtonDisabled ? 'disabled' : 'normal'}
             bgColor={'LUCK_GREEN'}

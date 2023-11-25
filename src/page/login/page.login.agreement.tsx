@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { AppScreens } from '@types-common/page.types';
+import { useFetch } from '@hooks/useFetch';
+import { RecoilJoinInfo } from '@recoil/recoil.join';
 
 type AgreementContent = {
   text: string;
@@ -34,6 +36,8 @@ const AGREEMENT_CONTENT: AgreementContent[] = [
 
 export const PageLoginAgreement: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
+  const joinInfo = useRecoilValue(RecoilJoinInfo);
+
   const [agreementInfo, setAgreementInfo] = useState<
     (AgreementContent & { isChecked: boolean })[]
   >(
@@ -69,9 +73,20 @@ export const PageLoginAgreement: React.FC = () => {
     .filter((info) => info.isNecessary)
     .some((info) => !info.isChecked);
 
-  const handlePressConfirm = () => {
-    navigation.navigate('LoginId');
-  };
+  const { onFetch: signUp } = useFetch({
+    method: 'POST',
+    url: '/join/user',
+    value: {
+      email: joinInfo.email,
+      password: joinInfo.password,
+    },
+    onSuccessCallback: () => {
+      navigation.navigate('LoginId');
+    },
+    onFailCallback: () => {
+      navigation.navigate('LoginId');
+    },
+  });
 
   return (
     <FrameLayout>
@@ -157,7 +172,7 @@ export const PageLoginAgreement: React.FC = () => {
             <Button
               type={'action'}
               text={'동의했어요'}
-              onPress={handlePressConfirm}
+              onPress={signUp}
               sizing="stretch"
               textColor="BLACK"
               bgColor={'LUCK_GREEN'}

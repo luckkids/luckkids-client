@@ -1,30 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, ButtonText, L, SvgIcon, TextInputField } from '@design-system';
+import { useFetch } from '@hooks/useFetch';
+import { RecoilJoinInfo } from '@recoil/recoil.join';
 
 interface IProps {
   onEmailPass: () => void;
-  email: string;
-  setEmail: (email: string) => void;
 }
 
-export const LoginJoinId: React.FC<IProps> = ({
-  onEmailPass,
-  email,
-  setEmail,
-}) => {
+export const LoginJoinId: React.FC<IProps> = ({ onEmailPass }) => {
   const { bottom } = useSafeAreaInsets();
+  const [joinInfo, setJoinInfo] = useRecoilState(RecoilJoinInfo);
+  const { email } = joinInfo;
+  const setEmail = (email: string) => {
+    setJoinInfo((prev) => ({
+      ...prev,
+      email,
+    }));
+  };
+
   // TODO(Gina) isValidEmail이 추가되어야 하는지 아닌지 확인 필요
   // const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [duplicationPassed, setDuplicationPassed] = useState<boolean>(false);
   const isButtonDisabled = !duplicationPassed;
 
-  const handleCheckDuplicate = async () => {
-    // TODO(Gina) 중복 체크 api 추가
-    setDuplicationPassed(true);
-  };
+  const { onFetch: checkEmail } = useFetch({
+    method: 'POST',
+    url: '/join/checkEmail',
+    value: {
+      email,
+    },
+    onSuccessCallback: () => {
+      setDuplicationPassed(true);
+    },
+    onFailCallback: () => {
+      setDuplicationPassed(true);
+    },
+  });
 
   useEffect(() => {
     setDuplicationPassed(false);
@@ -50,7 +65,7 @@ export const LoginJoinId: React.FC<IProps> = ({
                   <ButtonText
                     text={'중복확인'}
                     textColor="LUCK_GREEN"
-                    onPress={handleCheckDuplicate}
+                    onPress={checkEmail}
                   />
                 ) : (
                   <SvgIcon name={'validation_check'} size={20} />

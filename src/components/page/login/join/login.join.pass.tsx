@@ -2,22 +2,26 @@ import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
+import { RecoilJoinInfo } from '@recoil/recoil.join';
 
 interface IProps {
   onSuccess: () => void;
-  password: string;
-  setPassword: (password: string) => void;
 }
 
-export const LoginJoinPass: React.FC<IProps> = ({
-  onSuccess,
-  password,
-  setPassword,
-}) => {
+export const LoginJoinPass: React.FC<IProps> = ({ onSuccess }) => {
   const { bottom } = useSafeAreaInsets();
   const [visiblityMode, setVisiblityMode] = useState(false);
+  const [joinInfo, setJoinInfo] = useRecoilState(RecoilJoinInfo);
+  const { password } = joinInfo;
+  const setPassword = (password: string) => {
+    setJoinInfo((prev) => ({
+      ...prev,
+      password,
+    }));
+  };
 
   const isButtonDisabled = password.length < 8;
 
