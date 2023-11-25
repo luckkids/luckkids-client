@@ -10,8 +10,8 @@ import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
 import { PageLoginId } from '@page/login/page.login.id';
-import { PageLoginRemember } from '@page/login/page.login.remember';
 import { PageLoginJoin } from '@page/login/page.login.join';
+import { PageLoginRemember } from '@page/login/page.login.remember';
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
 import { PageMissionRepair } from '@page/mission/page.mission.repair';
@@ -23,13 +23,13 @@ import { PageSettingNotice } from '@page/setting/page.setting.notice';
 import { PageSettingProfile } from '@page/setting/page.setting.profile';
 import { PageSettingSecurity } from '@page/setting/page.setting.security';
 import { PageSettingSecurityPass } from '@page/setting/security/page.setting.security.pass';
-import { PageTutorial } from '@page/tutorial/page.tutorial';
+import { PageStoryTelling } from '@page/story-telling/page.story-telling';
 import { AppScreens, IStackScreen } from '@types-common/page.types';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
-    name: AppScreens.Tutorial,
-    component: PageTutorial,
+    name: AppScreens.StoryTelling,
+    component: PageStoryTelling,
   },
   {
     name: AppScreens.Login,

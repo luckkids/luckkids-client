@@ -10,7 +10,7 @@ export enum AppScreens {
   Mission = 'Mission',
   Garden = 'Garden',
   My = 'My',
-  Tutorial = 'tutorial',
+  StoryTelling = 'story.telling',
   Login = 'login',
   LoginJoin = 'login.join',
   LoginId = 'login.id',
