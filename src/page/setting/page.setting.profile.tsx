@@ -1,17 +1,8 @@
 import React, { useState } from 'react';
-import styled from 'styled-components/native';
 import { Font, L, TextInputField } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import { IPage } from '@types-common/page.types';
-
-const S = {
-  Text: styled.Text({
-    textAlign: 'center',
-  }),
-  Button: styled.Button({}),
-};
-
 export const PageSettingProfile: React.FC<IPage> = (props) => {
   const [text, setText] = useState<string>('');
   return (
