@@ -1,2 +1,2 @@
 export * from './common';
-export * from './tutorial';
+export * from './story-telling';

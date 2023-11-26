@@ -1,37 +1,19 @@
 import React, { useCallback, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
-import DeviceInfo from 'react-native-device-info';
-import { useFetch } from '@hooks/useFetch';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import { useFetch } from '@hooks/useFetch';
 
-export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
+export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
-  useAsyncEffect(async () => {
-    try {
-      await DeviceInfo.getUniqueId().then(setDeviceID);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
-  const setResult = useCallback(() => {
-    return navigation.navigate(AppScreens.LoginRemember);
-  }, []);
-  const { onFetch } = useFetch({
-    method: 'POST',
-    url: '/auth/login',
-    value: {
-      email: 'test@daum.net',
-      password: 'test1234',
-      deviceId: deviceID,
-      pushKey: 'tessPushKey',
-    },
-    onSuccessCallback: setResult,
-  });
+
+  const navigation = useNavigationService();
+
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
     password: string;
@@ -40,14 +22,35 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
     password: '',
   });
 
+  const isButtonDisabled = !loginInfo.email || !loginInfo.password;
+
   const [visiblityMode, setVisiblityMode] = useState(false);
 
   const handlePressForgotPassword = () => {
     //
   };
 
+  const { onFetch: login } = useFetch({
+    method: 'POST',
+    url: '/auth/login',
+    value: {
+      email: loginInfo.email,
+      password: loginInfo.password,
+      deviceId: deviceID,
+      pushKey: 'testPushKey',
+    },
+    onSuccessCallback: () => {
+      navigation.navigate('Home');
+    },
+  });
+
+  useAsyncEffect(async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    setDeviceID(deviceId);
+  }, []);
+
   return (
-    <FrameLayout NavBar={<StackNavbar title={'로그인하기'} useBackButton />}>
+    <FrameLayout NavBar={<StackNavbar title={'이메일 로그인'} useBackButton />}>
       <L.Col w={'100%'} h={'100%'} justify="space-between" ph={DEFAULT_MARGIN}>
         <L.Col w={'100%'} g={10} mt={40}>
           <TextInputField
@@ -81,15 +84,10 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           />
           <Button
             type={'action'}
-            text={'로그인하기'}
-            onPress={() => {
-              /**
-               * TODO: 현재 포스트맨으로도 확인했는데, 500에러 떠서 일단 페이지만 넘어가게 해두었습니다.
-               * */
-              onFetch();
-              navigation.navigate(AppScreens.LoginRemember);
-            }}
+            text={'로그인 할게요'}
+            onPress={login}
             sizing="stretch"
+            status={isButtonDisabled ? 'disabled' : 'normal'}
             bgColor={'LUCK_GREEN'}
           />
           <L.Row mt={10}>
@@ -104,7 +102,7 @@ export const PageLoginId: React.FC<IPage> = ({ navigation }) => {
           <Button
             type={'action'}
             text={'새 계정 만들기'}
-            onPress={() => navigation.navigate(AppScreens.LoginJoin)}
+            onPress={() => navigation.navigate('LoginJoin')}
             sizing="stretch"
             textColor="LUCK_GREEN"
             bgColor={'TRANSPARENT'}

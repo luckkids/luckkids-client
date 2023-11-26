@@ -5,9 +5,10 @@ import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
-export const PageMissionRepair: React.FC<IPage> = (props) => {
+export const PageMissionRepair: React.FC = () => {
+  const navigation = useNavigationService();
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
@@ -35,7 +36,7 @@ export const PageMissionRepair: React.FC<IPage> = (props) => {
       </FrameLayout>
       <FloatingButton
         text={'홈(임시버튼)'}
-        onPress={() => props.navigation.navigate(AppScreens.Home)}
+        onPress={() => navigation.navigate('Home')}
       />
     </>
   );

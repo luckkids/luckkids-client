@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { TopNavigation, TopNavigationProps } from '@design-system';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 interface StackNavbarProps extends TopNavigationProps {
   //
@@ -13,8 +13,7 @@ const StackNavbar: React.FC<StackNavbarProps> = ({
   bgColor = 'TRANSPARENT',
   ...props
 }) => {
-  // TODO(Gina): fix any type
-  const navigation = useNavigation<NavigationProp<any>>();
+  const navigation = useNavigationService();
 
   return (
     <TopNavigation

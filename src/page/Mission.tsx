@@ -4,7 +4,7 @@ import { Colors, Font, L } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const S = {
   item: styled.View({
@@ -35,8 +35,10 @@ const S = {
   }),
 };
 
-export const Mission: React.FC<IPage> = (props) => {
+export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
+  const navigation = useNavigationService();
+
   return (
     <>
       <FrameLayout>
@@ -82,7 +84,7 @@ export const Mission: React.FC<IPage> = (props) => {
       </FrameLayout>
       <FloatingButton
         text={'편집'}
-        onPress={() => props.navigation.navigate(AppScreens.MissionRepair)}
+        onPress={() => navigation.navigate('MissionRepair')}
       />
     </>
   );

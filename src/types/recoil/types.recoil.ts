@@ -10,3 +10,8 @@ export interface IResponse extends Response {
 export interface IStringDictionary {
   [index: string]: string;
 }
+
+export interface IJoinInfo {
+  email: string;
+  password: string;
+}

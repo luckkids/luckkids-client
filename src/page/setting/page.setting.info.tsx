@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const S = {
   Text: styled.Text({
@@ -10,13 +10,15 @@ const S = {
   Button: styled.Button({}),
 };
 
-export const PageSettingInfo: React.FC<IPage> = (props) => {
+export const PageSettingInfo: React.FC = () => {
+  const navigation = useNavigationService();
+
   return (
     <FrameLayout>
       <S.Text>계정</S.Text>
       <S.Button
         title={'뒤로가기'}
-        onPress={() => props.navigation.navigate(AppScreens.Setting)}
+        onPress={() => navigation.navigate('Setting')}
       />
     </FrameLayout>
   );

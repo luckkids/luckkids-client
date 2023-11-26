@@ -18,7 +18,6 @@ type ButtonProps = {
   iconName?: IconNames;
   iconPosition?: 'leading' | 'trailing';
   iconGap?: number;
-  disabled?: boolean;
   outline?: ColorKeys;
 };
 
@@ -33,14 +32,14 @@ const Button: React.FC<ButtonProps> = ({
   textColor = 'BLACK',
   iconPosition = 'leading',
   iconGap = 7,
-  disabled = false,
   outline,
 }) => {
   const [pressed, setPressed] = useState<boolean>(false);
+  const isDisabled = status === 'disabled';
 
   return (
     <TouchableWithoutFeedback
-      disabled={disabled}
+      disabled={isDisabled}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
       onPress={() => onPress && onPress(status)}
@@ -48,7 +47,7 @@ const Button: React.FC<ButtonProps> = ({
       <Container
         type={type}
         sizing={sizing}
-        bgColor={bgColor}
+        bgColor={isDisabled ? 'BG_TERTIARY' : bgColor}
         status={status}
         pressed={pressed}
         outline={outline}
@@ -58,7 +57,7 @@ const Button: React.FC<ButtonProps> = ({
             <SvgIcon name={iconName} size={20} color={textColor} />
           </L.Row>
         )}
-        <Font type={'BODY_SEMIBOLD'} color={textColor}>
+        <Font type={'BODY_SEMIBOLD'} color={isDisabled ? 'GREY2' : textColor}>
           {text}
         </Font>
         {!!iconName && iconPosition === 'trailing' && (
@@ -97,10 +96,9 @@ const Container = styled.View<{
       ? css`
           align-self: stretch;
           width: 100%;
+          flex: 1;
         `
-      : css`
-          padding: 0 100px;
-        `}
+      : css``}
 `;
 
 export default Button;

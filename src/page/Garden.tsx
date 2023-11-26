@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { Font, L, SvgIcon } from '@design-system';
 import { GardenItem } from '@components/page/garden/garden.item';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const S = {
   listWrap: styled.View({
@@ -17,7 +17,8 @@ const S = {
   }),
 };
 
-export const Garden: React.FC<IPage> = ({ navigation }) => {
+export const Garden: React.FC = () => {
+  const navigation = useNavigationService();
   return (
     <FrameLayout>
       <L.Row ph={20} pv={10} justify={'space-between'}>
@@ -25,7 +26,7 @@ export const Garden: React.FC<IPage> = ({ navigation }) => {
           Luck Kids
         </Font>
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate(AppScreens.HomeAlarm)}
+          onPress={() => navigation.navigate('HomeAlarm')}
         >
           <SvgIcon name={'bell_badge'} size={20} />
         </TouchableWithoutFeedback>

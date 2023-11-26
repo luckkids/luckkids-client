@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
-import { IPage } from '@types-common/page.types';
-export const PageSettingProfile: React.FC<IPage> = (props) => {
+import useNavigationService from '@hooks/navigation/useNavigationService';
+
+export const PageSettingProfile: React.FC = () => {
   const [text, setText] = useState<string>('');
+
+  const navigation = useNavigationService();
+
   return (
     <FrameLayout
       NavBar={

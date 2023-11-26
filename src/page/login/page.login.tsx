@@ -4,19 +4,23 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
-import { AppScreens, IPage } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
+import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
+import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
 
-export const PageLogin: React.FC<IPage> = ({ navigation }) => {
-  const handlePressKakao = () => {};
-  const handlePressGoogle = () => {};
-  const handlePressApple = () => {};
+export const PageLogin: React.FC = () => {
+  const { handleAppleLogin } = useAppleLogin();
+  const { handleGoogleLogin } = useGoogleLogin();
+  const { handleKakaoLogin } = useKakaoLogin();
+  const navigation = useNavigationService();
 
   const handlePressJoin = () => {
-    navigation.navigate(AppScreens.LoginJoin);
+    navigation.navigate('LoginJoin');
   };
 
   const handlePressLogin = () => {
-    navigation.navigate(AppScreens.LoginId);
+    navigation.navigate('LoginId');
   };
 
   const { bottom } = useSafeAreaInsets();
@@ -33,27 +37,38 @@ export const PageLogin: React.FC<IPage> = ({ navigation }) => {
             <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
-              text={'카카오톡으로 계속하기'}
+              text={'카카오톡으로 시작할게요'}
               textColor="WHITE"
-              onPress={handlePressKakao}
+              onPress={handleKakaoLogin}
               type={'action'}
               sizing="stretch"
             />
             <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
-              text={'구글로 계속하기'}
+              text={'구글로 시작할게요'}
               textColor="WHITE"
-              onPress={handlePressGoogle}
+              onPress={handleGoogleLogin}
               type={'action'}
               sizing="stretch"
             />
             <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
-              text={'애플 계속하기'}
+              text={'애플로 시작할게요'}
               textColor="WHITE"
-              onPress={handlePressApple}
+              onPress={handleAppleLogin}
+              type={'action'}
+              sizing="stretch"
+            />
+            <Button
+              status={'normal'}
+              bgColor={'BG_TERTIARY'}
+              text={'홈으로 바로 이동'}
+              textColor="WHITE"
+              onPress={() => {
+                navigation.navigate('Home');
+              }}
               type={'action'}
               sizing="stretch"
             />
@@ -61,12 +76,12 @@ export const PageLogin: React.FC<IPage> = ({ navigation }) => {
           <L.Row justify="center" g={20} w={'100%'} mt={30}>
             <TouchableWithoutFeedback onPress={handlePressJoin}>
               <Font type={'SUBHEADLINE_SEMIBOLD'} color={'WHITE'}>
-                가입하기
+                이메일 회원가입
               </Font>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={handlePressLogin}>
               <Font type={'SUBHEADLINE_SEMIBOLD'} color={'WHITE'}>
-                로그인하기
+                이메일 로그인
               </Font>
             </TouchableWithoutFeedback>
           </L.Row>

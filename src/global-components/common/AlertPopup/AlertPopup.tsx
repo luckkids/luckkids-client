@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import {
   createPopup,
   FullScreenOverlay,
@@ -14,8 +9,8 @@ import {
   usePopupContext,
 } from 'react-native-global-components';
 import Animated from 'react-native-reanimated';
-import styled from 'styled-components/native';
-import { L } from '@design-system';
+import { DEFAULT_MARGIN } from '@constants';
+import { Button, Font, L } from '@design-system';
 
 interface AlertPopupProps {
   body?: string;
@@ -61,42 +56,45 @@ const AlertPopupContent: React.FC<AlertPopupProps> = ({
     >
       <FullScreenOverlay hideOnPressOverlay />
       <Animated.View style={[styles.container, style, slide]}>
-        <PopupContainer>
+        <L.Col p={16} w={'100%'} rounded={15} bg="BG_SECONDARY">
           {!!title && (
             <L.Layout pv={15}>
-              <Text>{title}</Text>
+              <Font type={'TITLE2_BOLD'}>{title}</Font>
             </L.Layout>
           )}
           {headerComponent}
           {!!body && (
             <L.Layout pb={footerComponent ? 10 : 25}>
-              <Text>{body}</Text>
+              <Font type={'BODY_REGULAR'} color={'GREY0'}>
+                {body}
+              </Font>
             </L.Layout>
           )}
           {footerComponent}
-          <L.Row w={'100%'} justify={'space-evenly'}>
+          <L.Row g={8} w={'100%'}>
             {!!noText && (
-              <TouchableWithoutFeedback onPress={handlePressNo}>
-                <Text>{noText}</Text>
-              </TouchableWithoutFeedback>
+              <Button
+                type={'action'}
+                text={noText}
+                sizing="stretch"
+                onPress={handlePressNo}
+                bgColor="BG_TERTIARY"
+                textColor="WHITE"
+              />
             )}
-            <TouchableWithoutFeedback onPress={handlePressYes}>
-              <Text>{yesText}</Text>
-            </TouchableWithoutFeedback>
+            <Button
+              type={'action'}
+              text={yesText}
+              sizing="stretch"
+              onPress={handlePressYes}
+              bgColor="LUCK_GREEN"
+            />
           </L.Row>
-        </PopupContainer>
+        </L.Col>
       </Animated.View>
     </KeyboardAvoidingLayout>
   );
 };
-
-const PopupContainer = styled.View`
-  width: 90%;
-  background-color: white;
-  border-radius: 24px;
-  padding: 20px;
-  align-items: center;
-`;
 
 const styles = StyleSheet.create({
   container: {
@@ -104,6 +102,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: DEFAULT_MARGIN,
   },
 });
 
