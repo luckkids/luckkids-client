@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
-import StackNavBar from "@components/common/StackNavBar/StackNavBar";
 import {ButtonText, Colors, Font, L} from '@design-system';
+import StackNavBar from "@components/common/StackNavBar/StackNavBar";
+import { FrameLayout } from '@frame/frame.layout';
 
 const S = {
   Border: styled.View({
