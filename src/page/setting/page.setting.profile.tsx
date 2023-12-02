@@ -19,7 +19,7 @@ export const PageSettingProfile: React.FC = () => {
             fontType={'HEADLINE_SEMIBOLD'}
             textColor={'LUCK_GREEN'}
           />
-          <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정</Font>
+          <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정하기</Font>
           <ButtonText
             onPress={() => console.log('cancel')}
             fontType={'HEADLINE_SEMIBOLD'}
