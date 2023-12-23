@@ -5,7 +5,6 @@ import { Font, L, SvgIcon } from '@design-system';
 import { GardenItem } from '@components/page/garden/garden.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { ActionIcon } from '@components/common/ActionIcon';
 
 const S = {

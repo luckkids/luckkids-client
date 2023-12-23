@@ -10,6 +10,7 @@ import iconHomeOff from '../../assets/icons/icon-home-off.svg';
 import iconHomeOn from '../../assets/icons/icon-home-on.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
+import iconPlus from '../../assets/icons/icon-plus.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
 import list from '../../assets/icons/list.svg';
@@ -21,7 +22,6 @@ import password_visibility_off from '../../assets/icons/password_visibility_off.
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
 import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
-import iconPlus from '../../assets/icons/icon-plus.svg';
 
 export {
   bell,
