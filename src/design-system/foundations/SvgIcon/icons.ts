@@ -21,6 +21,7 @@ import password_visibility_off from '../../assets/icons/password_visibility_off.
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
 import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
+import iconPlus from '../../assets/icons/icon-plus.svg';
 
 export {
   bell,
@@ -44,5 +45,6 @@ export {
   iconGardenOff,
   iconGardenOn,
   iconSettingOn,
-  iconSettingOff
+  iconSettingOff,
+  iconPlus,
 };

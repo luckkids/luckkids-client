@@ -6,6 +6,7 @@ import { GardenItem } from '@components/page/garden/garden.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import { ActionIcon } from '@components/common/ActionIcon';
 
 const S = {
   listWrap: styled.View({
@@ -44,11 +45,7 @@ export const Garden: React.FC = () => {
         <GardenItem onPress={() => console.log('list')} />
         <GardenItem onPress={() => console.log('list')} />
       </S.listWrap>
-      <FloatingButton
-        text={'친구를 초대 할게요'}
-        onPress={() => console.log('친구초대')}
-        paddingBottom={35}
-      />
+      <ActionIcon title={'친구를 초대할게요!'} isIcon={true} />
     </FrameLayout>
   );
 };
