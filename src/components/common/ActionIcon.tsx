@@ -10,6 +10,7 @@ interface IActionIcon {
   isIcon?: boolean;
   bgColor?: string;
   isDim?: boolean;
+  onPress: () => void;
 }
 
 const S = {
@@ -44,6 +45,7 @@ export const ActionIcon: React.FC<IActionIcon> = ({
   isIcon,
   bgColor,
   isDim,
+  onPress,
 }) => {
   return (
     <>
@@ -59,7 +61,7 @@ export const ActionIcon: React.FC<IActionIcon> = ({
           <S.dimWrap />
         </Dim>
       )}
-      <TouchableWithoutFeedback onPress={() => console.log('action')}>
+      <TouchableWithoutFeedback onPress={onPress}>
         <S.wrap>
           <S.button bgColor={bgColor}>
             <Font type={'BODY_SEMIBOLD'} mr={isIcon ? 7 : 0}>

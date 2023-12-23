@@ -44,7 +44,11 @@ export const Garden: React.FC = () => {
         <GardenItem onPress={() => console.log('list')} />
         <GardenItem onPress={() => console.log('list')} />
       </S.listWrap>
-      <ActionIcon title={'친구를 초대할게요!'} isIcon={true} />
+      <ActionIcon
+        title={'친구를 초대할게요!'}
+        isIcon={true}
+        onPress={() => console.log('action')}
+      />
     </FrameLayout>
   );
 };
