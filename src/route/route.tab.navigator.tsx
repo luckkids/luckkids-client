@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'styled-components/native';
-import { CONSTANTS, FontSettings } from '@design-system';
+import { CONSTANTS, FontSettings, SvgIcon } from '@design-system';
 import { Garden } from '@page/Garden';
 import { Home } from '@page/Home';
 import { Mission } from '@page/Mission';
@@ -19,7 +19,9 @@ export const BottomTabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: theme.BG_PRIMARY,
+          borderTopWidth: 1,
+          borderTopColor: theme.TAB_BAR_BORDER_TOP,
+          backgroundColor: theme.TAB_BAR_BG,
           height: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
         },
         tabBarActiveTintColor: theme.LUCK_GREEN,
@@ -27,12 +29,57 @@ export const BottomTabNavigator = () => {
         tabBarLabelStyle: {
           ...FontSettings['CAPTION2_SEMIBOLD'],
         },
+        tabBarItemStyle: {
+          marginBottom: 35,
+          marginTop: 7,
+        },
       }}
     >
-      <Tab.Screen name={'홈'} component={HomeStackScreen} />
-      <Tab.Screen name={'습관'} component={Mission} />
-      <Tab.Screen name={'가든'} component={Garden} />
-      <Tab.Screen name={'설정'} component={PageSetting} />
+      <Tab.Screen
+        name={'홈'}
+        component={HomeStackScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <SvgIcon name={focused ? 'iconHomeOn' : 'iconHomeOff'} size={20} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={'습관'}
+        component={Mission}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <SvgIcon
+              name={focused ? 'iconMissionOn' : 'iconMissionOff'}
+              size={20}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={'가든'}
+        component={Garden}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <SvgIcon
+              name={focused ? 'iconGardenOn' : 'iconGardenOff'}
+              size={20}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={'설정'}
+        component={PageSetting}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <SvgIcon
+              name={focused ? 'iconSettingOn' : 'iconSettingOff'}
+              size={20}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 };

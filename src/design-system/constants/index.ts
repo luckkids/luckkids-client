@@ -11,7 +11,7 @@ const { width: _WINDOW_WIDTH, height: _WINDOW_HEIGHT } =
   Dimensions.get('window');
 
 // TO BE FIXED
-const BOTTOM_TABBAR_HEIGHT = 70;
+const BOTTOM_TABBAR_HEIGHT = 82;
 const TOP_NAVIGATION_HEIGHT = 52;
 const DEFAULT_MARGIN = 20;
 const MIN_PADDING_BOTTOM = 8;
