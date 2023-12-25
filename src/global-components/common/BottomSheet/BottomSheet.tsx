@@ -4,6 +4,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProps,
   BottomSheetModalProvider,
+  BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { createPopup, usePopupContext } from 'react-native-global-components';
 import { useTheme } from 'styled-components/native';
@@ -23,9 +24,9 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const bgStyle = useRef({ backgroundColor: theme.WHITE }).current;
+  const bgStyle = useRef({ backgroundColor: theme.BG_SECONDARY }).current;
 
-  const snapPoints = useRef([400]).current;
+  // const snapPoints = useMemo(() => ['CONTENT_HEIGHT'], []);
 
   useEffect(() => {
     bottomSheetModalRef.current?.present();
@@ -42,10 +43,10 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         enableDismissOnClose
+        enableDynamicSizing
         onDismiss={hide}
         ref={bottomSheetModalRef}
         index={0}
-        snapPoints={snapPoints}
         backgroundStyle={bgStyle}
         backdropComponent={(props) => (
           <BottomSheetBackdrop
@@ -56,7 +57,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
         )}
         {...bottomSheetModalProps}
       >
-        {component}
+        <BottomSheetView>{component}</BottomSheetView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );
