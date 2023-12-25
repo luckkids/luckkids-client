@@ -38,6 +38,9 @@ const Colors = {
   //TAB BOTTOM
   TAB_BAR_BG: '#050505',
   TAB_BAR_BORDER_TOP: 'rgba(142,142,142,0.3)',
+
+  //KAKAO
+  LOGO_KAKAO: '#FAE100',
 };
 
 export type ColorType = typeof Colors;
