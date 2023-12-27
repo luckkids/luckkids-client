@@ -7,6 +7,7 @@ import { GardenItem } from '@components/page/garden/garden.item';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { GardenPopup } from '@components/page/garden/garden.popup';
 
 const S = {
   listWrap: styled.View({
@@ -121,6 +122,14 @@ export const Garden: React.FC = () => {
         title={'친구를 초대할게요!'}
         isIcon={true}
         onPress={() => onInviteHandler()}
+      />
+      <GardenPopup
+        title={'aaa'}
+        img={{
+          uri: 'https://img.freepik.com/free-photo/sample-of-white-cotton-textile_1220-7596.jpg',
+          name: 'test',
+        }}
+        level={88}
       />
     </FrameLayout>
   );
