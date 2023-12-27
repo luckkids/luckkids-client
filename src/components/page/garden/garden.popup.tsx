@@ -1,5 +1,4 @@
 import React from 'react';
-import { ImageSourcePropType, ImageURISource } from 'react-native';
 import styled from 'styled-components/native';
 import { Font } from '@design-system';
 import Colors from '../../../design-system/colors';

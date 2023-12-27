@@ -4,10 +4,10 @@ import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
 import { ActionIcon } from '@components/common/ActionIcon';
 import { GardenItem } from '@components/page/garden/garden.item';
+import { GardenPopup } from '@components/page/garden/garden.popup';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { GardenPopup } from '@components/page/garden/garden.popup';
 
 const S = {
   listWrap: styled.View({
