@@ -2,12 +2,9 @@ import React, { useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const PageSettingProfile: React.FC = () => {
   const [text, setText] = useState<string>('');
-
-  const navigation = useNavigationService();
 
   return (
     <FrameLayout
@@ -19,7 +16,7 @@ export const PageSettingProfile: React.FC = () => {
             fontType={'HEADLINE_SEMIBOLD'}
             textColor={'LUCK_GREEN'}
           />
-          <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정</Font>
+          <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정하기</Font>
           <ButtonText
             onPress={() => console.log('cancel')}
             fontType={'HEADLINE_SEMIBOLD'}
