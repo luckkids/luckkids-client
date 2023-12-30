@@ -124,10 +124,10 @@ export const Garden: React.FC = () => {
         onPress={() => onInviteHandler()}
       />
       <GardenPopup
-        title={'aaa'}
+        title={'럭키즈 체고! 럭키즈 체고!'}
         img={{
           uri: 'https://img.freepik.com/free-photo/sample-of-white-cotton-textile_1220-7596.jpg',
-          name: 'test',
+          name: '행운럭키',
         }}
         level={88}
       />
