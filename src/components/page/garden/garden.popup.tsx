@@ -11,6 +11,8 @@ interface IGardenPopup {
     name: string;
   };
   level: number;
+  isShow: boolean;
+  setShow: React.Dispatch<boolean>;
 }
 
 const S = {
@@ -85,10 +87,15 @@ const S = {
     backgroundColor: 'rgba(0,0,0,0.7)',
   }),
 };
-export const GardenPopup: React.FC<IGardenPopup> = ({ title, img, level }) => {
-  const [show, setShow] = useState(false);
+export const GardenPopup: React.FC<IGardenPopup> = ({
+  title,
+  img,
+  level,
+  isShow,
+  setShow,
+}) => {
   return (
-    <S.popupContainer visible={true} transparent={true}>
+    <S.popupContainer visible={isShow} transparent={true}>
       <S.popupWrap>
         <TouchableWithoutFeedback onPress={() => setShow(false)}>
           <S.Dim />

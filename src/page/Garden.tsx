@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
@@ -94,6 +94,7 @@ const onInviteHandler = () => {
 
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
+  const [show, setShow] = useState(false);
   return (
     <FrameLayout>
       <L.Row ph={20} pv={10} justify={'space-between'}>
@@ -113,10 +114,10 @@ export const Garden: React.FC = () => {
         </TouchableWithoutFeedback>
       </L.Row>
       <S.listWrap>
-        <GardenItem onPress={() => console.log('list')} />
-        <GardenItem onPress={() => console.log('list')} />
-        <GardenItem onPress={() => console.log('list')} />
-        <GardenItem onPress={() => console.log('list')} />
+        <GardenItem onPress={() => setShow(true)} />
+        <GardenItem onPress={() => setShow(true)} />
+        <GardenItem onPress={() => setShow(true)} />
+        <GardenItem onPress={() => setShow(true)} />
       </S.listWrap>
       <ActionIcon
         title={'친구를 초대할게요!'}
@@ -130,6 +131,8 @@ export const Garden: React.FC = () => {
           name: '행운럭키',
         }}
         level={88}
+        isShow={show}
+        setShow={setShow}
       />
     </FrameLayout>
   );
