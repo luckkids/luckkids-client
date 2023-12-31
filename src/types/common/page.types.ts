@@ -12,7 +12,8 @@ export type AppScreensParamList = {
   StoryTelling: undefined;
   Login: undefined;
   LoginAlready: { type: SocialType };
-  LoginJoin: undefined;
+  LoginJoinEmailConfirm: undefined;
+  LoginJoin?: { step?: 'Id' | 'Password' };
   LoginId: undefined;
   LoginAgreement: undefined;
   CharacterMake: undefined;

@@ -14,6 +14,7 @@ const Colors = {
   GREY5: '#2C2C2C',
   GREY6: '#1C1C1C',
   WHITE: '#FFFFFF',
+  RED: '#E84747',
 
   // BG
   BG_PRIMARY: '#121212',

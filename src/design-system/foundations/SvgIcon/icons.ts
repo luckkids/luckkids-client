@@ -12,6 +12,7 @@ import iconHomeOn from '../../assets/icons/icon-home-on.svg';
 import iconKakao from '../../assets/icons/icon-kakao.svg';
 import iconGoogle from '../../assets/icons/icon-google.svg';
 import iconApple from '../../assets/icons/icon-apple.svg';
+import yellow_info from '../../assets/icons/yellow_info.svg';
 
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
@@ -27,6 +28,7 @@ import password_visibility_off from '../../assets/icons/password_visibility_off.
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
 import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
+import validation_error from '../../assets/icons/validation_error.svg';
 
 export {
   bell,
@@ -56,4 +58,6 @@ export {
   iconClip,
   iconGoogle,
   iconApple,
+  validation_error,
+  yellow_info,
 };

@@ -4,7 +4,7 @@ import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { RecoilToken } from '@recoil/recoil.token';
 
 // let isRefreshing = false;
-const host = 'http://218.155.95.66:8777/api/v1';
+const host = 'https://luck-kids.kro.kr/api/v1';
 const STATUS = {
   SUCCESS: 200,
   CREATED: 201,
@@ -17,7 +17,7 @@ export const useFetch = (args: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   url: string;
   value?: IStringDictionary;
-  onSuccessCallback?: () => void;
+  onSuccessCallback?: (resultData?: any) => void;
   onFailCallback?: () => void;
 }) => {
   const [token, setToken] = useRecoilState(RecoilToken);
@@ -57,7 +57,7 @@ export const useFetch = (args: {
           //3. 결과가 200일경우 isSuccess 불리언값 참조 가능
           setIsSuccess(true);
           //4. 완료 후 컴퍼넌트에서 던져주는 결과후 실행할 함수 실행
-          args.onSuccessCallback && args.onSuccessCallback();
+          args.onSuccessCallback && args.onSuccessCallback(result.data);
         }
         console.log('RESULT(data) ====>', result.data);
         //5. 데이터 참조 가능하도록 추가

@@ -47,7 +47,7 @@ const Button: React.FC<ButtonProps> = ({
       <Container
         type={type}
         sizing={sizing}
-        bgColor={isDisabled ? 'BG_TERTIARY' : bgColor}
+        bgColor={bgColor}
         status={status}
         pressed={pressed}
         outline={outline}
@@ -88,6 +88,7 @@ const Container = styled.View<{
   background-color: ${({ theme, bgColor }) => theme[bgColor]};
   overflow: hidden;
   opacity: ${({ status, pressed }) => {
+    if (status === 'disabled') return 0.3;
     if (pressed) return 0.9;
     return status === 'normal' ? 1 : 0.8;
   }};

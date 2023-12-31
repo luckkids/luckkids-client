@@ -1,16 +1,21 @@
-import React, { useCallback, useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import React, { createElement, useEffect, useState } from 'react';
+import { Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
-import { FrameLayout } from '@frame/frame.layout';
+import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
+  const { bottom } = useSafeAreaInsets();
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
 
   const navigation = useNavigationService();
 
@@ -27,7 +32,18 @@ export const PageLoginId: React.FC = () => {
   const [visiblityMode, setVisiblityMode] = useState(false);
 
   const handlePressForgotPassword = () => {
-    //
+    Keyboard.dismiss();
+    if (!loginInfo.email) {
+      return SnackBar.show({
+        leftElement: createElement(SvgIcon, {
+          name: 'yellow_info',
+          size: 20,
+        }),
+        title: `아이디를 입력해 주세요.`,
+        position: 'bottom',
+      });
+    }
+    return sendTempPassword();
   };
 
   const { onFetch: login } = useFetch({
@@ -42,6 +58,48 @@ export const PageLoginId: React.FC = () => {
     onSuccessCallback: () => {
       navigation.navigate('Home');
     },
+    onFailCallback: () => {
+      Keyboard.dismiss();
+      return SnackBar.show({
+        leftElement: createElement(SvgIcon, {
+          name: 'yellow_info',
+          size: 20,
+        }),
+        title: `이메일 또는 비밀번호가 잘못 입력되었어요!`,
+        position: 'bottom',
+        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+        rounded: 25,
+        offsetY: 110,
+      });
+    },
+  });
+
+  const { onFetch: sendTempPassword } = useFetch({
+    method: 'POST',
+    url: '/mail/password',
+    value: {
+      email: loginInfo.email,
+    },
+    onSuccessCallback: (resultData) => {
+      console.log('이메일 전송 성공');
+      SnackBar.show({
+        title: `${resultData.email} 주소로 비밀번호 재설정 이메일이 전송되었습니다.`,
+        position: 'bottom',
+        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+        rounded: 25,
+        offsetY: 110,
+      });
+    },
+    onFailCallback: () => {
+      console.log('이메일 전송 실패');
+      SnackBar.show({
+        title: `koyrkr@gmail.com 주소로\n비밀번호 재설정 이메일이 전송되었습니다.`,
+        position: 'bottom',
+        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+        rounded: 25,
+        offsetY: 110,
+      });
+    },
   });
 
   useAsyncEffect(async () => {
@@ -49,20 +107,30 @@ export const PageLoginId: React.FC = () => {
     setDeviceID(deviceId);
   }, []);
 
+  useEffect(() => {
+    const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    setIsValidEmail(reg.test(loginInfo.email));
+  }, [loginInfo.email]);
+
   return (
-    <FrameLayout NavBar={<StackNavbar title={'이메일 로그인'} useBackButton />}>
-      <L.Col w={'100%'} h={'100%'} justify="space-between" ph={DEFAULT_MARGIN}>
+    <FrameLayoutKeyboard>
+      <StackNavbar title={'이메일 로그인'} useBackButton />
+      <L.Col w={'100%'} justify="space-between" ph={DEFAULT_MARGIN}>
         <L.Col w={'100%'} g={10} mt={40}>
           <TextInputField
             text={loginInfo.email}
-            placeholder="luckkids.official@gmail.com"
+            placeholder="이메일"
+            keyboardType="email-address"
             onChangeText={(text) =>
               setLoginInfo((prev) => ({ ...prev, email: text }))
+            }
+            RightComponent={
+              isValidEmail && <SvgIcon name={'validation_check'} size={20} />
             }
           />
           <TextInputField
             text={loginInfo.password}
-            placeholder={'Password'}
+            placeholder={'비밀번호'}
             onChangeText={(text) =>
               setLoginInfo((prev) => ({ ...prev, password: text }))
             }
@@ -84,7 +152,7 @@ export const PageLoginId: React.FC = () => {
           />
           <Button
             type={'action'}
-            text={'로그인 할게요'}
+            text={'로그인'}
             onPress={login}
             sizing="stretch"
             status={isButtonDisabled ? 'disabled' : 'normal'}
@@ -92,13 +160,15 @@ export const PageLoginId: React.FC = () => {
           />
           <L.Row mt={10}>
             <TouchableWithoutFeedback onPress={handlePressForgotPassword}>
-              <Font type={'SUBHEADLINE_REGULAR'} color={'WHITE'}>
+              <Font type={'SUBHEADLINE_REGULAR'} color={'LUCK_GREEN'}>
                 비밀번호를 잊으셨나요?
               </Font>
             </TouchableWithoutFeedback>
           </L.Row>
         </L.Col>
-        <L.Col w={'100%'}>
+      </L.Col>
+      <L.Absolute b={bottom} w={SCREEN_WIDTH}>
+        <L.Row ph={DEFAULT_MARGIN}>
           <Button
             type={'action'}
             text={'새 계정 만들기'}
@@ -108,8 +178,8 @@ export const PageLoginId: React.FC = () => {
             bgColor={'TRANSPARENT'}
             outline={'LUCK_GREEN'}
           />
-        </L.Col>
-      </L.Col>
-    </FrameLayout>
+        </L.Row>
+      </L.Absolute>
+    </FrameLayoutKeyboard>
   );
 };
