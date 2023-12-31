@@ -36,32 +36,37 @@ export const PageLogin: React.FC = () => {
           <L.Col ph={DEFAULT_MARGIN} g={10} w={'100%'}>
             <Button
               status={'normal'}
-              bgColor={'BG_TERTIARY'}
-              text={'카카오톡으로 시작할게요'}
-              textColor="WHITE"
-              onPress={handleKakaoLogin}
+              bgColor={'KAKAO_YELLOW'}
+              text={'카카오로 계속하기'}
+              textColor="BLACK"
+              onPress={() => {
+                navigation.navigate('LoginAlready');
+              }}
               type={'action'}
               sizing="stretch"
+              iconName="iconKakao"
             />
             <Button
               status={'normal'}
-              bgColor={'BG_TERTIARY'}
-              text={'구글로 시작할게요'}
-              textColor="WHITE"
-              onPress={handleGoogleLogin}
-              type={'action'}
-              sizing="stretch"
-            />
-            <Button
-              status={'normal'}
-              bgColor={'BG_TERTIARY'}
-              text={'애플로 시작할게요'}
-              textColor="WHITE"
+              bgColor={'WHITE'}
+              text={'Apple로 계속하기'}
+              textColor="BLACK"
               onPress={handleAppleLogin}
               type={'action'}
               sizing="stretch"
+              iconName="iconApple"
             />
             <Button
+              status={'normal'}
+              bgColor={'WHITE'}
+              text={'Google로 계속하기'}
+              textColor="BLACK"
+              onPress={handleGoogleLogin}
+              type={'action'}
+              sizing="stretch"
+              iconName="iconGoogle"
+            />
+            {/* <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
               text={'홈으로 바로 이동'}
@@ -71,7 +76,7 @@ export const PageLogin: React.FC = () => {
               }}
               type={'action'}
               sizing="stretch"
-            />
+            /> */}
           </L.Col>
           <L.Row justify="center" g={20} w={'100%'} mt={30}>
             <TouchableWithoutFeedback onPress={handlePressJoin}>

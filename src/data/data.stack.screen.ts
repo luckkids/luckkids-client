@@ -11,6 +11,7 @@ import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
 import { PageLoginAgreement } from '@page/login/page.login.agreement';
+import { PageLoginAlready } from '@page/login/page.login.already';
 import { PageLoginId } from '@page/login/page.login.id';
 import { PageLoginJoin } from '@page/login/page.login.join';
 import { Mission } from '@page/Mission';
@@ -35,6 +36,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'Login',
     component: PageLogin,
+  },
+  {
+    name: 'LoginAlready',
+    component: PageLoginAlready,
   },
   {
     name: 'LoginJoin',

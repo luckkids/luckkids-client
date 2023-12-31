@@ -40,7 +40,8 @@ const Colors = {
   TAB_BAR_BORDER_TOP: 'rgba(142,142,142,0.3)',
 
   //KAKAO
-  LOGO_KAKAO: '#FAE100',
+  KAKAO_YELLOW: '#FAE100',
+  KAKAO_LOGO: '#371D1E',
 };
 
 export type ColorType = typeof Colors;

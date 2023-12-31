@@ -10,6 +10,7 @@ export type AppScreensParamList = {
   My: undefined;
   StoryTelling: undefined;
   Login: undefined;
+  LoginAlready: undefined;
   LoginJoin: undefined;
   LoginId: undefined;
   LoginAgreement: undefined;

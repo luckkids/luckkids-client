@@ -52,19 +52,23 @@ const Button: React.FC<ButtonProps> = ({
         pressed={pressed}
         outline={outline}
       >
-        {!!iconName && iconPosition === 'leading' && (
-          <L.Row pr={iconGap}>
+        <L.Row pr={iconGap} ml={18} w={20} h={20}>
+          {!!iconName && iconPosition === 'leading' ? (
             <SvgIcon name={iconName} size={20} color={textColor} />
-          </L.Row>
-        )}
+          ) : (
+            <L.Row />
+          )}
+        </L.Row>
         <Font type={'BODY_SEMIBOLD'} color={isDisabled ? 'GREY2' : textColor}>
           {text}
         </Font>
-        {!!iconName && iconPosition === 'trailing' && (
-          <L.Row pl={iconGap}>
+        <L.Row pl={iconGap} mr={18} w={20} h={20}>
+          {!!iconName && iconPosition === 'trailing' ? (
             <SvgIcon name={iconName} size={20} color={textColor} />
-          </L.Row>
-        )}
+          ) : (
+            <L.Row />
+          )}
+        </L.Row>
       </Container>
     </TouchableWithoutFeedback>
   );
@@ -80,7 +84,7 @@ const Container = styled.View<{
 }>`
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: ${({ theme, bgColor }) => theme[bgColor]};
   overflow: hidden;
   opacity: ${({ status, pressed }) => {
@@ -96,7 +100,6 @@ const Container = styled.View<{
       ? css`
           align-self: stretch;
           width: 100%;
-          flex: 1;
         `
       : css``}
 `;

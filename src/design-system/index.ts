@@ -19,3 +19,5 @@ export { default as CONSTANTS } from './constants';
 
 export { default as TextInputField } from './components/TextInputField/TextInputField';
 export { default as SimpleTextInput } from './components/SimpleTextInput/SimpleTextInput';
+
+export { default as ChipButton } from './components/ChipButton/ChipButton';
