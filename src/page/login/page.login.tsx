@@ -39,9 +39,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'KAKAO_YELLOW'}
               text={'카카오로 계속하기'}
               textColor="BLACK"
-              onPress={() => {
-                navigation.navigate('LoginAlready');
-              }}
+              onPress={handleKakaoLogin}
               type={'action'}
               sizing="stretch"
               iconName="iconKakao"
