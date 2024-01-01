@@ -17,7 +17,7 @@ export const PageLogin: React.FC = () => {
 
   const handlePressJoin = () => {
     navigation.navigate('LoginJoin', {
-      step: 'Password',
+      step: 'Id',
     });
   };
 
