@@ -22,7 +22,9 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
 
   const handleChangeEmail = () => {
     resetJoinInfo();
-    navigation.navigate('LoginJoin');
+    navigation.navigate('LoginJoin', {
+      step: 'Id',
+    });
   };
 
   const handlePressConfirm = () => {

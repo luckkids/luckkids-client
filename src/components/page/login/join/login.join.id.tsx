@@ -6,6 +6,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const LoginJoinId: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -14,6 +15,7 @@ export const LoginJoinId: React.FC = () => {
 
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [duplicationPassed, setDuplicationPassed] = useState<boolean>(false);
+  const navigation = useNavigationService();
 
   // 이메일 중복 체크
   const { onFetch: checkEmail } = useFetch({
@@ -70,9 +72,8 @@ export const LoginJoinId: React.FC = () => {
 
   const handleConfirmEmail = useCallback(() => {
     if (getIsError()) return;
-    console.log(joinInfo.email);
     sendEmail();
-  }, [getIsError, sendEmail, joinInfo]);
+  }, [getIsError, sendEmail]);
 
   useEffect(() => {
     const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

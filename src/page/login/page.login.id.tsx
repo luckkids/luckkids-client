@@ -172,7 +172,11 @@ export const PageLoginId: React.FC = () => {
           <Button
             type={'action'}
             text={'새 계정 만들기'}
-            onPress={() => navigation.navigate('LoginJoin')}
+            onPress={() =>
+              navigation.navigate('LoginJoin', {
+                step: 'Id',
+              })
+            }
             sizing="stretch"
             textColor="LUCK_GREEN"
             bgColor={'TRANSPARENT'}
