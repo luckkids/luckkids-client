@@ -12,6 +12,10 @@ export const Home: React.FC = () => {
     navigation.navigate('HomeCalendar');
   };
 
+  const handleEditComment = () => {
+    navigation.navigate('HomeComment');
+  };
+
   return (
     <>
       <FrameLayout NavBar={<HomeNavbar />}>
@@ -20,6 +24,9 @@ export const Home: React.FC = () => {
           <Font type="BODY_SEMIBOLD">캘린더 이동</Font>
         </TouchableWithoutFeedback>
         {/* 캐릭터 메인 */}
+        <TouchableWithoutFeedback onPress={handleEditComment}>
+          <Font type="BODY_SEMIBOLD">행운 문구 수정</Font>
+        </TouchableWithoutFeedback>
         {/* 정보 */}
       </FrameLayout>
     </>
