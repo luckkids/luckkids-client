@@ -24,6 +24,8 @@ import password_visibility_off from '../../assets/icons/password_visibility_off.
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
 import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
+import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
+import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
 
 export {
   bell,
@@ -51,4 +53,6 @@ export {
   iconPlus,
   iconKakao,
   iconClip,
+  iconCheckAlarmOn,
+  iconCheckAlarmOff,
 };

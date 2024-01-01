@@ -111,16 +111,6 @@ export const GardenPopup: React.FC<IGardenPopup> = ({
           >
             {img.name}
           </Font>
-          {/*<S.imgCaption>
-            <Font
-              color={'LUCK_GREEN'}
-              type={'HEADLINE_SEMIBOLD'}
-              textAlign={'center'}
-              style={{ width: '100%' }}
-            >
-              {img.name}
-            </Font>
-          </S.imgCaption>*/}
         </S.imgWrap>
         <S.progressBarContainer>
           <S.progressBarWrap>
