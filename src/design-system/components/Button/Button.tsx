@@ -96,7 +96,6 @@ const Container = styled.View<{
       ? css`
           align-self: stretch;
           width: 100%;
-          flex: 1;
         `
       : css``}
 `;
