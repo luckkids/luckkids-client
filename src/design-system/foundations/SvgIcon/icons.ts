@@ -4,6 +4,8 @@ import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
+import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
+import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
 import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
 import iconGardenOn from '../../assets/icons/icon-garden-on.svg';
@@ -24,8 +26,6 @@ import password_visibility_off from '../../assets/icons/password_visibility_off.
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
 import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
-import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
-import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
 
 export {
   bell,

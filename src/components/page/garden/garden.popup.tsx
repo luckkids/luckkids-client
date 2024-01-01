@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Font } from '@design-system';

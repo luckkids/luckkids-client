@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { Platform, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Colors, Font, L, SvgIcon } from '@design-system';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import styled from 'styled-components/native';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
+import styled from 'styled-components/native';
+import { Button, Colors, Font, L, SvgIcon } from '@design-system';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 
 interface missionState {
   isCheck?: boolean;
