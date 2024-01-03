@@ -73,22 +73,26 @@ const AlertPopupContent: React.FC<AlertPopupProps> = ({
           {footerComponent}
           <L.Row g={8} w={'100%'}>
             {!!noText && (
+              <L.Row flex-1>
+                <Button
+                  type={'action'}
+                  text={noText}
+                  sizing="stretch"
+                  onPress={handlePressNo}
+                  bgColor="BG_TERTIARY"
+                  textColor="WHITE"
+                />
+              </L.Row>
+            )}
+            <L.Row flex-1>
               <Button
                 type={'action'}
-                text={noText}
+                text={yesText}
                 sizing="stretch"
-                onPress={handlePressNo}
-                bgColor="BG_TERTIARY"
-                textColor="WHITE"
+                onPress={handlePressYes}
+                bgColor="LUCK_GREEN"
               />
-            )}
-            <Button
-              type={'action'}
-              text={yesText}
-              sizing="stretch"
-              onPress={handlePressYes}
-              bgColor="LUCK_GREEN"
-            />
+            </L.Row>
           </L.Row>
         </L.Col>
       </Animated.View>

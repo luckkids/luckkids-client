@@ -60,7 +60,6 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
           autoFocus={autoFocus}
           value={text}
           numberOfLines={1}
-          textAlign="center"
           selectionColor={theme.LUCK_GREEN}
           placeholderTextColor={theme.GREY1}
           {...textInputProps}
