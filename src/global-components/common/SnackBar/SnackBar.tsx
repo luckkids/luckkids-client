@@ -4,17 +4,7 @@ import {
   SimpleSnackbarUI,
 } from 'react-native-global-components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Colors, FontSettings } from '@design-system';
-
-const styles: SimpleSnackbarProps['styles'] = {
-  title: FontSettings['BODY_REGULAR'],
-  container: {
-    backgroundColor: Colors['GREY3'],
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-    opacity: 0.5,
-  },
-};
+import { Button, Colors, FontSettings } from '@design-system';
 
 interface Props extends SimpleSnackbarProps {
   rounded?: number;
@@ -28,10 +18,18 @@ const SnackBar = createPopup(({ rounded = 40, width, ...props }: Props) => {
     <SimpleSnackbarUI
       offsetY={top || 8}
       styles={{
-        ...styles,
+        title: FontSettings['SUBHEADLINE_REGULAR'],
         container: {
           borderRadius: rounded || 0,
           width,
+          backgroundColor: Colors['GREY4'],
+          gap: 10,
+          display: 'flex',
+          flexWrap: 'nowrap',
+          flex: 1,
+          paddingHorizontal: 20,
+          paddingVertical: 16,
+          borderWidth: 1,
         },
       }}
       {...props}
