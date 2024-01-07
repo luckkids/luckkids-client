@@ -1,21 +1,13 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import { Button } from '@design-system';
+import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-
-const S = {
-  Text: styled.Text({
-    textAlign: 'center',
-  }),
-  Button: styled.Button({}),
-};
 
 export const PageHomeCalendar: React.FC = () => {
   const navigation = useNavigationService();
   return (
-    <FrameLayout>
-      <S.Text>캘린더</S.Text>
+    <FrameLayout NavBar={<StackNavbar title="캘린더" />}>
       <Button
         type={'action'}
         text={'홈으로'}

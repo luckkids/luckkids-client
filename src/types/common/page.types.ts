@@ -1,5 +1,6 @@
 import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { SocialType } from '../user';
 
 export type AppScreens = keyof AppScreensParamList;
 
@@ -10,7 +11,9 @@ export type AppScreensParamList = {
   My: undefined;
   StoryTelling: undefined;
   Login: undefined;
-  LoginJoin: undefined;
+  LoginAlready: { type: SocialType };
+  LoginJoinEmailConfirm: undefined;
+  LoginJoin: { step: 'Id' | 'Password' };
   LoginId: undefined;
   LoginAgreement: undefined;
   CharacterMake: undefined;

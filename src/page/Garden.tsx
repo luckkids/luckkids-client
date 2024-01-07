@@ -59,7 +59,7 @@ const onInviteHandler = () => {
         </Font>
         <S.popupItemContainer>
           <S.popupItemWrap>
-            <S.popupItemLogo style={{ backgroundColor: Colors.LOGO_KAKAO }}>
+            <S.popupItemLogo style={{ backgroundColor: Colors.KAKAO_YELLOW }}>
               <SvgIcon name={'iconKakao'} size={20} />
             </S.popupItemLogo>
             <Font type={'BODY_REGULAR'} style={{ marginLeft: 16 }}>

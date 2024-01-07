@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,12 +23,17 @@ export const LoginJoinPass: React.FC<IProps> = ({ onSuccess }) => {
     }));
   };
 
-  const isButtonDisabled = password.length < 8;
+  const [isError, setIsError] = useState(false);
 
   const handlePressConfirm = () => {
-    if (isButtonDisabled) return;
+    if (isError) return;
     onSuccess();
   };
+
+  useEffect(() => {
+    if (!password) return;
+    setIsError(password.length < 8);
+  }, [password]);
 
   return (
     <>
@@ -36,25 +41,31 @@ export const LoginJoinPass: React.FC<IProps> = ({ onSuccess }) => {
         <TextInputField
           title="비밀번호를 설정해주세요."
           text={password}
-          placeholder="Password"
+          placeholder="8자 이상 입력해주세요"
           onChangeText={setPassword}
-          description="비밀번호는 8자 이상이 되어야 해요."
           secureTextEntry={visiblityMode}
+          isError={isError}
+          errorMessage="8자 이상이 되어야 해요!"
           RightComponent={
-            !!password && (
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  setVisiblityMode((prev) => !prev);
-                }}
-              >
-                <L.Row>
-                  <SvgIcon
-                    size={24}
-                    name={`password_visibility_${visiblityMode ? 'off' : 'on'}`}
-                  />
-                </L.Row>
-              </TouchableWithoutFeedback>
-            )
+            <>
+              {isError && <SvgIcon name={'validation_error'} size={20} />}
+              {!!password && (
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setVisiblityMode((prev) => !prev);
+                  }}
+                >
+                  <L.Row>
+                    <SvgIcon
+                      size={24}
+                      name={`password_visibility_${
+                        visiblityMode ? 'off' : 'on'
+                      }`}
+                    />
+                  </L.Row>
+                </TouchableWithoutFeedback>
+              )}
+            </>
           }
         />
       </L.Col>
@@ -62,9 +73,9 @@ export const LoginJoinPass: React.FC<IProps> = ({ onSuccess }) => {
         <L.Row ph={DEFAULT_MARGIN}>
           <Button
             type={'action'}
-            text={'설정했어요'}
+            text={'다음'}
             onPress={handlePressConfirm}
-            status={isButtonDisabled ? 'disabled' : 'normal'}
+            status={isError ? 'disabled' : 'normal'}
             sizing="stretch"
             bgColor={'LUCK_GREEN'}
           />
