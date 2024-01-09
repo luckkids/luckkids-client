@@ -9,12 +9,8 @@ import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
 import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
 import iconGardenOn from '../../assets/icons/icon-garden-on.svg';
-import iconGrowth_1 from '../../assets/icons/icon-growth-1.svg';
-import iconGrowth_2 from '../../assets/icons/icon-growth-2.svg';
-import iconGrowth_3 from '../../assets/icons/icon-growth-3.svg';
-import iconHealth_1 from '../../assets/icons/icon-health-1.svg';
-import iconHealth_2 from '../../assets/icons/icon-health-2.svg';
-import iconHealth_3 from '../../assets/icons/icon-health-3.svg';
+import iconGrowth from '../../assets/icons/icon-growth-1.svg';
+import iconHealth from '../../assets/icons/icon-health-1.svg';
 import iconHomeCare from '../../assets/icons/icon-home-care.svg';
 import iconHomeOff from '../../assets/icons/icon-home-off.svg';
 import iconHomeOn from '../../assets/icons/icon-home-on.svg';
@@ -23,18 +19,14 @@ import iconGoogle from '../../assets/icons/icon-google.svg';
 import iconApple from '../../assets/icons/icon-apple.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
 
-import iconMindSet_1 from '../../assets/icons/icon-mind-set-1.svg';
-import iconMindSet_2 from '../../assets/icons/icon-mind-set-2.svg';
+import iconMindSet from '../../assets/icons/icon-mind-set-1.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
 import iconPlus from '../../assets/icons/icon-plus.svg';
-import iconSelfCare_1 from '../../assets/icons/icon-self-care-1.svg';
-import iconSelfCare_2 from '../../assets/icons/icon-self-care-2.svg';
-import iconSelfCare_3 from '../../assets/icons/icon-self-care-3.svg';
+import iconSelfCare from '../../assets/icons/icon-self-care-1.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
-import iconWorking_1 from '../../assets/icons/icon-working-1.svg';
-import iconWorking_2 from '../../assets/icons/icon-working-2.svg';
+import iconWorking from '../../assets/icons/icon-working-1.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
@@ -78,18 +70,10 @@ export {
   yellow_info,
   iconCheckAlarmOn,
   iconCheckAlarmOff,
-  iconGrowth_1,
-  iconGrowth_2,
-  iconGrowth_3,
-  iconHealth_1,
-  iconHealth_2,
-  iconHealth_3,
+  iconGrowth,
+  iconHealth,
   iconHomeCare,
-  iconMindSet_1,
-  iconMindSet_2,
-  iconSelfCare_1,
-  iconSelfCare_2,
-  iconSelfCare_3,
-  iconWorking_1,
-  iconWorking_2,
+  iconMindSet,
+  iconSelfCare,
+  iconWorking,
 };
