@@ -32,6 +32,10 @@ export const BottomTabNavigator = () => {
         tabBarItemStyle: {
           marginBottom: 35,
           marginTop: 7,
+          height: 40,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 7,
         },
       }}
     >
