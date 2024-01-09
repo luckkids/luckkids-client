@@ -1,0 +1,63 @@
+export const DataDummyMissionRepair = {
+  statusCode: 200,
+  httpStatus: 'OK',
+  message: 'OK',
+  data: [
+    {
+      id: 1,
+      missionType: 'HOUSEKEEPING',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+    {
+      id: 1,
+      type: 'HOUSEKEEPING',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+    {
+      id: 2,
+      type: 'SELF_CARE',
+      missionDescription: '책 읽기',
+      alertStatus: 'UNCHECKED',
+      alertTime: '20:00:00',
+    },
+    {
+      id: 1,
+      type: 'HEALTH',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+    {
+      id: 1,
+      type: 'WORK',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+    {
+      id: 1,
+      type: 'MINDSET',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+    {
+      id: 1,
+      type: 'SELF_DEVELOPMENT',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+    {
+      id: 1,
+      type: 'SELF_DEVELOPMENT',
+      missionDescription: '운동하기',
+      alertStatus: 'CHECKED',
+      alertTime: '18:00:00',
+    },
+  ],
+};
