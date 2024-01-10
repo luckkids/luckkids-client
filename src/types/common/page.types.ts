@@ -43,3 +43,27 @@ export interface IStackScreen {
   component: React.FC;
   options?: NativeStackNavigationOptions | undefined;
 }
+
+export interface IMissionRepair extends IMissionData {
+  statusCode: number;
+  httpStatus: string;
+  message: string;
+  data: IMissionData;
+}
+
+interface IMissionData {
+  WORK: Array<IMissionDataItem>;
+  SELF_DEVELOPMENT: Array<IMissionDataItem>;
+  HEALTH: Array<IMissionDataItem>;
+  HOUSEKEEPING: Array<IMissionDataItem>;
+  MINDSET: Array<IMissionDataItem>;
+  SELF_CARE: Array<IMissionDataItem>;
+}
+
+interface IMissionDataItem {
+  id: number;
+  missionType: string;
+  missionDescription: null | string;
+  alertStatus: string;
+  alertTime: string;
+}
