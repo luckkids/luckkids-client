@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { SocialType } from '../user';
 
@@ -66,4 +66,12 @@ interface IMissionDataItem {
   missionDescription: null | string;
   alertStatus: string;
   alertTime: string;
+}
+
+export interface IMissionListData {
+  missionStatus: string;
+  alertTime: string;
+  id: number;
+  missionDescription: string;
+  setCount: Dispatch<number>;
 }

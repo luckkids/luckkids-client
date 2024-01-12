@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Font, L, SvgIcon } from '@design-system';
 import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
@@ -8,10 +8,22 @@ import { MisstionRepairItem } from '@components/page/mission/misstion.repair.ite
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { IMissionRepair } from '@types-common/page.types';
+import { useFetch } from '@hooks/useFetch';
 
 export const PageMissionRepair = () => {
   const navigation = useNavigationService();
   const list = { ...DataDummyMissionRepair } as IMissionRepair;
+  const [data, setData] = useState<IMissionRepair>();
+  const { onFetch, isSuccess } = useFetch({
+    method: 'GET',
+    url: '/missions',
+    value: {},
+    onSuccessCallback: setData,
+  });
+  useEffect(() => {
+    onFetch();
+  }, [isSuccess]);
+
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>

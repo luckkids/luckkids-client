@@ -1,43 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Colors, Font, L } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-
-const S = {
-  item: styled.View({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  }),
-  Title: styled.View({
-    display: 'flex',
-    flexDirection: 'row',
-  }),
-  iconRound: styled.View({
-    position: 'relative',
-    width: '22px',
-    height: '22px',
-    borderRadius: '22px',
-    border: `2px solid ${Colors.GREY1}`,
-    marginRight: '16px',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }),
-  dot: styled.View({
-    position: 'absolute',
-    width: '12px',
-    height: '12px',
-    borderRadius: '12px',
-    backgroundColor: Colors.LUCK_GREEN,
-  }),
-};
+import { useFetch } from '@hooks/useFetch';
+import { MissionItem } from '@components/page/mission/mission.item';
+import { IMissionListData } from '@types-common/page.types';
 
 export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
+  const [data, setData] = useState<Array<IMissionListData>>();
+  const [count, setCount] = useState<number>(0);
   const navigation = useNavigationService();
+  const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
+    method: 'GET',
+    url: '/missionOutcomes',
+    value: {},
+    onSuccessCallback: (rtn) => setData(rtn),
+  });
+  useEffect(() => {
+    missionList();
+  }, [missionListIsSuccess]);
+
+  console.log(data);
 
   return (
     <>
@@ -54,7 +41,7 @@ export const Mission: React.FC = () => {
         </L.Row>
         <L.Row ph={24} pt={48} justify={'space-between'}>
           <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
-            지금까지 N개 완료했어요!
+            지금까지 {count}개 완료했어요!
           </Font>
           <ButtonText
             text={hide ? '보기' : '숨기기'}
@@ -63,24 +50,10 @@ export const Mission: React.FC = () => {
             textColor={'LUCK_GREEN'}
           />
         </L.Row>
-        <L.Row ph={25} pv={20} justify={'space-between'}>
-          <S.Title>
-            <S.iconRound>
-              <S.dot />
-            </S.iconRound>
-            <Font type={'BODY_SEMIBOLD'}>자전거타기</Font>
-          </S.Title>
-          <Font type={'SUBHEADLINE_REGULAR'}>오전 9:00</Font>
-        </L.Row>
-        <L.Row ph={25} pv={20} justify={'space-between'}>
-          <S.Title>
-            <S.iconRound>
-              <S.dot />
-            </S.iconRound>
-            <Font type={'BODY_SEMIBOLD'}>자전거타기</Font>
-          </S.Title>
-          <Font type={'SUBHEADLINE_REGULAR'}>오전 9:00</Font>
-        </L.Row>
+        {data?.map((item, i) => {
+          if (!item) return;
+          return <MissionItem {...item} key={i} setCount={setCount} />;
+        })}
       </FrameLayout>
       <FloatingButton
         text={'편집'}
