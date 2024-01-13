@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/native';
-import { Colors, Font, L } from '@design-system';
+import { Font, L } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { FrameLayout } from '@frame/frame.layout';
@@ -18,13 +17,18 @@ export const Mission: React.FC = () => {
     method: 'GET',
     url: '/missionOutcomes',
     value: {},
-    onSuccessCallback: (rtn) => setData(rtn),
+    onSuccessCallback: (rtn) => {
+      setData(rtn);
+      rtn.map((item: IMissionListData) => {
+        if (item.missionStatus === 'SUCCEED') {
+          return setCount(count + 1);
+        }
+      });
+    },
   });
   useEffect(() => {
     missionList();
   }, [missionListIsSuccess]);
-
-  console.log(data);
 
   return (
     <>
