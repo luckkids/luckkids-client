@@ -29,7 +29,7 @@ export const BottomTabNavigator = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          opacity: 0.75,
+          opacity: 0.8,
           paddingBottom: bottom,
         },
         tabBarActiveTintColor: Colors.LUCK_GREEN,
