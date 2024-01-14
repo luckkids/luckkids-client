@@ -21,13 +21,11 @@ export const Home: React.FC = () => {
   return (
     <>
       <FrameLayout
-        statusBarColor={'KAKAO_YELLOW'}
+        statusBarColor={'HOME_BG'}
         NavBar={<HomeNavbar />}
         backgroundImage={bgImage}
       >
         {/* 캘린더 */}
-
-        {/* 캘린터 테스트 */}
         <HomeWeekCalendar />
         {/* <TouchableWithoutFeedback onPress={handlePressCalendar}>
           <Font type="BODY_SEMIBOLD">캘린더 이동</Font>

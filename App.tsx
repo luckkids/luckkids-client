@@ -60,7 +60,7 @@ const RootNavigator = withGlobalComponents(() => {
             <Stack.Screen
               name={item.name}
               component={item.component}
-              options={item.options ? item.options : { headerShown: false }}
+              options={{ headerShown: false, ...item.options }}
               key={item.name}
             />
           );

@@ -73,6 +73,9 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'Home',
     component: BottomTabNavigator,
+    options: {
+      gestureEnabled: false,
+    },
   },
   {
     name: 'HomeAlarm',

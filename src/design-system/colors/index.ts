@@ -43,6 +43,9 @@ const Colors = {
   //KAKAO
   KAKAO_YELLOW: '#FAE100',
   KAKAO_LOGO: '#371D1E',
+
+  // HOME
+  HOME_BG: '#A5E2FD',
 };
 
 export type ColorType = typeof Colors;
