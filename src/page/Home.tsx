@@ -3,7 +3,7 @@ import { Animated, TouchableWithoutFeedback, View } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
-import { Font, L } from '@design-system';
+import { Font, L, SvgIcon } from '@design-system';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
@@ -105,6 +105,20 @@ export const Home: React.FC = () => {
                 mb={GAP}
               >
                 {/* 달성율 */}
+                <L.Col ph={25} pv={18}>
+                  <L.Row items="flex-end">
+                    <Font type="LARGE_TITLE_BOLD" mr={4}>
+                      75
+                    </Font>
+                    <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
+                      %
+                    </Font>
+                  </L.Row>
+                  <Font type="SUBHEADLINE_SEMIBOLD" color="HOME_INFO_TEXT">
+                    럭키즈 달성율
+                  </Font>
+                  {/* TODO 프로그레스 바 */}
+                </L.Col>
               </L.Row>
               <L.Row
                 style={{
@@ -114,6 +128,17 @@ export const Home: React.FC = () => {
                 rounded={15}
               >
                 {/* 내가 모은 럭키즈 */}
+                <L.Col ph={25} pv={18}>
+                  <L.Row items="center">
+                    <SvgIcon name="iconHomeLuckkids" size={30} />
+                    <Font type="BODY_SEMIBOLD" color="WHITE" ml={8} mr={4}>
+                      내가 모은
+                    </Font>
+                    <Font type="BODY_SEMIBOLD" color="LUCK_GREEN">
+                      럭키즈
+                    </Font>
+                  </L.Row>
+                </L.Col>
               </L.Row>
             </Animated.View>
           </TouchableWithoutFeedback>
