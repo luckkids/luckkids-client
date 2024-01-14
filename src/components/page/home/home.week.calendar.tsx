@@ -1,14 +1,7 @@
-import { Colors, FontSettings } from '@design-system';
-import React, { useEffect } from 'react';
-import {
-  ExpandableCalendar,
-  AgendaList,
-  CalendarProvider,
-  WeekCalendar,
-  LocaleConfig,
-} from 'react-native-calendars';
-import { format, addDays } from 'date-fns';
-import { MarkedDates } from 'react-native-calendars/src/types';
+import React from 'react';
+import { format } from 'date-fns';
+import { LocaleConfig } from 'react-native-calendars';
+import { Font, L } from '@design-system';
 
 LocaleConfig.locales.ko = {
   monthNames: [
@@ -54,85 +47,54 @@ LocaleConfig.locales.ko = {
 LocaleConfig.defaultLocale = 'ko';
 
 const HomeWeekCalendar: React.FC = () => {
-  const today = new Date();
-  const markedDates: MarkedDates = {};
+  const today = new Date('2024-01-29');
+  const weekDates = [];
+  const koreanDays = ['일', '월', '화', '수', '목', '금', '토'];
 
-  // 오늘의 요일을 가져옵니다 (0: 일요일, 1: 월요일, ..., 6: 토요일).
   const dayOfWeek = today.getDay();
 
   for (let i = -dayOfWeek; i <= 6 - dayOfWeek; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    const formattedDate = format(date, 'yyyy-MM-dd');
+    const currentDate = new Date(today);
+    currentDate.setDate(today.getDate() + i);
 
-    const isSelected = i <= 0;
+    const dayInKorean = koreanDays[currentDate.getDay()];
 
-    markedDates[formattedDate] = {
-      type: 'custom',
-      selected: isSelected,
-      marked: false,
-      customStyles: isSelected
-        ? {
-            container: {
-              opacity: 0.7,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 9,
-            },
-            text: {
-              ...FontSettings['BODY_SEMIBOLD'],
-              color: Colors.BLACK,
-            },
-          }
-        : {
-            container: {
-              marginTop: 8,
-            },
-            text: {
-              ...FontSettings['BODY_SEMIBOLD'],
-              color: Colors.WHITE,
-            },
-          },
-    };
+    weekDates.push({
+      text: dayInKorean,
+      day: format(currentDate, 'd'),
+      date: format(currentDate, 'yyyy-MM-dd'),
+    });
   }
 
   return (
-    <CalendarProvider
-      date={format(new Date(), 'yyyy-MM-dd')}
-      theme={{
-        backgroundColor: Colors.TRANSPARENT,
-        calendarBackground: Colors.TRANSPARENT,
-      }}
-    >
-      <WeekCalendar
-        testID={'WEEK-CALENDAR'}
-        firstDay={0}
-        disabledDaysIndexes={[0]}
-        theme={{
-          backgroundColor: Colors.TRANSPARENT,
-          textSectionTitleColor: Colors.WHITE,
-          selectedDayBackgroundColor: 'rgba(255, 255, 255, 0.5)',
-          selectedDayTextColor: Colors.BLACK,
-          calendarBackground: Colors.TRANSPARENT,
-          textSectionTitleDisabledColor: Colors.WHITE,
-        }}
-        calendarStyle={{
-          backgroundColor: Colors.TRANSPARENT,
-        }}
-        style={{
-          backgroundColor: Colors.TRANSPARENT,
-          ...FontSettings['BODY_SEMIBOLD'],
-        }}
-        markingType={'custom'}
-        markedDates={{
-          // 미션 완료한 날짜
-          // 오늘 날짜
-          // 아직 오지 않은 날짜
-          ...markedDates,
-        }}
-      />
-    </CalendarProvider>
+    <L.Row mt={8} ph={30} w="100%" g={8} justify="center" items="center">
+      {weekDates.map((item) => {
+        const isToday = item.day === format(today, 'd');
+        const isFuture = item.date > format(today, 'yyyy-MM-dd');
+        return (
+          <L.Col g={12.5} key={item.day} flex-1 items="center" justify="center">
+            <L.Row
+              w={23}
+              h={23}
+              bg={isToday ? 'WHITE' : 'TRANSPARENT'}
+              rounded={100}
+              justify="center"
+              items="center"
+            >
+              <Font
+                type="BODY_SEMIBOLD"
+                color={isToday ? 'HOME_TODAY_TEXT' : 'WHITE'}
+              >
+                {item.text}
+              </Font>
+            </L.Row>
+            <Font type="BODY_SEMIBOLD" color={isFuture ? 'WHITE' : 'BLACK'}>
+              {item.day}
+            </Font>
+          </L.Col>
+        );
+      })}
+    </L.Row>
   );
 };
 
