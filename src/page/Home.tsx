@@ -1,9 +1,11 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Font } from '@design-system';
+import { Colors, Font } from '@design-system';
 import HomeNavbar from '@components/page/home/home.navbar';
+import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+const bgImage = require('assets/images/home-bg.png');
 
 export const Home: React.FC = () => {
   const navigation = useNavigationService();
@@ -18,15 +20,22 @@ export const Home: React.FC = () => {
 
   return (
     <>
-      <FrameLayout NavBar={<HomeNavbar />}>
+      <FrameLayout
+        statusBarColor={'KAKAO_YELLOW'}
+        NavBar={<HomeNavbar />}
+        backgroundImage={bgImage}
+      >
         {/* 캘린더 */}
-        <TouchableWithoutFeedback onPress={handlePressCalendar}>
+
+        {/* 캘린터 테스트 */}
+        <HomeWeekCalendar />
+        {/* <TouchableWithoutFeedback onPress={handlePressCalendar}>
           <Font type="BODY_SEMIBOLD">캘린더 이동</Font>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
         {/* 캐릭터 메인 */}
-        <TouchableWithoutFeedback onPress={handleEditComment}>
+        {/* <TouchableWithoutFeedback onPress={handleEditComment}>
           <Font type="BODY_SEMIBOLD">행운 문구 수정</Font>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback> */}
         {/* 정보 */}
       </FrameLayout>
     </>

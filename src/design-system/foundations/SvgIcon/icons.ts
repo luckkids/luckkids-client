@@ -4,16 +4,15 @@ import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
+import iconApple from '../../assets/icons/icon-apple.svg';
 import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
 import iconGardenOn from '../../assets/icons/icon-garden-on.svg';
+import iconGoogle from '../../assets/icons/icon-google.svg';
 import iconHomeOff from '../../assets/icons/icon-home-off.svg';
 import iconHomeOn from '../../assets/icons/icon-home-on.svg';
 import iconKakao from '../../assets/icons/icon-kakao.svg';
-import iconGoogle from '../../assets/icons/icon-google.svg';
-import iconApple from '../../assets/icons/icon-apple.svg';
-import yellow_info from '../../assets/icons/yellow_info.svg';
-
+import iconHomeLuckkids from '../../assets/icons/icon-home-luckkids.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
 import iconPlus from '../../assets/icons/icon-plus.svg';
@@ -22,13 +21,13 @@ import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
-
 import lucky_uncheck from '../../assets/icons/lucky_uncheck.svg';
 import password_visibility_off from '../../assets/icons/password_visibility_off.svg';
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
 import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
 import validation_error from '../../assets/icons/validation_error.svg';
+import yellow_info from '../../assets/icons/yellow_info.svg';
 
 export {
   bell,
@@ -60,4 +59,5 @@ export {
   iconApple,
   validation_error,
   yellow_info,
+  iconHomeLuckkids,
 };
