@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { Animated, TouchableWithoutFeedback, View } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 
 const bgImage = require('assets/images/home-bg.png');
 
@@ -50,6 +51,13 @@ export const Home: React.FC = () => {
       useNativeDriver: false,
     }).start();
   };
+
+  useLayoutEffect(() => {
+    LoadingIndicator.show({});
+    setTimeout(() => {
+      LoadingIndicator.hide();
+    }, 500);
+  }, []);
 
   return (
     <>
