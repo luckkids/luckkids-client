@@ -17,7 +17,7 @@ const Colors = {
   RED: '#E84747',
 
   // BG
-  BG_PRIMARY: '#121212',
+  BG_PRIMARY: '#111111',
   BG_SECONDARY: '#1C1C1C',
   BG_TERTIARY: '#2C2C2C',
 
@@ -37,12 +37,17 @@ const Colors = {
   TRANSPARENT: 'transparent',
 
   //TAB BOTTOM
-  TAB_BAR_BG: '#050505',
+  TAB_BAR_BG: '#000000',
   TAB_BAR_BORDER_TOP: 'rgba(142,142,142,0.3)',
 
   //KAKAO
   KAKAO_YELLOW: '#FAE100',
   KAKAO_LOGO: '#371D1E',
+
+  // HOME
+  HOME_BG: '#A5E2FD',
+  HOME_TODAY_TEXT: '#91CFE0',
+  HOME_INFO_TEXT: '#DCFEC1',
 };
 
 export type ColorType = typeof Colors;

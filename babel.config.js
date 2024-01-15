@@ -24,6 +24,7 @@ module.exports = {
           '@hooks': './src/hooks',
           '@page': './src/page',
           '@frame': './src/frame',
+          assets: './assets',
         },
       },
     ],
