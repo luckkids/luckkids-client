@@ -129,7 +129,7 @@ export const MisstionRepairItem: React.FC<missionState> = ({
                 color={'GREY1'}
                 style={{ marginLeft: 13 }}
               >
-                aaa {rtnTime}
+                aaab {rtnTime}
               </Font>
             ) : (
               <Font
