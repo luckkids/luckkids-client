@@ -9,15 +9,16 @@ import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
 import iconGardenOn from '../../assets/icons/icon-garden-on.svg';
 import iconGoogle from '../../assets/icons/icon-google.svg';
+import iconHomeLuckkids from '../../assets/icons/icon-home-luckkids.svg';
 import iconHomeOff from '../../assets/icons/icon-home-off.svg';
 import iconHomeOn from '../../assets/icons/icon-home-on.svg';
 import iconKakao from '../../assets/icons/icon-kakao.svg';
-import iconHomeLuckkids from '../../assets/icons/icon-home-luckkids.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
 import iconPlus from '../../assets/icons/icon-plus.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
+import icon_lock from '../../assets/icons/icon_lock.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
@@ -60,4 +61,5 @@ export {
   validation_error,
   yellow_info,
   iconHomeLuckkids,
+  icon_lock,
 };
