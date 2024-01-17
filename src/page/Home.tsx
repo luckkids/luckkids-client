@@ -7,8 +7,8 @@ import { Font, L, SvgIcon } from '@design-system';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const bgImage = require('assets/images/home-bg.png');
 
