@@ -62,7 +62,7 @@ const useFirebaseMessage = () => {
       }
       const pushToken = await messaging().getToken();
       console.log('[Firebase Device Token] : ', pushToken);
-      // push token update api
+      // TODO push token update api
     } catch (e) {
       console.log(e);
     }
@@ -71,7 +71,7 @@ const useFirebaseMessage = () => {
   const deletePushToken = useCallback(async () => {
     if (await DeviceInfo.isEmulator()) return;
     try {
-      // push token delete api
+      // TODO push token delete api
       await messaging().deleteToken();
     } catch (e) {
       console.log(e);

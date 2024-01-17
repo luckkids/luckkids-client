@@ -10,7 +10,7 @@ import { PageHomeCalendar } from '@page/home/page.home.calendar';
 import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
-import { PageLoginAgreement } from '@page/login/page.login.agreement';
+import { PageLoginJoinAgreement } from '@page/login/page.login.join.agreement';
 import { PageLoginAlready } from '@page/login/page.login.already';
 import { PageLoginId } from '@page/login/page.login.id';
 import { PageLoginJoin } from '@page/login/page.login.join';
@@ -55,8 +55,8 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageLoginId,
   },
   {
-    name: 'LoginAgreement',
-    component: PageLoginAgreement,
+    name: 'LoginJoinAgreement',
+    component: PageLoginJoinAgreement,
   },
   {
     name: 'CharacterMake',

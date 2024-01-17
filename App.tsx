@@ -12,6 +12,8 @@ import { QueryClientProvider } from '@queries';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import useLocalMessage from '@hooks/notification/useLocalMessage';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -37,17 +39,22 @@ const Stack = createNativeStackNavigator();
 
 const RootNavigator = withGlobalComponents(() => {
   const [initializing, setInitializing] = useState(true);
+  const { initialize: initializeFirebaseMessage, requestPermissionIfNot } =
+    useFirebaseMessage();
+  const { initialize: initializeLocalMessage } = useLocalMessage();
 
   useAsyncEffect(async () => {
     try {
       if (!initializing) {
-        return console.log('App Reload');
+        console.log('App Reload');
+
+        await initializeFirebaseMessage();
+        initializeLocalMessage();
       }
     } catch (error) {
       console.error(error);
     } finally {
       setInitializing(false);
-
       await BootSplash.hide({ fade: true });
     }
   }, [initializing]);

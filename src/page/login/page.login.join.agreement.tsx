@@ -34,7 +34,7 @@ const AGREEMENT_CONTENT: AgreementContent[] = [
   },
 ];
 
-export const PageLoginAgreement: React.FC = () => {
+export const PageLoginJoinAgreement: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
   const joinInfo = useRecoilValue(RecoilJoinInfo);
 

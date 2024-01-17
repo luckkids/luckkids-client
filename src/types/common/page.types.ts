@@ -15,7 +15,7 @@ export type AppScreensParamList = {
   LoginJoinEmailConfirm: undefined;
   LoginJoin: { step: 'Id' | 'Password' };
   LoginId: undefined;
-  LoginAgreement: undefined;
+  LoginJoinAgreement: undefined;
   CharacterMake: undefined;
   CharacterSelect: undefined;
   CharacterName: undefined;
