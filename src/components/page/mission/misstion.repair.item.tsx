@@ -58,9 +58,17 @@ export const MisstionRepairItem: React.FC<missionState> = ({
   const [alarm, setAlarm] = useState(isSetAlarm);
   const [date, setDate] = useState(new Date(1598051730000));
   const [isDisabled, setIsDisabled] = useState(false);
+  const [rtnTime, setRtnTime] = useState('');
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+
+    const tempDate = new Date(currentDate);
+    const fTime = `${
+      tempDate.getHours() < 12 ? '오전' : '오후'
+    } ${tempDate.getHours()}${tempDate.getMinutes()}`;
+    console.log('time =======>', tempDate);
+    setRtnTime(fTime);
   };
   const onTimePicker = useCallback(() => {
     BottomSheet.show({
@@ -75,7 +83,7 @@ export const MisstionRepairItem: React.FC<missionState> = ({
                 type={'BODY_REGULAR'}
                 color={isDisabled ? 'GREY1' : 'WHITE'}
               >
-                알람 끄기
+                알림끄기
               </Font>
               <L.Row ml={12}>
                 <SvgIcon
@@ -88,7 +96,7 @@ export const MisstionRepairItem: React.FC<missionState> = ({
           <DateTimePicker
             testID="dateTimePicker"
             value={date}
-            is24Hour={true}
+            is24Hour={false}
             display="spinner"
             mode={'time'}
             onChange={onChange}
@@ -114,32 +122,29 @@ export const MisstionRepairItem: React.FC<missionState> = ({
           <Font type={'HEADLINE_SEMIBOLD'} color={'WHITE'}>
             자전거타기
           </Font>
-          {alarm ? (
-            <Font
-              type={'FOOTNOTE_REGULAR'}
-              color={'GREY1'}
-              style={{ marginLeft: 13 }}
-            >
-              오전 8:00
-            </Font>
-          ) : (
-            <Font
-              type={'FOOTNOTE_REGULAR'}
-              color={'GREY1'}
-              style={{ marginLeft: 13 }}
-            >
-              알림끔
-            </Font>
-          )}
+          <TouchableWithoutFeedback onPress={() => onTimePicker()}>
+            {alarm ? (
+              <Font
+                type={'FOOTNOTE_REGULAR'}
+                color={'GREY1'}
+                style={{ marginLeft: 13 }}
+              >
+                aaa {rtnTime}
+              </Font>
+            ) : (
+              <Font
+                type={'FOOTNOTE_REGULAR'}
+                color={'GREY1'}
+                style={{ marginLeft: 13 }}
+              >
+                알림끔
+              </Font>
+            )}
+          </TouchableWithoutFeedback>
         </L.Row>
-        <TouchableWithoutFeedback onPress={() => onTimePicker()}>
-          <View>
-            <SvgIcon
-              name={isCheck ? 'lucky_check' : 'lucky_uncheck'}
-              size={30}
-            />
-          </View>
-        </TouchableWithoutFeedback>
+        <View>
+          <SvgIcon name={isCheck ? 'lucky_check' : 'lucky_uncheck'} size={30} />
+        </View>
       </L.Row>
     </L.Row>
   );

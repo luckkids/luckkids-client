@@ -24,8 +24,7 @@ import { PageSettingAlarm } from '@page/setting/page.setting.alarm';
 import { PageSettingInfo } from '@page/setting/page.setting.info';
 import { PageSettingNotice } from '@page/setting/page.setting.notice';
 import { PageSettingProfile } from '@page/setting/page.setting.profile';
-import { PageSettingSecurity } from '@page/setting/page.setting.security';
-import { PageSettingSecurityPass } from '@page/setting/security/page.setting.security.pass';
+import { PageSettingInfoPassword } from '@page/setting/page.setting.info.password';
 import { PageStoryTelling } from '@page/story-telling/page.story-telling';
 import { IStackScreen } from '@types-common/page.types';
 
@@ -127,16 +126,12 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageSettingInfo,
   },
   {
-    name: 'SettingSecurity',
-    component: PageSettingSecurity,
-  },
-  {
     name: 'SettingNotice',
     component: PageSettingNotice,
   },
   {
     name: 'SettingSecurityPass',
-    component: PageSettingSecurityPass,
+    component: PageSettingInfoPassword,
   },
   {
     name: 'SettingAccount',

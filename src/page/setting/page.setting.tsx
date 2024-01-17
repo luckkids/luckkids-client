@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import { Font, SvgIcon, L } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { ScrollView } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import { useFetch } from '@hooks/useFetch';
+import { DefaultTypeUnit, ISettingAlarm } from '@types-common/page.types';
 
 const S = {
   Wrap: styled.View({
@@ -19,6 +22,21 @@ const S = {
 
 export const PageSetting: React.FC = () => {
   const navigation = useNavigationService();
+  const [version, setVersion] = useState<string>('최신 버전이에요!');
+  const applicationVersion = DeviceInfo.getVersion();
+  const { onFetch } = useFetch({
+    method: 'GET',
+    url: '/versions/',
+    value: {},
+    onSuccessCallback: (rtn) => {
+      // if (rtn.versionNum === applicationVersion) setVersion(rtn.versionNum);
+      setVersion(rtn);
+    },
+  });
+  useEffect(() => {
+    // onFetch();
+    console.log(applicationVersion);
+  }, []);
   return (
     <FrameLayout
       NavBar={
@@ -50,12 +68,6 @@ export const PageSetting: React.FC = () => {
             <SvgIcon name={'arrow_right_gray'} size={14} />
           </L.Row>
         </ButtonText>
-        <ButtonText onPress={() => navigation.navigate('SettingSecurity')}>
-          <L.Row justify={'space-between'} ph={25} pv={20}>
-            <Font type={'BODY_REGULAR'}>보안</Font>
-            <SvgIcon name={'arrow_right_gray'} size={14} />
-          </L.Row>
-        </ButtonText>
         <ButtonText onPress={() => navigation.navigate('SettingNotice')}>
           <L.Row justify={'space-between'} ph={25} pv={20}>
             <Font type={'BODY_REGULAR'}>공지사항</Font>
@@ -71,7 +83,7 @@ export const PageSetting: React.FC = () => {
         <L.Row justify={'space-between'} ph={25} pv={20}>
           <Font type={'BODY_REGULAR'}>버전 정보</Font>
           <Font type={'BODY_REGULAR'} color={'GREY1'}>
-            최신 버전이에요!
+            {version}
           </Font>
         </L.Row>
         <ButtonText

@@ -90,3 +90,8 @@ export interface ISettingAlarm {
   luck: TCheck;
   notice: TCheck;
 }
+
+export interface ISettingNotice {
+  title: string;
+  createdDate: string;
+}

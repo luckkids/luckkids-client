@@ -8,6 +8,7 @@ import { GardenPopup } from '@components/page/garden/garden.popup';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useFetch } from '@hooks/useFetch';
 
 const S = {
   listWrap: styled.View({
@@ -95,6 +96,13 @@ const onInviteHandler = () => {
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
   const [show, setShow] = useState(false);
+  const [data, setData] = useState();
+  const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
+    method: 'GET',
+    url: '/friend/list',
+    value: {},
+    onSuccessCallback: (rtn) => {},
+  });
   return (
     <FrameLayout>
       <L.Row ph={20} pv={10} justify={'space-between'}>

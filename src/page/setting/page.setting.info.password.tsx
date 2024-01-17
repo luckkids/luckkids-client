@@ -10,7 +10,7 @@ const S = {
   Button: styled.Button({}),
 };
 
-export const PageSettingSecurityPass: React.FC = () => {
+export const PageSettingInfoPassword: React.FC = () => {
   const navigation = useNavigationService();
   return (
     <FrameLayout>
