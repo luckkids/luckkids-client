@@ -60,7 +60,7 @@ export const PageSettingAccount: React.FC = () => {
     });
   }, [tempArray, index]);
   return (
-    <FrameLayout NavBar={<StackNavBar title={'탈퇴하기'} useBackButton />}>
+    <FrameLayout NavBar={`<StackNavBar title={'탈퇴하기'} useBackButton />`}>
       <L.Col>{accountListItem}</L.Col>
       <L.Col g={10} w={'100%'} ph={25}>
         <L.Row w={'100%'}>

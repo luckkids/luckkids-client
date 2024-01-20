@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { ButtonText, Colors, Font, L, SvgIcon } from '@design-system';
+import { ButtonText, Colors, Font, L, SvgIcon, Toggle } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import { TouchableWithoutFeedback } from 'react-native';
@@ -15,11 +15,14 @@ const S = {
 
 export const PageSettingInfo: React.FC = () => {
   const navigation = useNavigationService();
+  const [autoLogin, setAutoLogin] = useState<boolean>(false);
   return (
     <FrameLayout NavBar={<StackNavBar title={'계정'} useBackButton />}>
       <S.Border />
       <L.Col ph={25} pt={25} pb={15}>
-        <Font type={'FOOTNOTE_SEMIBOLD'}>계정 정보</Font>
+        <Font type={'SUBHEADLINE_SEMIBOLD'} color={'GREY1'}>
+          계정 정보
+        </Font>
         <L.Col pt={30}>
           <Font type={'BODY_REGULAR'}>이메일</Font>
           <L.Col pt={7}>
@@ -37,8 +40,14 @@ export const PageSettingInfo: React.FC = () => {
           <SvgIcon name={'arrow_right_gray'} size={8.4} />
         </L.Row>
       </TouchableWithoutFeedback>
+      <L.Row ph={25} pv={25} justify={'space-between'} items={'center'}>
+        <Font type={'BODY_REGULAR'}>자동 로그인</Font>
+        <Toggle value={autoLogin} onChange={setAutoLogin} />
+      </L.Row>
       <L.Col ph={25} pt={25}>
-        <Font type={'FOOTNOTE_SEMIBOLD'}>기타</Font>
+        <Font type={'SUBHEADLINE_SEMIBOLD'} color={'GREY1'}>
+          기타
+        </Font>
         <L.Col pt={30}>
           <ButtonText
             onPress={() => console.log('서비스이용약관')}
