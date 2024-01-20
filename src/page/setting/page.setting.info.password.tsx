@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
+import { DEFAULT_MARGIN } from '@constants';
+import { Button, TextInputField, L, SvgIcon, ButtonText } from '@design-system';
+import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import StackNavBar from '@components/common/StackNavBar/StackNavBar';
-import { Button, TextInputField, L, SvgIcon, ButtonText } from '@design-system';
-import { TouchableWithoutFeedback } from 'react-native';
-import { DEFAULT_MARGIN } from '@constants';
 
 const S = {
   Text: styled.Text({

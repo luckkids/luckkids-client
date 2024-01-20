@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { ButtonText, Colors, Font, L, SvgIcon, Toggle } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
-import { TouchableWithoutFeedback } from 'react-native';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const S = {

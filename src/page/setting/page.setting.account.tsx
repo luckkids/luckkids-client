@@ -3,9 +3,6 @@ import styled from 'styled-components/native';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { Button, Font, L } from '@design-system';
-import { PageSetting } from '@page/setting/page.setting';
-import { DataStackScreen } from '../../data/data.stack.screen';
-import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { TouchableWithoutFeedback } from 'react-native';
 
 const S = {
