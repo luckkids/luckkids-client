@@ -9,6 +9,7 @@ import iconApple from '../../assets/icons/icon-apple.svg';
 import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
 import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
 
+import iconApple from '../../assets/icons/icon-apple.svg';
 import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
 import iconGardenOn from '../../assets/icons/icon-garden-on.svg';
@@ -16,9 +17,11 @@ import iconGoogle from '../../assets/icons/icon-google.svg';
 import iconGrowth from '../../assets/icons/icon-growth-1.svg';
 import iconHealth from '../../assets/icons/icon-health-1.svg';
 import iconHomeCare from '../../assets/icons/icon-home-care.svg';
+import iconGoogle from '../../assets/icons/icon-google.svg';
 import iconHomeOff from '../../assets/icons/icon-home-off.svg';
 import iconHomeOn from '../../assets/icons/icon-home-on.svg';
 import iconKakao from '../../assets/icons/icon-kakao.svg';
+import iconHomeLuckkids from '../../assets/icons/icon-home-luckkids.svg';
 import iconMindSet from '../../assets/icons/icon-mind-set-1.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
@@ -30,7 +33,6 @@ import iconWorking from '../../assets/icons/icon-working-1.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
-
 import lucky_uncheck from '../../assets/icons/lucky_uncheck.svg';
 import password_visibility_off from '../../assets/icons/password_visibility_off.svg';
 import password_visibility_on from '../../assets/icons/password_visibility_on.svg';
@@ -69,6 +71,7 @@ export {
   iconApple,
   validation_error,
   yellow_info,
+  iconHomeLuckkids,
   iconCheckAlarmOn,
   iconCheckAlarmOff,
   iconGrowth,

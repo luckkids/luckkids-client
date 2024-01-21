@@ -66,7 +66,7 @@ export const PageLogin: React.FC = () => {
               sizing="stretch"
               iconName="iconGoogle"
             />
-            {/* <Button
+            <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
               text={'홈으로 바로 이동'}
@@ -76,7 +76,7 @@ export const PageLogin: React.FC = () => {
               }}
               type={'action'}
               sizing="stretch"
-            /> */}
+            />
           </L.Col>
           <L.Row justify="center" g={20} w={'100%'} mt={30}>
             <TouchableWithoutFeedback onPress={handlePressJoin}>
