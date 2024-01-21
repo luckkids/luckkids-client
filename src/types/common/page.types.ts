@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { SocialType } from '../user';
+
+export const DefaultTypeUnit = {
+  CHECKED: 'CHECKED',
+  UNCHECKED: 'UNCHECKED',
+};
+export type TCheck = 'CHECKED' | 'UNCHECKED';
 
 export type AppScreens = keyof AppScreensParamList;
 
@@ -42,4 +48,50 @@ export interface IStackScreen {
   name: AppScreens;
   component: React.FC;
   options?: NativeStackNavigationOptions | undefined;
+}
+
+export interface IMissionRepair extends IMissionData {
+  statusCode: number;
+  httpStatus: string;
+  message: string;
+  data: IMissionData;
+}
+
+interface IMissionData {
+  WORK: Array<IMissionDataItem>;
+  SELF_DEVELOPMENT: Array<IMissionDataItem>;
+  HEALTH: Array<IMissionDataItem>;
+  HOUSEKEEPING: Array<IMissionDataItem>;
+  MINDSET: Array<IMissionDataItem>;
+  SELF_CARE: Array<IMissionDataItem>;
+}
+
+interface IMissionDataItem {
+  id: number;
+  missionType: string;
+  missionDescription: null | string;
+  alertStatus: string;
+  alertTime: string;
+}
+
+export interface IMissionListData {
+  missionStatus: string;
+  alertTime: string;
+  id: number;
+  missionDescription: string;
+  setCount: Dispatch<number>;
+}
+
+export interface IGarden {}
+
+export interface ISettingAlarm {
+  entire: TCheck;
+  mission: TCheck;
+  luck: TCheck;
+  notice: TCheck;
+}
+
+export interface ISettingNotice {
+  title: string;
+  createdDate: string;
 }

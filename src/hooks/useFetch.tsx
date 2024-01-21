@@ -4,7 +4,7 @@ import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { RecoilToken } from '@recoil/recoil.token';
 
 // let isRefreshing = false;
-const host = 'https://luck-kids.kro.kr/api/v1';
+const host = 'https://api-luckkids.kro.kr/api/v1';
 const STATUS = {
   SUCCESS: 200,
   CREATED: 201,
@@ -26,15 +26,29 @@ export const useFetch = (args: {
   const onFetch = useCallback(() => {
     const loadData = async () => {
       try {
-        const rtnData: IResponse = await fetch(host + args.url, {
-          method: args.method,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token.accessToken}`,
-          },
-          body: args.value ? JSON.stringify(args.value) : null,
-        });
-        return rtnData.json();
+        let rtnData: IResponse;
+        switch (args.method) {
+          case 'POST':
+          case 'PATCH':
+            rtnData = await fetch(host + args.url, {
+              method: args.method,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token.accessToken}`,
+              },
+              body: args.value ? JSON.stringify(args.value) : null,
+            });
+            return rtnData.json();
+          default:
+            rtnData = await fetch(host + args.url, {
+              method: args.method,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token.accessToken}`,
+              },
+            });
+            return rtnData.json();
+        }
       } catch (e) {
         console.log(e);
       }

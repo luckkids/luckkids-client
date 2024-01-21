@@ -13,7 +13,7 @@ const { width: _WINDOW_WIDTH, height: _WINDOW_HEIGHT } =
 // TO BE FIXED
 const BOTTOM_TABBAR_HEIGHT = 82;
 const TOP_NAVIGATION_HEIGHT = 52;
-const DEFAULT_MARGIN = 20;
+export const DEFAULT_MARGIN = 20;
 const MIN_PADDING_BOTTOM = 8;
 
 const IS_IOS = Platform.OS === 'ios';

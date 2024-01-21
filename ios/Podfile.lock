@@ -574,6 +574,8 @@ PODS:
     - React-Core
   - RNBootSplash (5.0.4):
     - React-Core
+  - RNDateTimePicker (7.6.2):
+    - React-Core
   - RNDeviceInfo (10.12.0):
     - React-Core
   - RNFBApp (18.6.2):
@@ -669,6 +671,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
+  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -802,6 +805,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
+  RNDateTimePicker:
+    :path: "../node_modules/@react-native-community/datetimepicker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   RNFBApp:
@@ -892,6 +897,7 @@ SPEC CHECKSUMS:
   ReactCommon: 91ece8350ebb3dd2be9cef662abd78b6948233c0
   RNAppleAuthentication: e99eaf3c4c01ad8ecb6125dd6f0cfd98871685b5
   RNBootSplash: 334668c563e44287ca39d03aa3f738a3c35a74a6
+  RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
   RNDeviceInfo: db5c64a060e66e5db3102d041ebe3ef307a85120
   RNFBApp: 5a4df14a5094dab69fc29049be3cf54af07b0435
   RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
@@ -905,4 +911,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 4db63ddab988b7bdfa95c6dd7ce1ccd4d13d8ecb
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.12.1
