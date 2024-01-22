@@ -39,15 +39,18 @@ const Stack = createNativeStackNavigator();
 
 const RootNavigator = withGlobalComponents(() => {
   const [initializing, setInitializing] = useState(true);
-  const { initialize: initializeFirebaseMessage, requestPermissionIfNot } =
-    useFirebaseMessage();
+  const {
+    initialize: initializeFirebaseMessage,
+    getToken,
+    requestPermissionIfNot,
+  } = useFirebaseMessage();
   const { initialize: initializeLocalMessage } = useLocalMessage();
 
   useAsyncEffect(async () => {
     try {
       if (!initializing) {
         console.log('App Reload');
-
+        requestPermissionIfNot();
         await initializeFirebaseMessage();
         initializeLocalMessage();
       }
