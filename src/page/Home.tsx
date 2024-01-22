@@ -1,5 +1,11 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import { Animated, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import {
+  Animated,
+  Text,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
@@ -9,12 +15,15 @@ import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import Tooltip from '@global-components/common/Tooltip/Tooltip';
+import TooltipContent from '@global-components/common/Tooltip/TooltipContent';
 
 const bgImage = require('assets/images/home-bg.png');
 
 export const Home: React.FC = () => {
   const { top } = useSafeAreaInsets();
   const navigation = useNavigationService();
+  const progressBarRef = useRef<View>(null);
 
   const handleEditComment = () => {
     navigation.navigate('HomeComment');
@@ -57,6 +66,15 @@ export const Home: React.FC = () => {
     setTimeout(() => {
       LoadingIndicator.hide();
     }, 500);
+  }, []);
+
+  useEffect(() => {
+    Tooltip.show({
+      parentRef: progressBarRef,
+      direction: 'top',
+      hideOnPressOutside: false,
+      component: <TooltipContent text={'한 단계 남았어요'} />,
+    });
   }, []);
 
   return (
@@ -113,7 +131,7 @@ export const Home: React.FC = () => {
                 mb={GAP}
               >
                 {/* 달성율 */}
-                <L.Col ph={25} pv={18}>
+                <L.Col ph={25} pv={18} w={'100%'}>
                   <L.Row items="flex-end">
                     <Font type="LARGE_TITLE_BOLD" mr={4}>
                       75
@@ -126,6 +144,29 @@ export const Home: React.FC = () => {
                     럭키즈 달성율
                   </Font>
                   {/* TODO 프로그레스 바 */}
+                  <L.Row
+                    mt={14}
+                    w={'100%'}
+                    style={{
+                      position: 'relative',
+                    }}
+                  >
+                    <L.Row
+                      w={'100%'}
+                      mt={14}
+                      h={14}
+                      bg={'WHITE'}
+                      outline="BLACK"
+                    />
+                    <L.Absolute
+                      w={116}
+                      h={0}
+                      r={0}
+                      bg={'LUCK_GREEN'}
+                      outline="BLACK"
+                      ref={progressBarRef}
+                    />
+                  </L.Row>
                 </L.Col>
               </L.Row>
               <L.Row
