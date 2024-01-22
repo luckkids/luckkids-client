@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
@@ -8,6 +8,7 @@ import { GardenPopup } from '@components/page/garden/garden.popup';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useFetch } from '@hooks/useFetch';
 
 const S = {
   listWrap: styled.View({
@@ -94,6 +95,14 @@ const onInviteHandler = () => {
 
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
+  const [show, setShow] = useState(false);
+  const [data, setData] = useState();
+  const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
+    method: 'GET',
+    url: '/friend/list',
+    value: {},
+    onSuccessCallback: (rtn) => {},
+  });
   return (
     <FrameLayout>
       <L.Row ph={20} pv={10} justify={'space-between'}>
@@ -113,10 +122,10 @@ export const Garden: React.FC = () => {
         </TouchableWithoutFeedback>
       </L.Row>
       <S.listWrap>
-        <GardenItem onPress={() => console.log('list')} />
-        <GardenItem onPress={() => console.log('list')} />
-        <GardenItem onPress={() => console.log('list')} />
-        <GardenItem onPress={() => console.log('list')} />
+        <GardenItem onPress={() => setShow(true)} />
+        <GardenItem onPress={() => setShow(true)} />
+        <GardenItem onPress={() => setShow(true)} />
+        <GardenItem onPress={() => setShow(true)} />
       </S.listWrap>
       <ActionIcon
         title={'친구를 초대할게요!'}
@@ -124,12 +133,14 @@ export const Garden: React.FC = () => {
         onPress={() => onInviteHandler()}
       />
       <GardenPopup
-        title={'aaa'}
+        title={'럭키즈 체고! 럭키즈 체고!'}
         img={{
           uri: 'https://img.freepik.com/free-photo/sample-of-white-cotton-textile_1220-7596.jpg',
-          name: 'test',
+          name: '행운럭키',
         }}
         level={88}
+        isShow={show}
+        setShow={setShow}
       />
     </FrameLayout>
   );
