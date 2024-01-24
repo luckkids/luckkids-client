@@ -39,7 +39,7 @@ export const FrameLayout = ({
       />
       <View
         style={{
-          backgroundColor: backgroundColor || theme.BG_PRIMARY,
+          backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
           width: SCREEN_WIDTH,
           flex: 1,
           paddingBottom: bottom,

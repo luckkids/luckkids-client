@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from 'styled-components/native';
 import { Layout } from './Layout';
 import { toStyle } from './Layout.utils';
 

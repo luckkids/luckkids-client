@@ -42,7 +42,7 @@ export const PageSettingProfile: React.FC = () => {
         <TextInputField
           text={text}
           onChangeText={setText}
-          placeholder="행운 문구 변경"
+          placeholder="프로필"
         />
       </L.Row>
     </FrameLayout>

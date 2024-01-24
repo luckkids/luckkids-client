@@ -1,12 +1,12 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { GestureResponderEvent, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { ColorKeys, Font, IconNames, SvgIcon } from '@design-system';
 
 type ChipButtonProps = {
   bgColor?: ColorKeys;
   textColor?: ColorKeys;
-  onPress?: () => void;
+  onPress?: (event: GestureResponderEvent) => void;
   text: string;
   iconName?: IconNames;
 };

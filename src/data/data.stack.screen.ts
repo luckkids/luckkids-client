@@ -7,7 +7,6 @@ import { PageGardenAlbum } from '@page/garden/page.garden.album';
 import { PageGardenRank } from '@page/garden/page.garden.rank';
 import { PageHomeAlarm } from '@page/home/page.home.alarm';
 import { PageHomeCalendar } from '@page/home/page.home.calendar';
-import { PageHomeComment } from '@page/home/page.home.comment';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageLogin } from '@page/login/page.login';
 import { PageLoginJoinAgreement } from '@page/login/page.login.join.agreement';
@@ -27,6 +26,7 @@ import { PageSettingProfile } from '@page/setting/page.setting.profile';
 import { PageSettingInfoPassword } from '@page/setting/page.setting.info.password';
 import { PageStoryTelling } from '@page/story-telling/page.story-telling';
 import { IStackScreen } from '@types-common/page.types';
+import { PageHomeProfile } from '@page/home/page.home.profile';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
@@ -89,8 +89,8 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageHomeLevel,
   },
   {
-    name: 'HomeComment',
-    component: PageHomeComment,
+    name: 'HomeProfile',
+    component: PageHomeProfile,
   },
   {
     name: 'Mission',
