@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Text, TextStyle, View } from 'react-native';
 import { format } from 'date-fns';
 import { CalendarList, DateData } from 'react-native-calendars';
+import { Colors, Font, L } from '@design-system';
 
 const RANGE = 24;
 const initialDate = format(new Date(), 'yyyy-MM-dd');
@@ -37,23 +37,31 @@ const HomeCalendar = () => {
 
   return (
     <CalendarList
-      testID={'test'}
+      theme={theme}
       current={initialDate}
       pastScrollRange={RANGE}
       futureScrollRange={RANGE}
       onDayPress={onDayPress}
       markedDates={marked}
       renderHeader={renderCustomHeader}
-      calendarHeight={390}
-      theme={theme}
       horizontal={false}
       pagingEnabled={false}
       staticHeader={false}
+      calendarStyle={{
+        backgroundColor: Colors.BLACK,
+      }}
+      contentContainerStyle={{
+        backgroundColor: Colors.BLACK,
+      }}
+      style={{
+        backgroundColor: Colors.BLACK,
+      }}
     />
   );
 };
 
 const theme = {
+  calendarBackground: Colors.BLACK,
   stylesheet: {
     calendar: {
       header: {
@@ -79,37 +87,14 @@ const theme = {
 function renderCustomHeader(date: any) {
   const header = date.toString('MMMM yyyy');
   const [month, year] = header.split(' ');
-  const textStyle: TextStyle = {
-    fontSize: 18,
-    fontWeight: 'bold',
-    paddingTop: 10,
-    paddingBottom: 10,
-    color: '#5E60CE',
-    paddingRight: 5,
-  };
 
   return (
-    <View style={styles.header}>
-      <Text style={[styles.month, textStyle]}>{`${month}`}</Text>
-      <Text style={[styles.year, textStyle]}>{year}</Text>
-    </View>
+    <L.Row w={'100%'} justify="center" mv={16}>
+      <Font type="BODY_SEMIBOLD" color="WHITE">
+        {`${month} ${year}`}
+      </Font>
+    </L.Row>
   );
 }
 
 export default HomeCalendar;
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  month: {
-    marginLeft: 5,
-  },
-  year: {
-    marginRight: 5,
-  },
-});
