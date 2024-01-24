@@ -1,22 +1,14 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
-import {
-  Animated,
-  Text,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import React, { useLayoutEffect, useRef } from 'react';
+import { Animated, TouchableWithoutFeedback, View } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
-import { Font, L, SvgIcon } from '@design-system';
+import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import Tooltip from '@global-components/common/Tooltip/Tooltip';
-import TooltipContent from '@global-components/common/Tooltip/TooltipContent';
 
 const bgImage = require('assets/images/home-bg.png');
 
@@ -24,6 +16,8 @@ export const Home: React.FC = () => {
   const { top } = useSafeAreaInsets();
   const navigation = useNavigationService();
   const progressBarRef = useRef<View>(null);
+
+  const handleViewProfile = () => {};
 
   const handleEditComment = () => {
     navigation.navigate('HomeComment');
@@ -42,7 +36,7 @@ export const Home: React.FC = () => {
 
   const animatedY = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [50, -INITIAL_HEIGHT_REDUCTION + 30],
+    outputRange: [0, -INITIAL_HEIGHT_REDUCTION - 20],
   });
 
   const openAnimation = () => {
@@ -68,15 +62,6 @@ export const Home: React.FC = () => {
     }, 500);
   }, []);
 
-  useEffect(() => {
-    Tooltip.show({
-      parentRef: progressBarRef,
-      direction: 'top',
-      hideOnPressOutside: false,
-      component: <TooltipContent text={'한 단계 남았어요'} />,
-    });
-  }, []);
-
   return (
     <>
       <FrameLayout
@@ -99,6 +84,7 @@ export const Home: React.FC = () => {
           </TouchableWithoutFeedback>
         </L.Col>
         {/* 정보 */}
+
         <View
           style={{
             flex: 1,
@@ -122,6 +108,14 @@ export const Home: React.FC = () => {
               }}
               onTouchStart={openAnimation}
             >
+              <L.Row justify="flex-end" mb={14}>
+                <ChipButton
+                  text={'프로필 보기'}
+                  bgColor="LUCK_GREEN"
+                  onPress={handleViewProfile}
+                  iconName="arrow_right"
+                />
+              </L.Row>
               <L.Row
                 style={{
                   backgroundColor: '#00000099',
@@ -144,29 +138,6 @@ export const Home: React.FC = () => {
                     럭키즈 달성율
                   </Font>
                   {/* TODO 프로그레스 바 */}
-                  <L.Row
-                    mt={14}
-                    w={'100%'}
-                    style={{
-                      position: 'relative',
-                    }}
-                  >
-                    <L.Row
-                      w={'100%'}
-                      mt={14}
-                      h={14}
-                      bg={'WHITE'}
-                      outline="BLACK"
-                    />
-                    <L.Absolute
-                      w={116}
-                      h={0}
-                      r={0}
-                      bg={'LUCK_GREEN'}
-                      outline="BLACK"
-                      ref={progressBarRef}
-                    />
-                  </L.Row>
                 </L.Col>
               </L.Row>
               <L.Row
@@ -201,5 +172,6 @@ const SUCCESS_RATE_HEIGHT = 142;
 const GAP = 8;
 const LUCKKIDS_HEIGHT = 157;
 const INITIAL_HEIGHT_REDUCTION = 140;
+const PROFILE_VIEW_BUTTON_HEIGHT = 36;
 
 const CHARACTER_MARGIN = 62;
