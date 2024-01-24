@@ -23,6 +23,7 @@ import { PageSettingAlarm } from '@page/setting/page.setting.alarm';
 import { PageSettingInfo } from '@page/setting/page.setting.info';
 import { PageSettingNotice } from '@page/setting/page.setting.notice';
 import { PageSettingProfile } from '@page/setting/page.setting.profile';
+import { PageSettingComment } from '@page/setting/page.setting.comment';
 import { PageSettingInfoPassword } from '@page/setting/page.setting.info.password';
 import { PageStoryTelling } from '@page/story-telling/page.story-telling';
 import { IStackScreen } from '@types-common/page.types';
@@ -119,6 +120,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'SettingProfile',
     component: PageSettingProfile,
+  },
+  {
+    name: 'SettingComment',
+    component: PageSettingComment,
   },
   {
     name: 'SettingAlarm',

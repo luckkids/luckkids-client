@@ -36,6 +36,7 @@ export type AppScreensParamList = {
   GardenRank: undefined;
   Setting: undefined;
   SettingProfile: undefined;
+  SettingComment: undefined;
   SettingAlarm: undefined;
   SettingInfo: undefined;
   SettingSecurity: undefined;

@@ -51,7 +51,7 @@ export const PageSetting: React.FC = () => {
         <S.Wrap>
           <Font type={'BODY_REGULAR'}>정럭키</Font>
           <ButtonText
-            onPress={() => navigation.navigate('SettingProfile')}
+            onPress={() => navigation.navigate('HomeProfile')}
             text={'프로필 수정'}
             textColor={'GREY1'}
           />

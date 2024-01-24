@@ -13,7 +13,7 @@ export const PageHomeProfile: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
 
   const handleEditComment = () => {
-    navigation.navigate('SettingProfile');
+    navigation.navigate('SettingComment');
   };
 
   const handleEditName = () => {
