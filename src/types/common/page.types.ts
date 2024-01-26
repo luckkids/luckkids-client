@@ -29,12 +29,14 @@ export type AppScreensParamList = {
   HomeAlarm: undefined;
   HomeLevel: undefined;
   HomeComment: undefined;
+  HomeProfile: undefined;
   MissionRepair: undefined;
   MissionAdd: undefined;
   GardenAlbum: undefined;
   GardenRank: undefined;
   Setting: undefined;
   SettingProfile: undefined;
+  SettingComment: undefined;
   SettingAlarm: undefined;
   SettingInfo: undefined;
   SettingSecurity: undefined;

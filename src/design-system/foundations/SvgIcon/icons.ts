@@ -1,6 +1,7 @@
 import album from '../../assets/icons/album.svg';
 import arrow_left from '../../assets/icons/arrow_left.svg';
 import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
+import arrow_right from '../../assets/icons/arrow_right.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
@@ -41,6 +42,8 @@ import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
 import icon_download_green from '../../assets/icons/icon_download_green.svg';
 import icon_share_green from '../../assets/icons/icon_share_green.svg';
+import icon_edit from '../../assets/icons/icon_edit.svg';
+import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
 
 export {
   bell,
@@ -55,6 +58,7 @@ export {
   password_visibility_on,
   arrow_left,
   arrow_right_gray,
+  arrow_right,
   album,
   list,
   iconHomeOn,
@@ -84,4 +88,6 @@ export {
   iconWorking,
   icon_download_green,
   icon_share_green,
+  icon_edit,
+  icon_edit_comment,
 };

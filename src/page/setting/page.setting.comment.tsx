@@ -5,7 +5,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import { useFetch } from '@hooks/useFetch';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
-export const PageSettingProfile: React.FC = () => {
+export const PageSettingComment: React.FC = () => {
   const navigation = useNavigationService();
   const [text, setText] = useState<string>('');
   const { onFetch, isSuccess } = useFetch({
@@ -28,7 +28,7 @@ export const PageSettingProfile: React.FC = () => {
             fontType={'HEADLINE_SEMIBOLD'}
             textColor={'LUCK_GREEN'}
           />
-          <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정하기</Font>
+          <Font type={'HEADLINE_SEMIBOLD'}>행운 문구 수정</Font>
           <ButtonText
             onPress={() => onFetch()}
             fontType={'HEADLINE_SEMIBOLD'}
@@ -42,7 +42,7 @@ export const PageSettingProfile: React.FC = () => {
         <TextInputField
           text={text}
           onChangeText={setText}
-          placeholder="프로필"
+          placeholder="행운 문구"
         />
       </L.Row>
     </FrameLayout>

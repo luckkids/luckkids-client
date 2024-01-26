@@ -1,13 +1,14 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { GestureResponderEvent, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
-import { ColorKeys, Font } from '@design-system';
+import { ColorKeys, Font, IconNames, SvgIcon } from '@design-system';
 
 type ChipButtonProps = {
   bgColor?: ColorKeys;
   textColor?: ColorKeys;
-  onPress?: () => void;
+  onPress?: (event: GestureResponderEvent) => void;
   text: string;
+  iconName?: IconNames;
 };
 
 const ChipButton: React.FC<ChipButtonProps> = ({
@@ -15,13 +16,15 @@ const ChipButton: React.FC<ChipButtonProps> = ({
   onPress,
   bgColor = 'WHITE',
   textColor = 'BLACK',
+  iconName,
 }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <Container bgColor={bgColor}>
-        <Font type={'BODY_SEMIBOLD'} color={textColor}>
+        <Font type={'BODY_SEMIBOLD'} mr={!!iconName ? 7 : 0} color={textColor}>
           {text}
         </Font>
+        {!!iconName && <SvgIcon name={iconName} size={8} color={textColor} />}
       </Container>
     </TouchableWithoutFeedback>
   );

@@ -1,13 +1,19 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
-import { L } from '@design-system';
+import { ColorKeys, Colors, L } from '@design-system';
 import * as S from './ProgressBar.styles';
 
 interface ProgressBarProps {
   progress: number;
+  height?: number;
+  backgroundColor?: ColorKeys;
 }
 
-const ProgressBar = ({ progress }: ProgressBarProps) => {
+const ProgressBar = ({
+  progress,
+  height = 4,
+  backgroundColor = 'LUCK_GREEN',
+}: ProgressBarProps) => {
   const widthAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -19,11 +25,11 @@ const ProgressBar = ({ progress }: ProgressBarProps) => {
   }, [progress, widthAnim]);
 
   return (
-    <S.ProgressBarWrapper w={'100%'} h={4}>
+    <S.ProgressBarWrapper w={'100%'} h={height}>
       <L.Absolute
         w={'100%'}
-        bg="LUCK_GREEN"
-        h={4}
+        bg={backgroundColor}
+        h={height}
         l={0}
         opacity={0.5}
         rounded={999}
@@ -36,8 +42,8 @@ const ProgressBar = ({ progress }: ProgressBarProps) => {
             outputRange: ['0%', '100%'],
           }),
         }}
-        bg="LUCK_GREEN"
-        h={4}
+        bg={'LUCK_GREEN'}
+        h={height}
         l={0}
         opacity={1}
         rounded={999}

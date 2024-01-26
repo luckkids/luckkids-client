@@ -52,6 +52,11 @@ const useFirebaseMessage = () => {
     messaging().onMessage(handleOnMessage);
   }, []);
 
+  const getToken = useCallback(async () => {
+    const pushToken = await messaging().getToken();
+    console.log('[Firebase Device Token] :', pushToken);
+  }, []);
+
   const updatePushToken = useCallback(async () => {
     if (await DeviceInfo.isEmulator()) return;
     try {
@@ -84,6 +89,7 @@ const useFirebaseMessage = () => {
     requestPermissionIfNot,
     deletePushToken,
     updatePushToken,
+    getToken,
   };
 };
 
