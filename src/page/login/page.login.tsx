@@ -82,6 +82,17 @@ export const PageLogin: React.FC = () => {
             <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
+              text={'레벨업 바로 이동'}
+              textColor="WHITE"
+              onPress={() => {
+                navigation.navigate('HomeLevel');
+              }}
+              type={'action'}
+              sizing="stretch"
+            />
+            {/* <Button
+              status={'normal'}
+              bgColor={'BG_TERTIARY'}
               text={'자동 로그인'}
               textColor="WHITE"
               onPress={() => {
@@ -95,7 +106,7 @@ export const PageLogin: React.FC = () => {
               }}
               type={'action'}
               sizing="stretch"
-            />
+            /> */}
           </L.Col>
           <L.Row justify="center" g={20} w={'100%'} mt={30}>
             <TouchableWithoutFeedback onPress={handlePressJoin}>
