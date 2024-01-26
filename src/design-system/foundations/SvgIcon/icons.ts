@@ -1,6 +1,7 @@
 import album from '../../assets/icons/album.svg';
 import arrow_left from '../../assets/icons/arrow_left.svg';
 import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
+import arrow_right from '../../assets/icons/arrow_right.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
@@ -27,6 +28,7 @@ import iconPlus from '../../assets/icons/icon-plus.svg';
 import iconSelfCare from '../../assets/icons/icon-self-care-1.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
+import icon_lock from '../../assets/icons/icon_lock.svg';
 import iconWorking from '../../assets/icons/icon-working-1.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
@@ -38,6 +40,8 @@ import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
 import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
+import icon_edit from '../../assets/icons/icon_edit.svg';
+import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
 
 export {
   bell,
@@ -52,6 +56,7 @@ export {
   password_visibility_on,
   arrow_left,
   arrow_right_gray,
+  arrow_right,
   album,
   list,
   iconHomeOn,
@@ -70,6 +75,7 @@ export {
   validation_error,
   yellow_info,
   iconHomeLuckkids,
+  icon_lock,
   iconCheckAlarmOn,
   iconCheckAlarmOff,
   iconGrowth,
@@ -78,4 +84,6 @@ export {
   iconMindSet,
   iconSelfCare,
   iconWorking,
+  icon_edit,
+  icon_edit_comment,
 };

@@ -6,7 +6,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
+import LoginRemember from '@components/page/login/remember';
 import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
@@ -56,7 +58,18 @@ export const PageLoginId: React.FC = () => {
       pushKey: 'testPushKey',
     },
     onSuccessCallback: () => {
-      navigation.navigate('Home');
+      // TODO 만약 자동 로그인 여부가 async storage에 없다면 bottomsheet 노출
+      // 아니면 바로 Home으로 이동
+      const rememberMe = true;
+      if (!rememberMe) {
+        BottomSheet.show({
+          component: (
+            <LoginRemember onClose={() => navigation.navigate('Home')} />
+          ),
+        });
+      } else {
+        return navigation.navigate('Home');
+      }
     },
     onFailCallback: () => {
       Keyboard.dismiss();

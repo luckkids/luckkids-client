@@ -16,7 +16,7 @@ export const PageLoginJoin: React.FC = () => {
   const resetJoinInfo = useResetRecoilState(RecoilJoinInfo);
 
   const handlePressConfirm = () => {
-    navigation.navigate('LoginAgreement');
+    navigation.navigate('LoginJoinAgreement');
   };
 
   const handlePressBack = () => {

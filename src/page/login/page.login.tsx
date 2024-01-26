@@ -3,7 +3,9 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
+import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
@@ -73,6 +75,23 @@ export const PageLogin: React.FC = () => {
               textColor="WHITE"
               onPress={() => {
                 navigation.navigate('Home');
+              }}
+              type={'action'}
+              sizing="stretch"
+            />
+            <Button
+              status={'normal'}
+              bgColor={'BG_TERTIARY'}
+              text={'자동 로그인'}
+              textColor="WHITE"
+              onPress={() => {
+                BottomSheet.show({
+                  component: (
+                    <LoginRemember
+                      onClose={() => navigation.navigate('Home')}
+                    />
+                  ),
+                });
               }}
               type={'action'}
               sizing="stretch"
