@@ -1,12 +1,15 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
+import { useFetch } from '@hooks/useFetch';
+import DeviceInfo from 'react-native-device-info';
 
 export function useKakaoLogin() {
   const handleKakaoLogin = useCallback(async () => {
     try {
       // Kakao 로그인 시도
       const result = await KakaoLogin.loginWithKakaoAccount();
-      console.log('Kakao Login Success:', result);
+      const { accessToken } = result;
+      return accessToken;
     } catch (error) {
       console.error('Login Failed:', error);
     }

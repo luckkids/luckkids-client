@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useCallback, useEffect, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
@@ -87,6 +87,10 @@ export const PageLoginId: React.FC = () => {
     },
   });
 
+  const handleLogin = useCallback(() => {
+    login();
+  }, []);
+
   const { onFetch: sendTempPassword } = useFetch({
     method: 'POST',
     url: '/mail/password',
@@ -166,7 +170,7 @@ export const PageLoginId: React.FC = () => {
           <Button
             type={'action'}
             text={'로그인'}
-            onPress={login}
+            onPress={handleLogin}
             sizing="stretch"
             status={isButtonDisabled ? 'disabled' : 'normal'}
             bgColor={'LUCK_GREEN'}

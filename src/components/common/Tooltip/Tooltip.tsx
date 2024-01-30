@@ -30,7 +30,6 @@ const Tooltip: React.FC<TooltipProps> = ({
       {/* arrow */}
       <L.Row w="100%" justify="center">
         <L.Row
-          justify="center"
           bg={bgColor}
           style={{
             width: 0,

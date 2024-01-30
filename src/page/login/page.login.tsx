@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
@@ -10,12 +10,17 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
+import { useFetch } from '@hooks/useFetch';
+import DeviceInfo from 'react-native-device-info';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 
 export const PageLogin: React.FC = () => {
+  const { bottom } = useSafeAreaInsets();
   const { handleAppleLogin } = useAppleLogin();
   const { handleGoogleLogin } = useGoogleLogin();
   const { handleKakaoLogin } = useKakaoLogin();
   const navigation = useNavigationService();
+  const [deviceId, setDeviceId] = React.useState<string>('');
 
   const handlePressJoin = () => {
     navigation.navigate('LoginJoin', {
@@ -27,7 +32,28 @@ export const PageLogin: React.FC = () => {
     navigation.navigate('LoginId');
   };
 
-  const { bottom } = useSafeAreaInsets();
+  const { onFetch: oauthKakaoLogin } = useFetch({
+    method: 'POST',
+    url: '/auth/oauth/login',
+    onSuccessCallback: () => {},
+    onFailCallback: () => {},
+  });
+
+  const handleKakao = async () => {
+    const token = await handleKakaoLogin();
+    if (token)
+      oauthKakaoLogin({
+        snsType: 'KAKAO',
+        deviceId,
+        pushKey:
+          'ffBUlnx4BE7XveMXelsLNu:APA91bHfd01c-SnAraV3twtgOiZztYEfC9Db-PVFYMvIxZntFc5twUQnuOOXKSFawxF7ZLTA64P36yEOYhQDHKYhAd52tgMWOZVmjHq7x8wIxInmul2Fbmab5yGG_kNKMylCoNJK8wZo',
+        token,
+      });
+  };
+
+  useAsyncEffect(async () => {
+    setDeviceId(await DeviceInfo.getUniqueId());
+  }, []);
 
   return (
     <FrameLayout>
@@ -43,7 +69,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'KAKAO_YELLOW'}
               text={'카카오로 계속하기'}
               textColor="BLACK"
-              onPress={handleKakaoLogin}
+              onPress={handleKakao}
               type={'action'}
               sizing="stretch"
               iconName="iconKakao"
