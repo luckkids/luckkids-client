@@ -16,6 +16,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -65,12 +66,12 @@ export const Home: React.FC = () => {
     }).start();
   };
 
-  useLayoutEffect(() => {
-    LoadingIndicator.show({});
-    setTimeout(() => {
-      LoadingIndicator.hide();
-    }, 500);
-  }, []);
+  // useLayoutEffect(() => {
+  //   LoadingIndicator.show({});
+  //   setTimeout(() => {
+  //     LoadingIndicator.hide();
+  //   }, 500);
+  // }, []);
 
   return (
     <>
@@ -121,29 +122,37 @@ export const Home: React.FC = () => {
                   iconName="arrow_right"
                 />
               </L.Row>
-              <L.Row
+              <L.Col
                 style={{
                   backgroundColor: '#00000099',
                 }}
                 h={SUCCESS_RATE_HEIGHT}
                 rounded={15}
                 mb={GAP}
+                ph={25}
+                pv={18}
               >
-                {/* 달성율 */}
-                <L.Col ph={25} pv={18} w={'100%'}>
-                  <L.Row items="flex-end">
-                    <Font type="LARGE_TITLE_BOLD" mr={4}>
-                      75
+                <L.Row justify="space-between">
+                  {/* 달성율 */}
+                  <L.Col w={'100%'}>
+                    <L.Row items="flex-end">
+                      <Font type="LARGE_TITLE_BOLD" mr={4}>
+                        75
+                      </Font>
+                      <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
+                        %
+                      </Font>
+                    </L.Row>
+                    <Font type="SUBHEADLINE_SEMIBOLD" color="HOME_INFO_TEXT">
+                      럭키즈 달성율
                     </Font>
-                    <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
-                      %
-                    </Font>
-                  </L.Row>
-                  <Font type="SUBHEADLINE_SEMIBOLD" color="HOME_INFO_TEXT">
-                    럭키즈 달성율
-                  </Font>
-                  {/* TODO 프로그레스 바 */}
-                  <L.Row mt={14}>
+                  </L.Col>
+                  <L.Absolute r={0} b={0}>
+                    <Tooltip text="한 단계 남았어요" />
+                  </L.Absolute>
+                </L.Row>
+                <L.Row w="100%" mt={14}>
+                  <L.Row>
                     <L.Col w={'100%'}>
                       <ProgressBar
                         progress={0.5}
@@ -152,8 +161,8 @@ export const Home: React.FC = () => {
                       />
                     </L.Col>
                   </L.Row>
-                </L.Col>
-              </L.Row>
+                </L.Row>
+              </L.Col>
               <L.Row
                 style={{
                   backgroundColor: '#00000099',
