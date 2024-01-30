@@ -3,11 +3,10 @@ import {
   Animated,
   GestureResponderEvent,
   Image,
-  TouchableWithoutFeedback,
+  ScrollView,
   View,
 } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import HomeNavbar from '@components/page/home/home.navbar';
@@ -26,10 +25,7 @@ const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsRabbit = require('assets/images/luckkids-rabbit.png');
 
 export const Home: React.FC = () => {
-  const { top } = useSafeAreaInsets();
   const navigation = useNavigationService();
-  const progressBarRef = useRef<View>(null);
-
   const handleViewProfile = (e: GestureResponderEvent) => {
     navigation.navigate('HomeProfile');
   };
@@ -50,28 +46,12 @@ export const Home: React.FC = () => {
     outputRange: [0, -INITIAL_HEIGHT_REDUCTION],
   });
 
-  const openAnimation = () => {
-    Animated.timing(animatedValue, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const closeAnimation = () => {
-    Animated.timing(animatedValue, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  // useLayoutEffect(() => {
-  //   LoadingIndicator.show({});
-  //   setTimeout(() => {
-  //     LoadingIndicator.hide();
-  //   }, 500);
-  // }, []);
+  useLayoutEffect(() => {
+    LoadingIndicator.show({});
+    setTimeout(() => {
+      LoadingIndicator.hide();
+    }, 500);
+  }, []);
 
   return (
     <>
@@ -91,17 +71,18 @@ export const Home: React.FC = () => {
           />
         </L.Col>
         {/* 정보 */}
-        <View
+        <ScrollView
           style={{
             flex: 1,
+            overflow: 'visible',
+          }}
+          // TODO(Gina): fix with reasonable value
+          contentContainerStyle={{
+            marginBottom: 100,
+            paddingBottom: 420,
           }}
         >
-          <TouchableWithoutFeedback
-            style={{
-              flex: 1,
-            }}
-            onPress={closeAnimation}
-          >
+          <View>
             <Animated.View
               style={{
                 height: animatedHeight,
@@ -112,7 +93,6 @@ export const Home: React.FC = () => {
                 left: 0,
                 transform: [{ translateY: animatedY }],
               }}
-              onTouchMove={openAnimation}
             >
               <L.Row justify="flex-end" mb={14}>
                 <ChipButton
@@ -250,8 +230,8 @@ export const Home: React.FC = () => {
                 </L.Col>
               </L.Row>
             </Animated.View>
-          </TouchableWithoutFeedback>
-        </View>
+          </View>
+        </ScrollView>
       </FrameLayout>
     </>
   );
