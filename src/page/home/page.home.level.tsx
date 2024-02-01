@@ -12,6 +12,14 @@ const levelUpMotion1 = require('assets/lotties/levelup-motion-1.json');
 export const PageHomeLevel: React.FC = () => {
   const [step, setStep] = useState(1);
 
+  const handleSaveImage = () => {
+    //
+  };
+
+  const handleShareProfile = () => {
+    //
+  };
+
   useEffect(() => {
     const subscription = interval(5000)
       .pipe(take(1))
@@ -62,7 +70,7 @@ export const PageHomeLevel: React.FC = () => {
           </Font>
           <L.Row g={8} mt={80}>
             {/* 이미지 저장 */}
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={handleSaveImage}>
               <L.Col
                 bg="BLACK"
                 style={{
@@ -82,7 +90,7 @@ export const PageHomeLevel: React.FC = () => {
               </L.Col>
             </TouchableWithoutFeedback>
             {/* 프로필 공유  */}
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={handleShareProfile}>
               <L.Col
                 bg="BLACK"
                 style={{
