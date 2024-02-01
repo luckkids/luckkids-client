@@ -6,16 +6,17 @@ import { DEFAULT_MARGIN } from '@constants';
 import { TouchableWithoutFeedback } from 'react-native';
 import { interval, take } from 'rxjs';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import LottieView from 'lottie-react-native';
+const levelUpMotion1 = require('assets/lotties/levelup-motion-1.json');
 
 export const PageHomeLevel: React.FC = () => {
   const [step, setStep] = useState(1);
-  const navigation = useNavigationService();
 
   useEffect(() => {
-    const subscription = interval(3000)
+    const subscription = interval(5000)
       .pipe(take(1))
       .subscribe(() => {
-        setStep((prev) => prev + 1);
+        if (step < 2) setStep((prev) => prev + 1);
       });
 
     return () => {
@@ -23,10 +24,8 @@ export const PageHomeLevel: React.FC = () => {
     };
   }, []);
 
-  // TODO 랜덤 캐릭터 부여
-
   return (
-    <FrameLayout statusBarColor={step === 1 ? 'HOME_BG' : 'BLACK'}>
+    <FrameLayout statusBarColor={'BLACK'} backgroundColor="BLACK">
       {step === 1 ? (
         <L.Col mt={60} ph={DEFAULT_MARGIN}>
           <Font type="TITLE1_BOLD" color="WHITE">
@@ -35,11 +34,16 @@ export const PageHomeLevel: React.FC = () => {
           <Font type="TITLE1_BOLD" color="WHITE">
             럭키즈가 한단계 성장해요
           </Font>
-          <L.Row
-            w={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-            h={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-            bg={'LUCK_GREEN'}
-          />
+          <L.Row w={'100%'} h="100%" justify="center" mt={200}>
+            <LottieView
+              source={levelUpMotion1}
+              style={{
+                width: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+                height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+              }}
+              autoPlay
+            />
+          </L.Row>
         </L.Col>
       ) : (
         <L.Col justify="center" ph={DEFAULT_MARGIN} h="100%" items="center">

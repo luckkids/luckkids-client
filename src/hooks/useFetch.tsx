@@ -51,6 +51,7 @@ export const useFetch = (args: {
 
       loadData()
         .then((result) => {
+          console.log(result);
           if (result.statusCode === STATUS.UNAUTHORIZED) {
             //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
             return setExpiredAccessToken();

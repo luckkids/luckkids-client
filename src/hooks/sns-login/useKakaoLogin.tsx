@@ -9,6 +9,7 @@ export function useKakaoLogin() {
       // Kakao 로그인 시도
       const result = await KakaoLogin.loginWithKakaoAccount();
       const { accessToken } = result;
+      console.log('Kakao Login Success:', accessToken);
       return accessToken;
     } catch (error) {
       console.error('Login Failed:', error);
