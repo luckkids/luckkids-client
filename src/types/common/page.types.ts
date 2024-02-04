@@ -84,7 +84,21 @@ export interface IMissionListData {
   setCount: Dispatch<number>;
 }
 
-export interface IGarden {}
+export interface IGarden {
+  myProfile:IGardenItem,
+  friendList:IGardenItem
+}
+
+export interface IGardenItem{
+  onPress: () => void;
+  isSelf?:boolean;
+  fileUrl:string;
+  nickname:string;
+  myId?:number;
+  friendId?:number;
+  characterCount:number;
+  luckPhrases:string;
+}
 
 export interface ISettingAlarm {
   entire: TCheck;
