@@ -17,7 +17,7 @@ export const PageGardenAlbum: React.FC = () => {
       <S.Text>Luck Kids(로그인메인)</S.Text>
       <S.Button
         title={'가입하기'}
-        onPress={() => navigation.navigate('LoginJoin')}
+        onPress={() => navigation.navigate('LoginJoin',{step:'Id'})}
       />
       <S.Button title={'로그인하기'} />
     </FrameLayout>
