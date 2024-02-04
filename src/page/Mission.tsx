@@ -7,6 +7,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { MissionItem } from '@components/page/mission/mission.item';
 import { IMissionListData } from '@types-common/page.types';
+import Constants from "../design-system/constants";
 
 export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
@@ -61,6 +62,7 @@ export const Mission: React.FC = () => {
       </FrameLayout>
       <FloatingButton
         text={'편집'}
+        paddingBottom={Constants.BOTTOM_TABBAR_HEIGHT + 38}
         onPress={() => navigation.navigate('MissionRepair')}
       />
     </>
