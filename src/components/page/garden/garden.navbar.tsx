@@ -1,5 +1,5 @@
 import React from 'react';
-import {Font, L, SvgIcon} from "@design-system";
+import { L, SvgIcon} from "@design-system";
 import {Image, TouchableWithoutFeedback} from "react-native";
 import useNavigationService from "@hooks/navigation/useNavigationService";
 
