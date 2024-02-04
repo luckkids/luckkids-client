@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
@@ -9,6 +9,8 @@ import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
+import {GardenNavbar} from "@components/page/garden/garden.navbar";
+import {DataDummyGarden} from "../data/dummy/data.dummy.garden";
 
 const S = {
   listWrap: styled.View({
@@ -95,26 +97,23 @@ const onInviteHandler = () => {
 
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
+  const dummyData = DataDummyGarden;
+  const friendData = dummyData.data.friendList.content;
+  const myData = dummyData.data.myProfile;
   const [show, setShow] = useState(false);
   const [data, setData] = useState();
   const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
     method: 'GET',
-    url: '/friend/list',
+    url: '/friends',
     value: {},
-    onSuccessCallback: (rtn) => {},
+    // onSuccessCallback: (rtn) => setData(JSON.stringify()),
   });
+  useEffect(() => {
+    missionList();
+    // console.log(data);
+  }, []);
   return (
-    <FrameLayout>
-      <L.Row ph={20} pv={10} justify={'space-between'}>
-        <Font type={'TITLE3_SEMIBOLD'} color={'GREY0'}>
-          Luck Kids
-        </Font>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('HomeAlarm')}
-        >
-          <SvgIcon name={'bell_badge'} size={20} />
-        </TouchableWithoutFeedback>
-      </L.Row>
+    <FrameLayout NavBar={<GardenNavbar/>}>
       <L.Row pt={20} pb={24} ph={25} justify={'space-between'}>
         <Font type={'TITLE1_BOLD'}>가든</Font>
         <TouchableWithoutFeedback onPress={() => console.log('ranking')}>
@@ -122,10 +121,10 @@ export const Garden: React.FC = () => {
         </TouchableWithoutFeedback>
       </L.Row>
       <S.listWrap>
-        <GardenItem onPress={() => setShow(true)} />
-        <GardenItem onPress={() => setShow(true)} />
-        <GardenItem onPress={() => setShow(true)} />
-        <GardenItem onPress={() => setShow(true)} />
+        {myData && <GardenItem onPress={() => setShow(true)} isSelf={true} {...myData}/>}
+        {friendData.map((item, i)=>{
+          return <GardenItem {...item} onPress={() => setShow(true)} key={i}/>
+        })}
       </S.listWrap>
       <ActionIcon
         title={'친구를 초대할게요!'}

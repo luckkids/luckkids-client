@@ -1,11 +1,9 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import {Image, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
-import { Colors } from '@design-system';
+import {Colors, Font} from '@design-system';
+import {IGardenItem} from "@types-common/page.types";
 
-interface GardenItem {
-  onPress: () => void;
-}
 
 const S = {
   Container: styled.View({
@@ -21,13 +19,32 @@ const S = {
     background: Colors.BG_TERTIARY,
     borderRadius: 12,
   }),
+  BadgeWrap:styled.View({
+    width:27,
+    height:24,
+    borderRadius:10,
+    background:Colors.LUCK_GREEN,
+    position:'absolute',
+    right:0,
+    top:-8,
+    alignItems:'center',
+    justifyContent:'center'
+  })
 };
-export const GardenItem: React.FC<GardenItem> = (props) => {
+export const GardenItem: React.FC<IGardenItem> = (props) => {
+  console.log(props);
+  // const imgSrc = require(props.fileUrl);
   return (
     <S.Container>
       <TouchableWithoutFeedback onPress={props.onPress}>
-        <S.Wrapper></S.Wrapper>
+        <S.Wrapper>
+          <Image source={require(props.fileUrl)} style={{
+            width: 30,
+            height: 40,
+          }}/>
+        </S.Wrapper>
       </TouchableWithoutFeedback>
+      {props.isSelf && <S.BadgeWrap><Font type={'CAPTION1_SEMIBOLD'} justify-content={'center'} textAlign={'center'} color={'BLACK'}>나</Font></S.BadgeWrap>}
     </S.Container>
   );
 };
