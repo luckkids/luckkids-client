@@ -49,6 +49,10 @@ const Colors = {
   HOME_TODAY_TEXT: '#91CFE0',
   HOME_INFO_TEXT: '#DCFEC1',
   HOME_PROFILE_BG: '#223A37',
+
+  // TUTORIAL
+  TUTORIAL_GUIDE_BG: '#47562B',
+  TUTORIAL_SETTING_BG: '#313B21',
 };
 
 export type ColorType = typeof Colors;

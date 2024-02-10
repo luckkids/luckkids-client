@@ -82,6 +82,17 @@ export const PageLogin: React.FC = () => {
             <Button
               status={'normal'}
               bgColor={'BG_TERTIARY'}
+              text={'튜토리얼 바로 이동'}
+              textColor="WHITE"
+              onPress={() => {
+                navigation.navigate('TutorialStart');
+              }}
+              type={'action'}
+              sizing="stretch"
+            />
+            <Button
+              status={'normal'}
+              bgColor={'BG_TERTIARY'}
               text={'자동 로그인'}
               textColor="WHITE"
               onPress={() => {

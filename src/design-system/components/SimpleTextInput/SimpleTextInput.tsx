@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 import { useTheme } from 'styled-components/native';
-import { FontSettings, L } from '@design-system';
+import { ColorKeys, Colors, FontSettings, L } from '@design-system';
 import * as S from './SimpleTextInput.styles';
 
 interface SimpleTextInputProps extends TextInputProps {
@@ -9,6 +9,8 @@ interface SimpleTextInputProps extends TextInputProps {
   onChangeText: (text: string) => void;
   title?: string;
   focusDelay?: number;
+  backgroundColor?: string;
+  outline?: ColorKeys;
 }
 
 const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
@@ -17,6 +19,8 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
   placeholder,
   autoFocus = false,
   focusDelay = 600,
+  backgroundColor,
+  outline,
   ...textInputProps
 }) => {
   const inputRef = useRef<TextInput>(null);
@@ -43,8 +47,9 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
         items="center"
         style={{
           ...S.defaultStyles.container,
-          backgroundColor: theme.BG_TERTIARY,
+          backgroundColor: backgroundColor || theme.BG_TERTIARY,
         }}
+        outline={outline}
       >
         <TextInput
           ref={inputRef}
@@ -53,6 +58,7 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
             {
               color: theme.WHITE,
               ...FontSettings['BODY_REGULAR'],
+              textAlign: 'center',
             },
           ])}
           placeholder={placeholder}
