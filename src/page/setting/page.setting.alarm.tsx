@@ -68,7 +68,7 @@ export const PageSettingAlarm: React.FC = () => {
         <Font type={'BODY_REGULAR'}>알림음</Font>
         <ButtonText
           onPress={() => console.log('알림음')}
-          text={'럭키'}
+          text={'럭럭'}
           textColor={'LUCK_GREEN'}
         />
       </L.Row>
