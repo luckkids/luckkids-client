@@ -951,6 +951,7 @@ SPEC CHECKSUMS:
   KakaoSDKCommon: 555e1bb46595b842ded01cf7888cc17bbae4e113
   KakaoSDKUser: 08c0a4f40bebdebdf948a9e3d0e44ed5c2754f99
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   lottie-ios: ef1be1f90d54255f08e09d767950e43714661178
   lottie-react-native: 00ac19344296ae018260aabd14d6b36dd816b0e2
   MMKV: f21593c0af4b3f2a0ceb8f820f28bb639ea22bb7
