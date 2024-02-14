@@ -22,6 +22,11 @@ export type AppScreensParamList = {
   LoginJoin: { step: 'Id' | 'Password' };
   LoginId: undefined;
   LoginJoinAgreement: undefined;
+  TutorialStart: undefined;
+  TutorialGuide: undefined;
+  TutorialSettingCharacter: undefined;
+  TutorialSettingMission: undefined;
+  TutorialSettingNoti: undefined;
   CharacterMake: undefined;
   CharacterSelect: undefined;
   CharacterName: undefined;

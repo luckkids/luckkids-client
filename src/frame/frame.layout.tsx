@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import {
   Image,
+  ImageBackground,
   ImageSourcePropType,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StatusBar,
   StyleProp,
@@ -37,7 +40,14 @@ export const FrameLayout = ({
   const { top, bottom } = useSafeAreaInsets();
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{
+        backgroundColor: theme.BG_PRIMARY,
+        width: SCREEN_WIDTH,
+        flex: 1,
+      }}
+    >
       <MyStatusBar
         backgroundColor={Colors[statusBarColor || 'BG_PRIMARY']}
         barStyle={statusBarStyle || 'light-content'}
@@ -65,19 +75,20 @@ export const FrameLayout = ({
               zIndex: -1,
             }}
           >
-            <Image
+            <ImageBackground
               source={backgroundImage}
               style={{
                 width: SCREEN_WIDTH,
                 height: (SCREEN_WIDTH * 790) / 390,
               }}
+              resizeMode="cover"
             />
           </View>
         )}
         {NavBar}
         {children}
       </View>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 

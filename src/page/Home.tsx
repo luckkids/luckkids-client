@@ -9,20 +9,20 @@ import {
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
+import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import Tooltip from '@components/common/Tooltip/Tooltip';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
-const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
-const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsRabbit = require('assets/images/luckkids-rabbit.png');
+const luckkidsSun = require('assets/images/luckkids-sun.png');
+const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
   const navigation = useNavigationService();

@@ -28,6 +28,11 @@ import { PageSettingInfoPassword } from '@page/setting/page.setting.info.passwor
 import { PageStoryTelling } from '@page/story-telling/page.story-telling';
 import { IStackScreen } from '@types-common/page.types';
 import { PageHomeProfile } from '@page/home/page.home.profile';
+import { PageTutorialStart } from '@page/tutorial/page.tutorial.start';
+import { PageTutorialGuide } from '@page/tutorial/page.tutorial.guide';
+import { PageTutorialSettingCharacter } from '@page/tutorial/page.tutorial.setting.character';
+import { PageTutorialSettingMission } from '@page/tutorial/page.tutorial.setting.mission';
+import { PageTutorialSettingNoti } from '@page/tutorial/page.tutorial.setting.noti';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
@@ -57,6 +62,26 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'LoginJoinAgreement',
     component: PageLoginJoinAgreement,
+  },
+  {
+    name: 'TutorialStart',
+    component: PageTutorialStart,
+  },
+  {
+    name: 'TutorialGuide',
+    component: PageTutorialGuide,
+  },
+  {
+    name: 'TutorialSettingCharacter',
+    component: PageTutorialSettingCharacter,
+  },
+  {
+    name: 'TutorialSettingMission',
+    component: PageTutorialSettingMission,
+  },
+  {
+    name: 'TutorialSettingNoti',
+    component: PageTutorialSettingNoti,
   },
   {
     name: 'CharacterMake',

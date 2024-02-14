@@ -50,7 +50,6 @@ const RootNavigator = withGlobalComponents(() => {
     try {
       if (!initializing) {
         console.log('App Reload');
-        requestPermissionIfNot();
         await initializeFirebaseMessage();
         initializeLocalMessage();
       }
