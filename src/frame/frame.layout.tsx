@@ -4,7 +4,10 @@ import {
   ImageSourcePropType,
   SafeAreaView,
   StatusBar,
+  StyleProp,
+  StyleSheet,
   View,
+  ViewStyle,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,6 +21,7 @@ interface FrameLayoutProps {
   statusBarColor?: ColorKeys;
   statusBarStyle?: 'light-content' | 'dark-content';
   backgroundImage?: ImageSourcePropType;
+  backgroundStyle?: StyleProp<ViewStyle>;
 }
 
 export const FrameLayout = ({
@@ -27,6 +31,7 @@ export const FrameLayout = ({
   statusBarColor,
   statusBarStyle,
   backgroundImage,
+  backgroundStyle,
 }: FrameLayoutProps) => {
   const theme = useTheme();
   const { top, bottom } = useSafeAreaInsets();
@@ -38,12 +43,15 @@ export const FrameLayout = ({
         barStyle={statusBarStyle || 'light-content'}
       />
       <View
-        style={{
-          backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
-          width: SCREEN_WIDTH,
-          flex: 1,
-          paddingBottom: bottom,
-        }}
+        style={StyleSheet.flatten([
+          {
+            backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
+            width: SCREEN_WIDTH,
+            flex: 1,
+            paddingBottom: bottom,
+          },
+          backgroundStyle,
+        ])}
       >
         {backgroundImage && (
           <View
