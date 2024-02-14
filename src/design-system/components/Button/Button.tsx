@@ -14,7 +14,7 @@ type ButtonProps = {
   textColor?: ColorKeys;
   sizing?: ButtonSizing;
   status?: ButtonStatus;
-  onPress?: (status: ButtonStatus) => void;
+  onPress?: (status?: ButtonStatus) => void;
   iconName?: IconNames;
   iconPosition?: 'leading' | 'trailing';
   iconGap?: number;
