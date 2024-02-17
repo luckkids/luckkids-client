@@ -90,14 +90,15 @@ export interface IGarden {
 }
 
 export interface IGardenItem{
-  onPress: () => void;
+  onPress?: () => void;
   isSelf?:boolean;
-  fileUrl:string;
+  imageFileUrl:string;
   nickname:string;
   myId?:number;
   friendId?:number;
-  characterCount:number;
-  luckPhrases:string;
+  characterCount?:number;
+  luckPhrase:string;
+  isShow?:boolean;
 }
 
 export interface ISettingAlarm {

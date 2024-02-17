@@ -6,8 +6,8 @@ export const DataDummyGarden = {
         myProfile: {
           myId: 1,
           nickname: "럭키즈",
-          luckPhrases: "행운문구",
-          fileUrl: "assets/images/garden/charactor-lucky.png",
+          luckPhrase: "행운문구",
+          imageFileUrl: 'assets/images/garden/charactor-lucky.png',
           characterCount: 1,
         },
         friendList: {
@@ -15,15 +15,15 @@ export const DataDummyGarden = {
             {
               friendId: 2,
               nickname: "럭키즈 친구 2",
-              luckPhrases: "행운 문구 2",
-              fileUrl: "assets/images/garden/charactor-lucky.png",
+              luckPhrase: "행운 문구 2",
+              imageFileUrl: 'assets/images/garden/charactor-lucky.png',
               characterCount: 1,
             },
             {
               friendId: 3,
               nickname: "럭키즈 친구 3",
-              luckPhrases: "행운 문구 3",
-              fileUrl: "assets/images/garden/charactor-lucky.png",
+              luckPhrase: "행운 문구 3",
+              imageFileUrl: 'assets/images/garden/charactor-lucky.png',
               characterCount: 2,
             },
           ],

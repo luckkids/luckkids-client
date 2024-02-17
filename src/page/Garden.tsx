@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
@@ -11,6 +11,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
+import {IGardenItem} from "@types-common/page.types";
 
 const S = {
   listWrap: styled.View({
@@ -100,8 +101,21 @@ export const Garden: React.FC = () => {
   const dummyData = DataDummyGarden;
   const friendData = dummyData.data.friendList.content;
   const myData = dummyData.data.myProfile;
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<IGardenItem>({isShow:false, nickname:'',luckPhrase:'',imageFileUrl:''});
   const [data, setData] = useState();
+  const dummy = {
+    nickname: "럭키즈 친구 2",
+    luckPhrase: "행운 문구 2",
+    imageFileUrl: 'assets/images/garden/charactor-lucky.png',
+    characterCount: 1,
+  };
+  const dimProfile = useMemo(()=>{
+    const temArray = [];
+    for (let i =0; i < 15 - (friendData.length + 1); i++){
+      temArray.push(<GardenItem {...dummy} isDimProfile={true} onPress={() =>{}}/>)
+    }
+    return temArray;
+  },[])
   const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
     method: 'GET',
     url: '/friends',
@@ -121,10 +135,11 @@ export const Garden: React.FC = () => {
         </TouchableWithoutFeedback>
       </L.Row>
       <S.listWrap>
-        {myData && <GardenItem onPress={() => setShow(true)} isSelf={true} {...myData}/>}
+        {myData && <GardenItem {...myData} onPress={() => setShow({isShow:true, ...myData})} isSelf={true}/>}
         {friendData.map((item, i)=>{
-          return <GardenItem {...item} onPress={() => setShow(true)} key={i}/>
+          return <GardenItem {...item} onPress={() => setShow({isShow:true, ...item})} key={i}/>
         })}
+        {dimProfile}
       </S.listWrap>
       <ActionIcon
         title={'친구를 초대할게요!'}
@@ -132,13 +147,10 @@ export const Garden: React.FC = () => {
         onPress={() => onInviteHandler()}
       />
       <GardenPopup
-        title={'럭키즈 체고! 럭키즈 체고!'}
-        img={{
-          uri: 'https://img.freepik.com/free-photo/sample-of-white-cotton-textile_1220-7596.jpg',
-          name: '행운럭키',
-        }}
-        level={88}
-        isShow={show}
+        title={show.luckPhrase}
+        img={show.imageFileUrl}
+        name={show.nickname}
+        isShow={show.isShow ? show.isShow : false}
         setShow={setShow}
       />
     </FrameLayout>
