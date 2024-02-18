@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Font, L, SvgIcon } from '@design-system';
 import { Image, TouchableWithoutFeedback, View } from 'react-native';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 import styled from 'styled-components/native';
-import Colors from '../../../design-system/colors';
-import Dim from 'react-native-linear-gradient';
-import { GardenLeagueItem } from '@components/page/garden/garden.league.item';
-import {
-  IGarden,
-  IGardenItem,
-  IGardenLeagueItem,
-} from '@types-common/page.types';
+import { Font, L, SvgIcon } from '@design-system';
 import { DataDummyGardenLeague } from '../../../data/dummy/data.dummy.garden.league';
+import Colors from '../../../design-system/colors';
+import { GardenLeagueItem } from '@components/page/garden/garden.league.item';
+import useNavigationService from '@hooks/navigation/useNavigationService';
+import { IGardenLeagueItem } from '@types-common/page.types';
 
 const S = {
   Icon: styled.View({
@@ -98,7 +93,7 @@ export const GardenNavbar = () => {
           <L.Col w={'100%'} h={'100%'} mv={25} justify={'center'}>
             <L.Row items={'center'} ml={15} mb={18}>
               <S.Icon>
-                <SvgIcon name={'icon_league'} size={22}></SvgIcon>
+                <SvgIcon name={'icon_league'} size={22} />
               </S.Icon>
               <Font type={'TITLE_League'}>리그</Font>
             </L.Row>

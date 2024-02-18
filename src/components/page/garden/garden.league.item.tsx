@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { Font, L, SvgIcon } from '@design-system';
-import { IGardenItem, IGardenLeagueItem } from '@types-common/page.types';
 import { Image } from 'react-native';
+import { Font, L, SvgIcon } from '@design-system';
+import { IGardenLeagueItem } from '@types-common/page.types';
 
 interface IProps extends IGardenLeagueItem {
   rank: number;

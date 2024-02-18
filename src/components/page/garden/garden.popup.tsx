@@ -1,9 +1,9 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import { Font, L } from '@design-system';
 import { IGardenItem } from '@types-common/page.types';
-import Dim from 'react-native-linear-gradient';
 
 interface IGardenPopup {
   title: string;

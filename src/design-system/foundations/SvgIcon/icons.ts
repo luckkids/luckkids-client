@@ -1,7 +1,7 @@
 import album from '../../assets/icons/album.svg';
 import arrow_left from '../../assets/icons/arrow_left.svg';
-import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
 import arrow_right from '../../assets/icons/arrow_right.svg';
+import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
@@ -21,6 +21,10 @@ import iconHomeLuckkids from '../../assets/icons/icon-home-luckkids.svg';
 import iconHomeOff from '../../assets/icons/icon-home-off.svg';
 import iconHomeOn from '../../assets/icons/icon-home-on.svg';
 import iconKakao from '../../assets/icons/icon-kakao.svg';
+import icon_league from '../../assets/icons/icon-league.svg';
+import iconMedal1 from '../../assets/icons/icon-medal-1.svg';
+import iconMedal2 from '../../assets/icons/icon-medal-2.svg';
+import iconMedal3 from '../../assets/icons/icon-medal-3.svg';
 import iconMindSet from '../../assets/icons/icon-mind-set-1.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
@@ -28,8 +32,10 @@ import iconPlus from '../../assets/icons/icon-plus.svg';
 import iconSelfCare from '../../assets/icons/icon-self-care-1.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
-import icon_lock from '../../assets/icons/icon_lock.svg';
 import iconWorking from '../../assets/icons/icon-working-1.svg';
+import icon_edit from '../../assets/icons/icon_edit.svg';
+import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
+import icon_lock from '../../assets/icons/icon_lock.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
@@ -40,12 +46,6 @@ import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
 import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
-import icon_edit from '../../assets/icons/icon_edit.svg';
-import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
-import icon_league from '../../assets/icons/icon-league.svg';
-import iconMedal1 from '../../assets/icons/icon-medal-1.svg';
-import iconMedal2 from '../../assets/icons/icon-medal-2.svg';
-import iconMedal3 from '../../assets/icons/icon-medal-3.svg';
 
 export {
   bell,
