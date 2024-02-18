@@ -27,6 +27,11 @@ export default {
     lineHeight: 36,
     fontFamily: PretendardFont.Bold,
   },
+  TITLE_League: {
+    fontSize: 26,
+    lineHeight: 36,
+    fontFamily: PretendardFont.Bold,
+  },
   TITLE2_REGULAR: {
     fontSize: 22,
     lineHeight: 28,
@@ -75,6 +80,11 @@ export default {
   SUBHEADLINE_SEMIBOLD: {
     fontSize: 15,
     lineHeight: 20,
+    fontFamily: PretendardFont.SemiBold,
+  },
+  SUBTITLE_LEAGUE: {
+    fontSize: 14,
+    lineHeight: 22,
     fontFamily: PretendardFont.SemiBold,
   },
   FOOTNOTE_REGULAR: {

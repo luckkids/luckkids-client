@@ -118,6 +118,7 @@ export const PageLoginId: React.FC = () => {
   useAsyncEffect(async () => {
     const deviceId = await DeviceInfo.getUniqueId();
     setDeviceID(deviceId);
+    console.log('device', deviceId);
   }, []);
 
   useEffect(() => {

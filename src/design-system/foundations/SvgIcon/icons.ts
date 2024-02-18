@@ -42,6 +42,10 @@ import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
 import icon_edit from '../../assets/icons/icon_edit.svg';
 import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
+import icon_league from '../../assets/icons/icon-league.svg';
+import iconMedal1 from '../../assets/icons/icon-medal-1.svg';
+import iconMedal2 from '../../assets/icons/icon-medal-2.svg';
+import iconMedal3 from '../../assets/icons/icon-medal-3.svg';
 
 export {
   bell,
@@ -86,4 +90,8 @@ export {
   iconWorking,
   icon_edit,
   icon_edit_comment,
+  icon_league,
+  iconMedal1,
+  iconMedal2,
+  iconMedal3,
 };

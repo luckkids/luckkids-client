@@ -85,20 +85,26 @@ export interface IMissionListData {
 }
 
 export interface IGarden {
-  myProfile:IGardenItem,
-  friendList:IGardenItem
+  myProfile: IGardenItem;
+  friendList: IGardenItem;
 }
 
-export interface IGardenItem{
+export interface IGardenItem {
   onPress?: () => void;
-  isSelf?:boolean;
-  imageFileUrl:string;
-  nickname:string;
-  myId?:number;
-  friendId?:number;
-  characterCount?:number;
-  luckPhrase:string;
-  isShow?:boolean;
+  isSelf?: boolean;
+  imageFileUrl: string;
+  nickname: string;
+  myId?: number;
+  friendId?: number;
+  characterCount?: number;
+  luckPhrase: string;
+  isShow?: boolean;
+}
+
+export interface IGardenLeagueItem {
+  nickname: string;
+  imageFileUrl: string;
+  characterCount: number;
 }
 
 export interface ISettingAlarm {
