@@ -1,18 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native';
-import { Font, L, SvgIcon } from '@design-system';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ScrollView } from 'react-native';
+import { Font, IconNames, L, SvgIcon } from '@design-system';
 import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
+import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { IMissionRepair } from '@types-common/page.types';
 import { useFetch } from '@hooks/useFetch';
+import { IMissionDataItem, IMissionRepair } from '@types-common/page.types';
 
 export const PageMissionRepair = () => {
+  const list = { ...DataDummyMissionRepair.data } as {
+    [key: string]: Array<IMissionDataItem>;
+  };
+  const [dataDicArray, setDataDicArray] = useState<Array<string>>(
+    Object.keys(list),
+  );
+  const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
-  const list = { ...DataDummyMissionRepair } as IMissionRepair;
+  const [current, setCurrent] = useState<number | null>(null);
+  const [isRemove, setIsRemove] = useState<boolean>(false);
   const [data, setData] = useState<IMissionRepair>();
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
@@ -21,8 +30,49 @@ export const PageMissionRepair = () => {
     onSuccessCallback: setData,
   });
   useEffect(() => {
-    onFetch();
+    // onFetch();
+    setAllCategory(Object.keys(list));
   }, [isSuccess]);
+
+  const categoryButton = useCallback((key: string) => {
+    switch (key) {
+      case 'HOUSEKEEPING':
+        return {
+          label: '집 정돈',
+          icon: 'iconHomeCare',
+        };
+      case 'SELF_CARE':
+        return {
+          label: '셀프케어',
+          icon: 'iconSelfCare',
+        };
+      case 'HEALTH':
+        return {
+          label: '건강',
+          icon: 'iconHealth',
+        };
+      case 'WORK':
+        return {
+          label: '일',
+          icon: 'iconWorking',
+        };
+      case 'MINDSET':
+        return {
+          label: '마인드셋',
+          icon: 'iconMindSet',
+        };
+      case 'SELF_DEVELOPMENT':
+        return {
+          label: '자기계발',
+          icon: 'iconGrowth',
+        };
+      default:
+        return {
+          label: '집 정돈',
+          icon: 'iconHomeCare',
+        };
+    }
+  }, []);
 
   return (
     <>
@@ -34,132 +84,61 @@ export const PageMissionRepair = () => {
             </Font>
           </L.Row>
           <L.Row ph={25} pv={15}>
-            <TouchableWithoutFeedback onPress={() => console.log('추가')}>
-              <L.Row>
-                <L.Row pr={25}>
-                  <SvgIcon name={'lucky_uncheck'} size={22} />
+            <MissionRepairCategoryItem
+              isAddButton={true}
+              label={'습관추가'}
+              onPress={() => console.log('추가')}
+            />
+            {allCategory.length !== 0 && (
+              <ScrollView horizontal={true}>
+                <L.Row ml={8} g={8}>
+                  {allCategory.map((item, i) => {
+                    return (
+                      <MissionRepairCategoryItem
+                        isActive={isRemove ? !isRemove : i === current}
+                        label={item}
+                        onPress={() => {
+                          if (i === current && !isRemove) {
+                            setIsRemove(true);
+                            setDataDicArray(allCategory);
+                            return;
+                          }
+                          setCurrent(i);
+                          setIsRemove(false);
+                          setDataDicArray([item]);
+                        }}
+                        key={i}
+                      />
+                    );
+                  })}
                 </L.Row>
-                <Font type={'HEADLINE_SEMIBOLD'} color={'GREY1'}>
-                  추가하기
-                </Font>
-              </L.Row>
-            </TouchableWithoutFeedback>
+              </ScrollView>
+            )}
           </L.Row>
-          {list.data.HOUSEKEEPING && list.data.HOUSEKEEPING.length !== 0 && (
-            <>
-              <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                <SvgIcon name={'iconHomeCare'} size={62} />
-                <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                  집 정돈
-                </Font>
-              </L.Row>
-              {list.data.HOUSEKEEPING.map((item, i) => {
-                return (
-                  <MisstionRepairItem
-                    isCheck={item.alertStatus === 'CHECKED'}
-                    isSetAlarm={true}
-                    key={i}
-                  />
-                );
-              })}
-            </>
-          )}
-          {list.data.SELF_CARE && list.data.SELF_CARE.length !== 0 && (
-            <>
-              <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                <SvgIcon name={'iconSelfCare'} size={62} />
-                <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                  셀프 케어
-                </Font>
-              </L.Row>
-              {list.data.SELF_CARE.map((item, i) => {
-                return (
-                  <MisstionRepairItem
-                    isCheck={item.alertStatus === 'CHECKED'}
-                    isSetAlarm={true}
-                    key={i}
-                  />
-                );
-              })}
-            </>
-          )}
-          {list.data.HEALTH && list.data.HEALTH.length !== 0 && (
-            <>
-              <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                <SvgIcon name={'iconHealth'} size={62} />
-                <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                  건강
-                </Font>
-              </L.Row>
-              {list.data.HEALTH.map((item, i) => {
-                return (
-                  <MisstionRepairItem
-                    isCheck={item.alertStatus === 'CHECKED'}
-                    isSetAlarm={true}
-                    key={i}
-                  />
-                );
-              })}
-            </>
-          )}
-          {list.data.WORK && list.data.WORK.length !== 0 && (
-            <>
-              <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                <SvgIcon name={'iconWorking'} size={62} />
-                <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                  일
-                </Font>
-              </L.Row>
-              {list.data.WORK.map((item, i) => {
-                return (
-                  <MisstionRepairItem
-                    isCheck={item.alertStatus === 'CHECKED'}
-                    isSetAlarm={true}
-                    key={i}
-                  />
-                );
-              })}
-            </>
-          )}
-          {list.data.MINDSET && list.data.MINDSET.length !== 0 && (
-            <>
-              <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                <SvgIcon name={'iconMindSet'} size={62} />
-                <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                  마인드셋
-                </Font>
-              </L.Row>
-              {list.data.MINDSET.map((item, i) => {
-                return (
-                  <MisstionRepairItem
-                    isCheck={item.alertStatus === 'CHECKED'}
-                    isSetAlarm={true}
-                    key={i}
-                  />
-                );
-              })}
-            </>
-          )}
-          {list.data.SELF_DEVELOPMENT &&
-            list.data.SELF_DEVELOPMENT.length !== 0 && (
-              <>
+          {dataDicArray.map((item, i) => {
+            return (
+              <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                  <SvgIcon name={'iconGrowth'} size={62} />
+                  <SvgIcon
+                    name={categoryButton(item).icon as IconNames}
+                    size={62}
+                  />
                   <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                    자기개발
+                    {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {list.data.SELF_DEVELOPMENT.map((item, i) => {
+                {list[item].map((value, i) => {
                   return (
                     <MisstionRepairItem
-                      isCheck={item.alertStatus === 'CHECKED'}
+                      isCheck={value.alertStatus === 'CHECKED'}
                       isSetAlarm={true}
                       key={i}
                     />
                   );
                 })}
-              </>
-            )}
+              </React.Fragment>
+            );
+          })}
         </ScrollView>
       </FrameLayout>
       <FloatingButton

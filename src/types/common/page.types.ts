@@ -59,16 +59,16 @@ export interface IMissionRepair extends IMissionData {
   data: IMissionData;
 }
 
-interface IMissionData {
-  WORK: Array<IMissionDataItem>;
-  SELF_DEVELOPMENT: Array<IMissionDataItem>;
-  HEALTH: Array<IMissionDataItem>;
+export interface IMissionData {
   HOUSEKEEPING: Array<IMissionDataItem>;
-  MINDSET: Array<IMissionDataItem>;
   SELF_CARE: Array<IMissionDataItem>;
+  HEALTH: Array<IMissionDataItem>;
+  WORK: Array<IMissionDataItem>;
+  MINDSET: Array<IMissionDataItem>;
+  SELF_DEVELOPMENT: Array<IMissionDataItem>;
 }
 
-interface IMissionDataItem {
+export interface IMissionDataItem {
   id: number;
   missionType: string;
   missionDescription: null | string;
@@ -76,12 +76,18 @@ interface IMissionDataItem {
   alertTime: string;
 }
 
+export interface IMissionCategoryItem {
+  isAddButton?: boolean;
+  onPress: () => void;
+  label: string;
+}
+
 export interface IMissionListData {
   missionStatus: string;
   alertTime: string;
   id: number;
   missionDescription: string;
-  setCount: Dispatch<number>;
+  setCount?: Dispatch<number>;
 }
 
 export interface IGarden {
