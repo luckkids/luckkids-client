@@ -3,29 +3,36 @@ export const DataDummyMissionRepair = {
   httpStatus: 'OK',
   message: 'OK',
   data: {
-    WORK: [
+    HOUSEKEEPING: [
       {
-        id: 16,
-        missionType: 'WORK',
+        id: 5,
+        missionType: 'HOUSEKEEPING',
         missionDescription: null,
         alertStatus: 'CHECKED',
         alertTime: '18:30:00',
       },
       {
-        id: 17,
-        missionType: 'WORK',
+        id: 8,
+        missionType: 'HOUSEKEEPING',
+        missionDescription: null,
+        alertStatus: 'CHECKED',
+        alertTime: '18:30:00',
+      },
+      {
+        id: 10,
+        missionType: 'HOUSEKEEPING',
         missionDescription: null,
         alertStatus: 'CHECKED',
         alertTime: '18:30:00',
       },
     ],
-    SELF_DEVELOPMENT: [
+    SELF_CARE: [
       {
-        id: 2,
-        missionType: 'SELF_DEVELOPMENT',
-        missionDescription: '책읽기',
+        id: 16,
+        missionType: 'WORK',
+        missionDescription: '셀프케어',
         alertStatus: 'CHECKED',
-        alertTime: '19:30:00',
+        alertTime: '18:30:00',
       },
     ],
     HEALTH: [
@@ -107,27 +114,38 @@ export const DataDummyMissionRepair = {
         alertTime: '18:30:00',
       },
     ],
-    HOUSEKEEPING: [
+    WORK: [
       {
-        id: 5,
-        missionType: 'HOUSEKEEPING',
+        id: 16,
+        missionType: 'WORK',
         missionDescription: null,
         alertStatus: 'CHECKED',
         alertTime: '18:30:00',
       },
       {
-        id: 8,
-        missionType: 'HOUSEKEEPING',
+        id: 17,
+        missionType: 'WORK',
         missionDescription: null,
         alertStatus: 'CHECKED',
         alertTime: '18:30:00',
       },
+    ],
+    MINDSET: [
       {
-        id: 10,
-        missionType: 'HOUSEKEEPING',
-        missionDescription: null,
+        id: 16,
+        missionType: 'WORK',
+        missionDescription: '마인드셋',
         alertStatus: 'CHECKED',
         alertTime: '18:30:00',
+      },
+    ],
+    SELF_DEVELOPMENT: [
+      {
+        id: 2,
+        missionType: 'SELF_DEVELOPMENT',
+        missionDescription: '책읽기',
+        alertStatus: 'CHECKED',
+        alertTime: '19:30:00',
       },
     ],
   },
