@@ -56,8 +56,6 @@ import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
 import icon_download_green from '../../assets/icons/icon_download_green.svg';
 import icon_share_green from '../../assets/icons/icon_share_green.svg';
-import icon_edit from '../../assets/icons/icon_edit.svg';
-import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
 
 export {
   bell,
