@@ -4,10 +4,12 @@ import { Font, SvgIcon, L } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { ScrollView } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useFetch } from '@hooks/useFetch';
 import { DefaultTypeUnit, ISettingAlarm } from '@types-common/page.types';
+import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const S = {
   Wrap: styled.View({
@@ -24,6 +26,8 @@ export const PageSetting: React.FC = () => {
   const navigation = useNavigationService();
   const [version, setVersion] = useState<string>('최신 버전이에요!');
   const applicationVersion = DeviceInfo.getVersion();
+
+  const { getToken } = useFirebaseMessage();
   const { onFetch } = useFetch({
     method: 'GET',
     url: '/versions/',
@@ -103,6 +107,21 @@ export const PageSetting: React.FC = () => {
             paddingHorizontal: 25,
           }}
           onPress={() => navigation.navigate('SettingAccount')}
+        />
+        <ButtonText
+          text={'내 푸시 토큰 복사하기'}
+          textColor={'WHITE'}
+          cssProp={{
+            paddingVertical: 20,
+            paddingHorizontal: 25,
+          }}
+          onPress={async () => {
+            const pushToken = await getToken();
+            if (pushToken) {
+              Clipboard.setString(pushToken);
+              Alert.alert('푸시 토큰이 복사되었습니다.');
+            } else Alert.alert('푸시 토큰이 없습니다.');
+          }}
         />
       </ScrollView>
     </FrameLayout>

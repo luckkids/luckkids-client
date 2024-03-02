@@ -3,32 +3,29 @@ import {
   Animated,
   GestureResponderEvent,
   Image,
-  TouchableWithoutFeedback,
+  ScrollView,
   View,
 } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
+import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import ProgressBar from '@components/common/ProgressBar/ProgressBar';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
-const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
-const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsRabbit = require('assets/images/luckkids-rabbit.png');
+const luckkidsSun = require('assets/images/luckkids-sun.png');
+const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
-  const { top } = useSafeAreaInsets();
   const navigation = useNavigationService();
-  const progressBarRef = useRef<View>(null);
-
   const handleViewProfile = (e: GestureResponderEvent) => {
     navigation.navigate('HomeProfile');
   };
@@ -48,22 +45,6 @@ export const Home: React.FC = () => {
     inputRange: [0, 1],
     outputRange: [0, -INITIAL_HEIGHT_REDUCTION],
   });
-
-  const openAnimation = () => {
-    Animated.timing(animatedValue, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const closeAnimation = () => {
-    Animated.timing(animatedValue, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
 
   useLayoutEffect(() => {
     LoadingIndicator.show({});
@@ -90,17 +71,18 @@ export const Home: React.FC = () => {
           />
         </L.Col>
         {/* 정보 */}
-        <View
+        <ScrollView
           style={{
             flex: 1,
+            overflow: 'visible',
+          }}
+          // TODO(Gina): fix with reasonable value
+          contentContainerStyle={{
+            marginBottom: 100,
+            paddingBottom: 420,
           }}
         >
-          <TouchableWithoutFeedback
-            style={{
-              flex: 1,
-            }}
-            onPress={closeAnimation}
-          >
+          <View>
             <Animated.View
               style={{
                 height: animatedHeight,
@@ -111,7 +93,6 @@ export const Home: React.FC = () => {
                 left: 0,
                 transform: [{ translateY: animatedY }],
               }}
-              onTouchMove={openAnimation}
             >
               <L.Row justify="flex-end" mb={14}>
                 <ChipButton
@@ -121,29 +102,37 @@ export const Home: React.FC = () => {
                   iconName="arrow_right"
                 />
               </L.Row>
-              <L.Row
+              <L.Col
                 style={{
                   backgroundColor: '#00000099',
                 }}
                 h={SUCCESS_RATE_HEIGHT}
                 rounded={15}
                 mb={GAP}
+                ph={25}
+                pv={18}
               >
-                {/* 달성율 */}
-                <L.Col ph={25} pv={18} w={'100%'}>
-                  <L.Row items="flex-end">
-                    <Font type="LARGE_TITLE_BOLD" mr={4}>
-                      75
+                <L.Row justify="space-between">
+                  {/* 달성율 */}
+                  <L.Col w={'100%'}>
+                    <L.Row items="flex-end">
+                      <Font type="LARGE_TITLE_BOLD" mr={4}>
+                        75
+                      </Font>
+                      <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
+                        %
+                      </Font>
+                    </L.Row>
+                    <Font type="SUBHEADLINE_SEMIBOLD" color="HOME_INFO_TEXT">
+                      럭키즈 달성율
                     </Font>
-                    <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
-                      %
-                    </Font>
-                  </L.Row>
-                  <Font type="SUBHEADLINE_SEMIBOLD" color="HOME_INFO_TEXT">
-                    럭키즈 달성율
-                  </Font>
-                  {/* TODO 프로그레스 바 */}
-                  <L.Row mt={14}>
+                  </L.Col>
+                  <L.Absolute r={0} b={0}>
+                    <Tooltip text="한 단계 남았어요" />
+                  </L.Absolute>
+                </L.Row>
+                <L.Row w="100%" mt={14}>
+                  <L.Row>
                     <L.Col w={'100%'}>
                       <ProgressBar
                         progress={0.5}
@@ -152,8 +141,8 @@ export const Home: React.FC = () => {
                       />
                     </L.Col>
                   </L.Row>
-                </L.Col>
-              </L.Row>
+                </L.Row>
+              </L.Col>
               <L.Row
                 style={{
                   backgroundColor: '#00000099',
@@ -241,8 +230,8 @@ export const Home: React.FC = () => {
                 </L.Col>
               </L.Row>
             </Animated.View>
-          </TouchableWithoutFeedback>
-        </View>
+          </View>
+        </ScrollView>
       </FrameLayout>
     </>
   );

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* LuckKidsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LuckKidsTests.m */; };
+		0769B8A92B7631CA00EE3AF6 /* noti_luckluck.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0769B8A82B7631CA00EE3AF6 /* noti_luckluck.wav */; };
 		078912732B128835000D6C5D /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 078912722B128835000D6C5D /* SwiftBridge.swift */; };
 		0789C3D52AF072B100285C72 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0789C3D32AF072B000285C72 /* Images.xcassets */; };
 		0789C3D62AF072B100285C72 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0789C3D42AF072B100285C72 /* BootSplash.storyboard */; };
@@ -39,6 +40,7 @@
 		00E356EE1AD99517003FC87E /* LuckKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LuckKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* LuckKidsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LuckKidsTests.m; sourceTree = "<group>"; };
+		0769B8A82B7631CA00EE3AF6 /* noti_luckluck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = noti_luckluck.wav; path = ../../Downloads/noti_luckluck.wav; sourceTree = "<group>"; };
 		0781D6992B42DCAD0034F0B8 /* LuckKids.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LuckKids.entitlements; path = LuckKids/LuckKids.entitlements; sourceTree = "<group>"; };
 		078912712B128834000D6C5D /* LuckKids-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LuckKids-Bridging-Header.h"; sourceTree = "<group>"; };
 		078912722B128835000D6C5D /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		EE075F3FFD614AAF9AA5C994 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0769B8A82B7631CA00EE3AF6 /* noti_luckluck.wav */,
 				D26EB5F29FD14B05A0F09AE1 /* Pretendard-Black.otf */,
 				C090505A2B3748329B6C9841 /* Pretendard-Bold.otf */,
 				EF55EE1D0CAE418DA8676BBE /* Pretendard-Medium.otf */,
@@ -285,6 +288,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				0789C3D52AF072B100285C72 /* Images.xcassets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				0769B8A92B7631CA00EE3AF6 /* noti_luckluck.wav in Resources */,
 				0789C3D62AF072B100285C72 /* BootSplash.storyboard in Resources */,
 				32E74D8427914262B8234823 /* Pretendard-Black.otf in Resources */,
 				15272065431E438B9D45E64E /* Pretendard-Bold.otf in Resources */,
@@ -550,13 +554,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = 7Y82CDD85J;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = LuckKids/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = luckKids;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -572,7 +575,6 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "LuckKids-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				SYMROOT = "/build/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -584,12 +586,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = 7Y82CDD85J;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				INFOPLIST_FILE = LuckKids/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = luckKids;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -604,7 +604,6 @@
 				PRODUCT_NAME = luckkids;
 				SWIFT_OBJC_BRIDGING_HEADER = "LuckKids-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				SYMROOT = "/build/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -642,7 +641,6 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				EXCLUDED_ARCHS = arm64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -691,11 +689,9 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SYMROOT = "/build/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}";
 			};
 			name = Debug;
 		};
@@ -732,7 +728,6 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				EXCLUDED_ARCHS = arm64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -776,11 +771,9 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				SYMROOT = "/build/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -23,67 +23,65 @@ export const useFetch = (args: {
   const [token, setToken] = useRecoilState(RecoilToken);
   const [isSuccess, setIsSuccess] = useState(false);
   const [resultData, setResultData] = useState<IResponse>();
-  const onFetch = useCallback(() => {
-    const loadData = async () => {
-      try {
-        let rtnData: IResponse;
-        switch (args.method) {
-          case 'POST':
-          case 'PATCH':
-            rtnData = await fetch(host + args.url, {
-              method: args.method,
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token.accessToken}`,
-              },
-              body: args.value ? JSON.stringify(args.value) : null,
-            });
-            return rtnData.json();
-          default:
-            rtnData = await fetch(host + args.url, {
-              method: args.method,
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token.accessToken}`,
-              },
-            });
-            return rtnData.json();
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    };
+  const onFetch = useCallback(
+    (value?: IStringDictionary) => {
+      const requestData = value ?? args.value; // Use provided value or default to args.value
 
-    loadData()
-      .then((result) => {
-        if (result.statusCode === STATUS.UNAUTHORIZED) {
-          //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
-          return setExpiredAccessToken();
+      const loadData = async () => {
+        try {
+          let rtnData: IResponse;
+          const requestOptions: RequestInit = {
+            method: args.method,
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+          };
+
+          if (args.method === 'POST' || args.method === 'PATCH') {
+            requestOptions.body = JSON.stringify(requestData);
+          }
+
+          rtnData = await fetch(host + args.url, requestOptions);
+          return await rtnData.json();
+        } catch (e) {
+          console.log(e);
         }
-        if (result.data.refreshToken) {
-          //2. 토큰이 있으면 recoil.token.ts에 저장(글로벌로 참조 가능하도록)
-          setToken({
-            accessToken: result.data.accessToken,
-            refreshToken: result.data.refreshToken,
-          });
-        }
-        if (result.statusCode === STATUS.SUCCESS) {
-          //3. 결과가 200일경우 isSuccess 불리언값 참조 가능
-          setIsSuccess(true);
-          //4. 완료 후 컴퍼넌트에서 던져주는 결과후 실행할 함수 실행
-          args.onSuccessCallback && args.onSuccessCallback(result.data);
-        }
-        console.log('RESULT(data) ====>', result.data);
-        //5. 데이터 참조 가능하도록 추가
-        setResultData(result.data);
-        return result.data;
-      })
-      .catch(() => {
-        setIsSuccess(false);
-        args.onFailCallback && args.onFailCallback();
-        console.log('서버 통신 에러');
-      });
-  }, [args]);
+      };
+
+      loadData()
+        .then((result) => {
+          console.log(result);
+          if (result.statusCode === STATUS.UNAUTHORIZED) {
+            //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
+            return setExpiredAccessToken();
+          }
+          if (result.data.refreshToken) {
+            //2. 토큰이 있으면 recoil.token.ts에 저장(글로벌로 참조 가능하도록)
+            setToken({
+              accessToken: result.data.accessToken,
+              refreshToken: result.data.refreshToken,
+            });
+          }
+          if (result.statusCode === STATUS.SUCCESS) {
+            //3. 결과가 200일경우 isSuccess 불리언값 참조 가능
+            setIsSuccess(true);
+            //4. 완료 후 컴퍼넌트에서 던져주는 결과후 실행할 함수 실행
+            args.onSuccessCallback && args.onSuccessCallback(result.data);
+          }
+          console.log('RESULT(data) ====>', result.data);
+          //5. 데이터 참조 가능하도록 추가
+          setResultData(result.data);
+          return result.data;
+        })
+        .catch(() => {
+          setIsSuccess(false);
+          args.onFailCallback && args.onFailCallback();
+          console.log('서버 통신 에러');
+        });
+    },
+    [args],
+  );
 
   const setExpiredAccessToken = async () => {
     try {

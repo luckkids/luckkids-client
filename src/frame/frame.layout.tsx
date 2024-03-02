@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react';
 import {
   Image,
+  ImageBackground,
   ImageSourcePropType,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StatusBar,
+  StyleProp,
+  StyleSheet,
   View,
+  ViewStyle,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,6 +24,7 @@ interface FrameLayoutProps {
   statusBarColor?: ColorKeys;
   statusBarStyle?: 'light-content' | 'dark-content';
   backgroundImage?: ImageSourcePropType;
+  backgroundStyle?: StyleProp<ViewStyle>;
 }
 
 export const FrameLayout = ({
@@ -27,23 +34,34 @@ export const FrameLayout = ({
   statusBarColor,
   statusBarStyle,
   backgroundImage,
+  backgroundStyle,
 }: FrameLayoutProps) => {
   const theme = useTheme();
   const { top, bottom } = useSafeAreaInsets();
 
   return (
-    <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{
+        backgroundColor: theme.BG_PRIMARY,
+        width: SCREEN_WIDTH,
+        flex: 1,
+      }}
+    >
       <MyStatusBar
         backgroundColor={Colors[statusBarColor || 'BG_PRIMARY']}
         barStyle={statusBarStyle || 'light-content'}
       />
       <View
-        style={{
-          backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
-          width: SCREEN_WIDTH,
-          flex: 1,
-          paddingBottom: bottom,
-        }}
+        style={StyleSheet.flatten([
+          {
+            backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
+            width: SCREEN_WIDTH,
+            flex: 1,
+            paddingBottom: bottom,
+          },
+          backgroundStyle,
+        ])}
       >
         {backgroundImage && (
           <View
@@ -57,19 +75,20 @@ export const FrameLayout = ({
               zIndex: -1,
             }}
           >
-            <Image
+            <ImageBackground
               source={backgroundImage}
               style={{
                 width: SCREEN_WIDTH,
                 height: (SCREEN_WIDTH * 790) / 390,
               }}
+              resizeMode="cover"
             />
           </View>
         )}
         {NavBar}
         {children}
       </View>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useCallback, useEffect, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
@@ -7,7 +7,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
-import { FrameLayoutKeyboard } from '@frame/frame.layout.keyboard';
+import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -87,6 +87,10 @@ export const PageLoginId: React.FC = () => {
     },
   });
 
+  const handleLogin = useCallback(() => {
+    login();
+  }, []);
+
   const { onFetch: sendTempPassword } = useFetch({
     method: 'POST',
     url: '/mail/password',
@@ -127,7 +131,7 @@ export const PageLoginId: React.FC = () => {
   }, [loginInfo.email]);
 
   return (
-    <FrameLayoutKeyboard>
+    <FrameLayout>
       <StackNavbar title={'이메일 로그인'} useBackButton />
       <L.Col w={'100%'} justify="space-between" ph={DEFAULT_MARGIN}>
         <L.Col w={'100%'} g={10} mt={40}>
@@ -167,7 +171,7 @@ export const PageLoginId: React.FC = () => {
           <Button
             type={'action'}
             text={'로그인'}
-            onPress={login}
+            onPress={handleLogin}
             sizing="stretch"
             status={isButtonDisabled ? 'disabled' : 'normal'}
             bgColor={'LUCK_GREEN'}
@@ -198,6 +202,6 @@ export const PageLoginId: React.FC = () => {
           />
         </L.Row>
       </L.Absolute>
-    </FrameLayoutKeyboard>
+    </FrameLayout>
   );
 };
