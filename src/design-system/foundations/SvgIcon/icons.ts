@@ -7,6 +7,14 @@ import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
 
 import iconApple from '../../assets/icons/icon-apple.svg';
+import iconCategoryAddOff from '../../assets/icons/icon-category-add-off.svg';
+import iconCategoryAddOn from '../../assets/icons/icon-category-add-on.svg';
+import iconCategoryHealth from '../../assets/icons/icon-category-health.svg';
+import iconCategoryHouseKeeping from '../../assets/icons/icon-category-house-keeping.svg';
+import iconCategoryMineSet from '../../assets/icons/icon-category-mine-set.svg';
+import iconCategorySelfCare from '../../assets/icons/icon-category-self-care.svg';
+import iconCategorySelfDevelopment from '../../assets/icons/icon-category-self-development.svg';
+import iconCategoryWork from '../../assets/icons/icon-category-work.svg';
 import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
 import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
 
@@ -94,4 +102,12 @@ export {
   iconMedal1,
   iconMedal2,
   iconMedal3,
+  iconCategoryHealth,
+  iconCategoryWork,
+  iconCategoryMineSet,
+  iconCategorySelfCare,
+  iconCategoryHouseKeeping,
+  iconCategorySelfDevelopment,
+  iconCategoryAddOn,
+  iconCategoryAddOff,
 };
