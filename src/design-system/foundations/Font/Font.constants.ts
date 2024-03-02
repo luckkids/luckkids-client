@@ -87,6 +87,11 @@ export default {
     lineHeight: 22,
     fontFamily: PretendardFont.SemiBold,
   },
+  CATEGORY_BUTTON: {
+    fontSize: 14,
+    lineHeight: 16,
+    fontFamily: PretendardFont.Medium,
+  },
   FOOTNOTE_REGULAR: {
     fontSize: 13,
     lineHeight: 18,
