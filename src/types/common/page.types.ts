@@ -11,15 +11,11 @@ export type TCheck = 'CHECKED' | 'UNCHECKED';
 export type AppScreens = keyof AppScreensParamList;
 
 export type AppScreensParamList = {
-  Home: undefined;
-  Mission: undefined;
-  Garden: undefined;
-  My: undefined;
   StoryTelling: undefined;
   Login: undefined;
   LoginAlready: { type: SocialType };
-  LoginJoinEmailConfirm: undefined;
   LoginJoin: { step: 'Id' | 'Password' };
+  LoginJoinEmailConfirm: undefined;
   LoginId: undefined;
   LoginJoinAgreement: undefined;
   TutorialStart: undefined;
@@ -30,11 +26,12 @@ export type AppScreensParamList = {
   CharacterMake: undefined;
   CharacterSelect: undefined;
   CharacterName: undefined;
-  HomeCalendar: undefined;
+  Home: undefined;
   HomeAlarm: undefined;
+  HomeCalendar: undefined;
   HomeLevel: undefined;
-  HomeComment: undefined;
   HomeProfile: undefined;
+  Mission: undefined;
   MissionRepair: undefined;
   MissionAdd: undefined;
   GardenAlbum: undefined;
@@ -44,11 +41,13 @@ export type AppScreensParamList = {
   SettingComment: undefined;
   SettingAlarm: undefined;
   SettingInfo: undefined;
-  SettingSecurity: undefined;
-  SettingSecurityPass: undefined;
   SettingNotice: undefined;
+  SettingSecurityPass: undefined;
   SettingAccount: undefined;
   WebView: { url: string; title?: string };
+  Garden: undefined;
+  My: undefined;
+  HomeComment: undefined;
 };
 
 export interface IStackScreen {
