@@ -43,7 +43,7 @@ export const PageLoginJoinAgreement: React.FC = () => {
   >(
     AGREEMENT_CONTENT.map((c) => ({
       ...c,
-      isChecked: c.isNecessary ? true : false,
+      isChecked: c.isNecessary,
     })),
   );
 
