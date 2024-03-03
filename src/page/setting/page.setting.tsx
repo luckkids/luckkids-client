@@ -78,7 +78,7 @@ export const PageSetting: React.FC = () => {
             <SvgIcon name={'arrow_right_gray'} size={14} />
           </L.Row>
         </ButtonText>
-        <ButtonText onPress={() => navigation.navigate('SettingSecurity')}>
+        <ButtonText onPress={() => console.log('브랜드스토리')}>
           <L.Row justify={'space-between'} ph={25} pv={20}>
             <Font type={'BODY_REGULAR'}>브랜드 스토리</Font>
             <SvgIcon name={'arrow_right_gray'} size={14} />
