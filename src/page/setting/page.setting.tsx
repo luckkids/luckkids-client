@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
+import DeviceInfo from 'react-native-device-info';
 import styled from 'styled-components/native';
 import { Font, SvgIcon, L } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { Alert, ScrollView } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import { useFetch } from '@hooks/useFetch';
-import { DefaultTypeUnit, ISettingAlarm } from '@types-common/page.types';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { useFetch } from '@hooks/useFetch';
 
 const S = {
   Wrap: styled.View({
