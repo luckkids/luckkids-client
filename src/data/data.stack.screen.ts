@@ -33,6 +33,8 @@ import { PageTutorialGuide } from '@page/tutorial/page.tutorial.guide';
 import { PageTutorialSettingCharacter } from '@page/tutorial/page.tutorial.setting.character';
 import { PageTutorialSettingMission } from '@page/tutorial/page.tutorial.setting.mission';
 import { PageTutorialSettingNoti } from '@page/tutorial/page.tutorial.setting.noti';
+import { Garden } from '@page/Garden';
+import { My } from '@page/My';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
@@ -119,6 +121,10 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageHomeProfile,
   },
   {
+    name: 'My',
+    component: My,
+  },
+  {
     name: 'Mission',
     component: Mission,
   },
@@ -129,6 +135,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'MissionAdd',
     component: PageMissionAdd,
+  },
+  {
+    name: 'Garden',
+    component: Garden,
   },
   {
     name: 'GardenAlbum',
