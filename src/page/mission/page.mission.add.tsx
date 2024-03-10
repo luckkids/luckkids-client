@@ -15,12 +15,12 @@ const S = {
 export const PageMissionAdd: React.FC = () => {
   const navigation = useNavigationService();
   const { onFetch } = useFetch({
-    method: 'GET',
-    url: '/api/v1/missions',
+    method: 'POST',
+    url: '/api/v1/missions/new',
   });
 
   useEffect(() => {
-    onFetch();
+    // onFetch();
   }, []);
   return (
     <FrameLayout>
