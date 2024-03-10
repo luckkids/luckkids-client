@@ -3,36 +3,38 @@ import { PageCharacterMake } from '@page/character/page.character.make';
 import { PageCharacterName } from '@page/character/page.character.name';
 import { PageCharacterSelect } from '@page/character/page.character.select';
 import { PageWebView } from '@page/common/page.common.webview';
+import { Garden } from '@page/Garden';
 import { PageGardenAlbum } from '@page/garden/page.garden.album';
 import { PageGardenRank } from '@page/garden/page.garden.rank';
 import { PageHomeAlarm } from '@page/home/page.home.alarm';
 import { PageHomeCalendar } from '@page/home/page.home.calendar';
 import { PageHomeLevel } from '@page/home/page.home.level';
+import { PageHomeProfile } from '@page/home/page.home.profile';
 import { PageLogin } from '@page/login/page.login';
-import { PageLoginJoinAgreement } from '@page/login/page.login.join.agreement';
 import { PageLoginAlready } from '@page/login/page.login.already';
 import { PageLoginId } from '@page/login/page.login.id';
 import { PageLoginJoin } from '@page/login/page.login.join';
+import { PageLoginJoinAgreement } from '@page/login/page.login.join.agreement';
 import { PageLoginJoinEmailConfirm } from '@page/login/page.login.join.email.confirm';
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
 import { PageMissionRepair } from '@page/mission/page.mission.repair';
+import { My } from '@page/My';
 import { PageSetting } from '@page/setting/page.setting';
 import { PageSettingAccount } from '@page/setting/page.setting.account';
 import { PageSettingAlarm } from '@page/setting/page.setting.alarm';
+import { PageSettingComment } from '@page/setting/page.setting.comment';
 import { PageSettingInfo } from '@page/setting/page.setting.info';
+import { PageSettingInfoPassword } from '@page/setting/page.setting.info.password';
 import { PageSettingNotice } from '@page/setting/page.setting.notice';
 import { PageSettingProfile } from '@page/setting/page.setting.profile';
-import { PageSettingComment } from '@page/setting/page.setting.comment';
-import { PageSettingInfoPassword } from '@page/setting/page.setting.info.password';
 import { PageStoryTelling } from '@page/story-telling/page.story-telling';
-import { IStackScreen } from '@types-common/page.types';
-import { PageHomeProfile } from '@page/home/page.home.profile';
-import { PageTutorialStart } from '@page/tutorial/page.tutorial.start';
 import { PageTutorialGuide } from '@page/tutorial/page.tutorial.guide';
 import { PageTutorialSettingCharacter } from '@page/tutorial/page.tutorial.setting.character';
 import { PageTutorialSettingMission } from '@page/tutorial/page.tutorial.setting.mission';
 import { PageTutorialSettingNoti } from '@page/tutorial/page.tutorial.setting.noti';
+import { PageTutorialStart } from '@page/tutorial/page.tutorial.start';
+import { IStackScreen } from '@types-common/page.types';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
@@ -119,6 +121,10 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageHomeProfile,
   },
   {
+    name: 'My',
+    component: My,
+  },
+  {
     name: 'Mission',
     component: Mission,
   },
@@ -129,6 +135,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'MissionAdd',
     component: PageMissionAdd,
+  },
+  {
+    name: 'Garden',
+    component: Garden,
   },
   {
     name: 'GardenAlbum',

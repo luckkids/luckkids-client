@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Font, L } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
+import Constants from '../design-system/constants';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import { MissionItem } from '@components/page/mission/mission.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
-import { MissionItem } from '@components/page/mission/mission.item';
 import { IMissionListData } from '@types-common/page.types';
+import { dataDummyMission } from '../data/dummy/data.dummy.mission';
 
 export const Mission: React.FC = () => {
+  const dummyData = dataDummyMission;
   const [hide, setHide] = useState<boolean>(false);
-  const [data, setData] = useState<Array<IMissionListData>>();
+  const [data, setData] = useState<Array<IMissionListData>>(dummyData.data);
   const [count, setCount] = useState<number>(0);
   const navigation = useNavigationService();
   const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
@@ -61,6 +64,7 @@ export const Mission: React.FC = () => {
       </FrameLayout>
       <FloatingButton
         text={'편집'}
+        paddingBottom={Constants.BOTTOM_TABBAR_HEIGHT + 38}
         onPress={() => navigation.navigate('MissionRepair')}
       />
     </>

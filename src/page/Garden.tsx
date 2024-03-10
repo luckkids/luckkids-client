@@ -1,24 +1,34 @@
-import React, { useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
+import { DataDummyGarden } from '../data/dummy/data.dummy.garden';
 import { ActionIcon } from '@components/common/ActionIcon';
 import { GardenItem } from '@components/page/garden/garden.item';
+import { GardenNavbar } from '@components/page/garden/garden.navbar';
 import { GardenPopup } from '@components/page/garden/garden.popup';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
+import { IGardenItem } from '@types-common/page.types';
+import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
 
 const S = {
-  listWrap: styled.View({
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'flex-start',
-    rowGap: 8,
-    paddingHorizontal: 17,
-  }),
+  listWrap: styled.View(
+    {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
+    },
+    (props: { isList: boolean }) => {
+      return {
+        rowGap: props.isList ? 0 : 8,
+        paddingHorizontal: props.isList ? 0 : 17,
+      };
+    },
+  ),
   popupWrap: styled.View({
     backgroundColor: Colors.BG_SECONDARY,
     borderTopLeftRadius: 15,
@@ -95,37 +105,98 @@ const onInviteHandler = () => {
 
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
-  const [show, setShow] = useState(false);
+  const dummyData = DataDummyGarden;
+  const friendData = dummyData.data.friendList.content;
+  const myData = dummyData.data.myProfile;
+  const [isList, setIsList] = useState<boolean>(false);
+  const [show, setShow] = useState<IGardenItem>({
+    isShow: false,
+    nickname: '',
+    luckPhrase: '',
+    imageFileUrl: '',
+  });
   const [data, setData] = useState();
+  const dummy = {
+    nickname: '럭키즈 친구 2',
+    luckPhrase: '행운 문구 2',
+    imageFileUrl: 'assets/images/garden/charactor-lucky.png',
+    characterCount: 1,
+  };
+  const dimProfile = useMemo(() => {
+    const temArray = [];
+    if (isList) {
+      for (let i = 0; i < 5 - (friendData.length + 1); i++) {
+        temArray.push(
+          <GardenHorizontalItem
+            {...dummy}
+            isDimProfile={true}
+            onPress={() => {}}
+          />,
+        );
+      }
+    } else {
+      for (let i = 0; i < 15 - (friendData.length + 1); i++) {
+        temArray.push(
+          <GardenItem {...dummy} isDimProfile={true} onPress={() => {}} />,
+        );
+      }
+    }
+    return temArray;
+  }, [isList]);
   const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
     method: 'GET',
-    url: '/friend/list',
+    url: '/friends',
     value: {},
-    onSuccessCallback: (rtn) => {},
+    // onSuccessCallback: (rtn) => setData(JSON.stringify()),
   });
+  useEffect(() => {
+    missionList();
+    // console.log(data);
+  }, []);
   return (
-    <FrameLayout>
-      <L.Row ph={20} pv={10} justify={'space-between'}>
-        <Font type={'TITLE3_SEMIBOLD'} color={'GREY0'}>
-          Luck Kids
-        </Font>
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('HomeAlarm')}
-        >
-          <SvgIcon name={'bell_badge'} size={20} />
-        </TouchableWithoutFeedback>
-      </L.Row>
+    <FrameLayout NavBar={<GardenNavbar />}>
       <L.Row pt={20} pb={24} ph={25} justify={'space-between'}>
         <Font type={'TITLE1_BOLD'}>가든</Font>
-        <TouchableWithoutFeedback onPress={() => console.log('ranking')}>
-          <SvgIcon name={'album'} size={22} />
+        <TouchableWithoutFeedback onPress={() => setIsList(!isList)}>
+          <View>
+            <SvgIcon name={!isList ? 'list' : 'album'} size={22} />
+          </View>
         </TouchableWithoutFeedback>
       </L.Row>
-      <S.listWrap>
-        <GardenItem onPress={() => setShow(true)} />
-        <GardenItem onPress={() => setShow(true)} />
-        <GardenItem onPress={() => setShow(true)} />
-        <GardenItem onPress={() => setShow(true)} />
+      <S.listWrap isList={isList}>
+        {myData && isList ? (
+          <GardenHorizontalItem
+            {...myData}
+            onPress={() => setShow({ isShow: true, ...myData })}
+            isSelf={true}
+          />
+        ) : (
+          <GardenItem
+            {...myData}
+            onPress={() => setShow({ isShow: true, ...myData })}
+            isSelf={true}
+          />
+        )}
+        {friendData.map((item, i) => {
+          if (isList) {
+            return (
+              <GardenHorizontalItem
+                {...item}
+                onPress={() => setShow({ isShow: true, ...item })}
+                key={i}
+              />
+            );
+          } else {
+            return (
+              <GardenItem
+                {...item}
+                onPress={() => setShow({ isShow: true, ...item })}
+                key={i}
+              />
+            );
+          }
+        })}
+        {dimProfile}
       </S.listWrap>
       <ActionIcon
         title={'친구를 초대할게요!'}
@@ -133,13 +204,10 @@ export const Garden: React.FC = () => {
         onPress={() => onInviteHandler()}
       />
       <GardenPopup
-        title={'럭키즈 체고! 럭키즈 체고!'}
-        img={{
-          uri: 'https://img.freepik.com/free-photo/sample-of-white-cotton-textile_1220-7596.jpg',
-          name: '행운럭키',
-        }}
-        level={88}
-        isShow={show}
+        title={show.luckPhrase}
+        img={show.imageFileUrl}
+        name={show.nickname}
+        isShow={show.isShow ? show.isShow : false}
         setShow={setShow}
       />
     </FrameLayout>

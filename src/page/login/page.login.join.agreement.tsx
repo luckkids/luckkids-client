@@ -43,7 +43,7 @@ export const PageLoginJoinAgreement: React.FC = () => {
   >(
     AGREEMENT_CONTENT.map((c) => ({
       ...c,
-      isChecked: c.isNecessary ? true : false,
+      isChecked: c.isNecessary,
     })),
   );
 
@@ -172,7 +172,7 @@ export const PageLoginJoinAgreement: React.FC = () => {
             <Button
               type={'action'}
               text={'동의했어요'}
-              onPress={signUp}
+              onPress={() => signUp}
               sizing="stretch"
               textColor="BLACK"
               bgColor={'LUCK_GREEN'}

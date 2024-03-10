@@ -4,6 +4,7 @@ import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import { Font, SvgIcon } from '@design-system';
 import Colors from '../../design-system/colors';
+import Constants from "../../design-system/constants";
 
 interface IActionIcon {
   title: string;
@@ -17,7 +18,7 @@ const S = {
   wrap: styled.View({
     position: 'absolute',
     paddingHorizontal: 25,
-    bottom: 35,
+    bottom: Constants.BOTTOM_TABBAR_HEIGHT + 35,
     width: '100%',
   }),
   button: styled.View(
