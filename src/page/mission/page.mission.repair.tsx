@@ -87,7 +87,7 @@ export const PageMissionRepair = () => {
             <MissionRepairCategoryItem
               isAddButton={true}
               label={'습관추가'}
-              onPress={() => console.log('추가')}
+              onPress={() => navigation.navigate('MissionAdd')}
             />
             {allCategory.length !== 0 && (
               <ScrollView horizontal={true}>
