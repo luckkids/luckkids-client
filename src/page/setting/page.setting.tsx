@@ -117,7 +117,7 @@ export const PageSetting: React.FC = () => {
           onPress={async () => {
             const pushToken = await getToken();
             if (pushToken) {
-              Clipboard.setString(pushToken);
+              // Clipboard.setString(pushToken);
               Alert.alert('푸시 토큰이 복사되었습니다.');
             } else Alert.alert('푸시 토큰이 없습니다.');
           }}
