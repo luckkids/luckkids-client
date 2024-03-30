@@ -7,6 +7,7 @@ import Colors from '../../../design-system/colors';
 import { GardenLeagueItem } from '@components/page/garden/garden.league.item';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { IGardenLeagueItem } from '@types-common/page.types';
+import { useFetch } from '@hooks/useFetch';
 
 const S = {
   Icon: styled.View({
@@ -46,12 +47,15 @@ const S = {
 
 export const GardenNavbar = () => {
   const navigation = useNavigationService();
-  const data = DataDummyGardenLeague.data;
   const [showLeague, setShowLeague] = useState<boolean>(false);
   const [league, setLeague] = useState<Array<IGardenLeagueItem>>([]);
-  useEffect(() => {
-    setLeague(data);
-  }, []);
+  const { onFetch: onGardenLeague } = useFetch({
+    method: 'GET',
+    url: '/garden/league',
+    value: {},
+    onSuccessCallback: (rtn) => setLeague(rtn),
+  });
+
   return (
     <>
       <L.Row
@@ -72,6 +76,7 @@ export const GardenNavbar = () => {
           <TouchableWithoutFeedback
             onPress={() => {
               setShowLeague(!showLeague);
+              if (!showLeague) onGardenLeague();
             }}
           >
             <View>
