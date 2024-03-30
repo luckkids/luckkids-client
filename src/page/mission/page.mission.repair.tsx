@@ -12,25 +12,23 @@ import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem, IMissionRepair } from '@types-common/page.types';
 
 export const PageMissionRepair = () => {
-  const list = { ...DataDummyMissionRepair.data } as {
+  const [allCategory, setAllCategory] = useState<Array<string>>([]);
+  const navigation = useNavigationService();
+  const [current, setCurrent] = useState<number | null>(null);
+  const [isRemove, setIsRemove] = useState<boolean>(false);
+  const { onFetch, resultData, isSuccess } = useFetch({
+    method: 'GET',
+    url: '/missions',
+    value: {},
+  });
+  const list = { ...resultData } as {
     [key: string]: Array<IMissionDataItem>;
   };
   const [dataDicArray, setDataDicArray] = useState<Array<string>>(
     Object.keys(list),
   );
-  const [allCategory, setAllCategory] = useState<Array<string>>([]);
-  const navigation = useNavigationService();
-  const [current, setCurrent] = useState<number | null>(null);
-  const [isRemove, setIsRemove] = useState<boolean>(false);
-  const [data, setData] = useState<IMissionRepair>();
-  const { onFetch, isSuccess } = useFetch({
-    method: 'GET',
-    url: '/missions',
-    value: {},
-    onSuccessCallback: setData,
-  });
   useEffect(() => {
-    // onFetch();
+    onFetch();
     setAllCategory(Object.keys(list));
   }, [isSuccess]);
 

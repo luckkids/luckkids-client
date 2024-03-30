@@ -96,7 +96,9 @@ export interface IMissionListData {
 
 export interface IGarden {
   myProfile: IGardenItem;
-  friendList: IGardenItem;
+  friendList: {
+    content: IGardenItem[];
+  };
 }
 
 export interface IGardenItem {

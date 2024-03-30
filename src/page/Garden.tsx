@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
 import { DataDummyGarden } from '../data/dummy/data.dummy.garden';
@@ -11,7 +11,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
-import { IGardenItem } from '@types-common/page.types';
+import { IGarden, IGardenItem } from '@types-common/page.types';
 import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
 
 const S = {
@@ -105,9 +105,22 @@ const onInviteHandler = () => {
 
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
-  const dummyData = DataDummyGarden;
-  const friendData = dummyData.data.friendList.content;
-  const myData = dummyData.data.myProfile;
+  const [data, setData] = useState<IGarden>();
+  const { onFetch } = useFetch({
+    method: 'GET',
+    url: '/garden/list?page=1&size=12',
+    value: {},
+    onSuccessCallback: (rtn) => setData(rtn),
+    onFailCallback: () => {
+      Alert.alert('데이터가 없습니다.');
+      navigation.goBack();
+    },
+  });
+  useEffect(() => {
+    onFetch();
+  }, []);
+  const friendData: Array<IGardenItem> | undefined = data?.friendList.content;
+  const myData = data?.myProfile;
   const [isList, setIsList] = useState<boolean>(false);
   const [show, setShow] = useState<IGardenItem>({
     isShow: false,
@@ -115,20 +128,14 @@ export const Garden: React.FC = () => {
     luckPhrase: '',
     imageFileUrl: '',
   });
-  const [data, setData] = useState();
-  const dummy = {
-    nickname: '럭키즈 친구 2',
-    luckPhrase: '행운 문구 2',
-    imageFileUrl: 'assets/images/garden/charactor-lucky.png',
-    characterCount: 1,
-  };
   const dimProfile = useMemo(() => {
+    if (!friendData) return;
     const temArray = [];
     if (isList) {
       for (let i = 0; i < 5 - (friendData.length + 1); i++) {
         temArray.push(
           <GardenHorizontalItem
-            {...dummy}
+            {...friendData[i]}
             isDimProfile={true}
             onPress={() => {}}
           />,
@@ -137,22 +144,16 @@ export const Garden: React.FC = () => {
     } else {
       for (let i = 0; i < 15 - (friendData.length + 1); i++) {
         temArray.push(
-          <GardenItem {...dummy} isDimProfile={true} onPress={() => {}} />,
+          <GardenItem
+            {...friendData[i]}
+            isDimProfile={true}
+            onPress={() => {}}
+          />,
         );
       }
     }
     return temArray;
-  }, [isList]);
-  const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
-    method: 'GET',
-    url: '/friends',
-    value: {},
-    // onSuccessCallback: (rtn) => setData(JSON.stringify()),
-  });
-  useEffect(() => {
-    missionList();
-    // console.log(data);
-  }, []);
+  }, [isList, data]);
   return (
     <FrameLayout NavBar={<GardenNavbar />}>
       <L.Row pt={20} pb={24} ph={25} justify={'space-between'}>
@@ -164,20 +165,21 @@ export const Garden: React.FC = () => {
         </TouchableWithoutFeedback>
       </L.Row>
       <S.listWrap isList={isList}>
-        {myData && isList ? (
-          <GardenHorizontalItem
-            {...myData}
-            onPress={() => setShow({ isShow: true, ...myData })}
-            isSelf={true}
-          />
-        ) : (
-          <GardenItem
-            {...myData}
-            onPress={() => setShow({ isShow: true, ...myData })}
-            isSelf={true}
-          />
-        )}
-        {friendData.map((item, i) => {
+        {myData &&
+          (isList ? (
+            <GardenHorizontalItem
+              {...myData}
+              onPress={() => setShow({ isShow: true, ...myData })}
+              isSelf={true}
+            />
+          ) : (
+            <GardenItem
+              {...myData}
+              onPress={() => setShow({ isShow: true, ...myData })}
+              isSelf={true}
+            />
+          ))}
+        {friendData?.map((item, i) => {
           if (isList) {
             return (
               <GardenHorizontalItem
