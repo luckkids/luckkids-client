@@ -18,5 +18,3 @@ export const viewStoryTellingStorage = new SafeUserStorage(
  * 첫 설치 여부를 기록하는 storage
  */
 export const firstInstallStorage = new SafeStorage<boolean>('firstInstall');
-
-// TODO(Gina): 적용 필요

@@ -14,7 +14,10 @@
       "@global-components/*": ["src/global-components/*"],
       "@hooks/*": ["src/hooks/*"],
       "@page/*": ["src/page/*"],
-      "@frame/*": ["src/frame/*"]
+      "@frame/*": ["src/frame/*"],
+      "@libs/*": ["src/libs/*"],
+      "@apis/*": ["src/apis/*"],
+      "@storage": ["src/storage/index"]
     },
     "types": ["styled-components-react-native"]
   },

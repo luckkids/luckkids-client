@@ -6,6 +6,7 @@ import notifee from '@notifee/react-native';
 import { AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
+import NavigationService from './src/libs/NavigationService';
 
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('[Firebase remote message on background] : ', remoteMessage);
@@ -14,7 +15,9 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
 notifee.onBackgroundEvent(async (event) => {
   console.log('[Notification on background] : ', event);
   if (event.type === EventType.PRESS) {
-    // navigation logic
+    console.log('onBackgroundEvent');
+    console.log(event.detail.notification.data.screen);
+    return NavigationService.navigate(event.detail.notification.data.screen);
   }
 });
 
