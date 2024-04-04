@@ -1,17 +1,23 @@
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Font, L, SvgIcon } from '@design-system';
+import { accessTokenStorage } from '@storage';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 type LoginRememberProps = {
   onClose: () => void;
+  tokenValue: string;
 };
 
-const LoginRemember = ({ onClose }: LoginRememberProps) => {
+const LoginRemember = ({ onClose, tokenValue }: LoginRememberProps) => {
   const { bottom } = useSafeAreaInsets();
+  const navigation = useNavigationService();
 
   const handleRemember = () => {
-    // TODO async storage 관련 정보 저장
+    accessTokenStorage.setItem(tokenValue);
+    navigation.navigate('Home');
+    BottomSheet.hide();
   };
 
   const handleClose = () => {
