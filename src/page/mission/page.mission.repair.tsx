@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Font, IconNames, L, SvgIcon } from '@design-system';
-import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
@@ -9,7 +8,7 @@ import { MisstionRepairItem } from '@components/page/mission/misstion.repair.ite
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
-import { IMissionDataItem, IMissionRepair } from '@types-common/page.types';
+import { IMissionDataItem } from '@types-common/page.types';
 
 export const PageMissionRepair = () => {
   const [allCategory, setAllCategory] = useState<Array<string>>([]);

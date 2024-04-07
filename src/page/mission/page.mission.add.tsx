@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components/native';
-import { Colors, Font, L, SvgIcon, TextInputField } from '@design-system';
-import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useFetch } from '@hooks/useFetch';
-import ButtonText from '../../design-system/components/Button/ButtonText';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
+import styled from 'styled-components/native';
 import { DEFAULT_MARGIN } from '@constants';
+import { Colors, Font, L, SvgIcon, TextInputField } from '@design-system';
+import ButtonText from '../../design-system/components/Button/ButtonText';
 import {
   IAddCategory,
   MissionAddCategory,
 } from '@components/page/mission/mission.add.category';
+import { FrameLayout } from '@frame/frame.layout';
+import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useFetch } from '@hooks/useFetch';
 
 const category: Array<IAddCategory> = [
   {

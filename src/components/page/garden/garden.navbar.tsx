@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Font, L, SvgIcon } from '@design-system';
-import { DataDummyGardenLeague } from '../../../data/dummy/data.dummy.garden.league';
 import Colors from '../../../design-system/colors';
 import { GardenLeagueItem } from '@components/page/garden/garden.league.item';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { IGardenLeagueItem } from '@types-common/page.types';
 import { useFetch } from '@hooks/useFetch';
+import { IGardenLeagueItem } from '@types-common/page.types';
 
 const S = {
   Icon: styled.View({

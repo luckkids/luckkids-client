@@ -1,6 +1,6 @@
 import React from 'react';
-import { Colors, Font, IconNames, L, SvgIcon } from '@design-system';
 import { TouchableWithoutFeedback } from 'react-native';
+import { Colors, Font, IconNames, L, SvgIcon } from '@design-system';
 
 export interface IAddCategory {
   label: string;

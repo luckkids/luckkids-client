@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
@@ -8,6 +8,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 export const PageSettingProfile: React.FC = () => {
   const navigation = useNavigationService();
   const [text, setText] = useState<string>('');
+
   const { onFetch, isSuccess } = useFetch({
     method: 'PATCH',
     url: '/user/phrase',
@@ -18,6 +19,10 @@ export const PageSettingProfile: React.FC = () => {
       navigation.goBack();
     },
   });
+
+  useEffect(() => {
+    console.log(text);
+  }, [text]);
   return (
     <FrameLayout
       NavBar={
@@ -30,7 +35,10 @@ export const PageSettingProfile: React.FC = () => {
           />
           <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정하기</Font>
           <ButtonText
-            onPress={() => onFetch()}
+            onPress={() => {
+              console.log('texttext');
+              onFetch();
+            }}
             fontType={'HEADLINE_SEMIBOLD'}
             text={'저장'}
             textColor={'LUCK_GREEN'}
