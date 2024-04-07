@@ -1,4 +1,10 @@
-import React, { createElement, useCallback, useEffect, useState } from 'react';
+import React, {
+  createElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
@@ -14,11 +20,14 @@ import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
+import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
   const { bottom } = useSafeAreaInsets();
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
+  const emailInput$ = useRef(new Subject<string>()).current;
 
   const navigation = useNavigationService();
 
@@ -90,7 +99,6 @@ export const PageLoginId: React.FC = () => {
       pushKey: 'testPushKey',
     },
     onSuccessCallback: (result: any) => {
-      console.log(93, result);
       onSuccessCallback(String(result.accessToken));
     },
     onFailCallback,
@@ -131,13 +139,23 @@ export const PageLoginId: React.FC = () => {
   useAsyncEffect(async () => {
     const deviceId = await DeviceInfo.getUniqueId();
     setDeviceID(deviceId);
-    console.log('device', deviceId);
   }, []);
 
+  const handleEmailChange = (text: string) => {
+    setLoginInfo((prev) => ({ ...prev, email: text }));
+    emailInput$.next(text);
+  };
+
   useEffect(() => {
-    const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    setIsValidEmail(reg.test(loginInfo.email));
-  }, [loginInfo.email]);
+    const subscription = emailInput$
+      .pipe(debounceTime(500))
+      .subscribe((email) => {
+        const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        setIsValidEmail(reg.test(email));
+      });
+
+    return () => subscription.unsubscribe();
+  }, [emailInput$]);
 
   return (
     <FrameLayout>
@@ -148,9 +166,7 @@ export const PageLoginId: React.FC = () => {
             text={loginInfo.email}
             placeholder="이메일"
             keyboardType="email-address"
-            onChangeText={(text) =>
-              setLoginInfo((prev) => ({ ...prev, email: text }))
-            }
+            onChangeText={handleEmailChange}
             RightComponent={
               isValidEmail && <SvgIcon name={'validation_check'} size={20} />
             }
