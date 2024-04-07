@@ -20,9 +20,9 @@ const Icons = {
 };
 
 type SvgIconProps = {
-  width?: number;
-  height?: number;
-  size?: number;
+  width?: number | string;
+  height?: number | string;
+  size?: number | string;
   color?: string;
   name: IconNames;
 };

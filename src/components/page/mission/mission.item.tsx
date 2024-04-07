@@ -45,7 +45,11 @@ export const MissionItem: React.FC<IMissionListData> = (props) => {
       value: {
         missionStatus: missionState ? 'SUCCEED' : 'FAILED',
       },
-      onSuccessCallback: (rtn) => props.setCount(rtn),
+      onSuccessCallback: (rtn) => {
+        if (props.setCount) {
+          props.setCount(rtn);
+        }
+      },
     });
   const [isSucceed, setIsSucceed] = useState();
   useEffect(() => {}, [props.missionStatus]);

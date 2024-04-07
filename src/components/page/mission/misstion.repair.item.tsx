@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -6,8 +6,9 @@ import DateTimePicker, {
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import { IMissionDataItem, IMissionListData } from '@types-common/page.types';
 
-interface missionState {
+interface IProps extends IMissionDataItem {
   isCheck?: boolean;
   isSetAlarm?: boolean;
 }
@@ -51,7 +52,10 @@ const S = {
     marginTop: 40,
   }),
 };
-export const MisstionRepairItem: React.FC<missionState> = ({
+export const MisstionRepairItem: React.FC<IProps> = ({
+  missionDescription,
+  alertStatus,
+  alertTime,
   isCheck,
   isSetAlarm = false,
 }) => {
@@ -59,15 +63,18 @@ export const MisstionRepairItem: React.FC<missionState> = ({
   const [date, setDate] = useState(new Date(1598051730000));
   const [isDisabled, setIsDisabled] = useState(false);
   const [rtnTime, setRtnTime] = useState('');
+
+  useEffect(() => {
+    setRtnTime(alertTime);
+  }, []);
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
 
     const tempDate = new Date(currentDate);
     const fTime = `${
-      tempDate.getHours() < 12 ? '오전' : '오후'
-    } ${tempDate.getHours()}${tempDate.getMinutes()}`;
-    console.log('time =======>', tempDate);
+      tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
+    }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
     setRtnTime(fTime);
   };
   const onTimePicker = useCallback(() => {
@@ -115,12 +122,13 @@ export const MisstionRepairItem: React.FC<missionState> = ({
       ),
     });
   }, [isDisabled]);
+
   return (
     <L.Row ph={25} pv={15} items={'center'} justify={'space-between'}>
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'}>
           <Font type={'HEADLINE_SEMIBOLD'} color={'WHITE'}>
-            자전거타기
+            {missionDescription}
           </Font>
           <TouchableWithoutFeedback onPress={() => onTimePicker()}>
             {alarm ? (
@@ -129,7 +137,7 @@ export const MisstionRepairItem: React.FC<missionState> = ({
                 color={'GREY1'}
                 style={{ marginLeft: 13 }}
               >
-                aaab {rtnTime}
+                {rtnTime}
               </Font>
             ) : (
               <Font

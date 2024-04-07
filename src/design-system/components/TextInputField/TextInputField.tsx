@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 import { useTheme } from 'styled-components/native';
-import { Font, FontSettings, L } from '@design-system';
+import { ColorKeys, Font, FontSettings, L } from '@design-system';
 import * as S from './TextInputField.styles';
 
 interface TextInputFieldProps extends TextInputProps {
@@ -13,6 +13,7 @@ interface TextInputFieldProps extends TextInputProps {
   errorMessage?: string;
   RightComponent?: React.ReactNode;
   isError?: boolean;
+  bg?: ColorKeys;
 }
 
 const TextInputField: React.FC<TextInputFieldProps> = ({
@@ -26,6 +27,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
   autoFocus = false,
   focusDelay = 600,
   RightComponent,
+  bg,
   ...textInputProps
 }) => {
   const inputRef = useRef<TextInput>(null);
@@ -62,7 +64,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
         g={8}
         style={{
           ...S.defaultStyles.container,
-          backgroundColor: theme.BG_TERTIARY,
+          backgroundColor: bg ? theme[bg] : theme.BG_TERTIARY,
         }}
         outline={isError ? 'RED' : undefined}
       >

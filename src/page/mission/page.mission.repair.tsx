@@ -30,6 +30,7 @@ export const PageMissionRepair = () => {
   useEffect(() => {
     onFetch();
     setAllCategory(Object.keys(list));
+    setDataDicArray(Object.keys(list));
   }, [isSuccess]);
 
   const categoryButton = useCallback((key: string) => {
@@ -78,7 +79,7 @@ export const PageMissionRepair = () => {
         <ScrollView>
           <L.Row p={24}>
             <Font type={'TITLE2_BOLD'}>
-              행운의 습과을 선택하고 알림을 설정해 보세요!
+              행운의 습관을 선택하고 알림을 설정해 보세요!
             </Font>
           </L.Row>
           <L.Row ph={25} pv={15}>
@@ -128,6 +129,7 @@ export const PageMissionRepair = () => {
                 {list[item].map((value, i) => {
                   return (
                     <MisstionRepairItem
+                      {...value}
                       isCheck={value.alertStatus === 'CHECKED'}
                       isSetAlarm={true}
                       key={i}
