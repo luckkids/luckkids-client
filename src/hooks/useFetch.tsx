@@ -16,7 +16,7 @@ const STATUS = {
 export const useFetch = (args: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   url: string;
-  value: IStringDictionary;
+  value?: IStringDictionary;
   onSuccessCallback?: (resultData?: any) => void;
   onFailCallback?: () => void;
 }) => {

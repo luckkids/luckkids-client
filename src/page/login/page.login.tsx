@@ -1,18 +1,16 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
-import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
-import { useFetch } from '@hooks/useFetch';
-import DeviceInfo from 'react-native-device-info';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import { useFetch } from '@hooks/useFetch';
 
 export const PageLogin: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -93,45 +91,6 @@ export const PageLogin: React.FC = () => {
               type={'action'}
               sizing="stretch"
               iconName="iconGoogle"
-            />
-            <Button
-              status={'normal'}
-              bgColor={'BG_TERTIARY'}
-              text={'홈으로 바로 이동'}
-              textColor="WHITE"
-              onPress={() => {
-                navigation.navigate('Home');
-              }}
-              type={'action'}
-              sizing="stretch"
-            />
-            <Button
-              status={'normal'}
-              bgColor={'BG_TERTIARY'}
-              text={'튜토리얼 바로 이동'}
-              textColor="WHITE"
-              onPress={() => {
-                navigation.navigate('TutorialStart');
-              }}
-              type={'action'}
-              sizing="stretch"
-            />
-            <Button
-              status={'normal'}
-              bgColor={'BG_TERTIARY'}
-              text={'자동 로그인'}
-              textColor="WHITE"
-              onPress={() => {
-                BottomSheet.show({
-                  component: (
-                    <LoginRemember
-                      onClose={() => navigation.navigate('Home')}
-                    />
-                  ),
-                });
-              }}
-              type={'action'}
-              sizing="stretch"
             />
           </L.Col>
           <L.Row justify="center" g={20} w={'100%'} mt={30}>
