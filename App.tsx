@@ -13,13 +13,16 @@ import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
+import { rememberMeStorage } from '@storage';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useLocalMessage from '@hooks/notification/useLocalMessage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import { useFetch } from '@hooks/useFetch';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList } from '@types-common/page.types';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const App: React.FC = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
@@ -44,10 +47,10 @@ const App: React.FC = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <RecoilRoot>
-        <SafeAreaProvider>
-          <ThemeProvider theme={Colors}>
-            <QueryClientProvider>
+      <QueryClientProvider>
+        <RecoilRoot>
+          <SafeAreaProvider>
+            <ThemeProvider theme={Colors}>
               <NavigationContainer<AppScreensParamList>
                 ref={navigationRef}
                 onReady={() => {
@@ -59,10 +62,10 @@ const App: React.FC = () => {
               >
                 <RootNavigator />
               </NavigationContainer>
-            </QueryClientProvider>
-          </ThemeProvider>
-        </SafeAreaProvider>
-      </RecoilRoot>
+            </ThemeProvider>
+          </SafeAreaProvider>
+        </RecoilRoot>
+      </QueryClientProvider>
     </GestureHandlerRootView>
   );
 };
@@ -70,6 +73,7 @@ const App: React.FC = () => {
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = withGlobalComponents(() => {
+  const navigation = useNavigationService();
   const [initializing, setInitializing] = useState(true);
   const {
     initialize: initializeFirebaseMessage,
@@ -78,13 +82,32 @@ const RootNavigator = withGlobalComponents(() => {
   } = useFirebaseMessage();
   const { initialize: initializeLocalMessage } = useLocalMessage();
 
+  const { onFetch: login } = useFetch({
+    method: 'POST',
+    url: '/auth/login',
+    onSuccessCallback: () => {
+      navigation.navigate('Home');
+    },
+    onFailCallback: () => {
+      navigation.navigate('Login');
+    },
+  });
+
   useAsyncEffect(async () => {
     try {
       if (!initializing) {
         console.log('App Reload');
-        await initializeFirebaseMessage();
+
+        // 자동 로그인 처리
+        const rememberMeInfo = rememberMeStorage.getItem();
+        if (rememberMeInfo) {
+          login({
+            ...rememberMeInfo,
+          });
+        }
+
+        initializeFirebaseMessage();
         initializeLocalMessage();
-        // NavigationService.setNavigation();
       }
     } catch (error) {
       console.error(error);

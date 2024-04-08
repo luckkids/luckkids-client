@@ -3,6 +3,7 @@ import { getUniqueIdSync, getVersion } from 'react-native-device-info';
 import { useRecoilValue } from 'recoil';
 import ApiError from './ApiError';
 import { RecoilToken } from '@recoil/recoil.token';
+import { accessTokenStorage } from '@storage';
 
 interface APIInstance {
   getUri(config?: RequestInit): string;
@@ -19,7 +20,7 @@ interface APIInstance {
 const API_BASE_URL = 'https://api-luckkids.kro.kr/api/v1';
 
 const API = (() => {
-  const accessToken = useRecoilValue(RecoilToken);
+  const accessToken = accessTokenStorage.getItem();
 
   const requestInterceptor = (
     url: string,
@@ -119,9 +120,5 @@ const API = (() => {
 
   return apiInstance;
 })();
-
-type AxiosCustomConfig = {
-  requestAt: string;
-};
 
 export default API;

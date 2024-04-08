@@ -16,7 +16,7 @@ import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-// import { useHomeInfo } from '@queries';
+import { useHomeInfo } from '@queries';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -54,7 +54,9 @@ export const Home: React.FC = () => {
     }, 500);
   }, []);
 
-  // const { data: homeInfo } = useHomeInfo();
+  const { data: homeInfo } = useHomeInfo();
+
+  console.log(59, homeInfo);
 
   return (
     <>

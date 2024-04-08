@@ -11,7 +11,7 @@ import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
-import { accessTokenStorage } from '@storage';
+import { accessTokenStorage, rememberMeStorage } from '@storage';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
@@ -58,14 +58,25 @@ export const PageLoginId: React.FC = () => {
     return sendTempPassword();
   };
 
-  const onSuccessCallback = (newToken: string) => {
-    const token = accessTokenStorage.getItem();
-    if (!token) {
+  const onSuccessCallback = () => {
+    Keyboard.dismiss();
+    const rememberMeInfo = rememberMeStorage.getItem();
+    if (!rememberMeInfo) {
       BottomSheet.show({
         component: (
           <LoginRemember
-            onClose={() => navigation.navigate('Home')}
-            tokenValue={newToken}
+            onClose={() => {
+              navigation.navigate('Home');
+            }}
+            onRemember={() => {
+              rememberMeStorage.setItem({
+                email: loginInfo.email,
+                password: loginInfo.password,
+                deviceId: deviceID,
+                pushKey: null,
+              });
+              navigation.navigate('Home');
+            }}
           />
         ),
       });
@@ -98,9 +109,7 @@ export const PageLoginId: React.FC = () => {
       deviceId: deviceID,
       pushKey: 'testPushKey',
     },
-    onSuccessCallback: (result: any) => {
-      onSuccessCallback(String(result.accessToken));
-    },
+    onSuccessCallback,
     onFailCallback,
   });
 
