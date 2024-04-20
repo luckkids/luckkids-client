@@ -21,6 +21,7 @@ const API_BASE_URL = 'https://api-luckkids.kro.kr/api/v1';
 
 const API = (() => {
   const accessToken = accessTokenStorage.getItem();
+  console.log(24, accessToken);
 
   const requestInterceptor = (
     url: string,
@@ -30,6 +31,7 @@ const API = (() => {
       'Client-Version': getVersion(),
       'Client-Platform': Platform.OS,
       'Client-Device': getUniqueIdSync(),
+      'Content-Type': 'application/json',
     };
 
     config.headers = {
@@ -59,62 +61,34 @@ const API = (() => {
       return API_BASE_URL;
     },
     request: <T>(url: string, config?: RequestInit): Promise<T> => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, config).then((response) => {
-        return response.json();
-      });
+      config = requestInterceptor(API_BASE_URL + url, config || {});
+      return fetch(API_BASE_URL + url, config)
+        .then((response) => response.json())
+        .then((res) => res.data);
     },
     get: <T>(url: string, config?: RequestInit): Promise<T> => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, config).then((response) => {
-        return response.json();
-      });
+      return apiInstance.request<T>(url, { ...config, method: 'GET' });
     },
     delete: (url: string, config?: RequestInit) => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, { ...config, method: 'DELETE' }).then((response) => {
-        return response.json();
-      });
+      return apiInstance.request(url, { ...config, method: 'DELETE' });
     },
     head: (url: string, config?: RequestInit) => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, { ...config, method: 'HEAD' }).then((response) => {
-        return response.json();
-      });
+      return apiInstance.request(url, { ...config, method: 'HEAD' });
     },
     options: (url: string, config?: RequestInit) => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, { ...config, method: 'OPTIONS' }).then((response) => {
-        return response.json();
-      });
+      return apiInstance.request(url, { ...config, method: 'OPTIONS' });
     },
     post: (url: string, data?: any, config?: RequestInit) => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, {
-        ...config,
-        method: 'POST',
-        body: JSON.stringify(data),
-      }).then();
+      config = { ...config, method: 'POST', body: JSON.stringify(data) };
+      return apiInstance.request(url, config);
     },
     put: (url: string, data?: any, config?: RequestInit) => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, {
-        ...config,
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }).then((response) => {
-        return response.json();
-      });
+      config = { ...config, method: 'PUT', body: JSON.stringify(data) };
+      return apiInstance.request(url, config);
     },
     patch: (url: string, data?: any, config?: RequestInit) => {
-      config = requestInterceptor(url, config || {});
-      return fetch(url, {
-        ...config,
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      }).then((response) => {
-        return response.json();
-      });
+      config = { ...config, method: 'PATCH', body: JSON.stringify(data) };
+      return apiInstance.request(url, config);
     },
   };
 

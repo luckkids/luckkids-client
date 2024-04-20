@@ -1,8 +1,43 @@
 import API from './API';
 
+export interface GetHomeInfoResponse {
+  luckkidsAchievementRate: number;
+  userCharacterSummaryResponse: UserCharacterSummaryResponse;
+  missionOutcomeForWeekResponse: MissionOutcomeForWeekResponse;
+}
+
+export interface UserCharacterSummaryResponse {
+  inProgressCharacter: InProgressCharacter;
+  completedCharacterCount: CompletedCharacterCount;
+}
+
+export interface InProgressCharacter {
+  characterType: string;
+  level: number;
+  characterProgressStatus: string;
+}
+
+export interface CompletedCharacterCount {
+  RABBIT: number;
+  SUN: number;
+  STONE: number;
+  CLOVER: number;
+  CLOUD: number;
+}
+
+export interface MissionOutcomeForWeekResponse {
+  startDate: string;
+  endDate: string;
+  calender: Calender[];
+}
+
+export interface Calender {
+  missionDate: string;
+  hasSucceed: boolean;
+}
+
 export const getHomeInfo = async () => {
-  const res = await API.get('/home/main');
-  console.log(5, res);
+  const res = await API.get<GetHomeInfoResponse>('/home/main');
   return res;
 };
 

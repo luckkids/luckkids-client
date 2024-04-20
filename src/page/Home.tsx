@@ -17,6 +17,9 @@ import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useHomeInfo } from '@queries';
+import { RecoilToken } from '@recoil/recoil.token';
+import { useRecoilState } from 'recoil';
+import { accessTokenStorage } from '@storage';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -55,8 +58,13 @@ export const Home: React.FC = () => {
   }, []);
 
   const { data: homeInfo } = useHomeInfo();
+  const {
+    luckkidsAchievementRate = 0,
+    userCharacterSummaryResponse,
+    missionOutcomeForWeekResponse, //TODO calendar 적용
+  } = homeInfo || {};
 
-  console.log(59, homeInfo);
+  console.log(missionOutcomeForWeekResponse);
 
   return (
     <>
@@ -122,7 +130,7 @@ export const Home: React.FC = () => {
                   <L.Col w={'100%'}>
                     <L.Row items="flex-end">
                       <Font type="LARGE_TITLE_BOLD" mr={4}>
-                        75
+                        {luckkidsAchievementRate}
                       </Font>
                       <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
                         %
@@ -180,7 +188,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .CLOUD
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -192,7 +203,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .STONE
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -204,7 +218,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .CLOVER
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -216,7 +233,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .SUN
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -228,7 +248,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .RABBIT
+                        }
                       </Font>
                     </L.Col>
                   </L.Row>

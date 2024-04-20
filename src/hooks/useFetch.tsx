@@ -36,7 +36,9 @@ export const useFetch = (args: {
             method: args.method,
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token.accessToken}`,
+              ...(token.accessToken && {
+                Authorization: `Bearer ${token.accessToken}`,
+              }),
             },
           };
 
@@ -45,15 +47,16 @@ export const useFetch = (args: {
           }
 
           const rtnData = await fetch(host + args.url, requestOptions);
+          console.log('rtnData ====>', rtnData);
           return await rtnData.json();
         } catch (e) {
-          console.log(e);
+          console.log('error ====>', e);
         }
       };
 
       loadData()
         .then((result) => {
-          console.log(result);
+          console.log('result ====>', result);
           if (result.statusCode === STATUS.UNAUTHORIZED) {
             //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
             return setExpiredAccessToken();
@@ -64,6 +67,7 @@ export const useFetch = (args: {
               accessToken: result.data.accessToken,
               refreshToken: result.data.refreshToken,
             });
+            accessTokenStorage.setItem(result.data.accessToken);
           }
           if (result.statusCode === STATUS.SUCCESS) {
             //3. 결과가 200일경우 isSuccess 불리언값 참조 가능

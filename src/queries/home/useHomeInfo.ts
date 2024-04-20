@@ -7,7 +7,6 @@ export const useHomeInfo = () => {
     getHomeQueryKey('HOME_INFO'),
     async () => {
       const res = await homeApis.getHomeInfo();
-
       return res;
     },
     {

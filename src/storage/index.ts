@@ -2,7 +2,7 @@ import SafeStorage from './modules/storage.safe';
 import SafeUserStorage from './modules/storage.user';
 
 /**
- * 토큰 관리를 위한 storage (자동 로그인)
+ * 토큰 관리를 위한 storage
  */
 export const accessTokenStorage = new SafeStorage<string>('accessToken');
 
