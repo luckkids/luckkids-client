@@ -27,6 +27,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 const App: React.FC = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
+  const [initializing, setInitializing] = useState(true);
 
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
@@ -45,6 +46,20 @@ const App: React.FC = () => {
     StatusBar.setBarStyle('light-content', true);
   }, []);
 
+  useAsyncEffect(async () => {
+    try {
+      if (!initializing) {
+        // Fast refresh 때 아래 로직 자꾸 도는거 방지
+        return console.log('App Reload');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setInitializing(false);
+      await BootSplash.hide({ fade: true });
+    }
+  }, [initializing]);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider>
@@ -53,7 +68,7 @@ const App: React.FC = () => {
             <ThemeProvider theme={Colors}>
               <NavigationContainer<AppScreensParamList>
                 ref={navigationRef}
-                onReady={() => {
+                onReady={async () => {
                   console.log('onReady');
                   if (!navigationRef.current) return;
                   NavigationService.setNavigation(navigationRef.current);
@@ -73,49 +88,13 @@ const App: React.FC = () => {
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = withGlobalComponents(() => {
-  const navigation = useNavigationService();
-  const [initializing, setInitializing] = useState(true);
-  const {
-    initialize: initializeFirebaseMessage,
-    getToken,
-    requestPermissionIfNot,
-  } = useFirebaseMessage();
+  const { initialize: initializeFirebaseMessage } = useFirebaseMessage();
   const { initialize: initializeLocalMessage } = useLocalMessage();
 
-  const { onFetch: login } = useFetch({
-    method: 'POST',
-    url: '/auth/login',
-    onSuccessCallback: () => {
-      navigation.navigate('Home');
-    },
-    onFailCallback: () => {
-      navigation.navigate('Login');
-    },
-  });
-
-  useAsyncEffect(async () => {
-    try {
-      if (!initializing) {
-        console.log('App Reload');
-
-        // 자동 로그인 처리
-        const rememberMeInfo = rememberMeStorage.getItem();
-        if (rememberMeInfo) {
-          login({
-            ...rememberMeInfo,
-          });
-        }
-
-        initializeFirebaseMessage();
-        initializeLocalMessage();
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setInitializing(false);
-      await BootSplash.hide({ fade: true });
-    }
-  }, [initializing]);
+  useEffect(() => {
+    initializeFirebaseMessage();
+    initializeLocalMessage();
+  }, []);
 
   return (
     <Stack.Navigator>

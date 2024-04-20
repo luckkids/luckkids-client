@@ -1,5 +1,4 @@
 import SafeStorage from './modules/storage.safe';
-import SafeUserStorage from './modules/storage.user';
 
 /**
  * 토큰 관리를 위한 storage
@@ -16,13 +15,6 @@ export const rememberMeStorage = new SafeStorage<{
   pushKey: string | null;
 }>('rememberMe');
 
-/**
- * 스토리텔링 view 여부를 기록하는 storage
- */
-export const viewStoryTellingStorage = new SafeUserStorage(
-  'viewStoryTelling',
-  'boolean',
-);
 
 /**
  * 첫 설치 여부를 기록하는 storage

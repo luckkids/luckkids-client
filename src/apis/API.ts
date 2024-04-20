@@ -17,7 +17,7 @@ interface APIInstance {
   patch<T>(url: string, data?: any, config?: RequestInit): Promise<T>;
 }
 
-const API_BASE_URL = 'https://api-luckkids.kro.kr/api/v1';
+const API_BASE_URL = 'http://api-luckkids.kro.kr/api/v1';
 
 const API = (() => {
   const accessToken = accessTokenStorage.getItem();
@@ -52,6 +52,8 @@ const API = (() => {
         requestAt: Date.now().toString(),
       };
     }
+
+    console.log(53, config);
 
     return config;
   };

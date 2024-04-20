@@ -5,7 +5,7 @@ import { RecoilToken } from '@recoil/recoil.token';
 import { accessTokenStorage } from '@storage';
 
 // let isRefreshing = false;
-const host = 'https://api-luckkids.kro.kr/api/v1';
+const host = 'http://api-luckkids.kro.kr/api/v1';
 const STATUS = {
   SUCCESS: 200,
   CREATED: 201,
