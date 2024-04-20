@@ -4,7 +4,7 @@ import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { RecoilToken } from '@recoil/recoil.token';
 
 // let isRefreshing = false;
-const host = 'https://api-luckkids.kro.kr/api/v1';
+const host = 'http://api-luckkids.kro.kr/api/v1';
 const STATUS = {
   SUCCESS: 200,
   CREATED: 201,
@@ -36,6 +36,7 @@ export const useFetch = (args: {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token.accessToken}`,
+              referrerPolicy: 'unsafe-url',
             },
           };
 
