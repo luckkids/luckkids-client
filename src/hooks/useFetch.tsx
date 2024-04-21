@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
+import { accessTokenStorage } from '@storage';
 import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { RecoilToken } from '@recoil/recoil.token';
-import { accessTokenStorage } from '@storage';
 
 // let isRefreshing = false;
 const host = 'http://api-luckkids.kro.kr/api/v1';

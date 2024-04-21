@@ -21,8 +21,7 @@ import useLocalMessage from '@hooks/notification/useLocalMessage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import NavigationService from '@libs/NavigationService';
-import { AppScreensParamList } from '@types-common/page.types';
-import useNavigationService from '@hooks/navigation/useNavigationService';
+import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 
 const App: React.FC = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
@@ -90,14 +89,41 @@ const Stack = createNativeStackNavigator();
 const RootNavigator = withGlobalComponents(() => {
   const { initialize: initializeFirebaseMessage } = useFirebaseMessage();
   const { initialize: initializeLocalMessage } = useLocalMessage();
+  const [initialRoute, setInitialRoute] = useState<InitialRoute>({
+    screeName: undefined,
+    screenParams: undefined,
+  });
+
+  const { onFetch: login } = useFetch({
+    method: 'POST',
+    url: '/auth/login',
+    onSuccessCallback: () => {
+      setInitialRoute({
+        screeName: 'Home',
+        screenParams: undefined,
+      });
+    },
+    onFailCallback: () => {
+      return;
+    },
+  });
 
   useEffect(() => {
     initializeFirebaseMessage();
     initializeLocalMessage();
   }, []);
 
+  useEffect(() => {
+    // 자동 로그인
+    const rememberMeInfo = rememberMeStorage.getItem();
+    console.log('rememberMeInfo ====>', rememberMeInfo);
+    if (rememberMeInfo) {
+      login(rememberMeInfo);
+    }
+  }, []);
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName={initialRoute.screeName}>
       {DataStackScreen.map((item) => {
         return (
           <Stack.Screen

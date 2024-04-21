@@ -69,13 +69,13 @@ export const PageLoginId: React.FC = () => {
               navigation.navigate('Home');
             }}
             onRemember={() => {
+              navigation.navigate('Home');
               rememberMeStorage.setItem({
                 email: loginInfo.email,
                 password: loginInfo.password,
                 deviceId: deviceID,
                 pushKey: null,
               });
-              navigation.navigate('Home');
             }}
           />
         ),

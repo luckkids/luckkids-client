@@ -19,6 +19,7 @@ class SafeStorage<T> extends Storage {
   public setItem(item: T): T | null {
     try {
       LuckKidsStorage.set(this.key, JSON.stringify(item));
+      console.log(`SafeStorage.setItem: ${this.key} = ${JSON.stringify(item)}`);
       return item;
     } catch (error) {
       console.log(error);

@@ -15,7 +15,6 @@ export const rememberMeStorage = new SafeStorage<{
   pushKey: string | null;
 }>('rememberMe');
 
-
 /**
  * 첫 설치 여부를 기록하는 storage
  */

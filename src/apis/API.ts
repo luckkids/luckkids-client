@@ -1,8 +1,5 @@
 import { Platform } from 'react-native';
 import { getUniqueIdSync, getVersion } from 'react-native-device-info';
-import { useRecoilValue } from 'recoil';
-import ApiError from './ApiError';
-import { RecoilToken } from '@recoil/recoil.token';
 import { accessTokenStorage } from '@storage';
 
 interface APIInstance {
@@ -21,7 +18,6 @@ const API_BASE_URL = 'http://api-luckkids.kro.kr/api/v1';
 
 const API = (() => {
   const accessToken = accessTokenStorage.getItem();
-  console.log(24, accessToken);
 
   const requestInterceptor = (
     url: string,
