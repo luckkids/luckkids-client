@@ -4,7 +4,7 @@ import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { RecoilToken } from '@recoil/recoil.token';
 
 // let isRefreshing = false;
-const host = 'https://api-luckkids.kro.kr/api/v1';
+const host = 'http://api-luckkids.kro.kr/api/v1';
 const STATUS = {
   SUCCESS: 200,
   CREATED: 201,
@@ -16,7 +16,7 @@ const STATUS = {
 export const useFetch = (args: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   url: string;
-  value?: IStringDictionary;
+  value: IStringDictionary;
   onSuccessCallback?: (resultData?: any) => void;
   onFailCallback?: () => void;
 }) => {
@@ -25,16 +25,18 @@ export const useFetch = (args: {
   const [resultData, setResultData] = useState<IResponse>();
   const onFetch = useCallback(
     (value?: IStringDictionary) => {
-      const requestData = value ?? args.value; // Use provided value or default to args.value
+      // Use provided value or default to args.value
+      const requestData = value ? value : args.value;
 
+      console.log('requestData ====>', requestData);
       const loadData = async () => {
         try {
-          let rtnData: IResponse;
           const requestOptions: RequestInit = {
             method: args.method,
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token.accessToken}`,
+              referrerPolicy: 'unsafe-url',
             },
           };
 
@@ -42,7 +44,7 @@ export const useFetch = (args: {
             requestOptions.body = JSON.stringify(requestData);
           }
 
-          rtnData = await fetch(host + args.url, requestOptions);
+          const rtnData = await fetch(host + args.url, requestOptions);
           return await rtnData.json();
         } catch (e) {
           console.log(e);
@@ -74,7 +76,8 @@ export const useFetch = (args: {
           setResultData(result.data);
           return result.data;
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           setIsSuccess(false);
           args.onFailCallback && args.onFailCallback();
           console.log('서버 통신 에러');

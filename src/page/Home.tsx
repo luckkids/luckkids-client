@@ -10,12 +10,13 @@ import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import Tooltip from '@components/common/Tooltip/Tooltip';
+// import { useHomeInfo } from '@queries';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -52,6 +53,8 @@ export const Home: React.FC = () => {
       LoadingIndicator.hide();
     }, 500);
   }, []);
+
+  // const { data: homeInfo } = useHomeInfo();
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import notifee, { AuthorizationStatus, EventType } from '@notifee/react-native';
+import NavigationService from '@libs/NavigationService';
 
 type LocalMessage = {
   title: string;
@@ -9,15 +10,16 @@ type LocalMessage = {
 const useLocalMessage = () => {
   const hasNotificationPermission = useCallback(async () => {
     const settings = await notifee.getNotificationSettings();
-
     return settings.authorizationStatus === AuthorizationStatus.AUTHORIZED;
   }, []);
 
   const initialize = useCallback(() => {
     notifee.onForegroundEvent((event) => {
       if (event.type === EventType.PRESS) {
-        const url = event.detail.notification?.data?.url;
-        if (typeof url !== 'string') return;
+        console.log('useLocalMessage');
+        const screen = event.detail.notification?.data?.screen;
+        if (typeof screen !== 'string') return;
+        NavigationService.navigate(screen);
       }
     });
   }, []);

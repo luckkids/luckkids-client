@@ -5,6 +5,7 @@ import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
+import { accessTokenStorage } from '@storage';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
@@ -48,6 +49,37 @@ export const PageLoginId: React.FC = () => {
     return sendTempPassword();
   };
 
+  const onSuccessCallback = (newToken: string) => {
+    const token = accessTokenStorage.getItem();
+    if (!token) {
+      BottomSheet.show({
+        component: (
+          <LoginRemember
+            onClose={() => navigation.navigate('Home')}
+            tokenValue={newToken}
+          />
+        ),
+      });
+    } else {
+      return navigation.navigate('Home');
+    }
+  };
+
+  const onFailCallback = () => {
+    Keyboard.dismiss();
+    return SnackBar.show({
+      leftElement: createElement(SvgIcon, {
+        name: 'yellow_info',
+        size: 20,
+      }),
+      title: `이메일 또는 비밀번호가 잘못 입력되었어요!`,
+      position: 'bottom',
+      width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+      rounded: 25,
+      offsetY: 110,
+    });
+  };
+
   const { onFetch: login } = useFetch({
     method: 'POST',
     url: '/auth/login',
@@ -57,39 +89,16 @@ export const PageLoginId: React.FC = () => {
       deviceId: deviceID,
       pushKey: 'testPushKey',
     },
-    onSuccessCallback: () => {
-      // TODO 만약 자동 로그인 여부가 async storage에 없다면 bottomsheet 노출
-      // 아니면 바로 Home으로 이동
-      const rememberMe = true;
-      if (!rememberMe) {
-        BottomSheet.show({
-          component: (
-            <LoginRemember onClose={() => navigation.navigate('Home')} />
-          ),
-        });
-      } else {
-        return navigation.navigate('Home');
-      }
+    onSuccessCallback: (result: any) => {
+      console.log(93, result);
+      onSuccessCallback(String(result.accessToken));
     },
-    onFailCallback: () => {
-      Keyboard.dismiss();
-      return SnackBar.show({
-        leftElement: createElement(SvgIcon, {
-          name: 'yellow_info',
-          size: 20,
-        }),
-        title: `이메일 또는 비밀번호가 잘못 입력되었어요!`,
-        position: 'bottom',
-        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
-        rounded: 25,
-        offsetY: 110,
-      });
-    },
+    onFailCallback,
   });
 
-  const handleLogin = useCallback(() => {
+  const handleLogin = () => {
     login();
-  }, []);
+  };
 
   const { onFetch: sendTempPassword } = useFetch({
     method: 'POST',
