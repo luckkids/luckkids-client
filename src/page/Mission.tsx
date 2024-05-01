@@ -9,6 +9,8 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
 import { dataDummyMission } from '../data/dummy/data.dummy.mission';
+import { ScrollView } from 'react-native';
+import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 
 export const Mission: React.FC = () => {
   const dummyData = dataDummyMission;
@@ -57,10 +59,12 @@ export const Mission: React.FC = () => {
             textColor={'LUCK_GREEN'}
           />
         </L.Row>
-        {data?.map((item, i) => {
-          if (!item) return;
-          return <MissionItem {...item} key={i} setCount={setCount} />;
-        })}
+        <ScrollView style={{ height: SCREEN_HEIGHT - 82 }}>
+          {data?.map((item, i) => {
+            if (!item) return;
+            return <MissionItem {...item} key={i} setCount={setCount} />;
+          })}
+        </ScrollView>
       </FrameLayout>
       <FloatingButton
         text={'편집'}
