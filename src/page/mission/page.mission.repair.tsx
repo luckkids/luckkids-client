@@ -10,26 +10,33 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
 
+interface IDataKey {
+  [key: string]: Array<IMissionDataItem>;
+}
+
 export const PageMissionRepair = () => {
+  // let allCategory: Array<string> = [];
   const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
   const [current, setCurrent] = useState<number | null>(null);
   const [isRemove, setIsRemove] = useState<boolean>(false);
+  const [listCategory, setListCategory] = useState<Array<string>>([]);
+  /*const list = {} as {
+    [key: string]: Array<IMissionDataItem>;
+  };*/
+  const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
   const { onFetch, resultData, isSuccess } = useFetch({
     method: 'GET',
     url: '/missions',
     value: {},
+    onSuccessCallback: (rtn) => {
+      setListCategory(Object.keys(rtn));
+      setAllCategory(Object.keys(rtn));
+      setDataDicArray({ ...rtn });
+    },
   });
-  const list = { ...resultData } as {
-    [key: string]: Array<IMissionDataItem>;
-  };
-  const [dataDicArray, setDataDicArray] = useState<Array<string>>(
-    Object.keys(list),
-  );
   useEffect(() => {
     onFetch();
-    setAllCategory(Object.keys(list));
-    setDataDicArray(Object.keys(list));
   }, [isSuccess]);
 
   const categoryButton = useCallback((key: string) => {
@@ -71,7 +78,7 @@ export const PageMissionRepair = () => {
         };
     }
   }, []);
-
+  console.log('allCategory', allCategory);
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
@@ -98,12 +105,12 @@ export const PageMissionRepair = () => {
                         onPress={() => {
                           if (i === current && !isRemove) {
                             setIsRemove(true);
-                            setDataDicArray(allCategory);
+                            setListCategory(allCategory);
                             return;
                           }
                           setCurrent(i);
                           setIsRemove(false);
-                          setDataDicArray([item]);
+                          setListCategory([item]);
                         }}
                         key={i}
                       />
@@ -113,7 +120,7 @@ export const PageMissionRepair = () => {
               </ScrollView>
             )}
           </L.Row>
-          {dataDicArray.map((item, i) => {
+          {listCategory.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
@@ -125,7 +132,7 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {list[item].map((value, i) => {
+                {dataDicArray[item]?.map((value, i) => {
                   return (
                     <MisstionRepairItem
                       {...value}
