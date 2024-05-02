@@ -25,7 +25,7 @@ export const PageMissionRepair = () => {
     [key: string]: Array<IMissionDataItem>;
   };*/
   const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
-  const { onFetch, resultData, isSuccess } = useFetch({
+  const { onFetch, isSuccess } = useFetch({
     method: 'GET',
     url: '/missions',
     value: {},
@@ -78,7 +78,6 @@ export const PageMissionRepair = () => {
         };
     }
   }, []);
-  console.log('allCategory', allCategory);
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
