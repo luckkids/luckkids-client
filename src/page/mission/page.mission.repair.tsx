@@ -136,7 +136,6 @@ export const PageMissionRepair = () => {
                     <MisstionRepairItem
                       {...value}
                       isCheck={value.alertStatus === 'CHECKED'}
-                      isSetAlarm={true}
                       key={i}
                     />
                   );
