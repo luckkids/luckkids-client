@@ -44,6 +44,7 @@ import iconMindSet from '../../assets/icons/icon-mind-set-1.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
 import iconPlus from '../../assets/icons/icon-plus.svg';
+import iconPlusDark from '../../assets/icons/icon-plus-dark.svg';
 import iconSelfCare from '../../assets/icons/icon-self-care-1.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
@@ -89,6 +90,7 @@ export {
   iconSettingOn,
   iconSettingOff,
   iconPlus,
+  iconPlusDark,
   iconKakao,
   iconClip,
   iconGoogle,
