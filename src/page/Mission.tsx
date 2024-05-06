@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Font, L } from '@design-system';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Colors, Font, L, SvgIcon } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import Constants from '../design-system/constants';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
@@ -8,32 +8,64 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
-import { dataDummyMission } from '../data/dummy/data.dummy.mission';
 import { ScrollView } from 'react-native';
 import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
+import { useIsFocused } from '@react-navigation/native';
 
 export const Mission: React.FC = () => {
-  const dummyData = dataDummyMission;
   const [hide, setHide] = useState<boolean>(false);
-  const [data, setData] = useState<Array<IMissionListData>>(dummyData.data);
+  const [data, setData] = useState<Array<IMissionListData>>([]);
+  const [hideData, setHideData] = useState<Array<IMissionListData>>([]);
   const [count, setCount] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
   const navigation = useNavigationService();
+  const isFocused = useIsFocused();
   const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
     method: 'GET',
     url: '/missionOutcomes',
     value: {},
     onSuccessCallback: (rtn) => {
       setData(rtn);
-      rtn.map((item: IMissionListData) => {
-        if (item.missionStatus === 'SUCCEED') {
-          return setCount(count + 1);
-        }
-      });
+      setHideData(
+        rtn.filter((item: IMissionListData) => item.missionStatus === 'FAILED'),
+      );
+      setTotal(rtn.length);
+      setCount(
+        rtn.filter((item: IMissionListData) => item.missionStatus === 'SUCCEED')
+          .length,
+      );
     },
   });
   useEffect(() => {
-    missionList();
-  }, [missionListIsSuccess]);
+    if (isFocused) missionList();
+  }, [missionListIsSuccess, isFocused]);
+
+  /*const setList = useCallback(() => {
+    console.log('hideData', hideData);
+    if (hide) {
+      return hideData?.map((item, i) => {
+        return (
+          <MissionItem
+            {...item}
+            key={i}
+            setCount={setCount}
+            prevCount={count}
+          />
+        );
+      });
+    } else {
+      return data?.map((item, i) => {
+        return (
+          <MissionItem
+            {...item}
+            key={i}
+            setCount={setCount}
+            prevCount={count}
+          />
+        );
+      });
+    }
+  }, [missionListIsSuccess, hide]);*/
 
   return (
     <>
@@ -45,7 +77,7 @@ export const Mission: React.FC = () => {
         <L.Row p={24} justify={'space-between'}>
           <Font type={'LARGE_TITLE_BOLD'}>미션 달성하기</Font>
           <Font type={'LARGE_TITLE_REGULAR'} color={'LUCK_GREEN'}>
-            3/10
+            {count}/{total}
           </Font>
         </L.Row>
         <L.Row ph={24} pt={48} justify={'space-between'}>
@@ -60,17 +92,55 @@ export const Mission: React.FC = () => {
           />
         </L.Row>
         <ScrollView style={{ height: SCREEN_HEIGHT - 82 }}>
-          {data?.map((item, i) => {
+          {hide
+            ? hideData.map((item, i) => {
+                return (
+                  <MissionItem
+                    {...item}
+                    key={i}
+                    setCount={setCount}
+                    prevCount={count}
+                  />
+                );
+              })
+            : data.map((item, i) => {
+                return (
+                  <MissionItem
+                    {...item}
+                    key={i}
+                    setCount={setCount}
+                    prevCount={count}
+                  />
+                );
+              })}
+          {/*{data?.map((item, i) => {
             if (!item) return;
-            return <MissionItem {...item} key={i} setCount={setCount} />;
-          })}
+            return (
+              <MissionItem
+                {...item}
+                key={i}
+                setCount={setCount}
+                prevCount={count}
+              />
+            );
+          })}*/}
         </ScrollView>
       </FrameLayout>
       <FloatingButton
-        text={'편집'}
         paddingBottom={Constants.BOTTOM_TABBAR_HEIGHT + 38}
         onPress={() => navigation.navigate('MissionRepair')}
-      />
+        containerStyle={{
+          width: 36,
+          height: 36,
+          paddingVertical: 0,
+          paddingHorizontal: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: Colors.WHITE,
+        }}
+      >
+        <SvgIcon name={'iconPlusDark'} size={'16.6'} />
+      </FloatingButton>
     </>
   );
 };

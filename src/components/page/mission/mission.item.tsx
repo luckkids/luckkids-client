@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font, L } from '@design-system';
@@ -34,7 +34,12 @@ const S = {
   }),
 };
 
-export const MissionItem: React.FC<IMissionListData> = (props) => {
+interface IProps extends IMissionListData {
+  prevCount: number;
+  setCount: Dispatch<number>;
+}
+
+export const MissionItem: React.FC<IProps> = (props) => {
   const [missionState, setMissionState] = useState(
     props.missionStatus === 'SUCCEED',
   );
@@ -45,17 +50,21 @@ export const MissionItem: React.FC<IMissionListData> = (props) => {
       value: {
         missionStatus: missionState ? 'SUCCEED' : 'FAILED',
       },
-      onSuccessCallback: (rtn) => {
-        if (props.setCount) {
-          props.setCount(rtn);
+      onSuccessCallback: () => {
+        if (missionState) {
+          props.setCount(props.prevCount + 1);
+        } else {
+          props.setCount(props.prevCount - 1);
         }
       },
     });
+  useEffect(() => {
+    isSuccessCount();
+  }, [missionState]);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         setMissionState(!missionState);
-        isSuccessCount();
       }}
     >
       <L.Row ph={25} pv={20} justify={'space-between'}>
