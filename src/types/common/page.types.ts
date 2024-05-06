@@ -91,7 +91,6 @@ export interface IMissionListData {
   alertTime: string;
   id: number;
   missionDescription: string;
-  setCount?: Dispatch<number>;
 }
 
 export interface IGarden {
