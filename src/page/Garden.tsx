@@ -1,8 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Alert, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
-import { DataDummyGarden } from '../data/dummy/data.dummy.garden';
 import { ActionIcon } from '@components/common/ActionIcon';
 import { GardenItem } from '@components/page/garden/garden.item';
 import { GardenNavbar } from '@components/page/garden/garden.navbar';
@@ -13,6 +17,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IGarden, IGardenItem } from '@types-common/page.types';
 import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
+import { useIsFocused } from '@react-navigation/native';
 
 const S = {
   listWrap: styled.View(
@@ -106,6 +111,7 @@ const onInviteHandler = () => {
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
   const [data, setData] = useState<IGarden>();
+  const isFocusScreen = useIsFocused();
   const { onFetch } = useFetch({
     method: 'GET',
     url: '/garden/list?page=1&size=12',
@@ -117,8 +123,8 @@ export const Garden: React.FC = () => {
     },
   });
   useEffect(() => {
-    onFetch();
-  }, []);
+    if (isFocusScreen) onFetch();
+  }, [isFocusScreen]);
   const friendData: Array<IGardenItem> | undefined = data?.friendList.content;
   const myData = data?.myProfile;
   const [isList, setIsList] = useState<boolean>(false);
@@ -164,42 +170,44 @@ export const Garden: React.FC = () => {
           </View>
         </TouchableWithoutFeedback>
       </L.Row>
-      <S.listWrap isList={isList}>
-        {myData &&
-          (isList ? (
-            <GardenHorizontalItem
-              {...myData}
-              onPress={() => setShow({ isShow: true, ...myData })}
-              isSelf={true}
-            />
-          ) : (
-            <GardenItem
-              {...myData}
-              onPress={() => setShow({ isShow: true, ...myData })}
-              isSelf={true}
-            />
-          ))}
-        {friendData?.map((item, i) => {
-          if (isList) {
-            return (
+      <ScrollView>
+        <S.listWrap isList={isList}>
+          {myData &&
+            (isList ? (
               <GardenHorizontalItem
-                {...item}
-                onPress={() => setShow({ isShow: true, ...item })}
-                key={i}
+                {...myData}
+                onPress={() => setShow({ isShow: true, ...myData })}
+                isSelf={true}
               />
-            );
-          } else {
-            return (
+            ) : (
               <GardenItem
-                {...item}
-                onPress={() => setShow({ isShow: true, ...item })}
-                key={i}
+                {...myData}
+                onPress={() => setShow({ isShow: true, ...myData })}
+                isSelf={true}
               />
-            );
-          }
-        })}
-        {dimProfile}
-      </S.listWrap>
+            ))}
+          {friendData?.map((item, i) => {
+            if (isList) {
+              return (
+                <GardenHorizontalItem
+                  {...item}
+                  onPress={() => setShow({ isShow: true, ...item })}
+                  key={i}
+                />
+              );
+            } else {
+              return (
+                <GardenItem
+                  {...item}
+                  onPress={() => setShow({ isShow: true, ...item })}
+                  key={i}
+                />
+              );
+            }
+          })}
+          {dimProfile}
+        </S.listWrap>
+      </ScrollView>
       <ActionIcon
         title={'친구를 초대할게요!'}
         isIcon={true}
