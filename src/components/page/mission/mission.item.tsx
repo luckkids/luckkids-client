@@ -62,11 +62,7 @@ export const MissionItem: React.FC<IProps> = (props) => {
     isSuccessCount();
   }, [missionState]);
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setMissionState(!missionState);
-      }}
-    >
+    <TouchableWithoutFeedback onPress={() => setMissionState(!missionState)}>
       <L.Row ph={25} pv={20} justify={'space-between'}>
         <S.Title>
           <S.iconRound>{missionState ? <S.dot /> : null}</S.iconRound>

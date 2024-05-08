@@ -9,22 +9,20 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
+import { useIsFocused } from '@react-navigation/native';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
 }
 
 export const PageMissionRepair = () => {
-  // let allCategory: Array<string> = [];
   const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
   const [current, setCurrent] = useState<number | null>(null);
   const [isRemove, setIsRemove] = useState<boolean>(false);
   const [listCategory, setListCategory] = useState<Array<string>>([]);
-  /*const list = {} as {
-    [key: string]: Array<IMissionDataItem>;
-  };*/
   const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
+  const isFocus = useIsFocused();
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
     url: '/missions',
@@ -36,7 +34,7 @@ export const PageMissionRepair = () => {
     },
   });
   useEffect(() => {
-    onFetch();
+    if (isFocus) onFetch();
   }, [isSuccess]);
 
   const categoryButton = useCallback((key: string) => {

@@ -75,7 +75,7 @@ export const MisstionRepairItem: React.FC<IProps> = ({
   });
 
   useEffect(() => {
-    onFetch();
+    if (Boolean(isCheck) !== isChecked) onFetch();
   }, [isChecked]);
   useEffect(() => {
     setRtnTime(alertTime);

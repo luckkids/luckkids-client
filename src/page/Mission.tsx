@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Colors, Font, L, SvgIcon } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import Constants from '../design-system/constants';
@@ -38,34 +38,7 @@ export const Mission: React.FC = () => {
   });
   useEffect(() => {
     if (isFocused) missionList();
-  }, [missionListIsSuccess, isFocused]);
-
-  /*const setList = useCallback(() => {
-    console.log('hideData', hideData);
-    if (hide) {
-      return hideData?.map((item, i) => {
-        return (
-          <MissionItem
-            {...item}
-            key={i}
-            setCount={setCount}
-            prevCount={count}
-          />
-        );
-      });
-    } else {
-      return data?.map((item, i) => {
-        return (
-          <MissionItem
-            {...item}
-            key={i}
-            setCount={setCount}
-            prevCount={count}
-          />
-        );
-      });
-    }
-  }, [missionListIsSuccess, hide]);*/
+  }, [isFocused]);
 
   return (
     <>
@@ -113,17 +86,6 @@ export const Mission: React.FC = () => {
                   />
                 );
               })}
-          {/*{data?.map((item, i) => {
-            if (!item) return;
-            return (
-              <MissionItem
-                {...item}
-                key={i}
-                setCount={setCount}
-                prevCount={count}
-              />
-            );
-          })}*/}
         </ScrollView>
       </FrameLayout>
       <FloatingButton
