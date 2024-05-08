@@ -43,21 +43,20 @@ export const MissionItem: React.FC<IProps> = (props) => {
   const [missionState, setMissionState] = useState(
     props.missionStatus === 'SUCCEED',
   );
-  const { onFetch: isSuccessCount, isSuccess: isSuccessCounterState } =
-    useFetch({
-      method: 'PATCH',
-      url: `/missionOutcomes/${props.id}`,
-      value: {
-        missionStatus: missionState ? 'SUCCEED' : 'FAILED',
-      },
-      onSuccessCallback: () => {
-        if (missionState) {
-          props.setCount(props.prevCount + 1);
-        } else {
-          props.setCount(props.prevCount - 1);
-        }
-      },
-    });
+  const { onFetch: isSuccessCount } = useFetch({
+    method: 'PATCH',
+    url: `/missionOutcomes/${props.id}`,
+    value: {
+      missionStatus: missionState ? 'SUCCEED' : 'FAILED',
+    },
+    onSuccessCallback: () => {
+      if (missionState) {
+        props.setCount(props.prevCount + 1);
+      } else {
+        props.setCount(props.prevCount - 1);
+      }
+    },
+  });
   useEffect(() => {
     isSuccessCount();
   }, [missionState]);

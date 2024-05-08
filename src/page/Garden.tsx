@@ -5,9 +5,11 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
 import { ActionIcon } from '@components/common/ActionIcon';
+import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
 import { GardenItem } from '@components/page/garden/garden.item';
 import { GardenNavbar } from '@components/page/garden/garden.navbar';
 import { GardenPopup } from '@components/page/garden/garden.popup';
@@ -16,8 +18,6 @@ import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IGarden, IGardenItem } from '@types-common/page.types';
-import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
-import { useIsFocused } from '@react-navigation/native';
 
 const S = {
   listWrap: styled.View(

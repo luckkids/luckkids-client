@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Font, IconNames, L, SvgIcon } from '@design-system';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
@@ -9,7 +10,6 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
-import { useIsFocused } from '@react-navigation/native';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
