@@ -11,7 +11,7 @@ export type TCheck = 'CHECKED' | 'UNCHECKED';
 export type AppScreens = keyof AppScreensParamList;
 
 export type InitialRoute = {
-  screeName: AppScreens | undefined;
+  screenName: AppScreens | undefined;
   screenParams: AppScreensParamList[AppScreens] | undefined;
 };
 

@@ -1,17 +1,12 @@
-import React, {
-  createElement,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createElement, useEffect, useRef, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
-import { accessTokenStorage, rememberMeStorage } from '@storage';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
@@ -20,8 +15,8 @@ import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
-import { debounceTime } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { StorageKeys } from '@hooks/storage/keys';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
@@ -42,7 +37,9 @@ export const PageLoginId: React.FC = () => {
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
 
   const [visiblityMode, setVisiblityMode] = useState(false);
-
+  const [rememberMe, setRememberMe] = useAsyncStorage<StorageKeys.RememberMe>(
+    StorageKeys.RememberMe,
+  );
   const handlePressForgotPassword = () => {
     Keyboard.dismiss();
     if (!loginInfo.email) {
@@ -60,8 +57,7 @@ export const PageLoginId: React.FC = () => {
 
   const onSuccessCallback = () => {
     Keyboard.dismiss();
-    const rememberMeInfo = rememberMeStorage.getItem();
-    if (!rememberMeInfo) {
+    if (!rememberMe) {
       BottomSheet.show({
         component: (
           <LoginRemember
@@ -70,7 +66,7 @@ export const PageLoginId: React.FC = () => {
             }}
             onRemember={() => {
               navigation.navigate('Home');
-              rememberMeStorage.setItem({
+              setRememberMe({
                 email: loginInfo.email,
                 password: loginInfo.password,
                 deviceId: deviceID,
@@ -136,7 +132,7 @@ export const PageLoginId: React.FC = () => {
     onFailCallback: () => {
       console.log('이메일 전송 실패');
       SnackBar.show({
-        title: `koyrkr@gmail.com 주소로\n비밀번호 재설정 이메일이 전송되었습니다.`,
+        title: `이메일 전송에 실패했습니다. 다시 시도해 주세요.`,
         position: 'bottom',
         width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
         rounded: 25,

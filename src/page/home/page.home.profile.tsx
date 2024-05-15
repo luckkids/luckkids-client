@@ -1,16 +1,24 @@
-import StackNavbar from '@components/common/StackNavBar/StackNavBar';
+import React from 'react';
+import { Image, TouchableWithoutFeedback } from 'react-native';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon } from '@design-system';
+import { useHomeInfo, useMe } from '@queries';
+import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getCharacterImage } from '@utils';
 
 export const PageHomeProfile: React.FC = () => {
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
+
+  const { data: me } = useMe();
+  const { luckPhrase, nickname } = me || {};
+  const { data: homeInfo } = useHomeInfo();
+  const { userCharacterSummaryResponse } = homeInfo || {};
+  const { inProgressCharacter } = userCharacterSummaryResponse || {};
 
   const handleEditComment = () => {
     navigation.navigate('SettingComment');
@@ -64,25 +72,37 @@ export const PageHomeProfile: React.FC = () => {
               items="center"
               w={SCREEN_WIDTH - 2 * 35}
               h={58}
+              opacity={luckPhrase ? 1 : 0.5}
             >
               <Font type={'BODY_REGULAR'} color={'WHITE'} textAlign="center">
-                당신의 행운의 한마디를 적어주세요!
+                {luckPhrase || PHRASE_PLACEHOLDER}
               </Font>
             </L.Absolute>
           </L.Row>
         </TouchableWithoutFeedback>
         {/* 캐릭터 */}
-        <L.Row
-          w={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-          h={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-          bg={'LUCK_GREEN'}
-        />
+        <L.Row w="100%" justify="center">
+          {inProgressCharacter && (
+            <Image
+              source={{
+                uri: getCharacterImage(
+                  inProgressCharacter?.characterType,
+                  inProgressCharacter?.level,
+                ),
+              }}
+              style={{
+                width: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+                height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+              }}
+            />
+          )}
+        </L.Row>
 
         {/* 이름 수정 */}
         <TouchableWithoutFeedback onPress={handleEditName}>
           <L.Row mt={36} items="center">
             <Font type={'TITLE1_BOLD'} color={'WHITE'} mr={9}>
-              럭키즈
+              {nickname}
             </Font>
             <SvgIcon name={'icon_edit'} size={16} />
           </L.Row>
@@ -102,4 +122,5 @@ export const PageHomeProfile: React.FC = () => {
   );
 };
 
+const PHRASE_PLACEHOLDER = '당신의 행운의 한마디를 적어주세요!';
 const CHARACTER_MARGIN = 75;

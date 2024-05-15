@@ -12,6 +12,7 @@ const Tooltip: React.FC<TooltipProps> = ({
   bgColor = 'BLACK',
   textColor = 'WHITE',
 }) => {
+  if (!text) return null;
   return (
     <L.Col>
       {/* container */}

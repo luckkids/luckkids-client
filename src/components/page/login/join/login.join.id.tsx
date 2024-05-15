@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const LoginJoinId: React.FC = () => {
   const { bottom } = useSafeAreaInsets();

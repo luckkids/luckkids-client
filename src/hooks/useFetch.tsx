@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { accessTokenStorage } from '@storage';
 import { IResponse, IStringDictionary } from '../types/recoil/types.recoil';
 import { RecoilToken } from '@recoil/recoil.token';
+import useAsyncStorage from './storage/useAsyncStorage';
+import { StorageKeys } from './storage/keys';
 
 // let isRefreshing = false;
-const host = 'http://api-luckkids.kro.kr/api/v1';
+const host = 'https://api-luckkids.kro.kr/api/v1';
 const STATUS = {
   SUCCESS: 200,
   CREATED: 201,
@@ -24,6 +25,11 @@ export const useFetch = (args: {
   const [token, setToken] = useRecoilState(RecoilToken);
   const [isSuccess, setIsSuccess] = useState(false);
   const [resultData, setResultData] = useState<IResponse>();
+
+  const [_, setAccessToken] = useAsyncStorage<StorageKeys.AccessToken>(
+    StorageKeys.AccessToken,
+  );
+
   const onFetch = useCallback(
     (value?: IStringDictionary) => {
       // Use provided value or default to args.value
@@ -67,7 +73,11 @@ export const useFetch = (args: {
               accessToken: result.data.accessToken,
               refreshToken: result.data.refreshToken,
             });
-            accessTokenStorage.setItem(result.data.accessToken);
+            //3. asyncStorage에 엑세스 토큰 저장
+            setAccessToken({
+              accessToken: result.data.accessToken,
+              refreshToken: result.data.refreshToken,
+            });
           }
           if (result.statusCode === STATUS.SUCCESS) {
             //3. 결과가 200일경우 isSuccess 불리언값 참조 가능

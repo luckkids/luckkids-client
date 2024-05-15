@@ -16,8 +16,7 @@
       "@page/*": ["src/page/*"],
       "@frame/*": ["src/frame/*"],
       "@libs/*": ["src/libs/*"],
-      "@apis/*": ["src/apis/*"],
-      "@storage": ["src/storage/index"]
+      "@apis/*": ["src/apis/*"]
     },
     "types": ["styled-components-react-native"]
   },

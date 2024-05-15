@@ -1,4 +1,5 @@
 import API from './API';
+import { CharacterType } from '@types-common/character.types';
 
 export interface GetHomeInfoResponse {
   luckkidsAchievementRate: number;
@@ -12,7 +13,7 @@ export interface UserCharacterSummaryResponse {
 }
 
 export interface InProgressCharacter {
-  characterType: string;
+  characterType: CharacterType;
   level: number;
   characterProgressStatus: string;
 }

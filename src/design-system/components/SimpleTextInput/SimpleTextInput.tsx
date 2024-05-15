@@ -61,6 +61,7 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
               textAlign: 'center',
             },
           ])}
+          autoCorrect={false}
           placeholder={placeholder}
           onChangeText={handleChangeText}
           autoFocus={autoFocus}
