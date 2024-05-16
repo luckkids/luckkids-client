@@ -26,7 +26,7 @@ import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 
 const Stack = createNativeStackNavigator();
 
-const App: React.FC = () => {
+const RootNavigator = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
   const [initializing, setInitializing] = useState(true);
@@ -93,8 +93,6 @@ const App: React.FC = () => {
     }
   }, [rememberMe]);
 
-  console.log('initialRoute ====>', initialRoute);
-
   useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
   }, []);
@@ -139,13 +137,15 @@ const App: React.FC = () => {
   );
 };
 
-const AppProviders = () => (
+const WrappedRootNavigator = withGlobalComponents(RootNavigator);
+
+const App = () => (
   <GestureHandlerRootView style={{ flex: 1 }}>
     <QueryClientProvider>
       <SafeAreaProvider>
         <ThemeProvider theme={Colors}>
           <RecoilRoot>
-            <App />
+            <WrappedRootNavigator />
           </RecoilRoot>
         </ThemeProvider>
       </SafeAreaProvider>
@@ -153,4 +153,4 @@ const AppProviders = () => (
   </GestureHandlerRootView>
 );
 
-export default withGlobalComponents(AppProviders);
+export default App;

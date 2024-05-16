@@ -5,12 +5,7 @@ import LoadingIndicator from '@global-components/common/LoadingIndicator/Loading
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import Tooltip from '@global-components/common/Tooltip/Tooltip';
 
-/**
- * TODO(Gina)
- * export default withGlobalComponents(RootNavigator);
- */
-
-function withGlobalComponents(Component: () => JSX.Element) {
+function withGlobalComponents(Component: React.ComponentType) {
   return function () {
     return (
       <>

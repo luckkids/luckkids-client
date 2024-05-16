@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { getAccessToken } from '@utils'; // getAccessToken 함수를 임포트합니다.
+import { getAccessToken } from '@utils';
 
 export const API_BASE_URL = 'https://api-luckkids.kro.kr/api/v1';
 
