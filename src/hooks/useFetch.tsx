@@ -26,7 +26,7 @@ export const useFetch = (args: {
   const [isSuccess, setIsSuccess] = useState(false);
   const [resultData, setResultData] = useState<IResponse>();
 
-  const [_, setAccessToken] = useAsyncStorage<StorageKeys.AccessToken>(
+  const { setValue: setAccessToken } = useAsyncStorage<StorageKeys.AccessToken>(
     StorageKeys.AccessToken,
   );
 

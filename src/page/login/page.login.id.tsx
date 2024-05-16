@@ -7,16 +7,18 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
+import { LoginResponse, authApis } from '@apis/auth';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
-import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { StorageKeys } from '@hooks/storage/keys';
+import { SettingStatus } from '@types-index';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
@@ -37,9 +39,9 @@ export const PageLoginId: React.FC = () => {
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
 
   const [visiblityMode, setVisiblityMode] = useState(false);
-  const [rememberMe, setRememberMe] = useAsyncStorage<StorageKeys.RememberMe>(
-    StorageKeys.RememberMe,
-  );
+  const { storedValue: rememberMe, setValue: setRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+
   const handlePressForgotPassword = () => {
     Keyboard.dismiss();
     if (!loginInfo.email) {
@@ -55,17 +57,29 @@ export const PageLoginId: React.FC = () => {
     return sendTempPassword();
   };
 
-  const onSuccessCallback = () => {
+  const handleAfterLogin = (settingStatus: SettingStatus) => {
+    if (settingStatus === 'COMPLETE') {
+      return navigation.navigate('Home');
+    } else {
+      return navigation.navigate('TutorialStart');
+    }
+  };
+
+  const onSuccessCallback = (result: LoginResponse) => {
+    const { settingStatus } = result;
+
     Keyboard.dismiss();
+
+    // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
     if (!rememberMe) {
       BottomSheet.show({
         component: (
           <LoginRemember
             onClose={() => {
-              navigation.navigate('Home');
+              handleAfterLogin(settingStatus);
             }}
             onRemember={() => {
-              navigation.navigate('Home');
+              handleAfterLogin(settingStatus);
               setRememberMe({
                 email: loginInfo.email,
                 password: loginInfo.password,
@@ -76,8 +90,9 @@ export const PageLoginId: React.FC = () => {
           />
         ),
       });
+      // rememberMe 정보가 있으면 바로 홈으로 이동
     } else {
-      return navigation.navigate('Home');
+      return handleAfterLogin(settingStatus);
     }
   };
 
@@ -96,21 +111,21 @@ export const PageLoginId: React.FC = () => {
     });
   };
 
-  const { onFetch: login } = useFetch({
-    method: 'POST',
-    url: '/auth/login',
-    value: {
-      email: loginInfo.email,
-      password: loginInfo.password,
-      deviceId: deviceID,
-      pushKey: 'testPushKey',
-    },
-    onSuccessCallback,
-    onFailCallback,
-  });
-
-  const handleLogin = () => {
-    login();
+  const handleLogin = async () => {
+    await authApis
+      .login({
+        ...loginInfo,
+        deviceId: deviceID,
+        pushKey: 'testPushKey',
+      })
+      .then((res) => {
+        console.log(res);
+        onSuccessCallback(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        onFailCallback();
+      });
   };
 
   const { onFetch: sendTempPassword } = useFetch({

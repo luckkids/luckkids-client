@@ -51,7 +51,7 @@ const RootNavigator = () => {
     screenParams: undefined,
   });
 
-  const [rememberMe] = useAsyncStorage<StorageKeys.RememberMe>(
+  const { storedValue: rememberMe } = useAsyncStorage<StorageKeys.RememberMe>(
     StorageKeys.RememberMe,
   );
 

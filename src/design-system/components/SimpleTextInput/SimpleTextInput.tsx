@@ -62,6 +62,7 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
             },
           ])}
           autoCorrect={false}
+          spellCheck={false}
           placeholder={placeholder}
           onChangeText={handleChangeText}
           autoFocus={autoFocus}
