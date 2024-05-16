@@ -5,12 +5,9 @@ import {
   FullScreenLayout,
   createPopup,
 } from 'react-native-global-components';
-import { useTheme } from 'styled-components/native';
 import { L } from '@design-system';
 
 const LoadingIndicator = () => {
-  const theme = useTheme();
-
   return (
     <FullScreenLayout>
       <FullScreenOverlay />
@@ -19,7 +16,7 @@ const LoadingIndicator = () => {
         rounded={16}
         style={{ backgroundColor: 'black', opacity: 0.8 }}
       >
-        <ActivityIndicator size="large" color={theme.WHITE} />
+        <ActivityIndicator size="large" color={'white'} />
       </L.Row>
     </FullScreenLayout>
   );

@@ -2,7 +2,9 @@ import React from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Font, L, SvgIcon } from '@design-system';
+import { useHomeInfo } from '@queries';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { getCompletedCharacterCount } from '@utils';
 
 const HomeNavbar: React.FC = () => {
   const isNewAlarmExist = true;
@@ -11,6 +13,10 @@ const HomeNavbar: React.FC = () => {
   const handlePressAlarm = () => {
     navigation.navigate('HomeAlarm');
   };
+
+  const { data: homeInfo } = useHomeInfo();
+  const { userCharacterSummaryResponse } = homeInfo || {};
+  const { completedCharacterCount } = userCharacterSummaryResponse || {};
 
   const handlePressLuckKids = () => {};
 
@@ -35,7 +41,11 @@ const HomeNavbar: React.FC = () => {
         <TouchableWithoutFeedback onPress={handlePressLuckKids}>
           <L.Row items="center" g={8}>
             <SvgIcon name="iconHomeLuckkids" size={20} />
-            <Font type={'BODY_REGULAR'}>21</Font>
+            {completedCharacterCount && (
+              <Font type={'BODY_REGULAR'}>
+                {getCompletedCharacterCount(completedCharacterCount)}
+              </Font>
+            )}
           </L.Row>
         </TouchableWithoutFeedback>
         {/* 푸시 아이콘 */}

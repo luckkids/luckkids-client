@@ -4,6 +4,7 @@ import { LocaleConfig } from 'react-native-calendars';
 import { Font, L } from '@design-system';
 import { TouchableWithoutFeedback } from 'react-native';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useHomeInfo } from '@queries';
 
 LocaleConfig.locales.ko = {
   monthNames: [
@@ -53,6 +54,8 @@ const HomeWeekCalendar: React.FC = () => {
   const today = new Date();
   const weekDates = [];
   const koreanDays = ['일', '월', '화', '수', '목', '금', '토'];
+  const { data: homeInfo } = useHomeInfo();
+  const { missionOutcomeForWeekResponse } = homeInfo || {};
 
   const dayOfWeek = today.getDay();
 
@@ -79,6 +82,10 @@ const HomeWeekCalendar: React.FC = () => {
         {weekDates.map((item) => {
           const isToday = item.day === format(today, 'd');
           const isFuture = item.date > format(today, 'yyyy-MM-dd');
+          const isSucceedDate = !!missionOutcomeForWeekResponse?.calender.find(
+            (r) => r.missionDate === item.date,
+          )?.hasSucceed;
+
           return (
             <L.Col
               g={12.5}
@@ -102,9 +109,38 @@ const HomeWeekCalendar: React.FC = () => {
                   {item.text}
                 </Font>
               </L.Row>
-              <Font type="BODY_SEMIBOLD" color={isFuture ? 'WHITE' : 'BLACK'}>
-                {item.day}
-              </Font>
+              <L.Row
+                style={{
+                  position: 'relative',
+                }}
+                w={45}
+                h={45}
+              >
+                <L.Row
+                  bg={isSucceedDate ? 'WHITE' : 'TRANSPARENT'}
+                  w={'100%'}
+                  h={'100%'}
+                  rounded={22.5}
+                  items="center"
+                  justify="center"
+                  style={{
+                    opacity: isSucceedDate ? 0.25 : 1,
+                  }}
+                />
+                <L.Absolute
+                  w={'100%'}
+                  h={'100%'}
+                  items="center"
+                  justify="center"
+                >
+                  <Font
+                    type="BODY_SEMIBOLD"
+                    color={isFuture ? 'WHITE' : 'BLACK'}
+                  >
+                    {item.day}
+                  </Font>
+                </L.Absolute>
+              </L.Row>
             </L.Col>
           );
         })}

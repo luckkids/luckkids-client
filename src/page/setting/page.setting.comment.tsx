@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
+import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
-import { useFetch } from '@hooks/useFetch';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useFetch } from '@hooks/useFetch';
 
 export const PageSettingComment: React.FC = () => {
   const navigation = useNavigationService();
-  const [text, setText] = useState<string>('');
+
+  const { data: me } = useMe();
+  const { nickname } = me || {};
+
+  const [text, setText] = useState<string>(nickname || '');
+
   const { onFetch, isSuccess } = useFetch({
     method: 'PATCH',
     url: '/user/phrase',
@@ -42,9 +48,11 @@ export const PageSettingComment: React.FC = () => {
         <TextInputField
           text={text}
           onChangeText={setText}
-          placeholder="행운 문구"
+          placeholder={PHRASE_PLACEHOLDER}
         />
       </L.Row>
     </FrameLayout>
   );
 };
+
+const PHRASE_PLACEHOLDER = '당신의 행운의 한마디를 적어주세요!';

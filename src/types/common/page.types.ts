@@ -10,6 +10,11 @@ export type TCheck = 'CHECKED' | 'UNCHECKED';
 
 export type AppScreens = keyof AppScreensParamList;
 
+export type InitialRoute = {
+  screenName: AppScreens | undefined;
+  screenParams: AppScreensParamList[AppScreens] | undefined;
+};
+
 export type AppScreensParamList = {
   StoryTelling: undefined;
   Login: undefined;

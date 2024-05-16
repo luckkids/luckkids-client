@@ -38,6 +38,13 @@ import { IStackScreen } from '@types-common/page.types';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
+    name: 'Home',
+    component: BottomTabNavigator,
+    options: {
+      gestureEnabled: false,
+    },
+  },
+  {
     name: 'StoryTelling',
     component: PageStoryTelling,
   },
@@ -96,13 +103,6 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'CharacterName',
     component: PageCharacterName,
-  },
-  {
-    name: 'Home',
-    component: BottomTabNavigator,
-    options: {
-      gestureEnabled: false,
-    },
   },
   {
     name: 'HomeAlarm',

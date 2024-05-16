@@ -9,6 +9,8 @@ import {
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
+import { useHomeInfo } from '@queries';
+import { getCharacterImage, getLevelToolTipText } from '@utils';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
@@ -16,7 +18,6 @@ import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-// import { useHomeInfo } from '@queries';
 
 const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -27,6 +28,7 @@ const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
   const navigation = useNavigationService();
+
   const handleViewProfile = (e: GestureResponderEvent) => {
     navigation.navigate('HomeProfile');
   };
@@ -54,7 +56,10 @@ export const Home: React.FC = () => {
     }, 500);
   }, []);
 
-  // const { data: homeInfo } = useHomeInfo();
+  const { data: homeInfo } = useHomeInfo();
+  const { luckkidsAchievementRate = 0, userCharacterSummaryResponse } =
+    homeInfo || {};
+  const { inProgressCharacter } = userCharacterSummaryResponse || {};
 
   return (
     <>
@@ -66,13 +71,22 @@ export const Home: React.FC = () => {
         {/* 캘린더 */}
         <HomeWeekCalendar />
         {/* 캐릭터 메인 */}
-        <L.Col justify={'center'} items={'center'} mt={100}>
-          <L.Row
-            w={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-            h={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-            bg={'LUCK_GREEN'}
-          />
-        </L.Col>
+        <L.Row w="100%" justify="center">
+          {inProgressCharacter && (
+            <Image
+              source={{
+                uri: getCharacterImage(
+                  inProgressCharacter?.characterType,
+                  inProgressCharacter?.level,
+                ),
+              }}
+              style={{
+                width: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+                height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+              }}
+            />
+          )}
+        </L.Row>
         {/* 정보 */}
         <ScrollView
           style={{
@@ -120,7 +134,7 @@ export const Home: React.FC = () => {
                   <L.Col w={'100%'}>
                     <L.Row items="flex-end">
                       <Font type="LARGE_TITLE_BOLD" mr={4}>
-                        75
+                        {luckkidsAchievementRate}
                       </Font>
                       <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
                         %
@@ -131,14 +145,18 @@ export const Home: React.FC = () => {
                     </Font>
                   </L.Col>
                   <L.Absolute r={0} b={0}>
-                    <Tooltip text="한 단계 남았어요" />
+                    <Tooltip
+                      text={getLevelToolTipText(
+                        inProgressCharacter?.level || 0,
+                      )}
+                    />
                   </L.Absolute>
                 </L.Row>
                 <L.Row w="100%" mt={14}>
                   <L.Row>
                     <L.Col w={'100%'}>
                       <ProgressBar
-                        progress={0.5}
+                        progress={luckkidsAchievementRate}
                         height={14}
                         backgroundColor={'BLACK'}
                       />
@@ -178,7 +196,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .CLOUD
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -190,7 +211,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .STONE
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -202,7 +226,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .CLOVER
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -214,7 +241,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .SUN
+                        }
                       </Font>
                     </L.Col>
                     <L.Col g={13} items="center">
@@ -226,7 +256,10 @@ export const Home: React.FC = () => {
                         }}
                       />
                       <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                        13
+                        {
+                          userCharacterSummaryResponse?.completedCharacterCount
+                            .RABBIT
+                        }
                       </Font>
                     </L.Col>
                   </L.Row>
@@ -244,8 +277,4 @@ const SUCCESS_RATE_HEIGHT = 142;
 const GAP = 8;
 const LUCKKIDS_HEIGHT = 157;
 const INITIAL_HEIGHT_REDUCTION = 140;
-const PROFILE_VIEW_BUTTON_HEIGHT = 36;
-
-const LUCKKIDS_GAP = 23;
-
 const CHARACTER_MARGIN = 62;

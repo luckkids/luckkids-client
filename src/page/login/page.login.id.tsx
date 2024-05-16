@@ -1,11 +1,12 @@
-import React, { createElement, useCallback, useEffect, useState } from 'react';
+import React, { createElement, useEffect, useRef, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
-import { accessTokenStorage } from '@storage';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
@@ -14,11 +15,14 @@ import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { StorageKeys } from '@hooks/storage/keys';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
   const { bottom } = useSafeAreaInsets();
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
+  const emailInput$ = useRef(new Subject<string>()).current;
 
   const navigation = useNavigationService();
 
@@ -33,7 +37,9 @@ export const PageLoginId: React.FC = () => {
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
 
   const [visiblityMode, setVisiblityMode] = useState(false);
-
+  const [rememberMe, setRememberMe] = useAsyncStorage<StorageKeys.RememberMe>(
+    StorageKeys.RememberMe,
+  );
   const handlePressForgotPassword = () => {
     Keyboard.dismiss();
     if (!loginInfo.email) {
@@ -49,14 +55,24 @@ export const PageLoginId: React.FC = () => {
     return sendTempPassword();
   };
 
-  const onSuccessCallback = (newToken: string) => {
-    const token = accessTokenStorage.getItem();
-    if (!token) {
+  const onSuccessCallback = () => {
+    Keyboard.dismiss();
+    if (!rememberMe) {
       BottomSheet.show({
         component: (
           <LoginRemember
-            onClose={() => navigation.navigate('Home')}
-            tokenValue={newToken}
+            onClose={() => {
+              navigation.navigate('Home');
+            }}
+            onRemember={() => {
+              navigation.navigate('Home');
+              setRememberMe({
+                email: loginInfo.email,
+                password: loginInfo.password,
+                deviceId: deviceID,
+                pushKey: null,
+              });
+            }}
           />
         ),
       });
@@ -89,10 +105,7 @@ export const PageLoginId: React.FC = () => {
       deviceId: deviceID,
       pushKey: 'testPushKey',
     },
-    onSuccessCallback: (result: any) => {
-      console.log(93, result);
-      onSuccessCallback(String(result.accessToken));
-    },
+    onSuccessCallback,
     onFailCallback,
   });
 
@@ -119,7 +132,7 @@ export const PageLoginId: React.FC = () => {
     onFailCallback: () => {
       console.log('이메일 전송 실패');
       SnackBar.show({
-        title: `koyrkr@gmail.com 주소로\n비밀번호 재설정 이메일이 전송되었습니다.`,
+        title: `이메일 전송에 실패했습니다. 다시 시도해 주세요.`,
         position: 'bottom',
         width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
         rounded: 25,
@@ -131,13 +144,23 @@ export const PageLoginId: React.FC = () => {
   useAsyncEffect(async () => {
     const deviceId = await DeviceInfo.getUniqueId();
     setDeviceID(deviceId);
-    console.log('device', deviceId);
   }, []);
 
+  const handleEmailChange = (text: string) => {
+    setLoginInfo((prev) => ({ ...prev, email: text }));
+    emailInput$.next(text);
+  };
+
   useEffect(() => {
-    const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    setIsValidEmail(reg.test(loginInfo.email));
-  }, [loginInfo.email]);
+    const subscription = emailInput$
+      .pipe(debounceTime(500))
+      .subscribe((email) => {
+        const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        setIsValidEmail(reg.test(email));
+      });
+
+    return () => subscription.unsubscribe();
+  }, [emailInput$]);
 
   return (
     <FrameLayout>
@@ -148,9 +171,7 @@ export const PageLoginId: React.FC = () => {
             text={loginInfo.email}
             placeholder="이메일"
             keyboardType="email-address"
-            onChangeText={(text) =>
-              setLoginInfo((prev) => ({ ...prev, email: text }))
-            }
+            onChangeText={handleEmailChange}
             RightComponent={
               isValidEmail && <SvgIcon name={'validation_check'} size={20} />
             }
