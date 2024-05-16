@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import getUserQueryKey from './getUserQueryKey';
-import { userApis } from '@apis/user';
+import { GetMeResponse, userApis } from '@apis/user';
 
 export const useMe = () => {
-  return useQuery(
+  return useQuery<GetMeResponse>(
     getUserQueryKey('ME'),
     async () => {
       const res = await userApis.getMe();
-      return res;
+      return res.data;
     },
     {
       select: (response) => response,
