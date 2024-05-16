@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font, L, SvgIcon } from '@design-system';
@@ -24,7 +24,6 @@ const S = {
     height: 80,
     background: Colors.BG_TERTIARY,
     borderRadius: 12,
-    padding: 15,
   }),
   BadgeWrap: styled.View({
     width: 27,
@@ -44,11 +43,6 @@ interface IProps extends IGardenItem {
   isDimProfile?: boolean;
 }
 export const GardenHorizontalItem: React.FC<IProps> = (props) => {
-  const [img, setImg] = useState<string>('');
-  // const imgSrc = require(props.fileUrl);
-  useEffect(() => {
-    setImg(props.imageFileUrl);
-  }, []);
   return (
     <S.Container isSelf={props.isSelf}>
       <TouchableWithoutFeedback onPress={props.onPress}>
@@ -56,11 +50,15 @@ export const GardenHorizontalItem: React.FC<IProps> = (props) => {
           <L.Row>
             <S.Wrapper>
               <Image
-                source={require('assets/images/garden/charactor-lucky.png')}
+                source={
+                  !props.isDimProfile
+                    ? { uri: props.imageFileUrl }
+                    : require('assets/images/garden/garden-character-disabled.png')
+                }
                 style={{
                   width: '100%',
                   height: '100%',
-                  opacity: props.isDimProfile ? 0.3 : 1,
+                  opacity: !props.isDimProfile ? 1 : 0.3,
                 }}
               />
               {props.isSelf && (

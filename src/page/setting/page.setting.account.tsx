@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Font, L } from '@design-system';
+import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
@@ -57,7 +58,7 @@ export const PageSettingAccount: React.FC = () => {
     });
   }, [tempArray, index]);
   return (
-    <FrameLayout NavBar={`<StackNavBar title={'탈퇴하기'} useBackButton />`}>
+    <FrameLayout NavBar={<StackNavBar title={'탈퇴하기'} useBackButton />}>
       <L.Col>{accountListItem}</L.Col>
       <L.Col g={10} w={'100%'} ph={25}>
         <L.Row w={'100%'}>
@@ -78,7 +79,7 @@ export const PageSettingAccount: React.FC = () => {
             bgColor={'TRANSPARENT'}
             outline={'LUCK_GREEN'}
             textColor={'LUCK_GREEN'}
-            onPress={() => navigation.navigate('Setting')}
+            onPress={() => navigation.goBack()}
           />
         </L.Row>
       </L.Col>

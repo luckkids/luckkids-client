@@ -18,6 +18,13 @@ import iconCategoryWork from '../../assets/icons/icon-category-work.svg';
 import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
 import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
 
+import iconAddCategoryHealth from '../../assets/icons/icon-add-category-health.svg';
+import iconAddCategoryHouseKeeping from '../../assets/icons/icon-add-category-house-keeping.svg';
+import iconAddCategoryMineSet from '../../assets/icons/icon-add-category-mind-set.svg';
+import iconAddCategorySelfCare from '../../assets/icons/icon-add-category-self-care.svg';
+import iconAddCategorySelfDevelopment from '../../assets/icons/icon-add-category-self-development.svg';
+import iconAddCategoryWork from '../../assets/icons/icon-add-category-work.svg';
+
 import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
 import iconGardenOn from '../../assets/icons/icon-garden-on.svg';
@@ -37,6 +44,7 @@ import iconMindSet from '../../assets/icons/icon-mind-set-1.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
 import iconPlus from '../../assets/icons/icon-plus.svg';
+import iconPlusDark from '../../assets/icons/icon-plus-dark.svg';
 import iconSelfCare from '../../assets/icons/icon-self-care-1.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
@@ -82,6 +90,7 @@ export {
   iconSettingOn,
   iconSettingOff,
   iconPlus,
+  iconPlusDark,
   iconKakao,
   iconClip,
   iconGoogle,
@@ -112,6 +121,12 @@ export {
   iconCategorySelfCare,
   iconCategoryHouseKeeping,
   iconCategorySelfDevelopment,
+  iconAddCategoryHealth,
+  iconAddCategoryWork,
+  iconAddCategoryMineSet,
+  iconAddCategorySelfCare,
+  iconAddCategoryHouseKeeping,
+  iconAddCategorySelfDevelopment,
   iconCategoryAddOn,
   iconCategoryAddOff,
 };
