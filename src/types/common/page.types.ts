@@ -96,12 +96,13 @@ export interface IMissionListData {
   alertTime: string;
   id: number;
   missionDescription: string;
-  setCount?: Dispatch<number>;
 }
 
 export interface IGarden {
   myProfile: IGardenItem;
-  friendList: IGardenItem;
+  friendList: {
+    content: IGardenItem[];
+  };
 }
 
 export interface IGardenItem {

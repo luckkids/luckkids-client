@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Font, IconNames, L, SvgIcon } from '@design-system';
-import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
@@ -9,29 +9,32 @@ import { MisstionRepairItem } from '@components/page/mission/misstion.repair.ite
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
-import { IMissionDataItem, IMissionRepair } from '@types-common/page.types';
+import { IMissionDataItem } from '@types-common/page.types';
+
+interface IDataKey {
+  [key: string]: Array<IMissionDataItem>;
+}
 
 export const PageMissionRepair = () => {
-  const list = { ...DataDummyMissionRepair.data } as {
-    [key: string]: Array<IMissionDataItem>;
-  };
-  const [dataDicArray, setDataDicArray] = useState<Array<string>>(
-    Object.keys(list),
-  );
   const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
   const [current, setCurrent] = useState<number | null>(null);
   const [isRemove, setIsRemove] = useState<boolean>(false);
-  const [data, setData] = useState<IMissionRepair>();
+  const [listCategory, setListCategory] = useState<Array<string>>([]);
+  const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
+  const isFocus = useIsFocused();
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
     url: '/missions',
     value: {},
-    onSuccessCallback: setData,
+    onSuccessCallback: (rtn) => {
+      setListCategory(Object.keys(rtn));
+      setAllCategory(Object.keys(rtn));
+      setDataDicArray({ ...rtn });
+    },
   });
   useEffect(() => {
-    // onFetch();
-    setAllCategory(Object.keys(list));
+    if (isFocus) onFetch();
   }, [isSuccess]);
 
   const categoryButton = useCallback((key: string) => {
@@ -73,14 +76,13 @@ export const PageMissionRepair = () => {
         };
     }
   }, []);
-
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
         <ScrollView>
           <L.Row p={24}>
             <Font type={'TITLE2_BOLD'}>
-              행운의 습과을 선택하고 알림을 설정해 보세요!
+              행운의 습관을 선택하고 알림을 설정해 보세요!
             </Font>
           </L.Row>
           <L.Row ph={25} pv={15}>
@@ -100,12 +102,12 @@ export const PageMissionRepair = () => {
                         onPress={() => {
                           if (i === current && !isRemove) {
                             setIsRemove(true);
-                            setDataDicArray(allCategory);
+                            setListCategory(allCategory);
                             return;
                           }
                           setCurrent(i);
                           setIsRemove(false);
-                          setDataDicArray([item]);
+                          setListCategory([item]);
                         }}
                         key={i}
                       />
@@ -115,7 +117,7 @@ export const PageMissionRepair = () => {
               </ScrollView>
             )}
           </L.Row>
-          {dataDicArray.map((item, i) => {
+          {listCategory.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
@@ -127,11 +129,11 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {list[item].map((value, i) => {
+                {dataDicArray[item]?.map((value, i) => {
                   return (
                     <MisstionRepairItem
+                      {...value}
                       isCheck={value.alertStatus === 'CHECKED'}
-                      isSetAlarm={true}
                       key={i}
                     />
                   );

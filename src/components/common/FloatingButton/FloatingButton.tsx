@@ -10,7 +10,7 @@ import { Colors, Font } from '@design-system';
 
 interface FloatingButtonProps {
   containerStyle?: StyleProp<ViewStyle>;
-  text: string;
+  text?: string;
   children?: React.ReactNode;
   isBottomTabShown?: boolean;
   onPress: () => void;

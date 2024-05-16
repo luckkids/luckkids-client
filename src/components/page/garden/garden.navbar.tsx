@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Font, L, SvgIcon } from '@design-system';
-import { DataDummyGardenLeague } from '../../../data/dummy/data.dummy.garden.league';
 import Colors from '../../../design-system/colors';
 import { GardenLeagueItem } from '@components/page/garden/garden.league.item';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useFetch } from '@hooks/useFetch';
 import { IGardenLeagueItem } from '@types-common/page.types';
 
 const S = {
@@ -46,12 +46,15 @@ const S = {
 
 export const GardenNavbar = () => {
   const navigation = useNavigationService();
-  const data = DataDummyGardenLeague.data;
   const [showLeague, setShowLeague] = useState<boolean>(false);
   const [league, setLeague] = useState<Array<IGardenLeagueItem>>([]);
-  useEffect(() => {
-    setLeague(data);
-  }, []);
+  const { onFetch: onGardenLeague } = useFetch({
+    method: 'GET',
+    url: '/garden/league',
+    value: {},
+    onSuccessCallback: (rtn) => setLeague(rtn),
+  });
+
   return (
     <>
       <L.Row
@@ -72,6 +75,7 @@ export const GardenNavbar = () => {
           <TouchableWithoutFeedback
             onPress={() => {
               setShowLeague(!showLeague);
+              if (!showLeague) onGardenLeague();
             }}
           >
             <View>

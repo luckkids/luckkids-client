@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
 import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
@@ -24,6 +24,10 @@ export const PageSettingProfile: React.FC = () => {
       navigation.goBack();
     },
   });
+
+  useEffect(() => {
+    console.log(text);
+  }, [text]);
   return (
     <FrameLayout
       NavBar={
@@ -36,7 +40,10 @@ export const PageSettingProfile: React.FC = () => {
           />
           <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정하기</Font>
           <ButtonText
-            onPress={() => onFetch()}
+            onPress={() => {
+              console.log('texttext');
+              onFetch();
+            }}
             fontType={'HEADLINE_SEMIBOLD'}
             text={'저장'}
             textColor={'LUCK_GREEN'}

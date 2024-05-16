@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { Colors, Font, L } from '@design-system';
-import { IMissionListData } from '@types-common/page.types';
 import styled from 'styled-components/native';
+import { Colors, Font, L } from '@design-system';
 import { useFetch } from '@hooks/useFetch';
+import { IMissionListData } from '@types-common/page.types';
 
 const S = {
   item: styled.View({
@@ -34,28 +34,34 @@ const S = {
   }),
 };
 
-export const MissionItem: React.FC<IMissionListData> = (props) => {
+interface IProps extends IMissionListData {
+  prevCount: number;
+  setCount: Dispatch<number>;
+}
+
+export const MissionItem: React.FC<IProps> = (props) => {
   const [missionState, setMissionState] = useState(
     props.missionStatus === 'SUCCEED',
   );
-  const { onFetch: isSuccessCount, isSuccess: isSuccessCounterState } =
-    useFetch({
-      method: 'PATCH',
-      url: `/missionOutcomes/${props.id}`,
-      value: {
-        missionStatus: missionState ? 'SUCCEED' : 'FAILED',
-      },
-      onSuccessCallback: (rtn) => props.setCount(rtn),
-    });
-  const [isSucceed, setIsSucceed] = useState();
-  useEffect(() => {}, [props.missionStatus]);
+  const { onFetch: isSuccessCount } = useFetch({
+    method: 'PATCH',
+    url: `/missionOutcomes/${props.id}`,
+    value: {
+      missionStatus: missionState ? 'SUCCEED' : 'FAILED',
+    },
+    onSuccessCallback: () => {
+      if (missionState) {
+        props.setCount(props.prevCount + 1);
+      } else {
+        props.setCount(props.prevCount - 1);
+      }
+    },
+  });
+  useEffect(() => {
+    isSuccessCount();
+  }, [missionState]);
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setMissionState(!missionState);
-        isSuccessCount();
-      }}
-    >
+    <TouchableWithoutFeedback onPress={() => setMissionState(!missionState)}>
       <L.Row ph={25} pv={20} justify={'space-between'}>
         <S.Title>
           <S.iconRound>{missionState ? <S.dot /> : null}</S.iconRound>

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -6,10 +6,11 @@ import DateTimePicker, {
 import styled from 'styled-components/native';
 import { Button, Colors, Font, L, SvgIcon } from '@design-system';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import { useFetch } from '@hooks/useFetch';
+import { IMissionDataItem } from '@types-common/page.types';
 
-interface missionState {
+interface IProps extends IMissionDataItem {
   isCheck?: boolean;
-  isSetAlarm?: boolean;
 }
 
 const S = {
@@ -51,23 +52,42 @@ const S = {
     marginTop: 40,
   }),
 };
-export const MisstionRepairItem: React.FC<missionState> = ({
+export const MisstionRepairItem: React.FC<IProps> = ({
+  missionDescription,
+  id,
+  alertStatus,
+  alertTime,
+  missionType,
   isCheck,
-  isSetAlarm = false,
 }) => {
-  const [alarm, setAlarm] = useState(isSetAlarm);
   const [date, setDate] = useState(new Date(1598051730000));
-  const [isDisabled, setIsDisabled] = useState(false);
   const [rtnTime, setRtnTime] = useState('');
+  const [isChecked, setIsChecked] = useState<boolean>(Boolean(isCheck));
+  const { onFetch, isSuccess } = useFetch({
+    method: 'PATCH',
+    url: `/missions/${id}`,
+    value: {
+      missionType: missionType,
+      missionDescription: missionDescription,
+      alertStatus: isChecked ? 'CHECKED' : 'UNCHECKED',
+      alertTime: alertTime,
+    },
+  });
+
+  useEffect(() => {
+    if (Boolean(isCheck) !== isChecked) onFetch();
+  }, [isChecked]);
+  useEffect(() => {
+    setRtnTime(alertTime);
+  }, []);
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
 
     const tempDate = new Date(currentDate);
     const fTime = `${
-      tempDate.getHours() < 12 ? '오전' : '오후'
-    } ${tempDate.getHours()}${tempDate.getMinutes()}`;
-    console.log('time =======>', tempDate);
+      tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
+    }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
     setRtnTime(fTime);
   };
   const onTimePicker = useCallback(() => {
@@ -77,17 +97,17 @@ export const MisstionRepairItem: React.FC<missionState> = ({
           <Font type={'HEADLINE_SEMIBOLD'} style={{ marginBottom: 10 }}>
             알람 시간을 변경할 수 있어요
           </Font>
-          <TouchableWithoutFeedback onPress={() => setIsDisabled(!isDisabled)}>
+          <TouchableWithoutFeedback onPress={() => setIsChecked(false)}>
             <S.disabledButton>
               <Font
                 type={'BODY_REGULAR'}
-                color={isDisabled ? 'GREY1' : 'WHITE'}
+                color={!isChecked ? 'GREY1' : 'WHITE'}
               >
                 알림끄기
               </Font>
               <L.Row ml={12}>
                 <SvgIcon
-                  name={isDisabled ? 'iconCheckAlarmOff' : 'iconCheckAlarmOn'}
+                  name={!isChecked ? 'iconCheckAlarmOff' : 'iconCheckAlarmOn'}
                   size={10}
                 />
               </L.Row>
@@ -101,7 +121,7 @@ export const MisstionRepairItem: React.FC<missionState> = ({
             mode={'time'}
             onChange={onChange}
             textColor={Colors.WHITE}
-            disabled={isDisabled}
+            disabled={!isChecked}
           />
           <S.buttonWrap>
             <Button
@@ -114,22 +134,23 @@ export const MisstionRepairItem: React.FC<missionState> = ({
         </S.popupWrap>
       ),
     });
-  }, [isDisabled]);
+  }, [isChecked]);
+
   return (
     <L.Row ph={25} pv={15} items={'center'} justify={'space-between'}>
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'}>
           <Font type={'HEADLINE_SEMIBOLD'} color={'WHITE'}>
-            자전거타기
+            {missionDescription}
           </Font>
           <TouchableWithoutFeedback onPress={() => onTimePicker()}>
-            {alarm ? (
+            {isChecked ? (
               <Font
                 type={'FOOTNOTE_REGULAR'}
                 color={'GREY1'}
                 style={{ marginLeft: 13 }}
               >
-                aaab {rtnTime}
+                {rtnTime}
               </Font>
             ) : (
               <Font
@@ -142,9 +163,14 @@ export const MisstionRepairItem: React.FC<missionState> = ({
             )}
           </TouchableWithoutFeedback>
         </L.Row>
-        <View>
-          <SvgIcon name={isCheck ? 'lucky_check' : 'lucky_uncheck'} size={30} />
-        </View>
+        <TouchableWithoutFeedback onPress={() => setIsChecked(!isChecked)}>
+          <View>
+            <SvgIcon
+              name={isChecked ? 'lucky_check' : 'lucky_uncheck'}
+              size={30}
+            />
+          </View>
+        </TouchableWithoutFeedback>
       </L.Row>
     </L.Row>
   );

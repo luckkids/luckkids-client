@@ -1,4 +1,4 @@
-const PretendardFont = {
+export const PretendardFont = {
   Black: 'Pretendard-Black',
   Bold: 'Pretendard-Bold',
   Medium: 'Pretendard-Medium',
