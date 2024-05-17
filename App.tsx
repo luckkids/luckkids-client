@@ -23,6 +23,7 @@ import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
+import CodePush from 'react-native-code-push';
 
 const Stack = createNativeStackNavigator();
 
@@ -153,4 +154,15 @@ const App = () => (
   </GestureHandlerRootView>
 );
 
-export default App;
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+  updateDialog: {
+    title: '업데이트 필요',
+    mandatoryUpdateMessage:
+      '새 버전이 출시되었습니다. 앱을 업데이트해야 합니다.',
+    mandatoryContinueButtonLabel: '업데이트',
+  },
+  installMode: CodePush.InstallMode.IMMEDIATE,
+};
+
+export default CodePush(codePushOptions)(App);

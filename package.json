@@ -34,6 +34,7 @@
     "react-native-asset": "2.1.1",
     "react-native-bootsplash": "5.0.4",
     "react-native-calendars": "1.1303.0",
+    "react-native-code-push": "^8.2.2",
     "react-native-device-info": "^10.11.0",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "2.13.2",
