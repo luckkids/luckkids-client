@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { interval, take } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
-import { Button, Font, L, SimpleTextInput } from '@design-system';
+import { Button, Font, L, SimpleTextInput, SvgIcon } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { getCharacterImage, saveImage, shareImage } from '@utils';
 
 const bgImage = require('assets/images/tutorial-setting-bg.png');
 
@@ -23,6 +24,20 @@ export const PageTutorialSettingCharacter: React.FC = () => {
 
   const handleNext = () => {
     setStep((prev) => prev + 1);
+  };
+
+  // save image
+  const handleSaveImage = () => {
+    return saveImage(getCharacterImage('CLOUD', 1));
+  };
+
+  const handleShareProfile = (imageUrl: string) => {
+    //TODO fix this
+    shareImage({
+      title: '럭키즈 프로필 공유',
+      message: '행운럭키',
+      imageUrl: imageUrl,
+    });
   };
 
   useEffect(() => {
@@ -107,6 +122,17 @@ export const PageTutorialSettingCharacter: React.FC = () => {
       case 3:
         return (
           <>
+            <L.Row>
+              <Image
+                source={{
+                  uri: getCharacterImage('CLOUD', 1),
+                }}
+                style={{
+                  width: SCREEN_WIDTH - 120,
+                  height: SCREEN_WIDTH - 120,
+                }}
+              />
+            </L.Row>
             <Font
               textAlign="center"
               type={'TITLE2_BOLD'}
@@ -126,7 +152,52 @@ export const PageTutorialSettingCharacter: React.FC = () => {
                 '아직 새싹 단계예요. 습관을 수행하여\n행운을 가져다 줄 클로버를 키워보세요!'
               }
             </Font>
-            {/* TODO(Gina): 버튼 추가 필요 */}
+            <L.Row g={8}>
+              {/* 이미지 저장 */}
+              <TouchableWithoutFeedback onPress={handleSaveImage}>
+                <L.Col
+                  bg="BLACK"
+                  style={{
+                    opacity: 0.5,
+                  }}
+                  flex-1
+                  ph={46}
+                  pv={15}
+                  items="center"
+                  rounded={15}
+                  g={10}
+                >
+                  <SvgIcon name="icon_download_green" size={20} />
+                  <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
+                    이미지 저장
+                  </Font>
+                </L.Col>
+              </TouchableWithoutFeedback>
+              {/* 프로필 공유  */}
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  handleShareProfile(getCharacterImage('CLOUD', 1));
+                }}
+              >
+                <L.Col
+                  bg="BLACK"
+                  style={{
+                    opacity: 0.5,
+                  }}
+                  flex-1
+                  ph={46}
+                  pv={15}
+                  items="center"
+                  rounded={15}
+                  g={10}
+                >
+                  <SvgIcon name="icon_share_green" size={20} />
+                  <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
+                    프로필 공유
+                  </Font>
+                </L.Col>
+              </TouchableWithoutFeedback>
+            </L.Row>
           </>
         );
       default:

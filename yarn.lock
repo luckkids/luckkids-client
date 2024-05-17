@@ -1599,6 +1599,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-camera-roll/camera-roll@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@react-native-camera-roll/camera-roll/-/camera-roll-7.7.0.tgz#f004cf9eadb22423110bff6fc94e8653d3f510b6"
+  integrity sha512-dtnH9xdJ4GMj5lSiYF0XzxqabaWiTEhJxQ90vHn6l8N+LarNXlUegXSypThL3yygS28nc9+zqGSdX28wZ5KY9A==
+
 "@react-native-clipboard/clipboard@^1.13.2":
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.14.1.tgz#835f82fc86881a0808a8405f2576617bb5383554"
@@ -7349,6 +7354,11 @@ react-native-screens@^3.25.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-share@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-10.2.1.tgz#baf94848c2acee6e52f6b28e05c47fa5fa9402be"
+  integrity sha512-Z2LWGYWH7raM4H6Oauttv1tEhaB43XSWJAN8iS6oaSG9CnyrUBeYFF4QpU1AH5RgNeylXQdN8CtbizCHHt6coQ==
 
 react-native-svg-transformer@^0.14.3:
   version "0.14.3"
