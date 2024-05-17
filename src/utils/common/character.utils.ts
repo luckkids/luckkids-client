@@ -1,5 +1,5 @@
-import { CompletedCharacterCount } from '@apis/home';
 import { CLOUD_FRONT_PREFIX } from './image.utils';
+import { CompletedCharacterCount } from '@apis/home';
 import { CharacterType } from '@types-common/character.types';
 
 export const getCharacterImage = (

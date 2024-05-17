@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import LottieView from 'lottie-react-native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
@@ -48,6 +50,17 @@ export const PageTutorialGuide: React.FC = () => {
               {TUTORIAL_GUIDE_CONTENTS[step].description}
             </Font>
           )}
+          <L.Row w={'100%'} justify="center" mt={50}>
+            <LottieView
+              source={TUTORIAL_GUIDE_CONTENTS[step].lottieFile}
+              autoPlay
+              loop
+              style={{
+                width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+              }}
+            />
+          </L.Row>
         </L.Col>
         <Button
           type={'action'}
@@ -62,18 +75,17 @@ export const PageTutorialGuide: React.FC = () => {
   );
 };
 
-// TODO(gina) TBU
 const TUTORIAL_GUIDE_CONTENTS = [
   {
-    title: '먼저 럭키즈 캐릭터를 만나요.',
+    title: '먼저 럭키즈 캐릭터를 설정해요.',
     description: '캐릭터 닉네임도 붙여줄 거예요!',
     buttonText: '그 다음은요?',
-    lottieFile: '',
+    lottieFile: require(`../../../assets/lotties/tutorial-guide-2.json`), //FIXME
   },
   {
     title: '행운을 키워줄 습관과\n습관 알림 시간을 세팅해요.',
     buttonText: '습관을 수행하면요?',
-    lottieFile: 'tutorial-guide-mission-1.json',
+    lottieFile: require(`../../../assets/lotties/tutorial-guide-2.json`),
   },
   {
     title:
@@ -81,6 +93,6 @@ const TUTORIAL_GUIDE_CONTENTS = [
     description:
       '100점이 완성되면 캐릭터 성장 완료! 100점\n이후에는 캐릭터를 다시 0점부터 키울 수 있어요.',
     buttonText: '이제 시작할래요',
-    lottieFile: 'tutorial-guide-mission-2.json',
+    lottieFile: require(`../../../assets/lotties/tutorial-guide-2.json`), //FIXME
   },
 ];

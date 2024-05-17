@@ -25,7 +25,6 @@ module.exports = {
           '@page': './src/page',
           '@frame': './src/frame',
           '@libs': './src/libs',
-          assets: './assets',
           '@apis': './src/apis',
         },
       },

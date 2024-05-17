@@ -17,7 +17,6 @@ export const PageTutorialSettingCharacter: React.FC = () => {
   const [nickname, setNickname] = useState('');
 
   const handleConfirm = () => {
-    // FIXME 원래는 TutorialSettingMission로 가야하나 임시로 TutorialSettingNoti
     navigation.navigate('TutorialSettingNoti');
     return;
   };
