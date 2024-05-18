@@ -7,6 +7,7 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BootSplash from 'react-native-bootsplash';
+import CodePush from 'react-native-code-push';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RecoilRoot } from 'recoil';
@@ -153,4 +154,15 @@ const App = () => (
   </GestureHandlerRootView>
 );
 
-export default App;
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
+  updateDialog: {
+    title: '업데이트 필요',
+    mandatoryUpdateMessage:
+      '새 버전이 출시되었습니다. 앱을 업데이트해야 합니다.',
+    mandatoryContinueButtonLabel: '업데이트',
+  },
+  installMode: CodePush.InstallMode.IMMEDIATE,
+};
+
+export default CodePush(codePushOptions)(App);
