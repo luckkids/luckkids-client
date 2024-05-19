@@ -1,4 +1,3 @@
-import Share from 'react-native-share';
 import { CLOUD_FRONT_PREFIX } from './image.utils';
 import { CompletedCharacterCount } from '@apis/home';
 import { CharacterType } from '@types-common/character.types';
@@ -34,20 +33,4 @@ export const getCompletedCharacterCount = (
 ) => {
   const { RABBIT, SUN, STONE, CLOVER, CLOUD } = completedCharacterCount;
   return RABBIT + SUN + STONE + CLOVER + CLOUD;
-};
-
-export const shareProfile = ({
-  title,
-  message,
-  imageUrl,
-}: {
-  title: string;
-  message: string;
-  imageUrl: string;
-}) => {
-  return Share.open({
-    title,
-    message,
-    url: imageUrl,
-  });
 };

@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo, useMe } from '@queries';
-import { getCharacterImage, shareProfile } from '@utils';
+import { getCharacterImage } from '@utils';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -31,14 +31,6 @@ export const PageHomeProfile: React.FC = () => {
   const handleShareProfile = () => {
     //TODO
     if (!inProgressCharacter) return;
-    shareProfile({
-      title: '공유한다 공유한다',
-      message: luckPhrase || PHRASE_PLACEHOLDER,
-      imageUrl: getCharacterImage(
-        inProgressCharacter.characterType,
-        inProgressCharacter.level,
-      ),
-    });
   };
 
   return (
