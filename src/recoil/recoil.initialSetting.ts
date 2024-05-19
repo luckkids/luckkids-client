@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 import { IInitialSetting } from '../types/recoil/types.recoil';
 
 export const RecoilInitialSetting = atom<IInitialSetting>({
-  key: 'recoil-token',
+  key: 'recoil-initial-setting',
   default: {
     missions: [],
     alertSetting: {
