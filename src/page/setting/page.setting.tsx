@@ -11,6 +11,8 @@ import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { useFetch } from '@hooks/useFetch';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { useResetRecoilState } from 'recoil';
+import { RecoilToken } from '@recoil/recoil.token';
 
 const S = {
   Wrap: styled.View({
@@ -32,7 +34,7 @@ export const PageSetting: React.FC = () => {
 
   const { removeValue: removeAccessToken } =
     useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
-
+  const resetAccessToken = useResetRecoilState(RecoilToken);
   const { getToken } = useFirebaseMessage();
   const { onFetch } = useFetch({
     method: 'GET',
@@ -53,6 +55,8 @@ export const PageSetting: React.FC = () => {
     removeRememberMe();
     // delete token
     removeAccessToken();
+    resetAccessToken();
+
     // go to login page
     return navigation.navigate('Login');
   };

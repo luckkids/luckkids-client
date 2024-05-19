@@ -11,8 +11,10 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 
+const tutorialSettingCharacterCompleteImage = require('assets/images/tutorial-setting-character-complete.png');
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
+const tutorialSettingCharacterImage = require('assets/images/tutorial-setting-character.png');
 
 export const PageTutorialSettingCharacter: React.FC = () => {
   const navigation = useNavigationService();
@@ -42,21 +44,8 @@ export const PageTutorialSettingCharacter: React.FC = () => {
     setStep((prev) => prev + 1);
   };
 
-  // save image
-  const handleSaveImage = () => {
-    return saveImage(getCharacterImage('CLOUD', 1));
-  };
-
-  const handleShareProfile = (imageUrl: string) => {
-    shareImage({
-      title: '럭키즈 프로필 공유',
-      message: '행운럭키',
-      imageUrl: imageUrl,
-    });
-  };
-
   useEffect(() => {
-    if (step === 3 || step === 2) return;
+    if (step !== 1) return;
     const subscription = interval(3000)
       .pipe(take(1))
       .subscribe(() => {
@@ -81,6 +70,25 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             >
               {'함께 키워가게 될\n어떤 럭키즈가 기다릴까?'}
             </Font>
+            <Font
+              textAlign="center"
+              type={'BODY_SEMIBOLD'}
+              color={'WHITE'}
+              mt={20}
+            >
+              {'슬라임을 눌러 럭키즈를 받아보세요'}
+            </Font>
+            <TouchableWithoutFeedback onPress={handleNext}>
+              <L.Row h={'100%'} flex-1 items="center">
+                <Image
+                  source={tutorialSettingCharacterImage}
+                  style={{
+                    width: 60,
+                    height: 130,
+                  }}
+                />
+              </L.Row>
+            </TouchableWithoutFeedback>
           </>
         );
       case 1:
@@ -89,6 +97,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             <Font textAlign="left" type={'TITLE1_BOLD'} color={'WHITE'} mt={76}>
               {'두근두근,\n럭키즈가 탄생하고 있어요!'}
             </Font>
+            {/* Lottie 추가 */}
           </>
         );
       case 2:
@@ -127,12 +136,10 @@ export const PageTutorialSettingCharacter: React.FC = () => {
           <>
             <L.Row>
               <Image
-                source={{
-                  uri: getCharacterImage('CLOUD', 1),
-                }}
+                source={tutorialSettingCharacterCompleteImage}
                 style={{
-                  width: SCREEN_WIDTH - 120,
-                  height: SCREEN_WIDTH - 120,
+                  width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                  height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
                 }}
               />
             </L.Row>
@@ -155,52 +162,6 @@ export const PageTutorialSettingCharacter: React.FC = () => {
                 '과연 어떤 럭키즈로 커갈까요?\n꾸준히 습관을 수행하며 럭키즈를 키워보세요.'
               }
             </Font>
-            <L.Row g={8} mt={50}>
-              {/* 이미지 저장 */}
-              <TouchableWithoutFeedback onPress={handleSaveImage}>
-                <L.Col
-                  bg="BLACK"
-                  style={{
-                    opacity: 0.5,
-                  }}
-                  flex-1
-                  ph={46}
-                  pv={15}
-                  items="center"
-                  rounded={15}
-                  g={10}
-                >
-                  <SvgIcon name="icon_download_green" size={20} />
-                  <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                    이미지 저장
-                  </Font>
-                </L.Col>
-              </TouchableWithoutFeedback>
-              {/* 프로필 공유  */}
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  handleShareProfile(getCharacterImage('CLOUD', 1));
-                }}
-              >
-                <L.Col
-                  bg="BLACK"
-                  style={{
-                    opacity: 0.5,
-                  }}
-                  flex-1
-                  ph={46}
-                  pv={15}
-                  items="center"
-                  rounded={15}
-                  g={10}
-                >
-                  <SvgIcon name="icon_share_green" size={20} />
-                  <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                    프로필 공유
-                  </Font>
-                </L.Col>
-              </TouchableWithoutFeedback>
-            </L.Row>
           </>
         );
       default:

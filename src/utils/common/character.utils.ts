@@ -10,8 +10,8 @@ export const getCharacterImage = (
   const paddedLevel = level.toString().padStart(2, '0');
 
   return level === 1
-    ? `${CLOUD_FRONT_PREFIX}/01_first.png`
-    : `${CLOUD_FRONT_PREFIX}/${paddedLevel}_${characterType.toLowerCase()}.png`;
+    ? `${CLOUD_FRONT_PREFIX}/characters/01_first.png`
+    : `${CLOUD_FRONT_PREFIX}/characters/${paddedLevel}_${characterType.toLowerCase()}.png`;
 };
 
 export const getLevelToolTipText = (currentLevel: number) => {

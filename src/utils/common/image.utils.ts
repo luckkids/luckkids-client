@@ -1,5 +1,5 @@
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
-import Share from 'react-native-share';
+import { Share } from 'react-native';
 
 export const CLOUD_FRONT_PREFIX = 'https://d1i0as5mndfs61.cloudfront.net';
 
@@ -17,9 +17,5 @@ export const shareImage = ({
   message: string;
   imageUrl: string;
 }) => {
-  return Share.open({
-    title,
-    message,
-    url: imageUrl,
-  });
+  // TBU (아직 기획이 정해지지 않아서 보류)
 };
