@@ -1,21 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
-import { Font, IconNames, L, SvgIcon } from '@design-system';
-import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilState } from 'recoil';
+import { DEFAULT_MARGIN } from '@constants';
+import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
+import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
 }
 
-export const PageMissionRepair = () => {
+type PageMissionRepairProps = {
+  type: 'INITIAL_SETTING' | 'MISSION_REPAIR';
+};
+
+export const PageMissionRepair = ({ type }: PageMissionRepairProps) => {
   const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
   const [current, setCurrent] = useState<number | null>(null);
@@ -23,6 +31,10 @@ export const PageMissionRepair = () => {
   const [listCategory, setListCategory] = useState<Array<string>>([]);
   const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
   const isFocus = useIsFocused();
+  const { bottom } = useSafeAreaInsets();
+  const [initialSetting, setInitialSetting] =
+    useRecoilState(RecoilInitialSetting);
+
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
     url: '/missions',
@@ -36,6 +48,18 @@ export const PageMissionRepair = () => {
   useEffect(() => {
     if (isFocus) onFetch();
   }, [isSuccess]);
+
+  const handleConfirm = () => {
+    if (type === 'INITIAL_SETTING') {
+      setInitialSetting({
+        ...initialSetting,
+        missions: [],
+      });
+      return navigation.navigate('TutorialSettingNoti');
+    } else {
+      // TODO (gil)
+    }
+  };
 
   const categoryButton = useCallback((key: string) => {
     switch (key) {
@@ -142,11 +166,23 @@ export const PageMissionRepair = () => {
             );
           })}
         </ScrollView>
+        <L.Absolute b={bottom} w={SCREEN_WIDTH}>
+          <L.Row ph={DEFAULT_MARGIN}>
+            <Button
+              type={'action'}
+              text={'선택 완료'}
+              onPress={handleConfirm}
+              sizing="stretch"
+              textColor="BLACK"
+              bgColor={'LUCK_GREEN'}
+            />
+          </L.Row>
+        </L.Absolute>
       </FrameLayout>
-      <FloatingButton
+      {/* <FloatingButton
         text={'홈(임시버튼)'}
         onPress={() => navigation.navigate('Home')}
-      />
+      /> */}
     </>
   );
 };

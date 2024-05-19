@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
+import { userApis } from '@apis/user';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 
 //TODO Fix bg image
 const bgImage = require('assets/images/tutorial-setting-bg.png');
@@ -15,30 +19,60 @@ const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
 
 export const PageTutorialSettingNoti: React.FC = () => {
   const navigation = useNavigationService();
-  const [step, setStep] = useState(0);
   const { bottom } = useSafeAreaInsets();
+  const [initialSetting, setInitialSetting] =
+    useRecoilState(RecoilInitialSetting);
 
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
   const handleTurnOnNoti = async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
     console.log('hasPermission', await hasPermission());
     if (await hasPermission()) {
       AlertPopup.show({
         body: '이미 알림이 허용되어 있어요!',
         yesText: '확인',
         onPressYes: () => {
+          setInitialSetting({
+            ...initialSetting,
+            alertSetting: {
+              deviceId,
+              alertStatus: 'CHECKED',
+            },
+          });
           navigation.navigate('Home');
         },
       });
     } else {
       requestPermissionIfNot().then(() => {
+        setInitialSetting({
+          ...initialSetting,
+          alertSetting: {
+            deviceId,
+            alertStatus: 'UNCHECKED',
+          },
+        });
         navigation.navigate('Home');
       });
     }
   };
 
-  const handleKeepGoing = () => {
-    navigation.navigate('Home');
+  const handleKeepGoing = async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    setInitialSetting({
+      ...initialSetting,
+      alertSetting: {
+        deviceId,
+        alertStatus: 'UNCHECKED',
+      },
+    });
+
+    // 초기 설정 저장
+    await userApis.setInitialSetting({
+      ...initialSetting,
+    });
+
+    return navigation.navigate('Home');
   };
 
   return (

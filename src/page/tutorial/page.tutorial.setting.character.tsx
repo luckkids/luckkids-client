@@ -5,24 +5,41 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { interval, take } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SimpleTextInput, SvgIcon } from '@design-system';
+import { getCharacterImage, saveImage, shareImage } from '@utils';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { getCharacterImage, saveImage, shareImage } from '@utils';
+import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
+import { useRecoilState } from 'recoil';
 
-const bgImage = require('assets/images/tutorial-setting-bg.png');
+const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
+const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
 
 export const PageTutorialSettingCharacter: React.FC = () => {
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
+  const [initialSetting, setInitialSetting] =
+    useRecoilState(RecoilInitialSetting);
 
   const handleConfirm = () => {
-    navigation.navigate('TutorialSettingNoti');
+    navigation.navigate('MissionRepair', {
+      type: 'INITIAL_SETTING',
+    });
     return;
   };
 
   const handleNext = () => {
+    if (step === 2) {
+      // nickname 저장
+      setInitialSetting({
+        ...initialSetting,
+        character: {
+          id: 1,
+          nickName: nickname,
+        },
+      });
+    }
     setStep((prev) => prev + 1);
   };
 
@@ -32,7 +49,6 @@ export const PageTutorialSettingCharacter: React.FC = () => {
   };
 
   const handleShareProfile = (imageUrl: string) => {
-    //TODO fix this
     shareImage({
       title: '럭키즈 프로필 공유',
       message: '행운럭키',
@@ -41,7 +57,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
   };
 
   useEffect(() => {
-    if (step !== 1) return;
+    if (step === 3 || step === 2) return;
     const subscription = interval(3000)
       .pipe(take(1))
       .subscribe(() => {
@@ -66,18 +82,6 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             >
               {'함께 키워가게 될\n어떤 럭키즈가 기다릴까?'}
             </Font>
-            <Font
-              textAlign="center"
-              type={'BODY_REGULAR'}
-              color={'GREY0'}
-              mt={20}
-            >
-              슬라임을 눌러 럭키즈를 받아보세요
-            </Font>
-            {/* TODO LOTTIE */}
-            <TouchableWithoutFeedback onPress={handleNext}>
-              <L.Row w={200} h={200} mt={100} bg="WHITE" />
-            </TouchableWithoutFeedback>
           </>
         );
       case 1:
@@ -137,9 +141,9 @@ export const PageTutorialSettingCharacter: React.FC = () => {
               textAlign="center"
               type={'TITLE2_BOLD'}
               color={'WHITE'}
-              mt={76}
+              mt={30}
             >
-              {'짠, 아직 새싹'}
+              {'럭키즈 탄생을 축하해요!'}
             </Font>
             <Font
               textAlign="center"
@@ -149,10 +153,10 @@ export const PageTutorialSettingCharacter: React.FC = () => {
               mb={40}
             >
               {
-                '아직 새싹 단계예요. 습관을 수행하여\n행운을 가져다 줄 클로버를 키워보세요!'
+                '과연 어떤 럭키즈로 커갈까요?\n꾸준히 습관을 수행하며 럭키즈를 키워보세요.'
               }
             </Font>
-            <L.Row g={8}>
+            <L.Row g={8} mt={50}>
               {/* 이미지 저장 */}
               <TouchableWithoutFeedback onPress={handleSaveImage}>
                 <L.Col
@@ -207,8 +211,10 @@ export const PageTutorialSettingCharacter: React.FC = () => {
 
   return (
     <FrameLayout
-      statusBarColor={'TUTORIAL_SETTING_BG'}
-      backgroundImage={bgImage}
+      statusBarColor={step === 3 ? 'TUTORIAL_GUIDE_BG' : 'TUTORIAL_SETTING_BG'}
+      backgroundImage={
+        step === 3 ? tutorialGuideBgImage : tutorialSettingBgImage
+      }
     >
       <L.Col
         w="100%"

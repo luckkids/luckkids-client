@@ -1,3 +1,5 @@
+import { InitialSetting } from '../user';
+
 export interface ILogin {
   accessToken: string;
   refreshToken: string;
@@ -15,3 +17,5 @@ export interface IJoinInfo {
   email: string;
   password: string;
 }
+
+export interface IInitialSetting extends InitialSetting {}
