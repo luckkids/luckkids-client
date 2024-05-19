@@ -7,10 +7,22 @@ module.exports = {
         extensions: ['.svg'],
       },
     ],
+    ['@babel/plugin-proposal-export-namespace-from'],
     [
       'module-resolver',
       {
         root: ['./'],
+        extensions: [
+          '.ios.ts',
+          '.android.ts',
+          '.ts',
+          '.ios.tsx',
+          '.android.tsx',
+          '.tsx',
+          '.jsx',
+          '.js',
+          '.json',
+        ],
         alias: {
           '@components': './src/components',
           '@constants': './src/constants',
@@ -26,6 +38,7 @@ module.exports = {
           '@frame': './src/frame',
           '@libs': './src/libs',
           '@apis': './src/apis',
+          '@assets': './src/assets',
         },
       },
     ],

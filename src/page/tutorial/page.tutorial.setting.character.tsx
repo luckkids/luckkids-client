@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import LottieView from 'lottie-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { interval, take } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
-import { Button, Font, L, SimpleTextInput, SvgIcon } from '@design-system';
-import { getCharacterImage, saveImage, shareImage } from '@utils';
+import { Button, Font, L, SimpleTextInput } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 
-const tutorialSettingCharacterCompleteImage = require('assets/images/tutorial-setting-character-complete.png');
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
+const tutorialSettingCharacterCompleteImage = require('assets/images/tutorial-setting-character-complete.png');
 const tutorialSettingCharacterImage = require('assets/images/tutorial-setting-character.png');
 
 export const PageTutorialSettingCharacter: React.FC = () => {
@@ -97,7 +97,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             <Font textAlign="left" type={'TITLE1_BOLD'} color={'WHITE'} mt={76}>
               {'두근두근,\n럭키즈가 탄생하고 있어요!'}
             </Font>
-            {/* Lottie 추가 */}
+            {/* TODO(Gina): lottie 추가 */}
           </>
         );
       case 2:

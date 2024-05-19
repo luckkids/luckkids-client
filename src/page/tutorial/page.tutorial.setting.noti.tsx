@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
@@ -13,14 +12,13 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
+import { InitialSetting, InitialSettingAlertStatus } from '@types-index';
 
-//TODO Fix bg image
 const bgImage = require('assets/images/tutorial-setting-bg.png');
 const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
 
 export const PageTutorialSettingNoti: React.FC = () => {
   const navigation = useNavigationService();
-  const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
     useRecoilState(RecoilInitialSetting);
   const [deviceId, setDeviceId] = useState('');
@@ -59,21 +57,26 @@ export const PageTutorialSettingNoti: React.FC = () => {
   };
 
   const handleKeepGoing = () => {
-    console.log(deviceId);
-    setInitialSetting({
-      ...initialSetting,
-      alertSetting: {
-        deviceId,
-        alertStatus: 'UNCHECKED',
-      },
-    });
+    // 상태 업데이트
+    new Promise<InitialSetting>((resolve) => {
+      setInitialSetting((prevSetting) => {
+        const newSetting: InitialSetting = {
+          ...prevSetting,
+          alertSetting: {
+            deviceId,
+            alertStatus: 'UNCHECKED',
+          },
+        };
+        resolve(newSetting);
+        return newSetting;
+      });
+    }).then((newSetting) => {
+      // API 호출
+      userApis.setInitialSetting(newSetting);
 
-    // 초기 설정 저장
-    userApis.setInitialSetting({
-      ...initialSetting,
+      // 네비게이션 이동
+      navigation.navigate('Home');
     });
-
-    return navigation.navigate('Home');
   };
 
   useAsyncEffect(async () => {

@@ -5,10 +5,12 @@ export type SocialType = 'APPLE' | 'KAKAO' | 'GOOGLE' | 'NORMAL';
 
 export type SettingStatus = 'COMPLETE' | 'INCOMPLETE';
 
+export type InitialSettingAlertStatus = 'CHECKED' | 'UNCHECKED';
+
 export type InitialSetting = {
   alertSetting: {
     deviceId: string;
-    alertStatus: 'CHECKED' | 'UNCHECKED';
+    alertStatus: InitialSettingAlertStatus;
   };
   character: {
     id: number;
