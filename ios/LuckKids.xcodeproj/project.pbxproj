@@ -13,7 +13,6 @@
 		0789C3D52AF072B100285C72 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0789C3D32AF072B000285C72 /* Images.xcassets */; };
 		0789C3D62AF072B100285C72 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0789C3D42AF072B100285C72 /* BootSplash.storyboard */; };
 		07A447FB2B5E575400C2AC6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07A447FA2B5E575400C2AC6B /* GoogleService-Info.plist */; };
-		07B625E12BF9E803006DA892 /* libRNShare.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B625E02BF9E7E9006DA892 /* libRNShare.a */; };
 		07B625E32BF9E818006DA892 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B625E22BF9E818006DA892 /* Social.framework */; };
 		07B625E52BF9E820006DA892 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B625E42BF9E820006DA892 /* MessageUI.framework */; };
 		0C80B921A6F3F58F76C31292 /* libPods-LuckKids.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-LuckKids.a */; };
@@ -36,13 +35,6 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = LuckKids;
 		};
-		07B625DF2BF9E7E9006DA892 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 07B625DB2BF9E7E8006DA892 /* RNShare.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNShare;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +48,6 @@
 		0789C3D32AF072B000285C72 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LuckKids/Images.xcassets; sourceTree = "<group>"; };
 		0789C3D42AF072B100285C72 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = LuckKids/BootSplash.storyboard; sourceTree = "<group>"; };
 		07A447FA2B5E575400C2AC6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		07B625DB2BF9E7E8006DA892 /* RNShare.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShare.xcodeproj; path = "../node_modules/react-native-share/ios/RNShare.xcodeproj"; sourceTree = "<group>"; };
 		07B625E22BF9E818006DA892 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		07B625E42BF9E820006DA892 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		13B07F961A680F5B00A75B9A /* luckkids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = luckkids.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,7 +85,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				07B625E32BF9E818006DA892 /* Social.framework in Frameworks */,
-				07B625E12BF9E803006DA892 /* libRNShare.a in Frameworks */,
 				07B625E52BF9E820006DA892 /* MessageUI.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-LuckKids.a in Frameworks */,
 			);
@@ -118,14 +108,6 @@
 				00E356F11AD99517003FC87E /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		07B625DC2BF9E7E8006DA892 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				07B625E02BF9E7E9006DA892 /* libRNShare.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		13B07FAE1A68108700A75B9A /* LuckKids */ = {
@@ -161,7 +143,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				07B625DB2BF9E7E8006DA892 /* RNShare.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -291,12 +272,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 07B625DC2BF9E7E8006DA892 /* Products */;
-					ProjectRef = 07B625DB2BF9E7E8006DA892 /* RNShare.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* LuckKids */,
@@ -304,16 +279,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		07B625E02BF9E7E9006DA892 /* libRNShare.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNShare.a;
-			remoteRef = 07B625DF2BF9E7E9006DA892 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -731,7 +696,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -816,7 +782,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
