@@ -20,10 +20,12 @@ interface IDataKey {
 }
 
 type PageMissionRepairProps = {
-  type: 'INITIAL_SETTING' | 'MISSION_REPAIR';
+  type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
 };
 
-export const PageMissionRepair = ({ type }: PageMissionRepairProps) => {
+export const PageMissionRepair = ({
+  type = 'MISSION_REPAIR',
+}: PageMissionRepairProps) => {
   const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
   const [current, setCurrent] = useState<number | null>(null);
