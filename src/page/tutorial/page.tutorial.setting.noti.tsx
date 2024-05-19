@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
@@ -11,6 +11,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 
 //TODO Fix bg image
@@ -22,11 +23,11 @@ export const PageTutorialSettingNoti: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
     useRecoilState(RecoilInitialSetting);
+  const [deviceId, setDeviceId] = useState('');
 
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
   const handleTurnOnNoti = async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
     console.log('hasPermission', await hasPermission());
     if (await hasPermission()) {
       AlertPopup.show({
@@ -57,8 +58,8 @@ export const PageTutorialSettingNoti: React.FC = () => {
     }
   };
 
-  const handleKeepGoing = async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
+  const handleKeepGoing = () => {
+    console.log(deviceId);
     setInitialSetting({
       ...initialSetting,
       alertSetting: {
@@ -68,12 +69,17 @@ export const PageTutorialSettingNoti: React.FC = () => {
     });
 
     // 초기 설정 저장
-    await userApis.setInitialSetting({
+    userApis.setInitialSetting({
       ...initialSetting,
     });
 
     return navigation.navigate('Home');
   };
+
+  useAsyncEffect(async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    setDeviceId(deviceId);
+  }, []);
 
   return (
     <FrameLayout

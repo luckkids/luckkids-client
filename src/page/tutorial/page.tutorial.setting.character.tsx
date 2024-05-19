@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilState } from 'recoil';
 import { interval, take } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SimpleTextInput, SvgIcon } from '@design-system';
@@ -9,7 +10,6 @@ import { getCharacterImage, saveImage, shareImage } from '@utils';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { useRecoilState } from 'recoil';
 
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
@@ -23,10 +23,9 @@ export const PageTutorialSettingCharacter: React.FC = () => {
     useRecoilState(RecoilInitialSetting);
 
   const handleConfirm = () => {
-    navigation.navigate('MissionRepair', {
+    return navigation.navigate('MissionRepair', {
       type: 'INITIAL_SETTING',
     });
-    return;
   };
 
   const handleNext = () => {

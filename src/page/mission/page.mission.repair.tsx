@@ -10,6 +10,7 @@ import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
@@ -19,13 +20,10 @@ interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
 }
 
-type PageMissionRepairProps = {
-  type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
-};
-
-export const PageMissionRepair = ({
-  type = 'MISSION_REPAIR',
-}: PageMissionRepairProps) => {
+export const PageMissionRepair = () => {
+  const {
+    params: { type },
+  } = useNavigationRoute('MissionRepair');
   const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
   const [current, setCurrent] = useState<number | null>(null);
@@ -52,6 +50,7 @@ export const PageMissionRepair = ({
   }, [isSuccess]);
 
   const handleConfirm = () => {
+    console.log(55, type);
     if (type === 'INITIAL_SETTING') {
       setInitialSetting({
         ...initialSetting,

@@ -38,7 +38,7 @@ export type AppScreensParamList = {
   HomeProfile: undefined;
   Mission: undefined;
   MissionRepair: {
-    type: 'INITIAL_SETTING' | 'MISSION_REPAIR';
+    type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
   };
   MissionAdd: undefined;
   GardenAlbum: undefined;

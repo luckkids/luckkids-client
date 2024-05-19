@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BootSplash from 'react-native-bootsplash';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useRecoilState } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
@@ -22,6 +22,7 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
+import { RecoilToken } from '@recoil/recoil.token';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 
 const Stack = createNativeStackNavigator();
@@ -30,6 +31,10 @@ const RootNavigator = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
   const [initializing, setInitializing] = useState(true);
+  const { setValue: setAccessToken } = useAsyncStorage<StorageKeys.AccessToken>(
+    StorageKeys.AccessToken,
+  );
+  const [token, setToken] = useRecoilState(RecoilToken);
 
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
@@ -61,7 +66,9 @@ const RootNavigator = () => {
         ...loginInfo,
       })
       .then((res) => {
-        const { settingStatus } = res.data;
+        const { settingStatus, accessToken, refreshToken } = res.data;
+        setAccessToken({ accessToken, refreshToken });
+        setToken({ accessToken, refreshToken });
         navigationRef.current?.reset({
           index: 0,
           routes: [
