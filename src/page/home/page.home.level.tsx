@@ -7,6 +7,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 import { interval, take } from 'rxjs';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
+
 const levelUpMotion1 = require('assets/lotties/levelup-motion-1.json');
 
 export const PageHomeLevel: React.FC = () => {

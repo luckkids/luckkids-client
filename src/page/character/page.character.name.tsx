@@ -19,7 +19,7 @@ export const PageCharacterName: React.FC = () => {
       <Button
         type={'action'}
         text={'럭키즈 만나기'}
-        onPress={() => navigation.navigate('MissionRepair')}
+        onPress={() => navigation.navigate('MissionRepair', {})}
         sizing="stretch"
         bgColor={'LUCK_GREEN'}
       />

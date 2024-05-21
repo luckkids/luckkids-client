@@ -19,6 +19,7 @@ API.interceptors.request.use(
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
+    console.log('request ====>', config.data);
     return config;
   },
   (error) => {

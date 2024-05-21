@@ -90,7 +90,7 @@ export const Mission: React.FC = () => {
       </FrameLayout>
       <FloatingButton
         paddingBottom={Constants.BOTTOM_TABBAR_HEIGHT + 38}
-        onPress={() => navigation.navigate('MissionRepair')}
+        onPress={() => navigation.navigate('MissionRepair', {})}
         containerStyle={{
           width: 36,
           height: 36,

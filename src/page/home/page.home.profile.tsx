@@ -5,10 +5,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo, useMe } from '@queries';
+import { getCharacterImage } from '@utils';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { getCharacterImage } from '@utils';
 
 export const PageHomeProfile: React.FC = () => {
   const navigation = useNavigationService();
@@ -26,6 +26,11 @@ export const PageHomeProfile: React.FC = () => {
 
   const handleEditName = () => {
     navigation.navigate('SettingProfile');
+  };
+
+  const handleShareProfile = () => {
+    //TODO
+    if (!inProgressCharacter) return;
   };
 
   return (
@@ -112,7 +117,7 @@ export const PageHomeProfile: React.FC = () => {
       <L.Absolute b={bottom} ph={DEFAULT_MARGIN}>
         <Button
           text={'프로필 공유하기'}
-          onPress={() => navigation.navigate('SettingProfile')}
+          onPress={handleShareProfile}
           type={'action'}
           bgColor="LUCK_GREEN"
           sizing="stretch"

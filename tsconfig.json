@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "rootDir": ".",
+    "resolveJsonModule": true,
     "paths": {
       "@components/*": ["src/components/*"],
       "@constants": ["src/constants/index"],
@@ -16,7 +17,8 @@
       "@page/*": ["src/page/*"],
       "@frame/*": ["src/frame/*"],
       "@libs/*": ["src/libs/*"],
-      "@apis/*": ["src/apis/*"]
+      "@apis/*": ["src/apis/*"],
+      "@assets/*": ["src/assets/*"]
     },
     "types": ["styled-components-react-native"]
   },

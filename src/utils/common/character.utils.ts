@@ -1,5 +1,5 @@
-import { CompletedCharacterCount } from '@apis/home';
 import { CLOUD_FRONT_PREFIX } from './image.utils';
+import { CompletedCharacterCount } from '@apis/home';
 import { CharacterType } from '@types-common/character.types';
 
 export const getCharacterImage = (
@@ -9,8 +9,8 @@ export const getCharacterImage = (
   const paddedLevel = level.toString().padStart(2, '0');
 
   return level === 1
-    ? `${CLOUD_FRONT_PREFIX}/01_first.png`
-    : `${CLOUD_FRONT_PREFIX}/${paddedLevel}_${characterType.toLowerCase()}.png`;
+    ? `${CLOUD_FRONT_PREFIX}/characters/01_first.png`
+    : `${CLOUD_FRONT_PREFIX}/characters/${paddedLevel}_${characterType.toLowerCase()}.png`;
 };
 
 export const getLevelToolTipText = (currentLevel: number) => {

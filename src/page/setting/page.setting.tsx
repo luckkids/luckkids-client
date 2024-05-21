@@ -9,6 +9,10 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { useFetch } from '@hooks/useFetch';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { useResetRecoilState } from 'recoil';
+import { RecoilToken } from '@recoil/recoil.token';
 
 const S = {
   Wrap: styled.View({
@@ -25,7 +29,12 @@ export const PageSetting: React.FC = () => {
   const navigation = useNavigationService();
   const [version, setVersion] = useState<string>('최신 버전이에요!');
   const applicationVersion = DeviceInfo.getVersion();
+  const { removeValue: removeRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
+  const { removeValue: removeAccessToken } =
+    useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
+  const resetAccessToken = useResetRecoilState(RecoilToken);
   const { getToken } = useFirebaseMessage();
   const { onFetch } = useFetch({
     method: 'GET',
@@ -40,6 +49,18 @@ export const PageSetting: React.FC = () => {
     // onFetch();
     console.log(applicationVersion);
   }, []);
+
+  const handleLogout = () => {
+    // delete remember me
+    removeRememberMe();
+    // delete token
+    removeAccessToken();
+    resetAccessToken();
+
+    // go to login page
+    return navigation.navigate('Login');
+  };
+
   return (
     <FrameLayout
       NavBar={
@@ -96,7 +117,7 @@ export const PageSetting: React.FC = () => {
             paddingVertical: 20,
             paddingHorizontal: 25,
           }}
-          onPress={() => navigation.navigate('Login')}
+          onPress={handleLogout}
         />
         <ButtonText
           text={'탈퇴하기'}
