@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BootSplash from 'react-native-bootsplash';
-import CodePush from 'react-native-code-push';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RecoilRoot } from 'recoil';
@@ -56,6 +55,10 @@ const RootNavigator = () => {
     StorageKeys.RememberMe,
   );
 
+  const [storyTelling] = useAsyncStorage<StorageKeys.StoryTelling>(
+    StorageKeys.StoryTelling,
+  );
+
   const { onFetch: login } = useFetch({
     method: 'POST',
     url: '/auth/login',
@@ -77,6 +80,16 @@ const RootNavigator = () => {
   }, []);
 
   useEffect(() => {
+    // 스토리텔링
+    console.log('storyTelling ====>', storyTelling);
+    if (!storyTelling?.viewed) {
+      navigationRef.current?.reset({
+        index: 0,
+        routes: [{ name: 'StoryTelling' }],
+      });
+      return;
+    }
+
     // 자동 로그인
     console.log('rememberMeInfo ====>', rememberMe);
     if (rememberMe) {
@@ -92,7 +105,7 @@ const RootNavigator = () => {
         screenParams: undefined,
       });
     }
-  }, [rememberMe]);
+  }, [rememberMe, storyTelling]);
 
   useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
@@ -154,15 +167,4 @@ const App = () => (
   </GestureHandlerRootView>
 );
 
-const codePushOptions = {
-  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
-  updateDialog: {
-    title: '업데이트 필요',
-    mandatoryUpdateMessage:
-      '새 버전이 출시되었습니다. 앱을 업데이트해야 합니다.',
-    mandatoryContinueButtonLabel: '업데이트',
-  },
-  installMode: CodePush.InstallMode.IMMEDIATE,
-};
-
-export default CodePush(codePushOptions)(App);
+export default App;
