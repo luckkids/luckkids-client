@@ -24,6 +24,7 @@ import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { RecoilToken } from '@recoil/recoil.token';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
+import CodePush from 'react-native-code-push';
 
 const Stack = createNativeStackNavigator();
 
@@ -122,6 +123,28 @@ const RootNavigator = () => {
 
   useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
+  }, []);
+
+  useEffect(() => {
+    // 코드 푸시 DEV 에서 테스트하는 경우 아니면 return 해두기
+    if (__DEV__) return;
+
+    CodePush.checkForUpdate().then((remotePackage) => {
+      if (!remotePackage) {
+        return console.log('[CodePush] package is up to date');
+      }
+
+      if (remotePackage.isMandatory) {
+        return navigationRef.current?.reset({
+          index: 0,
+          routes: [{ name: 'UpdateScreen', params: { remotePackage } }],
+        });
+      }
+
+      navigationRef.current?.navigate('UpdateScreen', {
+        remotePackage,
+      });
+    });
   }, []);
 
   useAsyncEffect(async () => {

@@ -73,6 +73,8 @@ export const LoginJoinId: React.FC = () => {
   const handleConfirmEmail = useCallback(() => {
     if (getIsError()) return;
     sendEmail();
+
+    return navigation.navigate('LoginJoinEmailConfirm');
   }, [getIsError, sendEmail]);
 
   useEffect(() => {
