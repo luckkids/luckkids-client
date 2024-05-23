@@ -1,5 +1,6 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { RemotePackage } from 'react-native-code-push';
 import { SocialType } from '../user';
 
 export const DefaultTypeUnit = {
@@ -55,6 +56,7 @@ export type AppScreensParamList = {
   Garden: undefined;
   My: undefined;
   HomeComment: undefined;
+  UpdateScreen: { remotePackage: RemotePackage };
 };
 
 export interface IStackScreen {

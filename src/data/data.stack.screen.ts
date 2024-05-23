@@ -2,6 +2,7 @@ import { BottomTabNavigator } from '../route/route.tab.navigator';
 import { PageCharacterMake } from '@page/character/page.character.make';
 import { PageCharacterName } from '@page/character/page.character.name';
 import { PageCharacterSelect } from '@page/character/page.character.select';
+import PageUpdateScreen from '@page/common/page.common.update';
 import { PageWebView } from '@page/common/page.common.webview';
 import { Garden } from '@page/Garden';
 import { PageGardenAlbum } from '@page/garden/page.garden.album';
@@ -183,5 +184,9 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'WebView',
     component: PageWebView,
+  },
+  {
+    name: 'UpdateScreen',
+    component: PageUpdateScreen,
   },
 ];
