@@ -35,6 +35,8 @@ export const PageStoryTelling: React.FC = () => {
     setStoryTelling({
       viewed: true,
     });
+
+    // 무조건 앱을 처음 실행시켰을 때 나오는 화면이므로 Login 화면으로 이동
     return navigation.navigate('Login');
   };
 
