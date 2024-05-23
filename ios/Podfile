@@ -26,11 +26,8 @@ if linkage != nil
 end
 
 target 'LuckKids' do
-  # Ensure all Firebase dependencies use compatible versions
-  pod 'Firebase/CoreOnly', '10.24.0'
-  pod 'FirebaseCoreExtension', '10.24.0'
-
   config = use_native_modules!
+
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   # Flags change depending on the env values.
@@ -38,8 +35,6 @@ target 'LuckKids' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # Hermes is now enabled by default. Disable by setting this flag to false.
-    :hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
     # Enables Flipper.
     #

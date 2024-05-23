@@ -1,4 +1,4 @@
-import { SettingStatus, SocialType } from '@types-index';
+import { InitialSetting, SettingStatus, SocialType } from '@types-index';
 import API from './API';
 
 export type GetMeResponse = {
@@ -16,6 +16,12 @@ export const getMe = async () => {
   return res;
 };
 
+export const setInitialSetting = async (initialSetting: InitialSetting) => {
+  const res = await API.post('/initialSetting', initialSetting);
+  return res;
+};
+
 export const userApis = {
   getMe,
+  setInitialSetting,
 };

@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import DeviceInfo from 'react-native-device-info';
+import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
+import { userApis } from '@apis/user';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
+import { InitialSetting, InitialSettingAlertStatus } from '@types-index';
 
-//TODO Fix bg image
 const bgImage = require('assets/images/tutorial-setting-bg.png');
 const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
 
 export const PageTutorialSettingNoti: React.FC = () => {
   const navigation = useNavigationService();
-  const [step, setStep] = useState(0);
-  const { bottom } = useSafeAreaInsets();
+  const [initialSetting, setInitialSetting] =
+    useRecoilState(RecoilInitialSetting);
+  const [deviceId, setDeviceId] = useState('');
 
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
@@ -27,19 +32,57 @@ export const PageTutorialSettingNoti: React.FC = () => {
         body: '이미 알림이 허용되어 있어요!',
         yesText: '확인',
         onPressYes: () => {
+          setInitialSetting({
+            ...initialSetting,
+            alertSetting: {
+              deviceId,
+              alertStatus: 'CHECKED',
+            },
+          });
           navigation.navigate('Home');
         },
       });
     } else {
       requestPermissionIfNot().then(() => {
+        setInitialSetting({
+          ...initialSetting,
+          alertSetting: {
+            deviceId,
+            alertStatus: 'UNCHECKED',
+          },
+        });
         navigation.navigate('Home');
       });
     }
   };
 
   const handleKeepGoing = () => {
-    navigation.navigate('Home');
+    // 상태 업데이트
+    new Promise<InitialSetting>((resolve) => {
+      setInitialSetting((prevSetting) => {
+        const newSetting: InitialSetting = {
+          ...prevSetting,
+          alertSetting: {
+            deviceId,
+            alertStatus: 'UNCHECKED',
+          },
+        };
+        resolve(newSetting);
+        return newSetting;
+      });
+    }).then((newSetting) => {
+      // API 호출
+      userApis.setInitialSetting(newSetting);
+
+      // 네비게이션 이동
+      navigation.navigate('Home');
+    });
   };
+
+  useAsyncEffect(async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    setDeviceId(deviceId);
+  }, []);
 
   return (
     <FrameLayout

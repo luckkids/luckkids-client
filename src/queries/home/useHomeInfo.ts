@@ -10,8 +10,8 @@ export const useHomeInfo = () => {
       return res.data;
     },
     {
-      refetchOnMount: 'always',
       select: (response) => response,
+      refetchOnReconnect: true,
     },
   );
 };

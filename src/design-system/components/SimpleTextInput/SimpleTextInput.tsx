@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { ColorKeys, Colors, FontSettings, L } from '@design-system';
@@ -41,6 +41,16 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
     }
   }, []);
 
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    setIsFocused(false);
+  }, []);
+
   return (
     <L.Col w={'100%'} mb={25}>
       <L.Row
@@ -48,6 +58,9 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
         style={{
           ...S.defaultStyles.container,
           backgroundColor: backgroundColor || theme.BG_TERTIARY,
+          borderColor: isFocused ? theme.LUCK_GREEN : 'transparent',
+          borderWidth: 1,
+          borderRadius: 15,
         }}
         outline={outline}
       >
@@ -62,8 +75,11 @@ const SimpleTextInput: React.FC<SimpleTextInputProps> = ({
             },
           ])}
           autoCorrect={false}
+          spellCheck={false}
           placeholder={placeholder}
           onChangeText={handleChangeText}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           autoFocus={autoFocus}
           value={text}
           numberOfLines={1}

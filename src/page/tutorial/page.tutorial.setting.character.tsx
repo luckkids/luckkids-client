@@ -1,28 +1,46 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import LottieView from 'lottie-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilState } from 'recoil';
 import { interval, take } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SimpleTextInput } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 
-const bgImage = require('assets/images/tutorial-setting-bg.png');
+const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
+const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
+const tutorialSettingCharacterCompleteImage = require('assets/images/tutorial-setting-character-complete.png');
+const tutorialSettingCharacterImage = require('assets/images/tutorial-setting-character.png');
 
 export const PageTutorialSettingCharacter: React.FC = () => {
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
+  const [initialSetting, setInitialSetting] =
+    useRecoilState(RecoilInitialSetting);
 
   const handleConfirm = () => {
-    // FIXME 원래는 TutorialSettingMission로 가야하나 임시로 TutorialSettingNoti
-    navigation.navigate('TutorialSettingNoti');
-    return;
+    return navigation.navigate('MissionRepair', {
+      type: 'INITIAL_SETTING',
+    });
   };
 
   const handleNext = () => {
+    if (step === 2) {
+      // nickname 저장
+      setInitialSetting({
+        ...initialSetting,
+        character: {
+          id: 1,
+          nickName: nickname,
+        },
+      });
+    }
     setStep((prev) => prev + 1);
   };
 
@@ -54,15 +72,22 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             </Font>
             <Font
               textAlign="center"
-              type={'BODY_REGULAR'}
-              color={'GREY0'}
+              type={'BODY_SEMIBOLD'}
+              color={'WHITE'}
               mt={20}
             >
-              슬라임을 눌러 럭키즈를 받아보세요
+              {'슬라임을 눌러 럭키즈를 받아보세요'}
             </Font>
-            {/* TODO LOTTIE */}
             <TouchableWithoutFeedback onPress={handleNext}>
-              <L.Row w={200} h={200} mt={100} bg="WHITE" />
+              <L.Row h={'100%'} flex-1 items="center">
+                <Image
+                  source={tutorialSettingCharacterImage}
+                  style={{
+                    width: 60,
+                    height: 130,
+                  }}
+                />
+              </L.Row>
             </TouchableWithoutFeedback>
           </>
         );
@@ -72,6 +97,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             <Font textAlign="left" type={'TITLE1_BOLD'} color={'WHITE'} mt={76}>
               {'두근두근,\n럭키즈가 탄생하고 있어요!'}
             </Font>
+            {/* TODO(Gina): lottie 추가 */}
           </>
         );
       case 2:
@@ -108,13 +134,22 @@ export const PageTutorialSettingCharacter: React.FC = () => {
       case 3:
         return (
           <>
+            <L.Row>
+              <Image
+                source={tutorialSettingCharacterCompleteImage}
+                style={{
+                  width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                  height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                }}
+              />
+            </L.Row>
             <Font
               textAlign="center"
               type={'TITLE2_BOLD'}
               color={'WHITE'}
-              mt={76}
+              mt={30}
             >
-              {'짠, 아직 새싹'}
+              {'럭키즈 탄생을 축하해요!'}
             </Font>
             <Font
               textAlign="center"
@@ -124,10 +159,9 @@ export const PageTutorialSettingCharacter: React.FC = () => {
               mb={40}
             >
               {
-                '아직 새싹 단계예요. 습관을 수행하여\n행운을 가져다 줄 클로버를 키워보세요!'
+                '과연 어떤 럭키즈로 커갈까요?\n꾸준히 습관을 수행하며 럭키즈를 키워보세요.'
               }
             </Font>
-            {/* TODO(Gina): 버튼 추가 필요 */}
           </>
         );
       default:
@@ -137,8 +171,10 @@ export const PageTutorialSettingCharacter: React.FC = () => {
 
   return (
     <FrameLayout
-      statusBarColor={'TUTORIAL_SETTING_BG'}
-      backgroundImage={bgImage}
+      statusBarColor={step === 3 ? 'TUTORIAL_GUIDE_BG' : 'TUTORIAL_SETTING_BG'}
+      backgroundImage={
+        step === 3 ? tutorialGuideBgImage : tutorialSettingBgImage
+      }
     >
       <L.Col
         w="100%"

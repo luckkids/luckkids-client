@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
-import { useMe } from '@queries';
+import { useHomeInfo, useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -9,21 +9,23 @@ import { useFetch } from '@hooks/useFetch';
 export const PageSettingComment: React.FC = () => {
   const navigation = useNavigationService();
 
-  const { data: me } = useMe();
-  const { nickname } = me || {};
+  const { data: me, refetch } = useMe();
+  const { luckPhrase } = me || {};
 
-  const [text, setText] = useState<string>(nickname || '');
+  const [text, setText] = useState<string>(luckPhrase || '');
 
   const { onFetch, isSuccess } = useFetch({
     method: 'PATCH',
     url: '/user/phrase',
     value: {
-      luckPhrases: text,
+      luckPhrase: text,
     },
     onSuccessCallback: () => {
+      refetch();
       navigation.goBack();
     },
   });
+
   return (
     <FrameLayout
       NavBar={

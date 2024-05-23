@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageValues } from './keys';
 
-type UseAsyncStorage<K extends keyof StorageValues> = [
-  StorageValues[K] | null,
-  (value: StorageValues[K]) => Promise<void>,
-  () => Promise<void>,
-  boolean,
-];
+type UseAsyncStorage<K extends keyof StorageValues> = {
+  storedValue: StorageValues[K] | null;
+  setValue: (value: StorageValues[K]) => Promise<void>;
+  removeValue: () => Promise<void>;
+  loading: boolean;
+};
 
 // Custom hook to manage async storage with a given key and value as an object
 const useAsyncStorage = <K extends keyof StorageValues>(
@@ -54,7 +54,12 @@ const useAsyncStorage = <K extends keyof StorageValues>(
     }
   };
 
-  return [storedValue, setValue, removeValue, loading];
+  return {
+    storedValue,
+    setValue,
+    removeValue,
+    loading,
+  };
 };
 
 export default useAsyncStorage;
