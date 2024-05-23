@@ -95,33 +95,6 @@ const RootNavigator = () => {
   }, []);
 
   useEffect(() => {
-    // 스토리텔링
-    console.log('storyTelling ====>', storyTelling);
-    if (!storyTelling?.viewed) {
-      navigationRef.current?.reset({
-        index: 0,
-        routes: [{ name: 'StoryTelling' }],
-      });
-      return;
-    }
-
-    // 자동 로그인
-    if (rememberMe) {
-      handleLogin({
-        email: rememberMe.email,
-        password: rememberMe.password,
-        deviceId: rememberMe.deviceId,
-        pushKey: rememberMe.pushKey,
-      });
-    } else {
-      setInitialRoute({
-        screenName: 'Login',
-        screenParams: undefined,
-      });
-    }
-  }, [rememberMe, storyTelling]);
-
-  useEffect(() => {
     StatusBar.setBarStyle('light-content', true);
   }, []);
 
@@ -160,6 +133,35 @@ const RootNavigator = () => {
       await BootSplash.hide({ fade: true });
     }
   }, [initializing]);
+
+  useEffect(() => {
+    if (initializing) return;
+    if (!storyTelling || !rememberMe) return;
+    // 스토리텔링
+    console.log('storyTelling ====>', storyTelling);
+    if (!storyTelling.viewed) {
+      navigationRef.current?.reset({
+        index: 0,
+        routes: [{ name: 'StoryTelling' }],
+      });
+      return;
+    }
+
+    // 자동 로그인
+    if (rememberMe) {
+      handleLogin({
+        email: rememberMe.email,
+        password: rememberMe.password,
+        deviceId: rememberMe.deviceId,
+        pushKey: rememberMe.pushKey,
+      });
+    } else {
+      setInitialRoute({
+        screenName: 'Login',
+        screenParams: undefined,
+      });
+    }
+  }, [rememberMe, storyTelling, initializing]);
 
   return (
     <NavigationContainer<AppScreensParamList>
