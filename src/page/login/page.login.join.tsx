@@ -16,7 +16,8 @@ export const PageLoginJoin: React.FC = () => {
   const resetJoinInfo = useResetRecoilState(RecoilJoinInfo);
 
   const handlePressConfirm = () => {
-    navigation.navigate('LoginJoinAgreement');
+    // 약관 동의 페이지로 이동
+    return navigation.navigate('LoginJoinAgreement');
   };
 
   const handlePressBack = () => {

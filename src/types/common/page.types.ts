@@ -21,7 +21,9 @@ export type AppScreensParamList = {
   Login: undefined;
   LoginAlready: { type: SocialType };
   LoginJoin: { step: 'Id' | 'Password' };
-  LoginJoinEmailConfirm: undefined;
+  LoginJoinEmailConfirm: {
+    authKey: string;
+  };
   LoginId: undefined;
   LoginJoinAgreement: undefined;
   TutorialStart: undefined;

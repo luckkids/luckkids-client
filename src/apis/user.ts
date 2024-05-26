@@ -1,5 +1,6 @@
 import { InitialSetting, SettingStatus, SocialType } from '@types-index';
 import API from './API';
+import { CharacterType } from '@types-common/character.types';
 
 export type GetMeResponse = {
   email: string;
@@ -16,12 +17,28 @@ export const getMe = async () => {
   return res;
 };
 
-export const setInitialSetting = async (initialSetting: InitialSetting) => {
+export type GetInitialCharacterResponse = {
+  id: number;
+  characterType: CharacterType;
+  level: number;
+  lottieFile: string;
+  imageFile: string;
+};
+
+const getInitialCharacter = async () => {
+  const res = await API.get<GetInitialCharacterResponse>(
+    '/initialSetting/character',
+  );
+  return res;
+};
+
+const setInitialSetting = async (initialSetting: InitialSetting) => {
   const res = await API.post('/initialSetting', initialSetting);
   return res;
 };
 
 export const userApis = {
+  getInitialCharacter,
   getMe,
   setInitialSetting,
 };

@@ -7,11 +7,15 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
 
 export const PageLoginJoinEmailConfirm: React.FC = () => {
+  const {
+    params: { authKey },
+  } = useNavigationRoute('LoginJoinEmailConfirm');
   const navigation = useNavigationService();
   const joinInfo = useRecoilValue(RecoilJoinInfo);
   const resetJoinInfo = useResetRecoilState(RecoilJoinInfo);
@@ -41,7 +45,7 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
     url: '/confirmEmail/check',
     value: {
       email: joinInfo.email,
-      authKey: '',
+      authKey: authKey,
     },
     onSuccessCallback: () => {
       console.log('이메일 인증 완료 성공');

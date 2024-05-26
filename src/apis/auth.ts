@@ -20,6 +20,16 @@ export const login = async (loginInfo: LoginRequest) => {
   return res;
 };
 
+export type SendEmailResponse = {
+  authKey: string;
+};
+
+const sendEmail = async (email: string) => {
+  const res = await API.post<SendEmailResponse>('/mail/authUrl', { email });
+  return res.data;
+};
+
 export const authApis = {
   login,
+  sendEmail,
 };
