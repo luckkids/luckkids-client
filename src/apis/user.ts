@@ -29,7 +29,7 @@ const getInitialCharacter = async () => {
   const res = await API.get<GetInitialCharacterResponse>(
     '/initialSetting/character',
   );
-  return res;
+  return res.data;
 };
 
 const setInitialSetting = async (initialSetting: InitialSetting) => {
