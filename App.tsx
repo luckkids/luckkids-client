@@ -7,14 +7,16 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BootSplash from 'react-native-bootsplash';
+import CodePush from 'react-native-code-push';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RecoilRoot, useRecoilState } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { DataStackScreen } from './src/data/data.stack.screen';
-import { LoginRequest, authApis } from '@apis/auth';
+import { LoginRequest } from '@apis/auth';
+import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useLocalMessage from '@hooks/notification/useLocalMessage';
@@ -22,9 +24,7 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
-import { RecoilToken } from '@recoil/recoil.token';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
-import CodePush from 'react-native-code-push';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,10 +32,6 @@ const RootNavigator = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
   const [initializing, setInitializing] = useState(true);
-  const { setValue: setAccessToken } = useAsyncStorage<StorageKeys.AccessToken>(
-    StorageKeys.AccessToken,
-  );
-  const [token, setToken] = useRecoilState(RecoilToken);
 
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
@@ -64,29 +60,23 @@ const RootNavigator = () => {
   const { storedValue: storyTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
 
+  const { login } = useAuth();
+
   const handleLogin = async (loginInfo: LoginRequest) => {
-    await authApis
-      .login({
-        ...loginInfo,
-      })
-      .then((res) => {
-        const { settingStatus, accessToken, refreshToken } = res.data;
-        setAccessToken({ accessToken, refreshToken });
-        setToken({ accessToken, refreshToken });
-        navigationRef.current?.reset({
-          index: 0,
-          routes: [
-            { name: settingStatus === 'COMPLETE' ? 'Home' : 'TutorialStart' },
-          ],
-        });
-      })
-      .catch((error) => {
-        console.error('Login Error', error);
-        setInitialRoute({
-          screenName: 'Login', // rememberMe 정보가 없을 때 로그인 화면으로 이동
-          screenParams: undefined,
-        });
+    const res = await login(loginInfo);
+    if (!res) {
+      return setInitialRoute({
+        screenName: 'Login',
+        screenParams: undefined,
       });
+    } else {
+      return navigationRef.current?.reset({
+        index: 0,
+        routes: [
+          { name: res.settingStatus === 'COMPLETE' ? 'Home' : 'TutorialStart' },
+        ],
+      });
+    }
   };
 
   useEffect(() => {

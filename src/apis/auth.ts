@@ -29,7 +29,27 @@ const sendEmail = async (email: string) => {
   return res.data;
 };
 
+export type RefreshTokenRequest = {
+  email: string;
+  deviceId: string;
+  refreshToken: string;
+};
+
+export type RefreshTokenResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+const refreshToken = async (refreshTokenInfo: RefreshTokenRequest) => {
+  const res = await API.post<RefreshTokenResponse>(
+    '/auth/refresh',
+    refreshTokenInfo,
+  );
+  return res.data;
+};
+
 export const authApis = {
   login,
   sendEmail,
+  refreshToken,
 };
