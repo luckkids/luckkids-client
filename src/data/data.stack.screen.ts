@@ -11,6 +11,7 @@ import { PageHomeAlarm } from '@page/home/page.home.alarm';
 import { PageHomeCalendar } from '@page/home/page.home.calendar';
 import { PageHomeLevel } from '@page/home/page.home.level';
 import { PageHomeProfile } from '@page/home/page.home.profile';
+import { PageHomeProfileShare } from '@page/home/page.home.profile.share';
 import { PageLogin } from '@page/login/page.login';
 import { PageLoginAlready } from '@page/login/page.login.already';
 import { PageLoginId } from '@page/login/page.login.id';
@@ -120,6 +121,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'HomeProfile',
     component: PageHomeProfile,
+  },
+  {
+    name: 'HomeProfileShare',
+    component: PageHomeProfileShare,
   },
   {
     name: 'My',

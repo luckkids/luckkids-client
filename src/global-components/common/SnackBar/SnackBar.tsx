@@ -4,7 +4,7 @@ import {
   SimpleSnackbarUI,
 } from 'react-native-global-components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button, Colors, FontSettings } from '@design-system';
+import { Colors, FontSettings } from '@design-system';
 
 interface Props extends SimpleSnackbarProps {
   rounded?: number;
@@ -29,7 +29,6 @@ const SnackBar = createPopup(({ rounded = 40, width, ...props }: Props) => {
           flex: 1,
           paddingHorizontal: 20,
           paddingVertical: 16,
-          borderWidth: 1,
         },
       }}
       {...props}

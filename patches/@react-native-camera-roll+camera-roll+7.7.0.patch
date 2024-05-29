@@ -1,0 +1,32 @@
+diff --git a/node_modules/@react-native-camera-roll/camera-roll/ios/RNCCameraRoll.mm b/node_modules/@react-native-camera-roll/camera-roll/ios/RNCCameraRoll.mm
+index 7a2e07f..1bc1621 100644
+--- a/node_modules/@react-native-camera-roll/camera-roll/ios/RNCCameraRoll.mm
++++ b/node_modules/@react-native-camera-roll/camera-roll/ios/RNCCameraRoll.mm
+@@ -207,26 +207,7 @@ static void requestPhotoLibraryAccess(RCTPromiseRejectBlock reject, PhotosAuthor
+       }
+     } completionHandler:^(BOOL success, NSError *error) {
+       if (success) {
+-        PHFetchOptions *options = [PHFetchOptions new];
+-        options.includeHiddenAssets = YES;
+-        options.includeAllBurstAssets = YES;
+-        options.fetchLimit = 1;
+-        PHFetchResult<PHAsset *> *createdAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier]
+-                                                                                  options:options];
+-        if (createdAsset.count < 1) {
+-          reject(kErrorUnableToSave, nil, nil);
+-          return;
+-        }
+-        NSDictionary *dictionary = [self convertAssetToDictionary:[createdAsset firstObject]
+-                                                    includeAlbums:YES
+-                                                  includeFilename:YES
+-                                             includeFileExtension:YES
+-                                                 includeImageSize:YES
+-                                                  includeFileSize:YES
+-                                          includePlayableDuration:YES
+-                                                  includeLocation:YES
+-                                                  includeSourceType:YES];
+-        resolve(dictionary);
++        resolve(nil);
+       } else {
+         reject(kErrorUnableToSave, nil, error);
+       }

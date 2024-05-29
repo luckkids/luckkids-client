@@ -39,6 +39,7 @@ export type AppScreensParamList = {
   HomeCalendar: undefined;
   HomeLevel: undefined;
   HomeProfile: undefined;
+  HomeProfileShare: undefined;
   Mission: undefined;
   MissionRepair: {
     type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';

@@ -53,11 +53,10 @@ const RootNavigator = () => {
     screenParams: undefined,
   });
 
-  const { storedValue: rememberMe } = useAsyncStorage<StorageKeys.RememberMe>(
-    StorageKeys.RememberMe,
-  );
+  const { storedValue: rememberMe, loading: isLoadingRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
-  const { storedValue: storyTelling } =
+  const { storedValue: storyTelling, loading: isLoadingStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
 
   const { login } = useAuth();
@@ -124,20 +123,20 @@ const RootNavigator = () => {
     }
   }, [initializing]);
 
-  useEffect(() => {
-    if (initializing) return;
-    if (!storyTelling || !rememberMe) return;
+  useAsyncEffect(async () => {
+    if (isLoadingRememberMe || isLoadingStoryTelling) return;
+
     // 스토리텔링
     console.log('storyTelling ====>', storyTelling);
-    if (!storyTelling.viewed) {
-      navigationRef.current?.reset({
+    if (!storyTelling || !storyTelling.viewed) {
+      return navigationRef.current?.reset({
         index: 0,
         routes: [{ name: 'StoryTelling' }],
       });
-      return;
     }
 
     // 자동 로그인
+    console.log('rememberMe ====>', rememberMe);
     if (rememberMe) {
       handleLogin({
         email: rememberMe.email,
@@ -151,7 +150,7 @@ const RootNavigator = () => {
         screenParams: undefined,
       });
     }
-  }, [rememberMe, storyTelling, initializing]);
+  }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   return (
     <NavigationContainer<AppScreensParamList>

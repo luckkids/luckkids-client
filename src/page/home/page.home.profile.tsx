@@ -29,8 +29,8 @@ export const PageHomeProfile: React.FC = () => {
   };
 
   const handleShareProfile = () => {
-    //TODO
     if (!inProgressCharacter) return;
+    navigation.navigate('HomeProfileShare');
   };
 
   return (
