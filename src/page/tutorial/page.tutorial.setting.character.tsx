@@ -10,6 +10,7 @@ import { Button, Font, L, SimpleTextInput } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
+import { userApis } from '@apis/user';
 
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
@@ -30,13 +31,17 @@ export const PageTutorialSettingCharacter: React.FC = () => {
     });
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // getInitialCharacter
+    const initialCharacter = await userApis.getInitialCharacter();
+    const { id } = initialCharacter;
+
     if (step === 2) {
       // nickname 저장
       setInitialSetting({
         ...initialSetting,
         character: {
-          id: 1,
+          id: id,
           nickName: nickname,
         },
       });
@@ -97,7 +102,16 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             <Font textAlign="left" type={'TITLE1_BOLD'} color={'WHITE'} mt={76}>
               {'두근두근,\n럭키즈가 탄생하고 있어요!'}
             </Font>
-            {/* TODO(Gina): lottie 추가 */}
+            <LottieView
+              source={require(
+                `../../../assets/lotties/tutorial-character-change.json`,
+              )}
+              style={{
+                width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+              }}
+              autoPlay
+            />
           </>
         );
       case 2:

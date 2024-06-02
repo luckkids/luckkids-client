@@ -16,6 +16,7 @@ type AgreementContent = {
   url: string;
 };
 
+//TODO : 페이지 이동 필요
 const AGREEMENT_CONTENT: AgreementContent[] = [
   {
     text: '럭키즈 이용약관 필수동의',

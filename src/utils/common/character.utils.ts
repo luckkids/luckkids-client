@@ -34,3 +34,14 @@ export const getCompletedCharacterCount = (
   const { RABBIT, SUN, STONE, CLOVER, CLOUD } = completedCharacterCount;
   return RABBIT + SUN + STONE + CLOVER + CLOUD;
 };
+
+export const getLuckCardImage = (
+  characterType: CharacterType,
+  level: number,
+) => {
+  const paddedLevel = level.toString().padStart(2, '0');
+
+  return level === 1
+    ? `${CLOUD_FRONT_PREFIX}/luck-card/01_first.png`
+    : `${CLOUD_FRONT_PREFIX}/luck-card/${paddedLevel}_${characterType.toLowerCase()}.png`;
+};

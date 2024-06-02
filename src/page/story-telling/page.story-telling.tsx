@@ -1,25 +1,43 @@
 import React, { useState } from 'react';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import LottieView from 'lottie-react-native';
 import { timer } from 'rxjs';
 import { takeWhile, tap } from 'rxjs/operators';
-import { DEFAULT_MARGIN, STORY_TELLING_CONTENTS } from '@constants';
+import {
+  DEFAULT_MARGIN,
+  STORY_TELLING_CONTENTS,
+  STORY_TELLING_LOTTIES,
+} from '@constants';
 import { Button, Font, L } from '@design-system';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 
 export const PageStoryTelling: React.FC = () => {
   const [step, setStep] = useState(1);
   const navigation = useNavigationService();
 
+  const { setValue: setStoryTelling } =
+    useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
+
   timer(5000)
     .pipe(
-      takeWhile(() => step < STORY_TELLING_CONTENTS.length),
-      tap(() => setStep((prev) => prev + 1)),
+      takeWhile(() => step < STORY_TELLING_CONTENTS.length - 1),
+      tap(() => {
+        setStep((prev) => prev + 1);
+      }),
     )
     .subscribe();
 
   const handlePressStart = () => {
-    navigation.navigate('Login');
+    setStoryTelling({
+      viewed: true,
+    });
+
+    // 무조건 앱을 처음 실행시켰을 때 나오는 화면이므로 Login 화면으로 이동
+    return navigation.navigate('Login');
   };
 
   return (
@@ -38,6 +56,16 @@ export const PageStoryTelling: React.FC = () => {
           <Font textAlign="center" type={'TITLE2_BOLD'} color={'WHITE'} mt={76}>
             {STORY_TELLING_CONTENTS[step - 1]}
           </Font>
+          {!!STORY_TELLING_LOTTIES[step - 1] && (
+            <LottieView
+              source={STORY_TELLING_LOTTIES[step - 1]}
+              style={{
+                width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+              }}
+              autoPlay
+            />
+          )}
         </L.Col>
         <Button
           type={'action'}

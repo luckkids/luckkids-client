@@ -20,6 +20,36 @@ export const login = async (loginInfo: LoginRequest) => {
   return res;
 };
 
+export type SendEmailResponse = {
+  authKey: string;
+};
+
+const sendEmail = async (email: string) => {
+  const res = await API.post<SendEmailResponse>('/mail/authUrl', { email });
+  return res.data;
+};
+
+export type RefreshTokenRequest = {
+  email: string;
+  deviceId: string;
+  refreshToken: string;
+};
+
+export type RefreshTokenResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+const refreshToken = async (refreshTokenInfo: RefreshTokenRequest) => {
+  const res = await API.post<RefreshTokenResponse>(
+    '/auth/refresh',
+    refreshTokenInfo,
+  );
+  return res.data;
+};
+
 export const authApis = {
   login,
+  sendEmail,
+  refreshToken,
 };

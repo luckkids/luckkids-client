@@ -7,18 +7,19 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
+import { SettingStatus } from '@types-index';
 import { LoginResponse, authApis } from '@apis/auth';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
-import { SettingStatus } from '@types-index';
 
 export const PageLoginId: React.FC = () => {
   const [deviceID, setDeviceID] = useState('');
@@ -37,7 +38,7 @@ export const PageLoginId: React.FC = () => {
   });
 
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
-
+  const { login } = useAuth();
   const [visiblityMode, setVisiblityMode] = useState(false);
   const { storedValue: rememberMe, setValue: setRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
@@ -112,20 +113,17 @@ export const PageLoginId: React.FC = () => {
   };
 
   const handleLogin = async () => {
-    await authApis
-      .login({
-        ...loginInfo,
-        deviceId: deviceID,
-        pushKey: 'testPushKey',
-      })
-      .then((res) => {
-        console.log(res);
-        onSuccessCallback(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        onFailCallback();
-      });
+    const res = await login({
+      ...loginInfo,
+      deviceId: deviceID,
+      pushKey: null,
+    });
+
+    if (!res) {
+      return onFailCallback();
+    } else {
+      return onSuccessCallback(res);
+    }
   };
 
   const { onFetch: sendTempPassword } = useFetch({

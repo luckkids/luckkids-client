@@ -7,6 +7,7 @@ import { Button, L, SvgIcon, TextInputField } from '@design-system';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
+import { authApis } from '@apis/auth';
 
 export const LoginJoinId: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -32,20 +33,10 @@ export const LoginJoinId: React.FC = () => {
     },
   });
 
-  // 이메일 전송
-  const { resultData, onFetch: sendEmail } = useFetch({
-    method: 'POST',
-    url: '/mail/authUrl',
-    value: {
-      email: joinInfo.email,
-    },
-    onSuccessCallback: () => {
-      console.log('이메일 전송 성공');
-    },
-    onFailCallback: () => {
-      console.log('이메일 전송 실패');
-    },
-  });
+  const handleSendEmail = async () => {
+    const res = await authApis.sendEmail(joinInfo.email);
+    return res.authKey;
+  };
 
   const handleChangeEmail = useCallback(
     (email: string) => {
@@ -70,10 +61,14 @@ export const LoginJoinId: React.FC = () => {
     return false;
   }, [email]);
 
-  const handleConfirmEmail = useCallback(() => {
+  const handleConfirmEmail = useCallback(async () => {
     if (getIsError()) return;
-    sendEmail();
-  }, [getIsError, sendEmail]);
+    const authKey = await handleSendEmail();
+    if (authKey)
+      return navigation.navigate('LoginJoinEmailConfirm', {
+        authKey,
+      });
+  }, [getIsError, handleSendEmail]);
 
   useEffect(() => {
     const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

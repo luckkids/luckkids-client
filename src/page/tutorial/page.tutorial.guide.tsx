@@ -9,7 +9,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const bgImage = require('assets/images/tutorial-guide-bg.png');
 
-//TODO Lottie 추가 필요
 export const PageTutorialGuide: React.FC = () => {
   const navigation = useNavigationService();
   const [step, setStep] = useState(0);
@@ -80,7 +79,7 @@ const TUTORIAL_GUIDE_CONTENTS = [
     title: '먼저 럭키즈 캐릭터를 설정해요.',
     description: '캐릭터 닉네임도 붙여줄 거예요!',
     buttonText: '그 다음은요?',
-    lottieFile: require(`../../../assets/lotties/tutorial-guide-2.json`), //FIXME
+    lottieFile: require(`../../../assets/lotties/tutorial-guide-1.json`),
   },
   {
     title: '행운을 키워줄 습관과\n습관 알림 시간을 세팅해요.',
@@ -93,6 +92,6 @@ const TUTORIAL_GUIDE_CONTENTS = [
     description:
       '100점이 완성되면 캐릭터 성장 완료! 100점\n이후에는 캐릭터를 다시 0점부터 키울 수 있어요.',
     buttonText: '이제 시작할래요',
-    lottieFile: require(`../../../assets/lotties/tutorial-guide-2.json`), //FIXME
+    lottieFile: require(`../../../assets/lotties/tutorial-guide-3.json`),
   },
 ];

@@ -1,5 +1,6 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { RemotePackage } from 'react-native-code-push';
 import { SocialType } from '../user';
 
 export const DefaultTypeUnit = {
@@ -20,7 +21,9 @@ export type AppScreensParamList = {
   Login: undefined;
   LoginAlready: { type: SocialType };
   LoginJoin: { step: 'Id' | 'Password' };
-  LoginJoinEmailConfirm: undefined;
+  LoginJoinEmailConfirm: {
+    authKey: string;
+  };
   LoginId: undefined;
   LoginJoinAgreement: undefined;
   TutorialStart: undefined;
@@ -36,6 +39,7 @@ export type AppScreensParamList = {
   HomeCalendar: undefined;
   HomeLevel: undefined;
   HomeProfile: undefined;
+  HomeProfileShare: undefined;
   Mission: undefined;
   MissionRepair: {
     type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
@@ -55,6 +59,7 @@ export type AppScreensParamList = {
   Garden: undefined;
   My: undefined;
   HomeComment: undefined;
+  UpdateScreen: { remotePackage: RemotePackage };
 };
 
 export interface IStackScreen {
