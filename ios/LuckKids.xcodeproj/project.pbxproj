@@ -19,6 +19,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		15272065431E438B9D45E64E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C090505A2B3748329B6C9841 /* Pretendard-Bold.otf */; };
+		2B1B976D2C14C97300156BD1 /* RNShare.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B1B976C2C14C97300156BD1 /* RNShare.h */; };
 		2DFE8DA9824246B285CB6D61 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 36A122E7D5F8422AB0D89BB5 /* Pretendard-Regular.otf */; };
 		32E74D8427914262B8234823 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = D26EB5F29FD14B05A0F09AE1 /* Pretendard-Black.otf */; };
 		7699B88040F8A987B510C191 /* libPods-LuckKids-LuckKidsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-LuckKids-LuckKidsTests.a */; };
@@ -37,17 +38,30 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2BBF81EF2C14716200390A41 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* LuckKidsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LuckKidsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* LuckKidsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LuckKidsTests.m; sourceTree = "<group>"; };
-		0769B8A82B7631CA00EE3AF6 /* noti_luckluck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = noti_luckluck.wav; path = ../../Downloads/noti_luckluck.wav; sourceTree = "<group>"; };
+		0769B8A82B7631CA00EE3AF6 /* noti_luckluck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = noti_luckluck.wav; sourceTree = "<group>"; };
 		0781D6992B42DCAD0034F0B8 /* LuckKids.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = LuckKids.entitlements; path = LuckKids/LuckKids.entitlements; sourceTree = "<group>"; };
 		078912712B128834000D6C5D /* LuckKids-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LuckKids-Bridging-Header.h"; sourceTree = "<group>"; };
 		078912722B128835000D6C5D /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
 		0789C3D32AF072B000285C72 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LuckKids/Images.xcassets; sourceTree = "<group>"; };
 		0789C3D42AF072B100285C72 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = LuckKids/BootSplash.storyboard; sourceTree = "<group>"; };
-		07A447FA2B5E575400C2AC6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		07A447FA2B5E575400C2AC6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		07B625E22BF9E818006DA892 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		07B625E42BF9E820006DA892 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		13B07F961A680F5B00A75B9A /* luckkids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = luckkids.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,6 +71,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = LuckKids/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LuckKids/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-LuckKids-LuckKidsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LuckKids-LuckKidsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B1B976C2C14C97300156BD1 /* RNShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNShare.h; path = "../node_modules/react-native-share/ios/RNShare.h"; sourceTree = "<group>"; };
 		36A122E7D5F8422AB0D89BB5 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.otf"; path = "../assets/fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-LuckKids.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.debug.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-LuckKids.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.release.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.release.xcconfig"; sourceTree = "<group>"; };
@@ -84,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B1B976D2C14C97300156BD1 /* RNShare.h in Frameworks */,
 				07B625E32BF9E818006DA892 /* Social.framework in Frameworks */,
 				07B625E52BF9E820006DA892 /* MessageUI.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-LuckKids.a in Frameworks */,
@@ -131,6 +147,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2B1B976C2C14C97300156BD1 /* RNShare.h */,
 				07B625E42BF9E820006DA892 /* MessageUI.framework */,
 				07B625E22BF9E818006DA892 /* Social.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
@@ -234,6 +251,7 @@
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				451644CF55A226BF81E8C5CB /* [CP-User] [RNFB] Core Configuration */,
+				2BBF81EF2C14716200390A41 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -560,11 +578,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = PLZY9FTCGS;
+				DEVELOPMENT_TEAM = 7Y82CDD85J;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LuckKids/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -577,6 +598,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.app.luck-kids";
 				PRODUCT_NAME = luckkids;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "LuckKids-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -591,10 +613,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = PLZY9FTCGS;
+				DEVELOPMENT_TEAM = 7Y82CDD85J;
 				INFOPLIST_FILE = LuckKids/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -607,6 +632,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.app.luck-kids";
 				PRODUCT_NAME = luckkids;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "LuckKids-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -698,7 +724,12 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -785,7 +816,12 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
