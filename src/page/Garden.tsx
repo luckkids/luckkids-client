@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import styled from 'styled-components/native';
-import { Button, Colors, Font, L, SvgIcon } from '@design-system';
+import { Button, Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import { ActionIcon } from '@components/common/ActionIcon';
 import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
 import { GardenItem } from '@components/page/garden/garden.item';
@@ -30,7 +30,7 @@ const S = {
     (props: { isList: boolean }) => {
       return {
         rowGap: props.isList ? 0 : 8,
-        paddingHorizontal: props.isList ? 0 : 17,
+        paddingHorizontal: props.isList ? 0 : 21,
       };
     },
   ),
@@ -170,7 +170,11 @@ export const Garden: React.FC = () => {
           </View>
         </TouchableWithoutFeedback>
       </L.Row>
-      <ScrollView>
+      <ScrollView
+        contentInset={{
+          bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT + 132,
+        }}
+      >
         <S.listWrap isList={isList}>
           {myData &&
             (isList ? (

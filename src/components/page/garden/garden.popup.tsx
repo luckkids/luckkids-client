@@ -72,13 +72,13 @@ export const GardenPopup: React.FC<IGardenPopup> = ({
           }
         >
           <Dim
-            colors={['#478d87', '#647a36']}
+            colors={['#3E4A33', '#314540']}
             style={{
               position: 'absolute',
               bottom: 0,
               width: '100%',
               height: '100%',
-              opacity: 0.6,
+              opacity: 0.97,
             }}
           >
             <S.Dim />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image, TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
-import { Font, L, SvgIcon } from '@design-system';
+import { CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import Colors from '../../../design-system/colors';
 import { GardenLeagueItem } from '@components/page/garden/garden.league.item';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -24,12 +24,14 @@ const S = {
     height: '100%',
     width: '100%',
     zIndex: 1,
+    bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
   }),
   Dim: styled.View({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backdropFilter: 'blur(30px)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
   }),
   leagueContainer: styled.View({
     display: 'flex',

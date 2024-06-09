@@ -104,44 +104,48 @@ export const PageMissionRepair = () => {
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
-        <ScrollView>
-          <L.Row p={24}>
-            <Font type={'TITLE2_BOLD'}>
-              행운의 습관을 선택하고 알림을 설정해 보세요!
-            </Font>
-          </L.Row>
-          <L.Row ph={25} pv={15}>
-            <MissionRepairCategoryItem
-              isAddButton={true}
-              label={'습관추가'}
-              onPress={() => navigation.navigate('MissionAdd')}
-            />
-            {allCategory.length !== 0 && (
-              <ScrollView horizontal={true}>
-                <L.Row ml={8} g={8}>
-                  {allCategory.map((item, i) => {
-                    return (
-                      <MissionRepairCategoryItem
-                        isActive={isRemove ? !isRemove : i === current}
-                        label={item}
-                        onPress={() => {
-                          if (i === current && !isRemove) {
-                            setIsRemove(true);
-                            setListCategory(allCategory);
-                            return;
-                          }
-                          setCurrent(i);
-                          setIsRemove(false);
-                          setListCategory([item]);
-                        }}
-                        key={i}
-                      />
-                    );
-                  })}
-                </L.Row>
-              </ScrollView>
-            )}
-          </L.Row>
+        <L.Row p={24}>
+          <Font type={'TITLE2_BOLD'}>
+            행운의 습관을 선택하고 알림을 설정해 보세요!
+          </Font>
+        </L.Row>
+        <L.Row ph={25} pv={15}>
+          <MissionRepairCategoryItem
+            isAddButton={true}
+            label={'습관추가'}
+            onPress={() => navigation.navigate('MissionAdd')}
+          />
+          {allCategory.length !== 0 && (
+            <ScrollView horizontal={true}>
+              <L.Row ml={8} g={8}>
+                {allCategory.map((item, i) => {
+                  return (
+                    <MissionRepairCategoryItem
+                      isActive={isRemove ? !isRemove : i === current}
+                      label={item}
+                      onPress={() => {
+                        if (i === current && !isRemove) {
+                          setIsRemove(true);
+                          setListCategory(allCategory);
+                          return;
+                        }
+                        setCurrent(i);
+                        setIsRemove(false);
+                        setListCategory([item]);
+                      }}
+                      key={i}
+                    />
+                  );
+                })}
+              </L.Row>
+            </ScrollView>
+          )}
+        </L.Row>
+        <ScrollView
+          contentInset={{
+            bottom: DEFAULT_MARGIN + 30,
+          }}
+        >
           {listCategory.map((item, i) => {
             return (
               <React.Fragment key={i}>
@@ -167,7 +171,7 @@ export const PageMissionRepair = () => {
             );
           })}
         </ScrollView>
-        <L.Absolute b={bottom} w={SCREEN_WIDTH}>
+        <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>
           <L.Row ph={DEFAULT_MARGIN}>
             <Button
               type={'action'}
@@ -180,10 +184,6 @@ export const PageMissionRepair = () => {
           </L.Row>
         </L.Absolute>
       </FrameLayout>
-      {/* <FloatingButton
-        text={'홈(임시버튼)'}
-        onPress={() => navigation.navigate('Home')}
-      /> */}
     </>
   );
 };

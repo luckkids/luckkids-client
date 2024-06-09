@@ -103,6 +103,7 @@ export interface IMissionListData {
   alertTime: string;
   id: number;
   missionDescription: string;
+  missionType: string;
 }
 
 export interface IGarden {
