@@ -29,6 +29,7 @@ API.interceptors.request.use(
 
 API.interceptors.response.use(
   (response) => {
+    console.log('response ====>', response.data);
     return response.data;
   },
   async (error) => {

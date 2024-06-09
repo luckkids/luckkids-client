@@ -1,10 +1,10 @@
 import React from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 import { format } from 'date-fns';
 import { LocaleConfig } from 'react-native-calendars';
 import { Font, L } from '@design-system';
-import { TouchableWithoutFeedback } from 'react-native';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useHomeInfo } from '@queries';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 LocaleConfig.locales.ko = {
   monthNames: [
@@ -82,7 +82,7 @@ const HomeWeekCalendar: React.FC = () => {
         {weekDates.map((item) => {
           const isToday = item.day === format(today, 'd');
           const isFuture = item.date > format(today, 'yyyy-MM-dd');
-          const isSucceedDate = !!missionOutcomeForWeekResponse?.calender.find(
+          const isSucceedDate = !!missionOutcomeForWeekResponse?.calendar.find(
             (r) => r.missionDate === item.date,
           )?.hasSucceed;
 

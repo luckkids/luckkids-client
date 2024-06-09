@@ -1,79 +1,91 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { format } from 'date-fns';
 import { CalendarList, DateData } from 'react-native-calendars';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { APP_LAUNCH_DATE } from '@constants';
 import { Colors, Font, FontSettings, L } from '@design-system';
-
-const initialDate = '2024-02-10'; // 앱 출시 날짜
+import { useHomeCalendar } from '@queries';
+import HomeCalendarDetail from './home.calendar.detail';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 
 const HomeCalendar = () => {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [activatedDates, setActivatedDates] = useState<string[]>([
-    '2024-02-01',
-    '2024-02-06',
-  ]);
+  const [activatedDates, setActivatedDates] = useState<string[]>([]);
   const today = format(new Date(), 'yyyy-MM-dd');
+  const { bottom } = useSafeAreaInsets();
+  const [currentDate, setCurrentDate] = useState<string>(today);
 
   const PAST_RANGE = Math.abs(
-    new Date(initialDate).getMonth() - new Date(today).getMonth(),
+    new Date(APP_LAUNCH_DATE).getMonth() - new Date(today).getMonth(),
   );
 
+  const { data: homeCalendarInfo } = useHomeCalendar({
+    missionDate: currentDate,
+  });
+
   const onDayPress = useCallback((day: DateData) => {
-    setSelected(day.dateString);
+    BottomSheet.show({
+      component: <HomeCalendarDetail selectedDate={day.dateString} />,
+    });
   }, []);
 
   const renderDayComponent = useCallback(
     (date?: DateData) => {
       if (!date) return <></>;
-      const isSelected = selected === date?.dateString;
       const isActivated = activatedDates.includes(date?.dateString || '');
 
       return (
         <TouchableWithoutFeedback onPress={() => date && onDayPress(date)}>
-          {isSelected ? (
-            <L.Row
-              w={DAY_ITEM_SIZE}
-              h={DAY_ITEM_SIZE}
-              items="center"
-              justify="center"
-              bg={isSelected ? 'LUCK_GREEN' : 'TRANSPARENT'}
-              rounded={DAY_ITEM_SIZE / 2}
+          <L.Row
+            w={DAY_ITEM_SIZE}
+            h={DAY_ITEM_SIZE}
+            items="center"
+            justify="center"
+            rounded={DAY_ITEM_SIZE / 2}
+            style={{
+              backgroundColor: isActivated
+                ? `${Colors.LUCK_GREEN}40`
+                : Colors.TRANSPARENT,
+            }}
+          >
+            <Font
+              type={'BODY_SEMIBOLD'}
+              color={isActivated ? 'LUCK_GREEN' : 'GREY1'}
             >
-              <Font type={'BODY_SEMIBOLD'} color={'BLACK'}>
-                {date?.day}
-              </Font>
-            </L.Row>
-          ) : (
-            <L.Row
-              w={DAY_ITEM_SIZE}
-              h={DAY_ITEM_SIZE}
-              items="center"
-              justify="center"
-              rounded={DAY_ITEM_SIZE / 2}
-              style={{
-                backgroundColor: isActivated
-                  ? `${Colors.LUCK_GREEN}40`
-                  : Colors.TRANSPARENT,
-              }}
-            >
-              <Font
-                type={'BODY_SEMIBOLD'}
-                color={isActivated ? 'LUCK_GREEN' : 'GREY1'}
-              >
-                {date?.day}
-              </Font>
-            </L.Row>
-          )}
+              {date?.day}
+            </Font>
+          </L.Row>
         </TouchableWithoutFeedback>
       );
     },
-    [selected, activatedDates],
+    [activatedDates],
   );
+
+  const handleCurrentDateChange = useCallback((months: DateData[]) => {
+    // 마지막 달의 마지막 날짜를 기준으로 currentDate를 설정
+    const lastMonth = months[months.length - 1];
+    const lastDate = new Date(
+      lastMonth.year,
+      lastMonth.month - 1,
+      lastMonth.day,
+    );
+    setCurrentDate(format(lastDate, 'yyyy-MM-dd'));
+  }, []);
+
+  useEffect(() => {
+    if (!homeCalendarInfo) return;
+    setActivatedDates((prevDates) => {
+      const newDates = homeCalendarInfo.calendar
+        .filter((c) => c.hasSucceed)
+        .map((c) => c.missionDate);
+      return [...prevDates, ...newDates];
+    });
+  }, [homeCalendarInfo]);
 
   return (
     <CalendarList
       theme={theme}
-      current={initialDate}
+      current={currentDate}
       pastScrollRange={PAST_RANGE}
       futureScrollRange={0}
       onDayPress={onDayPress}
@@ -89,14 +101,13 @@ const HomeCalendar = () => {
       }}
       contentContainerStyle={{
         backgroundColor: Colors.TRANSPARENT,
-        paddingBottom: 20,
       }}
       style={{
         backgroundColor: Colors.TRANSPARENT,
-        height: '100%',
       }}
       bounces={false}
       dayComponent={({ date }) => renderDayComponent(date)}
+      onVisibleMonthsChange={handleCurrentDateChange}
     />
   );
 };
@@ -118,7 +129,9 @@ const theme = {
       },
       main: {
         backgroundColor: Colors.TRANSPARENT,
+        paddingBottom: 100,
       },
+      paddingBottom: 200,
     },
   },
   'stylesheet.day.basic': {

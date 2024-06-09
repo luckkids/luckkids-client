@@ -134,7 +134,7 @@ export const Home: React.FC = () => {
                   <L.Col w={'100%'}>
                     <L.Row items="flex-end">
                       <Font type="LARGE_TITLE_BOLD" mr={4}>
-                        {luckkidsAchievementRate}
+                        {luckkidsAchievementRate * 100}
                       </Font>
                       <Font type="TITLE1_BOLD" color="HOME_INFO_TEXT">
                         %
