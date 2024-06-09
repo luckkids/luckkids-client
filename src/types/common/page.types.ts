@@ -2,6 +2,7 @@ import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RemotePackage } from 'react-native-code-push';
 import { SocialType } from '../user';
+import { CharacterType } from './character.types';
 
 export const DefaultTypeUnit = {
   CHECKED: 'CHECKED',
@@ -37,7 +38,10 @@ export type AppScreensParamList = {
   Home: undefined;
   HomeAlarm: undefined;
   HomeCalendar: undefined;
-  HomeLevel: undefined;
+  HomeLevel: {
+    level: number;
+    type: CharacterType;
+  };
   HomeProfile: undefined;
   HomeProfileShare: undefined;
   Mission: undefined;
