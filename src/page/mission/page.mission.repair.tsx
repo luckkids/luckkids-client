@@ -50,16 +50,11 @@ export const PageMissionRepair = () => {
   }, [isSuccess]);
 
   const handleConfirm = () => {
-    console.log(55, type);
-    if (type === 'INITIAL_SETTING') {
-      setInitialSetting({
-        ...initialSetting,
-        missions: [],
-      });
-      return navigation.navigate('TutorialSettingNoti');
-    } else {
-      // TODO (gil)
-    }
+    setInitialSetting({
+      ...initialSetting,
+      missions: [],
+    });
+    return navigation.navigate('TutorialSettingNoti');
   };
 
   const categoryButton = useCallback((key: string) => {
@@ -171,18 +166,20 @@ export const PageMissionRepair = () => {
             );
           })}
         </ScrollView>
-        <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>
-          <L.Row ph={DEFAULT_MARGIN}>
-            <Button
-              type={'action'}
-              text={'선택 완료'}
-              onPress={handleConfirm}
-              sizing="stretch"
-              textColor="BLACK"
-              bgColor={'LUCK_GREEN'}
-            />
-          </L.Row>
-        </L.Absolute>
+        {type === 'INITIAL_SETTING' && (
+          <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>
+            <L.Row ph={DEFAULT_MARGIN}>
+              <Button
+                type={'action'}
+                text={'선택 완료'}
+                onPress={handleConfirm}
+                sizing="stretch"
+                textColor="BLACK"
+                bgColor={'LUCK_GREEN'}
+              />
+            </L.Row>
+          </L.Absolute>
+        )}
       </FrameLayout>
     </>
   );
