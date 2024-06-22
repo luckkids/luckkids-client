@@ -13,11 +13,38 @@ import { IMissionListData } from '@types-common/page.types';
 export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
   const [data, setData] = useState<Array<IMissionListData>>([]);
-  const [hideData, setHideData] = useState<Array<IMissionListData>>([]);
   const [count, setCount] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
+  const [accumulate, setAccumulate] = useState<number>(0);
   const navigation = useNavigationService();
   const isFocused = useIsFocused();
+  const { onFetch: missionList } = useFetch({
+    method: 'GET',
+    url: '/missionOutcomes',
+    value: {},
+    onSuccessCallback: (rtn) => {
+      setData(rtn);
+      setTotal(rtn.length);
+      setCount(
+        rtn.filter((item: IMissionListData) => item.missionStatus === 'SUCCEED')
+          .length,
+      );
+    },
+  });
+  const { onFetch: accumulateCount } = useFetch({
+    method: 'GET',
+    url: '/missionOutcomes/count',
+    value: {},
+    onSuccessCallback: (rtn) => {
+      setAccumulate(rtn.count);
+    },
+  });
+  useEffect(() => {
+    if (isFocused) {
+      missionList();
+      accumulateCount();
+    }
+  }, [isFocused, count]);
   const resultItemData = useMemo(() => {
     if (hide) {
       return data.filter((item) => {
@@ -26,33 +53,13 @@ export const Mission: React.FC = () => {
     } else {
       return data;
     }
-  }, [hide]);
-  const { onFetch: missionList } = useFetch({
-    method: 'GET',
-    url: '/missionOutcomes',
-    value: {},
-    onSuccessCallback: (rtn) => {
-      setData(rtn);
-      setHideData(
-        rtn.filter((item: IMissionListData) => item.missionStatus === 'FAILED'),
-      );
-      setTotal(rtn.length);
-      setCount(
-        rtn.filter((item: IMissionListData) => item.missionStatus === 'SUCCEED')
-          .length,
-      );
-    },
-  });
-  useEffect(() => {
-    if (isFocused) missionList();
-  }, [isFocused]);
+  }, [hide, data]);
 
   return (
     <>
       <FrameLayout>
         <L.Row ph={24} justify={'flex-end'}>
-          <Font type={'FOOTNOTE_REGULAR'}>누적된 수행 습관 545</Font>
-          {/*<Font type={'FOOTNOTE_REGULAR'}>+3</Font>*/}
+          <Font type={'FOOTNOTE_REGULAR'}>누적된 수행 습관 {accumulate}</Font>
         </L.Row>
         <L.Row p={24} pt={40} justify={'space-between'}>
           <Font type={'LARGE_TITLE_BOLD'}>오늘의 습관</Font>
@@ -80,7 +87,7 @@ export const Mission: React.FC = () => {
             return (
               <MissionItem
                 {...item}
-                key={i}
+                key={`${hide}-${i}`}
                 setCount={setCount}
                 prevCount={count}
               />
