@@ -8,13 +8,14 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
-import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
+import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
+import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
@@ -37,7 +38,7 @@ export const PageMissionRepair = () => {
 
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
-    url: '/missions',
+    url: '/initialSetting/luckMission',
     value: {},
     onSuccessCallback: (rtn) => {
       setListCategory(Object.keys(rtn));
@@ -155,10 +156,10 @@ export const PageMissionRepair = () => {
                 </L.Row>
                 {dataDicArray[item]?.map((value, i) => {
                   return (
-                    <MisstionRepairItem
+                    <MissionRepairItem
                       {...value}
-                      isCheck={value.alertStatus === 'CHECKED'}
                       key={i}
+                      isCheck={value.alertStatus === 'CHECKED'}
                     />
                   );
                 })}

@@ -9,6 +9,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
+import { MissionSwipeItem } from '@components/page/mission/mission.swipe.item';
 
 export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
@@ -85,7 +86,7 @@ export const Mission: React.FC = () => {
         >
           {resultItemData.map((item, i) => {
             return (
-              <MissionItem
+              <MissionSwipeItem
                 {...item}
                 key={`${hide}-${i}`}
                 setCount={setCount}
