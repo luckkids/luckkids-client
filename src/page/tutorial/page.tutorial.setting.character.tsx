@@ -15,6 +15,8 @@ import { userApis } from '@apis/user';
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
 const tutorialSettingCharacterCompleteImage = require('assets/images/tutorial-setting-character-complete.png');
+const tutorialSettingCharacterNickname = require('assets/images/tutorial-setting-nickname.png');
+
 const tutorialSettingCharacterImage = require('assets/images/tutorial-setting-character.png');
 
 export const PageTutorialSettingCharacter: React.FC = () => {
@@ -198,6 +200,17 @@ export const PageTutorialSettingCharacter: React.FC = () => {
       >
         {renderContent()}
       </L.Col>
+      {step === 2 && (
+        <L.Absolute flex-1 b={0} items="flex-end">
+          <Image
+            source={tutorialSettingCharacterNickname}
+            style={{
+              width: SCREEN_WIDTH,
+              height: SCREEN_WIDTH * (500 / 375),
+            }}
+          />
+        </L.Absolute>
+      )}
       {step === 2 && !!nickname && (
         <L.Absolute b={bottom} w={SCREEN_WIDTH}>
           <L.Row ph={DEFAULT_MARGIN}>

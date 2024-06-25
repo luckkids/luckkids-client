@@ -12,5 +12,6 @@ export const defaultStyles = StyleSheet.create({
     height: 60,
     flex: 1,
     padding: 20,
+    fontWeight: 'normal',
   },
 });
