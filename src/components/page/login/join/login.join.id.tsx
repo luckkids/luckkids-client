@@ -4,10 +4,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
+import { authApis } from '@apis/auth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
-import { authApis } from '@apis/auth';
+import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 
 export const LoginJoinId: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -62,12 +63,15 @@ export const LoginJoinId: React.FC = () => {
   }, [email]);
 
   const handleConfirmEmail = useCallback(async () => {
+    LoadingIndicator.show({});
     if (getIsError()) return;
     const authKey = await handleSendEmail();
-    if (authKey)
+    if (authKey) {
+      LoadingIndicator.hide();
       return navigation.navigate('LoginJoinEmailConfirm', {
         authKey,
       });
+    }
   }, [getIsError, handleSendEmail]);
 
   useEffect(() => {

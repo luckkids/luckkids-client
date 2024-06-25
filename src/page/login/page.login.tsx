@@ -4,13 +4,14 @@ import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
+import { authApis } from '@apis/auth';
 import { FrameLayout } from '@frame/frame.layout';
+import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
 import useAsyncEffect from '@hooks/useAsyncEffect';
-import { useFetch } from '@hooks/useFetch';
 
 export const PageLogin: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -30,23 +31,30 @@ export const PageLogin: React.FC = () => {
     navigation.navigate('LoginId');
   };
 
-  const { onFetch: oauthKakaoLogin } = useFetch({
-    method: 'POST',
-    url: '/auth/oauth/login',
-    onSuccessCallback: () => {},
-    onFailCallback: () => {},
-  });
+  const { login } = useAuth();
+
+  const onSuccessCallback = () => {};
 
   const handleKakao = async () => {
     const token = await handleKakaoLogin();
-    if (token)
-      oauthKakaoLogin({
-        snsType: 'KAKAO',
-        deviceId,
-        pushKey:
-          'ffBUlnx4BE7XveMXelsLNu:APA91bHfd01c-SnAraV3twtgOiZztYEfC9Db-PVFYMvIxZntFc5twUQnuOOXKSFawxF7ZLTA64P36yEOYhQDHKYhAd52tgMWOZVmjHq7x8wIxInmul2Fbmab5yGG_kNKMylCoNJK8wZo',
-        token,
-      });
+    if (token) {
+      try {
+        const { accessToken, refreshToken, email } = await authApis.oauthLogin({
+          snsType: 'KAKAO',
+          deviceId,
+          pushKey: null,
+          token,
+        });
+
+        // login({
+        //   accessToken,
+        //   refreshToken,
+        //   email,
+        // });
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   useAsyncEffect(async () => {

@@ -4,10 +4,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon } from '@design-system';
+import { authApis } from '@apis/auth';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
+import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
 
 type AgreementContent = {
@@ -16,22 +17,21 @@ type AgreementContent = {
   url: string;
 };
 
-//TODO : 페이지 이동 필요
 const AGREEMENT_CONTENT: AgreementContent[] = [
   {
     text: '럭키즈 이용약관 필수동의',
     isNecessary: true,
-    url: 'https://naver.com',
+    url: 'https://www.notion.so/1f210857eb944efcb575dc674249cda3?pvs=4',
   },
   {
     text: '개인정보 필수동의',
     isNecessary: true,
-    url: 'https://naver.com',
+    url: 'https://www.notion.so/4bfd637b63324d93b5deb2360a14fb26?pvs=4',
   },
   {
     text: '마케팅 수신 동의 (선택)',
     isNecessary: false,
-    url: 'https://naver.com',
+    url: 'https://www.notion.so/df134f4ec1c24461a8dd7393774c0c92?pvs=4',
   },
 ];
 
@@ -74,20 +74,15 @@ export const PageLoginJoinAgreement: React.FC = () => {
     .filter((info) => info.isNecessary)
     .some((info) => !info.isChecked);
 
-  const { onFetch: signUp } = useFetch({
-    method: 'POST',
-    url: '/join/user',
-    value: {
+  const handleConfirmAgree = async () => {
+    LoadingIndicator.show({});
+    await authApis.signUp({
       email: joinInfo.email,
       password: joinInfo.password,
-    },
-    onSuccessCallback: () => {
-      navigation.navigate('LoginId');
-    },
-    onFailCallback: () => {
-      navigation.navigate('LoginId');
-    },
-  });
+    });
+    navigation.navigate('LoginId');
+    LoadingIndicator.hide();
+  };
 
   return (
     <FrameLayout>
@@ -173,7 +168,7 @@ export const PageLoginJoinAgreement: React.FC = () => {
             <Button
               type={'action'}
               text={'동의했어요'}
-              onPress={() => signUp}
+              onPress={handleConfirmAgree}
               sizing="stretch"
               textColor="BLACK"
               bgColor={'LUCK_GREEN'}
