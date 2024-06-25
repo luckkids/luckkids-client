@@ -45,7 +45,7 @@ const PageUpdateScreen: React.FC = () => {
         {/* luckkids 로고 */}
         <L.Col flex-1 justify="center">
           <Image
-            source={require('@design-system/assets/images/update-logo.png')}
+            source={require('@design-system/assets/images/main-logo.png')}
             style={{
               resizeMode: 'contain',
               width: 136,

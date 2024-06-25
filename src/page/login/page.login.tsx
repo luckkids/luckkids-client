@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
@@ -67,7 +67,14 @@ export const PageLogin: React.FC = () => {
         <L.Col w={'100%'} items="center">
           <L.Col mb={60} items="center">
             {/* 로고 추가 */}
-            <Font type={'LARGE_TITLE_BOLD'}>Luck Kids</Font>
+            <Image
+              source={require('@design-system/assets/images/main-logo.png')}
+              style={{
+                resizeMode: 'contain',
+                width: 136,
+                height: 107,
+              }}
+            />
           </L.Col>
           <L.Col ph={DEFAULT_MARGIN} g={10} w={'100%'}>
             <Button
