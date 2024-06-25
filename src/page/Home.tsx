@@ -31,7 +31,7 @@ export const Home: React.FC = () => {
   const navigation = useNavigationService();
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
-    navigation.navigate('HomeProfile');
+    navigation.push('HomeProfile');
   };
 
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -61,6 +61,8 @@ export const Home: React.FC = () => {
   const { luckkidsAchievementRate = 0, userCharacterSummaryResponse } =
     homeInfo || {};
   const { inProgressCharacter } = userCharacterSummaryResponse || {};
+  const characterType = inProgressCharacter?.characterType;
+  const level = inProgressCharacter?.level;
 
   return (
     <>
