@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { mission_categories } from '@constants';
 import { Font, L, SvgIcon } from '@design-system';
 import { useHomeCalendarDetail } from '@queries';
 import { getDayOfWeek } from '@utils';
-import { mission_categories } from '@constants';
 
 type HomeCalendarDetailProps = {
   selectedDate: string;
