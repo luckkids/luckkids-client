@@ -1,6 +1,5 @@
-// Day.tsx
 import React, { useCallback } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
 import { format } from 'date-fns';
 import { useRecoilValue } from 'recoil';
 import { Colors, Font, L } from '@design-system';
