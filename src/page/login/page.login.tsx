@@ -4,7 +4,7 @@ import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
-import { authApis } from '@apis/auth';
+import { SettingStatus, SocialType } from '@types-index';
 import { FrameLayout } from '@frame/frame.layout';
 import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -31,26 +31,40 @@ export const PageLogin: React.FC = () => {
     navigation.navigate('LoginId');
   };
 
-  const { login } = useAuth();
+  const { oauthLogin } = useAuth();
 
-  const onSuccessCallback = () => {};
+  const getOauthHandler = async (type: SocialType) => {
+    switch (type) {
+      case 'APPLE':
+        return await handleAppleLogin();
+      case 'GOOGLE':
+        return await handleGoogleLogin();
+      case 'KAKAO':
+      default:
+        return await handleKakaoLogin();
+    }
+  };
 
-  const handleKakao = async () => {
-    const token = await handleKakaoLogin();
+  const handleAfterLogin = (settingStatus: SettingStatus) => {
+    if (settingStatus === 'COMPLETE') {
+      return navigation.navigate('Home');
+    } else {
+      return navigation.navigate('TutorialStart');
+    }
+  };
+
+  const handleOauthLogin = async (type: SocialType) => {
+    const token = await getOauthHandler?.(type);
     if (token) {
       try {
-        const { accessToken, refreshToken, email } = await authApis.oauthLogin({
-          snsType: 'KAKAO',
+        const res = await oauthLogin({
+          snsType: type,
           deviceId,
           pushKey: null,
           token,
         });
 
-        // login({
-        //   accessToken,
-        //   refreshToken,
-        //   email,
-        // });
+        if (res) handleAfterLogin(res.settingStatus);
       } catch (e) {
         console.log(e);
       }
@@ -82,7 +96,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'KAKAO_YELLOW'}
               text={'카카오로 계속하기'}
               textColor="BLACK"
-              onPress={handleKakao}
+              onPress={() => handleOauthLogin('KAKAO')}
               type={'action'}
               sizing="stretch"
               iconName="iconKakao"
@@ -92,7 +106,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'WHITE'}
               text={'Apple로 계속하기'}
               textColor="BLACK"
-              onPress={handleAppleLogin}
+              onPress={() => handleOauthLogin('APPLE')}
               type={'action'}
               sizing="stretch"
               iconName="iconApple"
@@ -102,7 +116,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'WHITE'}
               text={'Google로 계속하기'}
               textColor="BLACK"
-              onPress={handleGoogleLogin}
+              onPress={() => handleOauthLogin('GOOGLE')}
               type={'action'}
               sizing="stretch"
               iconName="iconGoogle"

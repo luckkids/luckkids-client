@@ -59,11 +59,12 @@ export type OauthLoginResponse = {
   accessToken: string;
   refreshToken: string;
   email: string;
+  settingStatus: SettingStatus;
 };
 
 const oauthLogin = async (request: OauthLoginRequest) => {
   const res = await API.post<OauthLoginResponse>('/auth/oauth/login', request);
-  return res.data;
+  return res;
 };
 
 export type ConfirmEmailRequest = {
