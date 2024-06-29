@@ -1,12 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import {
-  Animated,
-  GestureResponderEvent,
-  Image,
-  ScrollView,
-  View,
-} from 'react-native';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { Animated, GestureResponderEvent, Image, View } from 'react-native';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
@@ -19,14 +13,12 @@ import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
-const bgImage = require('assets/images/home-bg.png');
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
 const luckkidsRabbit = require('assets/images/luckkids-rabbit.png');
 const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
-//TODO: animation 수정 필요
 export const Home: React.FC = () => {
   const navigation = useNavigationService();
 
@@ -34,20 +26,12 @@ export const Home: React.FC = () => {
     navigation.push('HomeProfile');
   };
 
-  const animatedValue = useRef(new Animated.Value(0)).current;
+  const scrollY = useRef(new Animated.Value(0)).current;
 
-  // 애니메이션을 위한 높이와 위치 계산
-  const animatedHeight = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [
-      SUCCESS_RATE_HEIGHT + GAP + LUCKKIDS_HEIGHT - INITIAL_HEIGHT_REDUCTION,
-      SUCCESS_RATE_HEIGHT + GAP + LUCKKIDS_HEIGHT,
-    ],
-  });
-
-  const animatedY = animatedValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -INITIAL_HEIGHT_REDUCTION],
+  const infoTranslateY = scrollY.interpolate({
+    inputRange: [0, 200],
+    outputRange: [0, -100],
+    extrapolate: 'clamp',
   });
 
   useLayoutEffect(() => {
@@ -61,13 +45,11 @@ export const Home: React.FC = () => {
   const { luckkidsAchievementRate = 0, userCharacterSummaryResponse } =
     homeInfo || {};
   const { inProgressCharacter } = userCharacterSummaryResponse || {};
-  const characterType = inProgressCharacter?.characterType;
-  const level = inProgressCharacter?.level;
 
   return (
     <>
       <FrameLayout
-        statusBarColor={'HOME_BG'}
+        // statusBarColor={'HOME_BG'}
         NavBar={<HomeNavbar />}
         backgroundImage={
           inProgressCharacter && {
@@ -78,20 +60,32 @@ export const Home: React.FC = () => {
             ),
           }
         }
+        stickToTop
       >
         {/* 캘린더 */}
-        <HomeWeekCalendar />
+        <View style={{ height: 100 }}>
+          <HomeWeekCalendar />
+        </View>
         {/* 정보 */}
-        <ScrollView
-          style={{
-            flex: 1,
-            overflow: 'visible',
-          }}
+        <Animated.ScrollView
+          style={{ flex: 1 }}
           contentContainerStyle={{
             paddingHorizontal: DEFAULT_MARGIN,
+            paddingTop: SCREEN_HEIGHT * 0.4, // 초기 스크롤 위치 조정
+            paddingBottom: 20, // 하단 여백 추가
           }}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: true },
+          )}
+          scrollEventThrottle={16}
         >
-          <View>
+          <Animated.View
+            style={{
+              transform: [{ translateY: infoTranslateY }],
+            }}
+          >
+            {/* 프로필 보기 버튼 */}
             <L.Row justify="flex-end" mb={14}>
               <ChipButton
                 text={'프로필 보기'}
@@ -244,8 +238,8 @@ export const Home: React.FC = () => {
                 </L.Row>
               </L.Col>
             </L.Row>
-          </View>
-        </ScrollView>
+          </Animated.View>
+        </Animated.ScrollView>
       </FrameLayout>
     </>
   );
@@ -254,5 +248,3 @@ export const Home: React.FC = () => {
 const SUCCESS_RATE_HEIGHT = 142;
 const GAP = 8;
 const LUCKKIDS_HEIGHT = 157;
-const INITIAL_HEIGHT_REDUCTION = 140;
-const CHARACTER_MARGIN = 62;

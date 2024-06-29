@@ -94,6 +94,13 @@ const signUp = async (request: SignUpRequest) => {
   return res.data;
 };
 
+const checkEmail = async (email: string) => {
+  const res = await API.get('/join/checkEmail', {
+    params: { email },
+  });
+  return res.data;
+};
+
 export const authApis = {
   login,
   sendEmail,
@@ -101,4 +108,5 @@ export const authApis = {
   oauthLogin,
   confirmEmail,
   signUp,
+  checkEmail,
 };
