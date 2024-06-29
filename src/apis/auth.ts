@@ -95,8 +95,8 @@ const signUp = async (request: SignUpRequest) => {
 };
 
 const checkEmail = async (email: string) => {
-  const res = await API.get('/join/checkEmail', {
-    params: { email },
+  const res = await API.post('/join/checkEmail', {
+    email,
   });
   return res.data;
 };

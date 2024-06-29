@@ -2,27 +2,32 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
 import { authApis } from '@apis/auth';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useFetch } from '@hooks/useFetch';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
-import { Subject } from 'rxjs';
-import { debounceTime, filter, switchMap } from 'rxjs/operators';
-import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 
-// TODO(Gina): 이메일 중복 체크 로직 확인 (sns도)
+const socialTypeValues = {
+  APPLE: 'APPLE',
+  KAKAO: 'KAKAO',
+  GOOGLE: 'GOOGLE',
+  NORMAL: 'NORMAL',
+} as const;
+
 export const LoginJoinId: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
   const [joinInfo, setJoinInfo] = useRecoilState(RecoilJoinInfo);
   const { email } = joinInfo;
 
   const [email$] = useState(() => new Subject<string>());
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
+  const [isDuplicate, setIsDuplicate] = useState<boolean>(false);
 
-  const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
-  const [duplicationPassed, setDuplicationPassed] = useState<boolean>(false);
   const navigation = useNavigationService();
 
   const handleSendEmail = async () => {
@@ -32,79 +37,76 @@ export const LoginJoinId: React.FC = () => {
 
   const getErrorMessage = useCallback(() => {
     if (!isValidEmail) return '이메일 형식을 확인해주세요!';
-    if (!duplicationPassed) return '이미 등록된 이메일이에요!';
+    if (isDuplicate) return '이미 등록된 이메일입니다!';
     return '';
-  }, [email]);
+  }, [isValidEmail, isDuplicate]);
 
   const getIsError = useCallback(() => {
     if (!email) return false;
-    if (!isValidEmail || !!duplicationPassed) return true;
-    return false;
-  }, [email]);
-
-  const resetState = useCallback(() => {
-    setJoinInfo((prev) => ({ ...prev, email: '' }));
-    setIsValidEmail(false);
-    setDuplicationPassed(false);
-  }, [setJoinInfo]);
+    return !isValidEmail || isDuplicate;
+  }, [email, isValidEmail, isDuplicate]);
 
   const handleConfirmEmail = useCallback(async () => {
+    if (!email || !isValidEmail) return;
+
     LoadingIndicator.show({});
-    if (getIsError()) return;
-    const authKey = await handleSendEmail();
-    if (authKey) {
+    try {
+      // 이메일 중복 체크
+      await authApis.checkEmail(email);
+
+      // 이메일 인증 키 발송
+      const authKey = await handleSendEmail();
+
       LoadingIndicator.hide();
-      return navigation.navigate('LoginJoinEmailConfirm', {
-        authKey,
-      });
-    }
-  }, [getIsError, handleSendEmail]);
-
-  useEffect(() => {
-    const subscription = email$
-      .pipe(
-        debounceTime(300),
-        switchMap((email) => {
-          const reg = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          const isValid = reg.test(email);
-          setIsValidEmail(isValid);
-
-          if (isValid) {
-            console.log(63, email);
-            return authApis.checkEmail(email);
+      if (authKey) {
+        navigation.navigate('LoginJoinEmailConfirm', { authKey });
+      }
+    } catch (error: any) {
+      LoadingIndicator.hide();
+      if (error.response && error.response.data) {
+        const { message } = error.response.data;
+        if (Object.values(socialTypeValues).includes(message)) {
+          if (message === 'NORMAL') {
+            setIsDuplicate(true);
           } else {
-            return Promise.resolve({ isDuplicate: false });
+            navigation.push('LoginAlready', { type: message });
           }
-        }),
-      )
-      .subscribe({
-        next: (result) => {
-          console.log('Email check result:', result);
-          setDuplicationPassed(!result.isDuplicate);
-        },
-        error: (error) => {
-          console.error('Email check error:', error);
+        } else {
           AlertPopup.show({
             title: '이메일 확인 에러',
-            body: error.response.data.message,
+            body: message,
             yesText: '확인',
           });
-          resetState();
-        },
-      });
+        }
+      } else {
+        AlertPopup.show({
+          title: '이메일 전송 실패',
+          body: '이메일 전송 중 오류가 발생했습니다. 다시 시도해주세요.',
+          yesText: '확인',
+        });
+      }
+    }
+  }, [email, isValidEmail, navigation]);
+
+  useEffect(() => {
+    const subscription = email$.pipe(debounceTime(300)).subscribe((email) => {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      setIsValidEmail(emailRegex.test(email));
+    });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleChangeEmail = useCallback((email: string) => {
-    console.log('handleChangeEmail', email);
-    setJoinInfo((prev) => ({
-      ...prev,
-      email,
-    }));
-
-    email$.next(email);
-  }, []);
+  const handleChangeEmail = useCallback(
+    (email: string) => {
+      setJoinInfo((prev) => ({
+        ...prev,
+        email,
+      }));
+      email$.next(email);
+    },
+    [setJoinInfo],
+  );
 
   return (
     <>
@@ -118,11 +120,10 @@ export const LoginJoinId: React.FC = () => {
           errorMessage={getErrorMessage()}
           isError={getIsError()}
           RightComponent={
-            getIsError() && (
+            email &&
+            isValidEmail && (
               <SvgIcon
-                name={
-                  duplicationPassed ? 'validation_check' : 'validation_error'
-                }
+                name={isDuplicate ? 'validation_error' : 'validation_check'}
                 size={20}
               />
             )
@@ -133,7 +134,7 @@ export const LoginJoinId: React.FC = () => {
         <L.Row ph={DEFAULT_MARGIN}>
           <Button
             type={'action'}
-            status={getIsError() || !email ? 'disabled' : 'normal'}
+            status={!email || !isValidEmail ? 'disabled' : 'normal'}
             text={'다음'}
             onPress={handleConfirmEmail}
             sizing="stretch"
