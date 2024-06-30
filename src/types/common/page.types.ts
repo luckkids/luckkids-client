@@ -142,6 +142,8 @@ export interface ISettingAlarm {
 }
 
 export interface ISettingNotice {
+  id: number;
   title: string;
   createdDate: string;
+  url: string;
 }

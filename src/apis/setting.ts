@@ -1,3 +1,4 @@
+import { ISettingNotice } from '@types-common/page.types';
 import API from './API';
 import { AlertStatus, AlertType } from '@types-common/setting.types';
 
@@ -22,6 +23,14 @@ const updateAlertSetting = async (request: UpdateAlertStatusRequest) => {
   return res;
 };
 
+export type GetNoticesResponse = ISettingNotice[];
+
+const getNotices = async () => {
+  const res = await API.get<GetNoticesResponse>('/notices');
+  return res;
+};
+
 export const settingApis = {
   updateAlertSetting,
+  getNotices,
 };
