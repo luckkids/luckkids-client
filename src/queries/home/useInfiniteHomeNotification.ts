@@ -5,7 +5,7 @@ import { GetNotificationListResponse, getNotificationList } from '@apis/home';
 
 const PAGE_SIZE = 15;
 
-export const useHomeNotification = (deviceId: string) => {
+export const useInfiniteHomeNotification = (deviceId: string) => {
   return useInfiniteQuery<
     GetNotificationListResponse,
     Error,

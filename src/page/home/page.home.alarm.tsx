@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList, ActivityIndicator } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { SvgIcon, L, Font, ButtonText } from '@design-system';
-import { useHomeNotification } from '@queries';
+import { useInfiniteHomeNotification } from '@queries';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import HomeAlarmItem from '@components/page/home/home.alarm.item';
 import { FrameLayout } from '@frame/frame.layout';
@@ -14,7 +14,7 @@ export const PageHomeAlarm: React.FC = () => {
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useHomeNotification(deviceId);
+    useInfiniteHomeNotification(deviceId);
 
   //TODO 이쪽 기획 확정되면 진행
   const handlePressAllowAlarm = () => {
