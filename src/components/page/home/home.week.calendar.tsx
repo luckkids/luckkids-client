@@ -82,7 +82,7 @@ const HomeWeekCalendar: React.FC = () => {
         {weekDates.map((item) => {
           const isToday = item.day === format(today, 'd');
           const isFuture = item.date > format(today, 'yyyy-MM-dd');
-          const isSucceedDate = !!missionOutcomeForWeekResponse?.calender.find(
+          const isSucceedDate = !!missionOutcomeForWeekResponse?.calendar.find(
             (r) => r.missionDate === item.date,
           )?.hasSucceed;
 

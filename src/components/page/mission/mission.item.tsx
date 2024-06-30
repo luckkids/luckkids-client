@@ -11,6 +11,8 @@ import styled from 'styled-components/native';
 import { Colors, Font, IconNames, L, SvgIcon } from '@design-system';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 
 const S = {
   item: styled.View({
@@ -53,6 +55,10 @@ interface IProps extends IMissionListData {
 export const MissionItem: React.FC<IProps> = (props) => {
   const [missionState, setMissionState] = useState<string>(props.missionStatus);
   const onMount = useRef(false);
+  const [rtnTime, setRtnTime] = useState(props.alertTime);
+  const [isChecked, setIsChecked] = useState<boolean>(
+    props.alertStatus === 'CHECKED',
+  );
 
   const { onFetch: isSuccessCount } = useFetch({
     method: 'PATCH',
@@ -99,29 +105,48 @@ export const MissionItem: React.FC<IProps> = (props) => {
   const bullet = useMemo(() => {
     return missionState === 'SUCCEED' ? <S.dot /> : null;
   }, [missionState]);
+
+  const Popup = useCallback(() => {
+    BottomSheet.show({
+      component: (
+        <MissionItemTimePicker
+          {...props}
+          isCheck={isChecked}
+          setIsCheckFn={() => setIsChecked(!isChecked)}
+          setRtnTime={setRtnTime}
+        />
+      ),
+    });
+  }, [isChecked]);
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        setMissionState((prev) => {
-          return prev === 'SUCCEED' ? 'FAILED' : 'SUCCEED';
-        });
-      }}
-    >
-      <L.Row ph={25} pv={20} justify={'space-between'}>
-        <S.Title>
-          <S.iconRound>{bullet}</S.iconRound>
-          <S.iconType>
-            <SvgIcon name={iconType} size={24} />
-          </S.iconType>
-          <Font
-            type={'BODY_SEMIBOLD'}
-            color={missionState === 'SUCCEED' ? 'GREY1' : 'WHITE'}
-          >
-            {props.missionDescription}
-          </Font>
-        </S.Title>
-        <Font type={'SUBHEADLINE_REGULAR'}>{props.alertTime}</Font>
-      </L.Row>
-    </TouchableWithoutFeedback>
+    <>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          setMissionState((prev) => {
+            return prev === 'SUCCEED' ? 'FAILED' : 'SUCCEED';
+          });
+        }}
+      >
+        <L.Row ph={25} pv={20} justify={'space-between'}>
+          <S.Title>
+            <S.iconRound>{bullet}</S.iconRound>
+            <S.iconType>
+              <SvgIcon name={iconType} size={24} />
+            </S.iconType>
+            <Font
+              type={'BODY_SEMIBOLD'}
+              color={missionState === 'SUCCEED' ? 'GREY1' : 'WHITE'}
+            >
+              {props.missionDescription}
+            </Font>
+          </S.Title>
+        </L.Row>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => Popup()}>
+        <Font type={'SUBHEADLINE_REGULAR'}>
+          {isChecked ? rtnTime : '알림 끔'}
+        </Font>
+      </TouchableWithoutFeedback>
+    </>
   );
 };

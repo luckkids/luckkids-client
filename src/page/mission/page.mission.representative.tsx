@@ -8,24 +8,13 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
+import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { IMissionDataItem, IMissionListData } from '@types-common/page.types';
-import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
-import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
-import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
-
-const category = [
-  'HOUSEKEEPING',
-  'SELF_CARE',
-  'HEALTH',
-  'WORK',
-  'MINDSET',
-  'SELF_DEVELOPMENT',
-];
+import { IMissionDataItem } from '@types-common/page.types';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
@@ -35,14 +24,12 @@ export const PageMissionRepair = () => {
   const {
     params: { type },
   } = useNavigationRoute('MissionRepair');
-  // const [allCategory, setAllCategory] = useState<Array<string>>([]);
+  const [allCategory, setAllCategory] = useState<Array<string>>([]);
   const navigation = useNavigationService();
-  /*const [current, setCurrent] = useState<number | null>(null);
+  const [current, setCurrent] = useState<number | null>(null);
   const [isRemove, setIsRemove] = useState<boolean>(false);
-  const [listCategory, setListCategory] = useState<Array<string>>([]);*/
-  // const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
-  const [hasCategory, setHasCategory] = useState<Array<string>>([]);
-  const [listData, setListData] = useState<IMissionListData[]>([]);
+  const [listCategory, setListCategory] = useState<Array<string>>([]);
+  const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
   const isFocus = useIsFocused();
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
@@ -50,29 +37,17 @@ export const PageMissionRepair = () => {
 
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
-    url: '/initialSetting/luckMission',
+    url: '/missions',
     value: {},
     onSuccessCallback: (rtn) => {
-      // setListCategory(Object.keys(rtn));
-      // setAllCategory(Object.keys(rtn));
-      // setDataDicArray({ ...rtn });
-      setListData(rtn);
-      setHasCategory(
-        Array.from(
-          new Set(
-            (rtn as IMissionListData[])
-              .map((item) => item.missionType)
-              .filter((type) => category.includes(type)),
-          ),
-        ),
-      );
+      setListCategory(Object.keys(rtn));
+      setAllCategory(Object.keys(rtn));
+      setDataDicArray({ ...rtn });
     },
   });
   useEffect(() => {
     if (isFocus) onFetch();
   }, [isSuccess]);
-
-  useEffect(() => {}, []);
 
   const handleConfirm = () => {
     setInitialSetting({
@@ -135,10 +110,9 @@ export const PageMissionRepair = () => {
             label={'습관추가'}
             onPress={() => navigation.navigate('MissionAdd')}
           />
-          {/*{allCategory.length !== 0 && (
+          {allCategory.length !== 0 && (
             <ScrollView horizontal={true}>
               <L.Row ml={8} g={8}>
-                /initialSetting/luckMission
                 {allCategory.map((item, i) => {
                   return (
                     <MissionRepairCategoryItem
@@ -160,14 +134,14 @@ export const PageMissionRepair = () => {
                 })}
               </L.Row>
             </ScrollView>
-          )}*/}
+          )}
         </L.Row>
         <ScrollView
           contentInset={{
             bottom: DEFAULT_MARGIN + 30,
           }}
         >
-          {hasCategory.map((item, i) => {
+          {listCategory.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
@@ -179,11 +153,15 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {listData
-                  .filter((type) => type.missionType === item)
-                  .map((value, index) => {
-                    return <MissionRepairItem {...value} key={index} />;
-                  })}
+                {dataDicArray[item]?.map((value, i) => {
+                  return (
+                    <MisstionRepairItem
+                      {...value}
+                      isCheck={value.alertStatus === 'CHECKED'}
+                      key={i}
+                    />
+                  );
+                })}
               </React.Fragment>
             );
           })}

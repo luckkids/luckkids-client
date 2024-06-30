@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
+import { Button, Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import { MissionItem } from '@components/page/mission/mission.item';
@@ -10,6 +10,11 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
 import { MissionSwipeItem } from '@components/page/mission/mission.swipe.item';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import styled from 'styled-components/native';
 
 export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);

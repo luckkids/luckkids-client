@@ -88,7 +88,6 @@ export interface IMissionDataItem {
   id: number;
   missionType: string;
   missionDescription: null | string;
-  alertStatus: string;
   alertTime: string;
 }
 
@@ -101,6 +100,7 @@ export interface IMissionCategoryItem {
 export interface IMissionListData {
   missionStatus: string;
   alertTime: string;
+  alertStatus?: 'CHECKED' | 'UNCHECKED';
   id: number;
   missionDescription: string;
   missionType: string;

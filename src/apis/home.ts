@@ -29,10 +29,10 @@ export interface CompletedCharacterCount {
 export interface MissionOutcomeForWeekResponse {
   startDate: string;
   endDate: string;
-  calender: Calender[];
+  calendar: Calendar[];
 }
 
-export interface Calender {
+export interface Calendar {
   missionDate: string;
   hasSucceed: boolean;
 }

@@ -53,7 +53,7 @@ export const useFetch = (args: {
           }
 
           const rtnData = await fetch(host + args.url, requestOptions);
-          console.log('rtnData ====>', rtnData);
+          // console.log('rtnData ====>', rtnData);
           return await rtnData.json();
         } catch (e) {
           console.log('error ====>', e);
