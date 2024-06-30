@@ -25,6 +25,7 @@ interface FrameLayoutProps {
   statusBarStyle?: 'light-content' | 'dark-content';
   backgroundImage?: ImageSourcePropType;
   backgroundStyle?: StyleProp<ViewStyle>;
+  stickToTop?: boolean;
 }
 
 export const FrameLayout = ({
@@ -35,6 +36,7 @@ export const FrameLayout = ({
   statusBarStyle,
   backgroundImage,
   backgroundStyle,
+  stickToTop = false,
 }: FrameLayoutProps) => {
   const theme = useTheme();
   const { top, bottom } = useSafeAreaInsets();
@@ -67,7 +69,7 @@ export const FrameLayout = ({
           <View
             style={{
               position: 'absolute',
-              top: 0,
+              top: stickToTop ? -top : 0,
               left: 0,
               bottom: bottom + CONSTANTS.BOTTOM_TABBAR_HEIGHT,
               width: SCREEN_WIDTH,

@@ -20,7 +20,7 @@ export const useFetch = (args: {
   url: string;
   value?: IStringDictionary;
   onSuccessCallback?: (resultData?: any) => void;
-  onFailCallback?: () => void;
+  onFailCallback?: (resultData?: any) => void;
 }) => {
   const [token, setToken] = useRecoilState(RecoilToken);
   const [isSuccess, setIsSuccess] = useState(false);

@@ -3,6 +3,7 @@
 #import "RNBootSplash.h"
 #import <React/RCTBundleURLProvider.h>
 #import <RNKakaoLogins.h>
+ #import <GoogleSignIn/GoogleSignIn.h>
 
 @implementation AppDelegate
 
@@ -12,6 +13,10 @@
  if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
     return [RNKakaoLogins handleOpenUrl: url];
  }
+
+  if ([GIDSignIn.sharedInstance handleURL:url]) {
+    return [GIDSignIn.sharedInstance handleURL:url];
+  }
 
  return NO;
 }

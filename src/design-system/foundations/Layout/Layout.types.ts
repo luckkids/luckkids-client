@@ -39,5 +39,6 @@ export type FlexStyle = {
     | 'flex-end'
     | 'center'
     | 'space-between'
+    | 'space-around'
     | 'space-evenly';
 };

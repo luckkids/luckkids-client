@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import DeviceInfo from 'react-native-device-info';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { userApis } from '@apis/user';
@@ -12,71 +12,69 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { InitialSetting, InitialSettingAlertStatus } from '@types-index';
 
 const bgImage = require('assets/images/tutorial-setting-bg.png');
 const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
 
 export const PageTutorialSettingNoti: React.FC = () => {
   const navigation = useNavigationService();
-  const [initialSetting, setInitialSetting] =
-    useRecoilState(RecoilInitialSetting);
+  const initialSetting = useRecoilValue(RecoilInitialSetting);
   const [deviceId, setDeviceId] = useState('');
 
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
   const handleTurnOnNoti = async () => {
-    console.log('hasPermission', await hasPermission());
+    // 이미 알림이 허용되어 있으면
     if (await hasPermission()) {
       AlertPopup.show({
         body: '이미 알림이 허용되어 있어요!',
         yesText: '확인',
         onPressYes: () => {
-          setInitialSetting({
+          userApis
+            .setInitialSetting({
+              ...initialSetting,
+              alertSetting: {
+                deviceId,
+                alertStatus: 'CHECKED',
+              },
+            })
+            .then(() => {
+              navigation.navigate('Home');
+            });
+        },
+      });
+    } else {
+      // 알림 허용 요청
+      requestPermissionIfNot().then(() => {
+        userApis
+          .setInitialSetting({
             ...initialSetting,
             alertSetting: {
               deviceId,
               alertStatus: 'CHECKED',
             },
+          })
+          .then(() => {
+            navigation.navigate('Home');
           });
-          navigation.navigate('Home');
-        },
-      });
-    } else {
-      requestPermissionIfNot().then(() => {
-        setInitialSetting({
-          ...initialSetting,
-          alertSetting: {
-            deviceId,
-            alertStatus: 'UNCHECKED',
-          },
-        });
-        navigation.navigate('Home');
       });
     }
   };
 
   const handleKeepGoing = () => {
     // 상태 업데이트
-    new Promise<InitialSetting>((resolve) => {
-      setInitialSetting((prevSetting) => {
-        const newSetting: InitialSetting = {
-          ...prevSetting,
-          alertSetting: {
-            deviceId,
-            alertStatus: 'UNCHECKED',
-          },
-        };
-        resolve(newSetting);
-        return newSetting;
+    userApis
+      .setInitialSetting({
+        ...initialSetting,
+        alertSetting: {
+          deviceId,
+          alertStatus: 'UNCHECKED',
+        },
+      })
+      .then(() => {
+        // 네비게이션 이동
+        navigation.navigate('Home');
       });
-    }).then((newSetting) => {
-      // API 호출
-      userApis.setInitialSetting(newSetting);
-
-      // 네비게이션 이동
-      navigation.navigate('Home');
-    });
   };
 
   useAsyncEffect(async () => {

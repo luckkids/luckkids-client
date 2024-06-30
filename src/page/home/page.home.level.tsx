@@ -1,24 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Font, L, SvgIcon } from '@design-system';
-import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
-import { DEFAULT_MARGIN } from '@constants';
-import { TouchableWithoutFeedback } from 'react-native';
-import { interval, take } from 'rxjs';
+import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { interval, take } from 'rxjs';
+import { DEFAULT_MARGIN, levelup_contents } from '@constants';
+import { Button, Font, L } from '@design-system';
+import { getCharacterImage } from '@utils';
+import StackNavbar from '@components/common/StackNavBar/StackNavBar';
+import { FrameLayout } from '@frame/frame.layout';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const levelUpMotion1 = require('assets/lotties/levelup-motion-1.json');
 
-export const PageHomeLevel: React.FC = () => {
-  const [step, setStep] = useState(1);
+/**
+ * NOTE:
+ * You can navigate to the 'HomeLevel' screen with the following parameters:
+ *
+ * navigation.navigate('HomeLevel', {
+ *   level: 2,
+ *   type: 'CLOUD',
+ * });
+ */
 
-  const handleSaveImage = () => {
-    //
+export const PageHomeLevel: React.FC = () => {
+  const {
+    params: { level, type },
+  } = useNavigationRoute('HomeLevel');
+  const [step, setStep] = useState(1);
+  const { bottom } = useSafeAreaInsets();
+  const navigation = useNavigationService();
+
+  const handleNext = () => {
+    navigation.navigate('Home');
   };
 
-  const handleShareProfile = () => {
-    //
+  const handlePressBack = () => {
+    navigation.navigate('Home');
   };
 
   useEffect(() => {
@@ -34,7 +53,11 @@ export const PageHomeLevel: React.FC = () => {
   }, []);
 
   return (
-    <FrameLayout statusBarColor={'BLACK'} backgroundColor="BLACK">
+    <FrameLayout
+      statusBarColor={step === 2 ? 'TUTORIAL_SETTING_BG' : 'BLACK'}
+      backgroundColor={step === 2 ? 'TUTORIAL_SETTING_BG' : 'BLACK'}
+    >
+      <StackNavbar useBackButton onBackPress={handlePressBack} />
       {step === 1 ? (
         <L.Col mt={60} ph={DEFAULT_MARGIN}>
           <Font type="TITLE1_BOLD" color="WHITE">
@@ -55,66 +78,37 @@ export const PageHomeLevel: React.FC = () => {
           </L.Row>
         </L.Col>
       ) : (
-        <L.Col justify="center" ph={DEFAULT_MARGIN} h="100%" items="center">
-          <L.Row
-            w={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-            h={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
-            bg={'LUCK_GREEN'}
+        <L.Col items="center" pt={42} h="100%">
+          <Image
+            source={{
+              uri: getCharacterImage(type, level, 'normal'),
+            }}
+            style={{
+              width: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+              height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+            }}
           />
           <Font type="TITLE2_BOLD" color="WHITE" mt={30}>
-            짠, 아직 새싹
+            {levelup_contents[level - 1].title}
           </Font>
           <Font type="BODY_REGULAR" color="GREY0" mt={16} textAlign="center">
-            {
-              '아직 새싹 단계예요. 습관을 수행하여\n행운을 가져다 줄 클로버를 키워보세요!'
-            }
+            {levelup_contents[level - 1].description}
           </Font>
-          <L.Row g={8} mt={80}>
-            {/* 이미지 저장 */}
-            <TouchableWithoutFeedback onPress={handleSaveImage}>
-              <L.Col
-                bg="BLACK"
-                style={{
-                  opacity: 0.5,
-                }}
-                flex-1
-                ph={46}
-                pv={15}
-                items="center"
-                rounded={15}
-                g={10}
-              >
-                <SvgIcon name="icon_download_green" size={20} />
-                <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                  이미지 저장
-                </Font>
-              </L.Col>
-            </TouchableWithoutFeedback>
-            {/* 프로필 공유  */}
-            <TouchableWithoutFeedback onPress={handleShareProfile}>
-              <L.Col
-                bg="BLACK"
-                style={{
-                  opacity: 0.5,
-                }}
-                flex-1
-                ph={46}
-                pv={15}
-                items="center"
-                rounded={15}
-                g={10}
-              >
-                <SvgIcon name="icon_share_green" size={20} />
-                <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                  프로필 공유
-                </Font>
-              </L.Col>
-            </TouchableWithoutFeedback>
-          </L.Row>
         </L.Col>
+      )}
+      {step === 2 && (
+        <L.Absolute b={bottom} ph={DEFAULT_MARGIN}>
+          <Button
+            text={'계속하기'}
+            onPress={handleNext}
+            type={'action'}
+            bgColor="LUCK_GREEN"
+            sizing="stretch"
+          />
+        </L.Absolute>
       )}
     </FrameLayout>
   );
 };
 
-const CHARACTER_MARGIN = 75;
+const CHARACTER_MARGIN = 40;

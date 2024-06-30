@@ -1,11 +1,13 @@
 export type Mission = {
-  missionType:
-    | 'HOUSEKEEPING'
-    | 'SELF_CARE'
-    | 'HEALTH'
-    | 'WORK'
-    | 'MINDSET'
-    | 'SELF_DEVELOPMENT';
+  missionType: MissionType;
   missionDescription: string;
   alertTime: string;
 };
+
+export type MissionType =
+  | 'HOUSEKEEPING'
+  | 'SELF_CARE'
+  | 'HEALTH'
+  | 'WORK'
+  | 'MINDSET'
+  | 'SELF_DEVELOPMENT';

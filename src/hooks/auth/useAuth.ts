@@ -1,6 +1,12 @@
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { LoginRequest, LoginResponse, authApis } from '@apis/auth';
+import {
+  LoginRequest,
+  LoginResponse,
+  OauthLoginRequest,
+  OauthLoginResponse,
+  authApis,
+} from '@apis/auth';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilToken } from '@recoil/recoil.token';
@@ -28,6 +34,25 @@ const useAuth = () => {
       })
       .catch((error) => {
         console.error('Login Error', error);
+        return null;
+      });
+  };
+
+  const oauthLogin = async (
+    loginInfo: OauthLoginRequest,
+  ): Promise<OauthLoginResponse | null> => {
+    return await authApis
+      .oauthLogin({
+        ...loginInfo,
+      })
+      .then((res) => {
+        const { accessToken, refreshToken } = res.data;
+        setAccessToken({ accessToken, refreshToken });
+        setToken({ accessToken, refreshToken });
+        return res.data;
+      })
+      .catch((error) => {
+        console.error('Oauth Login Error', error);
         return null;
       });
   };
@@ -77,6 +102,7 @@ const useAuth = () => {
 
   return {
     login,
+    oauthLogin,
     logout,
     accessToken: accessToken?.accessToken,
     refreshToken: accessToken?.refreshToken,
