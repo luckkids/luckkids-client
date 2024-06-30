@@ -30,7 +30,7 @@ export const GardenLeagueItem: React.FC<IProps> = (props) => {
       />
       <Font type={'SUBTITLE_LEAGUE'}>{props.nickname}</Font>
       <Font type={'FOOTNOTE_REGULAR'} color={'GREY1'}>
-        {props.characterCount}네잎
+        {props.characterCount} 네잎
       </Font>
     </L.Col>
   );

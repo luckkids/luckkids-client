@@ -8,7 +8,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
-import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
+import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -99,11 +99,6 @@ export const PageMissionRepair = () => {
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
-        <MissionRepairCategoryItem
-          isAddButton={true}
-          label={'대표미션'}
-          onPress={() => navigation.navigate('MissionRepairPublic')}
-        />
         <L.Row p={24}>
           <Font type={'TITLE2_BOLD'}>
             행운의 습관을 선택하고 알림을 설정해 보세요!
@@ -160,8 +155,7 @@ export const PageMissionRepair = () => {
                 </L.Row>
                 {dataDicArray[item]?.map((value, i) => {
                   return (
-                    <MissionRepairItem
-                      isRepair={true}
+                    <MisstionRepairItem
                       {...value}
                       isCheck={value.alertStatus === 'CHECKED'}
                       key={i}
