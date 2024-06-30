@@ -13,6 +13,7 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { useResetRecoilState } from 'recoil';
 import { RecoilToken } from '@recoil/recoil.token';
+import { useMe } from '@queries';
 
 const S = {
   Wrap: styled.View({
@@ -35,6 +36,9 @@ export const PageSetting: React.FC = () => {
   const { removeValue: removeAccessToken } =
     useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
   const resetAccessToken = useResetRecoilState(RecoilToken);
+
+  const { data: me } = useMe();
+  const { luckPhrase, nickname } = me || {};
   const { getToken } = useFirebaseMessage();
   const { onFetch } = useFetch({
     method: 'GET',
@@ -73,7 +77,7 @@ export const PageSetting: React.FC = () => {
     >
       <ScrollView>
         <S.Wrap>
-          <Font type={'BODY_REGULAR'}>정럭키</Font>
+          <Font type={'BODY_REGULAR'}>{nickname}</Font>
           <ButtonText
             onPress={() => navigation.navigate('HomeProfile')}
             text={'프로필 수정'}

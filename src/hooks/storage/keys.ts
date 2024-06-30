@@ -1,3 +1,5 @@
+import { SocialType } from '@types-index';
+
 // Define the keys as an enum
 export enum StorageKeys {
   StoryTelling = 'story_telling',
@@ -7,11 +9,20 @@ export enum StorageKeys {
 }
 
 // Define the type for each storage key
-interface RememberMeType {
-  email: string;
-  password: string;
-  deviceId: string;
-  pushKey: string | null;
+export interface RememberMeType {
+  snsType: SocialType;
+  /**
+   * email
+   * - email (일반) 로그인 : email
+   * - oauth 로그인 : null
+   */
+  email: string | null;
+  /**
+   * credential
+   * - email (일반) 로그인 : password
+   * - oauth 로그인 : token
+   */
+  credential: string;
 }
 
 interface AccessToken {

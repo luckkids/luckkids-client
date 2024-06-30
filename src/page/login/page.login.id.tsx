@@ -22,7 +22,7 @@ import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 
 export const PageLoginId: React.FC = () => {
-  const [deviceID, setDeviceID] = useState('');
+  const [deviceId, setDeviceId] = useState('');
   const { bottom } = useSafeAreaInsets();
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const emailInput$ = useRef(new Subject<string>()).current;
@@ -72,7 +72,7 @@ export const PageLoginId: React.FC = () => {
     Keyboard.dismiss();
 
     // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
-    if (!rememberMe) {
+    if (!rememberMe || rememberMe?.snsType !== 'NORMAL') {
       BottomSheet.show({
         component: (
           <LoginRemember
@@ -82,10 +82,9 @@ export const PageLoginId: React.FC = () => {
             onRemember={() => {
               handleAfterLogin(settingStatus);
               setRememberMe({
+                snsType: 'NORMAL',
                 email: loginInfo.email,
-                password: loginInfo.password,
-                deviceId: deviceID,
-                pushKey: null,
+                credential: loginInfo.password,
               });
             }}
           />
@@ -115,7 +114,7 @@ export const PageLoginId: React.FC = () => {
   const handleLogin = async () => {
     const res = await login({
       ...loginInfo,
-      deviceId: deviceID,
+      deviceId: deviceId,
       pushKey: null,
     });
 
@@ -135,7 +134,7 @@ export const PageLoginId: React.FC = () => {
     onSuccessCallback: (resultData) => {
       console.log('이메일 전송 성공');
       SnackBar.show({
-        title: `${resultData.email} 주소로 비밀번호 재설정 이메일이 전송되었습니다.`,
+        title: `${resultData.email} 주소로 임시 비밀번호가 전송되었습니다.`,
         position: 'bottom',
         width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
         rounded: 25,
@@ -156,7 +155,7 @@ export const PageLoginId: React.FC = () => {
 
   useAsyncEffect(async () => {
     const deviceId = await DeviceInfo.getUniqueId();
-    setDeviceID(deviceId);
+    setDeviceId(deviceId);
   }, []);
 
   const handleEmailChange = (text: string) => {

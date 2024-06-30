@@ -8,19 +8,20 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BootSplash from 'react-native-bootsplash';
 import CodePush from 'react-native-code-push';
+import DeviceInfo from 'react-native-device-info';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
+import { SocialType } from '@types-index';
 import { DataStackScreen } from './src/data/data.stack.screen';
-import { LoginRequest } from '@apis/auth';
 import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useLocalMessage from '@hooks/notification/useLocalMessage';
-import { StorageKeys } from '@hooks/storage/keys';
+import { RememberMeType, StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
@@ -32,7 +33,9 @@ const RootNavigator = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
   const [initializing, setInitializing] = useState(true);
+  const [deviceId, setDeviceId] = useState('');
 
+  const { getToken } = useFirebaseMessage();
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
 
@@ -59,10 +62,25 @@ const RootNavigator = () => {
   const { storedValue: storyTelling, loading: isLoadingStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
 
-  const { login } = useAuth();
+  const { login, oauthLogin } = useAuth();
 
-  const handleLogin = async (loginInfo: LoginRequest) => {
-    const res = await login(loginInfo);
+  const handleRememberMeLogin = async (rememberMe: RememberMeType) => {
+    const pushKey = await getToken();
+    const res =
+      rememberMe.snsType === 'NORMAL'
+        ? await login({
+            email: rememberMe.email || '',
+            password: rememberMe.credential,
+            pushKey,
+            deviceId,
+          })
+        : await oauthLogin({
+            snsType: rememberMe.snsType as SocialType,
+            token: rememberMe.credential,
+            pushKey,
+            deviceId,
+          });
+
     if (!res) {
       return setInitialRoute({
         screenName: 'Login',
@@ -138,11 +156,8 @@ const RootNavigator = () => {
     // 자동 로그인
     console.log('rememberMe ====>', rememberMe);
     if (rememberMe) {
-      handleLogin({
-        email: rememberMe.email,
-        password: rememberMe.password,
-        deviceId: rememberMe.deviceId,
-        pushKey: rememberMe.pushKey,
+      handleRememberMeLogin({
+        ...rememberMe,
       });
     } else {
       setInitialRoute({
@@ -152,11 +167,15 @@ const RootNavigator = () => {
     }
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
+  useAsyncEffect(async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    setDeviceId(deviceId);
+  }, []);
+
   return (
     <NavigationContainer<AppScreensParamList>
       ref={navigationRef}
       onReady={async () => {
-        console.log('onReady');
         if (!navigationRef.current) return;
         NavigationService.setNavigation(navigationRef.current);
       }}

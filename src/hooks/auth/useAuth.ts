@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   LoginRequest,
   LoginResponse,
@@ -9,6 +9,7 @@ import {
 } from '@apis/auth';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
 
 const useAuth = () => {
@@ -18,6 +19,8 @@ const useAuth = () => {
     removeValue: removeAccessToken,
   } = useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
   const [token, setToken] = useRecoilState(RecoilToken);
+  const setLoginInfo = useSetRecoilState(RecoilLoignInfo);
+  const setOauthLoginInfo = useSetRecoilState(RecoilOauthLoginInfo);
 
   const login = async (
     loginInfo: LoginRequest,
@@ -28,8 +31,14 @@ const useAuth = () => {
       })
       .then((res) => {
         const { accessToken, refreshToken } = res.data;
+        // token 저장
         setAccessToken({ accessToken, refreshToken });
         setToken({ accessToken, refreshToken });
+        // login 정보 저장
+        setLoginInfo({
+          email: loginInfo.email,
+          password: loginInfo.password,
+        });
         return res.data;
       })
       .catch((error) => {
@@ -47,8 +56,14 @@ const useAuth = () => {
       })
       .then((res) => {
         const { accessToken, refreshToken } = res.data;
+        // token 저장
         setAccessToken({ accessToken, refreshToken });
         setToken({ accessToken, refreshToken });
+        // login 정보 저장
+        setOauthLoginInfo({
+          snsType: loginInfo.snsType,
+          token: loginInfo.token,
+        });
         return res.data;
       })
       .catch((error) => {

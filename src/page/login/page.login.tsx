@@ -5,12 +5,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { SettingStatus, SocialType } from '@types-index';
+import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 
 export const PageLogin: React.FC = () => {
@@ -20,6 +24,8 @@ export const PageLogin: React.FC = () => {
   const { handleKakaoLogin } = useKakaoLogin();
   const navigation = useNavigationService();
   const [deviceId, setDeviceId] = React.useState<string>('');
+  const { storedValue: rememberMe, setValue: setRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const handlePressJoin = () => {
     navigation.navigate('LoginJoin', {
@@ -64,7 +70,31 @@ export const PageLogin: React.FC = () => {
           token,
         });
 
-        if (res) handleAfterLogin(res.settingStatus);
+        if (!res) return;
+
+        // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
+        if (!rememberMe || rememberMe?.snsType === 'NORMAL') {
+          BottomSheet.show({
+            component: (
+              <LoginRemember
+                onClose={() => {
+                  handleAfterLogin(res.settingStatus);
+                }}
+                onRemember={() => {
+                  handleAfterLogin(res.settingStatus);
+                  setRememberMe({
+                    snsType: type,
+                    email: null,
+                    credential: token,
+                  });
+                }}
+              />
+            ),
+          });
+          // rememberMe 정보가 있으면 바로 홈으로 이동
+        } else {
+          return handleAfterLogin(res.settingStatus);
+        }
       } catch (e) {
         console.log(e);
       }
