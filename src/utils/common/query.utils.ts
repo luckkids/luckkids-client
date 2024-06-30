@@ -1,9 +1,11 @@
 export const getNextPageParam = <
-  T extends { isEnd: boolean; nextOffset?: number },
+  T extends { pageInfo: { currentPage: number; totalPage: number } },
 >(
   lastPage: T,
 ) => {
-  return !lastPage.isEnd ? lastPage.nextOffset : undefined;
+  return lastPage.pageInfo.currentPage < lastPage.pageInfo.totalPage
+    ? lastPage.pageInfo.currentPage + 1
+    : undefined;
 };
 
 export const withInfiniteLoad =

@@ -1,6 +1,6 @@
-export type Noti = {
+export type NotificationItem = {
   id: number;
-  title: string;
-  createdAt: string;
-  // navigation 정보 추가
+  alertDescription: string;
+  alertHistoryStatus: 'UNCHECKED' | 'CHECKED';
+  createdDate: string;
 };

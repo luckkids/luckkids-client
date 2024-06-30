@@ -1,27 +1,49 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
-import styled from 'styled-components/native';
+import { FlatList, ActivityIndicator } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import { SvgIcon, L, Font, ButtonText } from '@design-system';
+import { useHomeNotification } from '@queries';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import HomeAlarmItem from '@components/page/home/home.alarm.item';
 import { FrameLayout } from '@frame/frame.layout';
-import { Noti } from '@types-common/noti.types';
+import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 
 export const PageHomeAlarm: React.FC = () => {
-  const notiList: Noti[] = [
-    {
-      id: 1,
-      title: 'title',
-      createdAt: '20시간 전',
-    },
-    {
-      id: 2,
-      title: 'title',
-      createdAt: '20시간 전',
-    },
-  ];
+  const [deviceId, setDeviceId] = React.useState<string>('');
+  const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
-  const handlePressAllowAlarm = () => {};
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useHomeNotification(deviceId);
+
+  //TODO 이쪽 기획 확정되면 진행
+  const handlePressAllowAlarm = () => {
+    // requestPermissionIfNot().then(() => {
+    // })
+  };
+
+  useAsyncEffect(async () => {
+    setDeviceId(await DeviceInfo.getUniqueId());
+  }, []);
+
+  const renderItem = ({ item }: { item: any }) => (
+    <HomeAlarmItem
+      key={item.id}
+      title={item.alertDescription}
+      createdAt={item.createdDate}
+    />
+  );
+
+  const loadMore = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  const renderFooter = () => {
+    if (!isFetchingNextPage) return null;
+    return <ActivityIndicator style={{ marginVertical: 20 }} />;
+  };
 
   return (
     <FrameLayout NavBar={<StackNavbar title="알림" />}>
@@ -32,7 +54,6 @@ export const PageHomeAlarm: React.FC = () => {
           <Font type="BODY_REGULAR" color="GREY0">
             알림을 놓치지 마세요
           </Font>
-          {/* TODO ChipButton으로 바꾸기 */}
           <ButtonText
             textColor="LUCK_GREEN"
             onPress={handlePressAllowAlarm}
@@ -41,15 +62,18 @@ export const PageHomeAlarm: React.FC = () => {
         </L.Col>
       </L.Row>
       {/* 알림 리스트 */}
-      <ScrollView>
-        {notiList.map((noti) => (
-          <HomeAlarmItem
-            key={noti.id}
-            title={noti.title}
-            createdAt={noti.createdAt}
-          />
-        ))}
-      </ScrollView>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          data={data?.pages.flatMap((page) => page.content) || []}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={renderFooter}
+        />
+      )}
     </FrameLayout>
   );
 };

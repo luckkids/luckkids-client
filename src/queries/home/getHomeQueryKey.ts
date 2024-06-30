@@ -8,7 +8,9 @@ export type HomeQueryList = {
   HOME_CALENDAR_DETAIL: {
     missionDate?: string;
   };
-  //
+  HOME_NOTIFICATION: {
+    deviceId: string;
+  };
 };
 
 export default createQueryKeyFactory<HomeQueryList>();

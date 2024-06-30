@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
+import { MissionType } from '@types-index';
 import API from './API';
 import { CharacterType } from '@types-common/character.types';
-import { MissionType } from '@types-index';
+import { NotificationItem } from '@types-common/noti.types';
 
 export interface GetHomeInfoResponse {
   luckkidsAchievementRate: number;
@@ -72,8 +73,39 @@ export const getCalenderDetailInfo = async (missionDate: string) => {
   return res;
 };
 
+export type GetNotificationListRequest = {
+  deviceId: string;
+  page?: number;
+  size?: number;
+};
+
+export type GetNotificationListResponse = {
+  content: NotificationItem[];
+  pageInfo: {
+    currentPage: number;
+    totalPage: number;
+    totalElement: number;
+  };
+};
+
+export const getNotificationList = async (
+  request: GetNotificationListRequest,
+) => {
+  const res = await API.get<GetNotificationListResponse>('/alertHistories', {
+    params: request,
+  });
+  return res;
+};
+
+export const readNotification = async (id: string) => {
+  const res = await API.patch(`/alertHistories/${id}`);
+  return res;
+};
+
 export const homeApis = {
   getHomeInfo,
   getCalendarInfo,
   getCalenderDetailInfo,
+  getNotificationList,
+  readNotification,
 };
