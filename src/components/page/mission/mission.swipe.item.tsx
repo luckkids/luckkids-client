@@ -1,9 +1,8 @@
 import React, { Dispatch } from 'react';
-import { IMissionListData } from '@types-common/page.types';
-import { MissionItem } from '@components/page/mission/mission.item';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { Animated, StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { MissionItem } from '@components/page/mission/mission.item';
+import { IMissionListData } from '@types-common/page.types';
 
 interface IProps extends IMissionListData {
   prevCount: number;

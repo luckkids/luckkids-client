@@ -1,22 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
-import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
+import { Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
-import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
-import { FrameLayout } from '@frame/frame.layout';
-import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
-import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useFetch } from '@hooks/useFetch';
-import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { IMissionDataItem, IMissionListData } from '@types-common/page.types';
-import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
 import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
-import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
+import { FrameLayout } from '@frame/frame.layout';
+import { useFetch } from '@hooks/useFetch';
+import { IMissionListData } from '@types-common/page.types';
 
 const category = [
   'HOUSEKEEPING',
@@ -27,13 +18,9 @@ const category = [
   'SELF_DEVELOPMENT',
 ];
 export const PageMissionRepairPublic = () => {
-  const navigation = useNavigationService();
   const [hasCategory, setHasCategory] = useState<Array<string>>([]);
   const [listData, setListData] = useState<IMissionListData[]>([]);
   const isFocus = useIsFocused();
-  const { bottom } = useSafeAreaInsets();
-  const [initialSetting, setInitialSetting] =
-    useRecoilState(RecoilInitialSetting);
 
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',

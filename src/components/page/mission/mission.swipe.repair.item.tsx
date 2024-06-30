@@ -1,14 +1,14 @@
-import React, { createElement, Dispatch, useEffect, useState } from 'react';
-import { IMissionDataItem, IMissionListData } from '@types-common/page.types';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
-import { Alert, Animated, Keyboard, StyleSheet } from 'react-native';
-import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
-import { Font, SvgIcon } from '@design-system';
-import Colors from '../../../design-system/colors';
-import { useFetch } from '@hooks/useFetch';
-import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import React, { useState } from 'react';
+import { Animated, Keyboard, StyleSheet } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { DEFAULT_MARGIN } from '@constants';
+import { Font } from '@design-system';
+import Colors from '../../../design-system/colors';
+import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import { useFetch } from '@hooks/useFetch';
+import { IMissionDataItem } from '@types-common/page.types';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;

@@ -1,15 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
 import styled from 'styled-components/native';
-import { Button, Colors, Font, L, SvgIcon } from '@design-system';
+import { Font, L, SvgIcon } from '@design-system';
+import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
-import { useMe } from '@queries';
-import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;

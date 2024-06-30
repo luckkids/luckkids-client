@@ -1,18 +1,9 @@
-import React, {
-  Dispatch,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { Dispatch, useEffect, useMemo, useRef, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font, IconNames, L, SvgIcon } from '@design-system';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 
 const S = {
   item: styled.View({
@@ -106,11 +97,10 @@ export const MissionItem: React.FC<IProps> = (props) => {
     return missionState === 'SUCCEED' ? <S.dot /> : null;
   }, [missionState]);
 
-  const setIsCheckFn = useCallback(() => {
-    return setIsChecked(!isChecked);
-  }, []);
+  // const setIsCheckFn = useCallback(() => {
+  //   return setIsChecked(!isChecked);
+  // }, []);
 
-  console.log(props.id);
   return (
     <>
       <L.Row ph={25} pv={20} justify={'space-between'}>
