@@ -130,6 +130,29 @@ const findEmail = async (request: FindEmailRequest) => {
   return res.data;
 };
 
+type DeleteUserResponse = {
+  id: number;
+};
+
+const deleteUser = async () => {
+  const res = await API.delete<DeleteUserResponse>(`/user/withdraw/`);
+  return res.data;
+};
+
+type RegisterWithdrawReasonResponse = {
+  id: number;
+};
+
+const registerWithdrawReason = async (reason: string) => {
+  const res = await API.post<RegisterWithdrawReasonResponse>(
+    '/withdraw/reason',
+    {
+      reason,
+    },
+  );
+  return res.data;
+};
+
 export const authApis = {
   login,
   sendEmail,
@@ -140,4 +163,6 @@ export const authApis = {
   checkEmail,
   resetPassword,
   findEmail,
+  deleteUser,
+  registerWithdrawReason,
 };
