@@ -20,24 +20,18 @@ const S = {
 
 export const PageSettingInfo: React.FC = () => {
   const navigation = useNavigationService();
-  const {
-    storedValue: rememberMe,
-    loading: isLoadingRememberMe,
-    setValue: setRememberMe,
-  } = useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
-
+  const { storedValue: rememberMe, setValue: setRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
   const { data: me } = useMe();
   const { email } = me || {};
-  const [deviceId, setDeviceId] = useState<string>('');
 
   const handleRememberMe = (value: boolean) => {
-    // TODO: 자동 로그인 어떻게 해야할지 확인 후 구현 필요
+    if (!rememberMe) return;
+    setRememberMe({
+      ...rememberMe,
+      isEnabled: value,
+    });
   };
-
-  useAsyncEffect(async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
-    setDeviceId(deviceId);
-  }, []);
 
   return (
     <FrameLayout NavBar={<StackNavBar title={'계정'} useBackButton />}>
@@ -65,7 +59,11 @@ export const PageSettingInfo: React.FC = () => {
       </TouchableWithoutFeedback>
       <L.Row ph={25} pv={20} justify={'space-between'} items={'center'}>
         <Font type={'BODY_REGULAR'}>자동 로그인</Font>
-        <Toggle value={!!rememberMe} onChange={handleRememberMe} />
+        <Toggle
+          value={rememberMe?.isEnabled || false}
+          onChange={handleRememberMe}
+          disabled={!rememberMe}
+        />
       </L.Row>
       <L.Col ph={25} pt={25}>
         <Font type={'SUBHEADLINE_SEMIBOLD'} color={'GREY1'}>

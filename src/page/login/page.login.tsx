@@ -79,6 +79,12 @@ export const PageLogin: React.FC = () => {
               <LoginRemember
                 onClose={() => {
                   handleAfterLogin(res.settingStatus);
+                  setRememberMe({
+                    snsType: type,
+                    email: null,
+                    credential: token,
+                    isEnabled: false,
+                  });
                 }}
                 onRemember={() => {
                   handleAfterLogin(res.settingStatus);
@@ -86,6 +92,7 @@ export const PageLogin: React.FC = () => {
                     snsType: type,
                     email: null,
                     credential: token,
+                    isEnabled: true,
                   });
                 }}
               />

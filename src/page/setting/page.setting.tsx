@@ -62,7 +62,7 @@ export const PageSetting: React.FC = () => {
     resetAccessToken();
 
     // go to login page
-    return navigation.navigate('Login');
+    return navigation.replace('Login');
   };
 
   return (

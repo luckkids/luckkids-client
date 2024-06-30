@@ -78,10 +78,17 @@ export const PageLoginId: React.FC = () => {
           <LoginRemember
             onClose={() => {
               handleAfterLogin(settingStatus);
+              setRememberMe({
+                isEnabled: false,
+                snsType: 'NORMAL',
+                email: loginInfo.email,
+                credential: loginInfo.password,
+              });
             }}
             onRemember={() => {
               handleAfterLogin(settingStatus);
               setRememberMe({
+                isEnabled: true,
                 snsType: 'NORMAL',
                 email: loginInfo.email,
                 credential: loginInfo.password,

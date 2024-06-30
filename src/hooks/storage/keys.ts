@@ -10,6 +10,7 @@ export enum StorageKeys {
 
 // Define the type for each storage key
 export interface RememberMeType {
+  isEnabled: boolean;
   snsType: SocialType;
   /**
    * email
