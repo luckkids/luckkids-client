@@ -26,10 +26,10 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
 
   const bgStyle = useRef({ backgroundColor: theme.BG_SECONDARY }).current;
 
-  // const snapPoints = useMemo(() => ['CONTENT_HEIGHT'], []);
-
   useEffect(() => {
-    bottomSheetModalRef.current?.present();
+    const timer = setTimeout(() => {
+      bottomSheetModalRef.current?.present();
+    }, 100);
 
     addHideAnimation(() => {
       return new Promise((resolve) => {
@@ -37,6 +37,8 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
         setTimeout(resolve, 500);
       });
     });
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (

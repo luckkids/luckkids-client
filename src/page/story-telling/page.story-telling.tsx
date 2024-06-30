@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
-import { timer } from 'rxjs';
-import { takeWhile, tap } from 'rxjs/operators';
+import { interval } from 'rxjs';
+import { take } from 'rxjs/operators';
 import {
   DEFAULT_MARGIN,
   STORY_TELLING_CONTENTS,
@@ -22,15 +22,6 @@ export const PageStoryTelling: React.FC = () => {
   const { setValue: setStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
 
-  timer(5000)
-    .pipe(
-      takeWhile(() => step < STORY_TELLING_CONTENTS.length - 1),
-      tap(() => {
-        setStep((prev) => prev + 1);
-      }),
-    )
-    .subscribe();
-
   const handlePressStart = () => {
     setStoryTelling({
       viewed: true,
@@ -39,6 +30,19 @@ export const PageStoryTelling: React.FC = () => {
     // 무조건 앱을 처음 실행시켰을 때 나오는 화면이므로 Login 화면으로 이동
     return navigation.navigate('Login');
   };
+
+  useEffect(() => {
+    const subscription = interval(3000)
+      .pipe(take(1))
+      .subscribe(() => {
+        if (step < STORY_TELLING_CONTENTS.length + 1)
+          setStep((prev) => prev + 1);
+      });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   return (
     <FrameLayout>

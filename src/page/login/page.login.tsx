@@ -1,16 +1,17 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
+import { SettingStatus, SocialType } from '@types-index';
 import { FrameLayout } from '@frame/frame.layout';
+import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
 import useAsyncEffect from '@hooks/useAsyncEffect';
-import { useFetch } from '@hooks/useFetch';
 
 export const PageLogin: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -30,23 +31,44 @@ export const PageLogin: React.FC = () => {
     navigation.navigate('LoginId');
   };
 
-  const { onFetch: oauthKakaoLogin } = useFetch({
-    method: 'POST',
-    url: '/auth/oauth/login',
-    onSuccessCallback: () => {},
-    onFailCallback: () => {},
-  });
+  const { oauthLogin } = useAuth();
 
-  const handleKakao = async () => {
-    const token = await handleKakaoLogin();
-    if (token)
-      oauthKakaoLogin({
-        snsType: 'KAKAO',
-        deviceId,
-        pushKey:
-          'ffBUlnx4BE7XveMXelsLNu:APA91bHfd01c-SnAraV3twtgOiZztYEfC9Db-PVFYMvIxZntFc5twUQnuOOXKSFawxF7ZLTA64P36yEOYhQDHKYhAd52tgMWOZVmjHq7x8wIxInmul2Fbmab5yGG_kNKMylCoNJK8wZo',
-        token,
-      });
+  const getOauthHandler = async (type: SocialType) => {
+    switch (type) {
+      case 'APPLE':
+        return await handleAppleLogin();
+      case 'GOOGLE':
+        return await handleGoogleLogin();
+      case 'KAKAO':
+      default:
+        return await handleKakaoLogin();
+    }
+  };
+
+  const handleAfterLogin = (settingStatus: SettingStatus) => {
+    if (settingStatus === 'COMPLETE') {
+      return navigation.navigate('Home');
+    } else {
+      return navigation.navigate('TutorialStart');
+    }
+  };
+
+  const handleOauthLogin = async (type: SocialType) => {
+    const token = await getOauthHandler?.(type);
+    if (token) {
+      try {
+        const res = await oauthLogin({
+          snsType: type,
+          deviceId,
+          pushKey: null,
+          token,
+        });
+
+        if (res) handleAfterLogin(res.settingStatus);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
 
   useAsyncEffect(async () => {
@@ -59,7 +81,14 @@ export const PageLogin: React.FC = () => {
         <L.Col w={'100%'} items="center">
           <L.Col mb={60} items="center">
             {/* 로고 추가 */}
-            <Font type={'LARGE_TITLE_BOLD'}>Luck Kids</Font>
+            <Image
+              source={require('@design-system/assets/images/main-logo.png')}
+              style={{
+                resizeMode: 'contain',
+                width: 136,
+                height: 107,
+              }}
+            />
           </L.Col>
           <L.Col ph={DEFAULT_MARGIN} g={10} w={'100%'}>
             <Button
@@ -67,7 +96,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'KAKAO_YELLOW'}
               text={'카카오로 계속하기'}
               textColor="BLACK"
-              onPress={handleKakao}
+              onPress={() => handleOauthLogin('KAKAO')}
               type={'action'}
               sizing="stretch"
               iconName="iconKakao"
@@ -77,7 +106,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'WHITE'}
               text={'Apple로 계속하기'}
               textColor="BLACK"
-              onPress={handleAppleLogin}
+              onPress={() => handleOauthLogin('APPLE')}
               type={'action'}
               sizing="stretch"
               iconName="iconApple"
@@ -87,7 +116,7 @@ export const PageLogin: React.FC = () => {
               bgColor={'WHITE'}
               text={'Google로 계속하기'}
               textColor="BLACK"
-              onPress={handleGoogleLogin}
+              onPress={() => handleOauthLogin('GOOGLE')}
               type={'action'}
               sizing="stretch"
               iconName="iconGoogle"

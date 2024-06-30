@@ -6,3 +6,9 @@ export const formatCreatedAt = (createdAt: string) => {
   // 이틀 이상이면 날짜 그대로
   return createdAt;
 };
+
+export const getDayOfWeek = (date: string) => {
+  const dayOfWeek = new Date(date).getDay();
+  const dayOfWeekList = ['일', '월', '화', '수', '목', '금', '토'];
+  return dayOfWeekList[dayOfWeek];
+};

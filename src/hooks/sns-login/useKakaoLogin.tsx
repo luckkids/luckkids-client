@@ -1,7 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
-import { useFetch } from '@hooks/useFetch';
-import DeviceInfo from 'react-native-device-info';
 
 export function useKakaoLogin() {
   const handleKakaoLogin = useCallback(async () => {
