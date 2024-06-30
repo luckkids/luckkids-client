@@ -29,6 +29,7 @@ export const Mission: React.FC = () => {
     url: '/missionOutcomes',
     value: {},
     onSuccessCallback: (rtn) => {
+      console.log('---->', rtn);
       setData(rtn);
       setTotal(rtn.length);
       setCount(
@@ -52,6 +53,7 @@ export const Mission: React.FC = () => {
     }
   }, [isFocused, count]);
   const resultItemData = useMemo(() => {
+    if (data.length === 0) return [];
     if (hide) {
       return data.filter((item) => {
         return item.missionStatus === 'FAILED';
@@ -89,6 +91,13 @@ export const Mission: React.FC = () => {
             bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
           }}
         >
+          {data.length === 0 && (
+            <L.Col w={'100%'} items={'center'} mt={100}>
+              <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
+                아직 선택한 습관이 없어요.
+              </Font>
+            </L.Col>
+          )}
           {resultItemData.map((item, i) => {
             return (
               <MissionSwipeItem

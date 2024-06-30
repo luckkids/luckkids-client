@@ -106,28 +106,21 @@ export const MissionItem: React.FC<IProps> = (props) => {
     return missionState === 'SUCCEED' ? <S.dot /> : null;
   }, [missionState]);
 
-  const Popup = useCallback(() => {
-    BottomSheet.show({
-      component: (
-        <MissionItemTimePicker
-          {...props}
-          isCheck={isChecked}
-          setIsCheckFn={() => setIsChecked(!isChecked)}
-          setRtnTime={setRtnTime}
-        />
-      ),
-    });
-  }, [isChecked]);
+  const setIsCheckFn = useCallback(() => {
+    return setIsChecked(!isChecked);
+  }, []);
+
+  console.log(props.id);
   return (
     <>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          setMissionState((prev) => {
-            return prev === 'SUCCEED' ? 'FAILED' : 'SUCCEED';
-          });
-        }}
-      >
-        <L.Row ph={25} pv={20} justify={'space-between'}>
+      <L.Row ph={25} pv={20} justify={'space-between'}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setMissionState((prev) => {
+              return prev === 'SUCCEED' ? 'FAILED' : 'SUCCEED';
+            });
+          }}
+        >
           <S.Title>
             <S.iconRound>{bullet}</S.iconRound>
             <S.iconType>
@@ -140,13 +133,27 @@ export const MissionItem: React.FC<IProps> = (props) => {
               {props.missionDescription}
             </Font>
           </S.Title>
-        </L.Row>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => Popup()}>
-        <Font type={'SUBHEADLINE_REGULAR'}>
-          {isChecked ? rtnTime : '알림 끔'}
-        </Font>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            console.log('수정');
+            /*BottomSheet.show({
+              component: (
+                  <MissionItemTimePicker
+                      {...props}
+                      isCheck={isChecked}
+                      setIsCheckFn={setIsCheckFn}
+                      setRtnTime={setRtnTime}
+                  />
+              ),
+            })*/
+          }}
+        >
+          <Font type={'SUBHEADLINE_REGULAR'}>
+            {isChecked ? rtnTime : '알림 끔'}
+          </Font>
+        </TouchableWithoutFeedback>
+      </L.Row>
     </>
   );
 };

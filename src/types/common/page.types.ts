@@ -44,6 +44,7 @@ export type AppScreensParamList = {
   MissionRepair: {
     type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
   };
+  MissionRepairPublic: undefined;
   MissionAdd: undefined;
   GardenAlbum: undefined;
   GardenRank: undefined;
@@ -89,6 +90,7 @@ export interface IMissionDataItem {
   missionType: string;
   missionDescription: null | string;
   alertTime: string;
+  alertStatus?: string;
 }
 
 export interface IMissionCategoryItem {

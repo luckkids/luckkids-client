@@ -8,28 +8,28 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
-import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { IMissionDataItem } from '@types-common/page.types';
+import { IMissionDataItem, IMissionListData } from '@types-common/page.types';
+import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
+import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
+import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
 
-interface IDataKey {
-  [key: string]: Array<IMissionDataItem>;
-}
-
-export const PageMissionRepair = () => {
-  const {
-    params: { type },
-  } = useNavigationRoute('MissionRepair');
-  const [allCategory, setAllCategory] = useState<Array<string>>([]);
+const category = [
+  'HOUSEKEEPING',
+  'SELF_CARE',
+  'HEALTH',
+  'WORK',
+  'MINDSET',
+  'SELF_DEVELOPMENT',
+];
+export const PageMissionRepairPublic = () => {
   const navigation = useNavigationService();
-  const [current, setCurrent] = useState<number | null>(null);
-  const [isRemove, setIsRemove] = useState<boolean>(false);
-  const [listCategory, setListCategory] = useState<Array<string>>([]);
-  const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
+  const [hasCategory, setHasCategory] = useState<Array<string>>([]);
+  const [listData, setListData] = useState<IMissionListData[]>([]);
   const isFocus = useIsFocused();
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
@@ -37,25 +37,26 @@ export const PageMissionRepair = () => {
 
   const { onFetch, isSuccess } = useFetch({
     method: 'GET',
-    url: '/missions',
+    url: '/initialSetting/luckMission',
     value: {},
     onSuccessCallback: (rtn) => {
-      setListCategory(Object.keys(rtn));
-      setAllCategory(Object.keys(rtn));
-      setDataDicArray({ ...rtn });
+      setListData(rtn);
+      setHasCategory(
+        Array.from(
+          new Set(
+            (rtn as IMissionListData[])
+              .map((item) => item.missionType)
+              .filter((type) => category.includes(type)),
+          ),
+        ),
+      );
     },
   });
   useEffect(() => {
     if (isFocus) onFetch();
   }, [isSuccess]);
 
-  const handleConfirm = () => {
-    setInitialSetting({
-      ...initialSetting,
-      missions: [],
-    });
-    return navigation.navigate('TutorialSettingNoti');
-  };
+  useEffect(() => {}, []);
 
   const categoryButton = useCallback((key: string) => {
     switch (key) {
@@ -99,54 +100,17 @@ export const PageMissionRepair = () => {
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
-        <MissionRepairCategoryItem
-          isAddButton={true}
-          label={'대표미션'}
-          onPress={() => navigation.navigate('MissionRepairPublic')}
-        />
         <L.Row p={24}>
           <Font type={'TITLE2_BOLD'}>
             행운의 습관을 선택하고 알림을 설정해 보세요!
           </Font>
-        </L.Row>
-        <L.Row ph={25} pv={15}>
-          <MissionRepairCategoryItem
-            isAddButton={true}
-            label={'습관추가'}
-            onPress={() => navigation.navigate('MissionAdd')}
-          />
-          {allCategory.length !== 0 && (
-            <ScrollView horizontal={true}>
-              <L.Row ml={8} g={8}>
-                {allCategory.map((item, i) => {
-                  return (
-                    <MissionRepairCategoryItem
-                      isActive={isRemove ? !isRemove : i === current}
-                      label={item}
-                      onPress={() => {
-                        if (i === current && !isRemove) {
-                          setIsRemove(true);
-                          setListCategory(allCategory);
-                          return;
-                        }
-                        setCurrent(i);
-                        setIsRemove(false);
-                        setListCategory([item]);
-                      }}
-                      key={i}
-                    />
-                  );
-                })}
-              </L.Row>
-            </ScrollView>
-          )}
         </L.Row>
         <ScrollView
           contentInset={{
             bottom: DEFAULT_MARGIN + 30,
           }}
         >
-          {listCategory.map((item, i) => {
+          {hasCategory.map((item, i) => {
             return (
               <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
@@ -158,34 +122,15 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {dataDicArray[item]?.map((value, i) => {
-                  return (
-                    <MissionRepairItem
-                      isRepair={true}
-                      {...value}
-                      isCheck={value.alertStatus === 'CHECKED'}
-                      key={i}
-                    />
-                  );
-                })}
+                {listData
+                  .filter((type) => type.missionType === item)
+                  .map((value, index) => {
+                    return <MissionRepairItem {...value} key={index} />;
+                  })}
               </React.Fragment>
             );
           })}
         </ScrollView>
-        {type === 'INITIAL_SETTING' && (
-          <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>
-            <L.Row ph={DEFAULT_MARGIN}>
-              <Button
-                type={'action'}
-                text={'선택 완료'}
-                onPress={handleConfirm}
-                sizing="stretch"
-                textColor="BLACK"
-                bgColor={'LUCK_GREEN'}
-              />
-            </L.Row>
-          </L.Absolute>
-        )}
       </FrameLayout>
     </>
   );

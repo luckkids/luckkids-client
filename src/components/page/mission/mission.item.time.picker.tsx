@@ -48,29 +48,15 @@ const S = {
     marginTop: 35,
   }),
 };
-interface IProps extends IMissionListData {
+interface IProps {
   isCheck: boolean;
   setRtnTime: Dispatch<string>;
   setIsCheckFn: () => void;
+  isOnFetchFn: () => void;
 }
 export default function MissionItemTimePicker(props: IProps) {
+  const [isChange, setIsChange] = useState(props.isCheck);
   const [date, setDate] = useState(new Date(1598051730000));
-  const { onFetch, isSuccess } = useFetch({
-    method: 'PATCH',
-    url: `/missions/${props.id}`,
-    value: {
-      missionType: props.missionType,
-      missionDescription: props.missionDescription,
-      alertStatus: props.isCheck ? 'CHECKED' : 'UNCHECKED',
-      alertTime: props.alertTime,
-    },
-  });
-  /*useEffect(() => {
-    if (props.isCheck !== isChecked) onFetch();
-  }, [isChecked]);*/
-  /*useEffect(() => {
-    props.setRtnTime(props.alertTime);
-  }, []);*/
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
@@ -90,20 +76,16 @@ export default function MissionItemTimePicker(props: IProps) {
       </Font>
       <TouchableWithoutFeedback
         onPress={() => {
-          props.setIsCheckFn();
-          console.log('props.isCheck ====>  ', props.isCheck);
+          setIsChange(!isChange);
         }}
       >
         <S.disabledButton>
-          <Font
-            type={'BODY_REGULAR'}
-            color={!props.isCheck ? 'GREY1' : 'WHITE'}
-          >
+          <Font type={'BODY_REGULAR'} color={!isChange ? 'GREY1' : 'WHITE'}>
             알림끄기
           </Font>
           <L.Row ml={12}>
             <SvgIcon
-              name={!props.isCheck ? 'iconCheckAlarmOff' : 'iconCheckAlarmOn'}
+              name={!isChange ? 'iconCheckAlarmOff' : 'iconCheckAlarmOn'}
               size={10}
             />
           </L.Row>
@@ -117,7 +99,7 @@ export default function MissionItemTimePicker(props: IProps) {
         mode={'time'}
         onChange={onChange}
         textColor={Colors.WHITE}
-        disabled={!props.isCheck}
+        disabled={!isChange}
       />
       <S.buttonWrap>
         <Button
@@ -126,7 +108,7 @@ export default function MissionItemTimePicker(props: IProps) {
           bgColor={'LUCK_GREEN'}
           onPress={() => {
             BottomSheet.hide;
-            onFetch();
+            props.isOnFetchFn();
           }}
         />
       </S.buttonWrap>

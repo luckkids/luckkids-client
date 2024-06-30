@@ -111,9 +111,6 @@ export const PageMissionAdd: React.FC = () => {
     setRtnTime(fTime);
   };
 
-  // 00:00:00
-  // 08:17:23
-
   useEffect(() => {
     // onFetch();
   }, []);
