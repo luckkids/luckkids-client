@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import styled from 'styled-components/native';
 import { ButtonText, Colors, Font, L, SvgIcon, Toggle } from '@design-system';
 import { useMe } from '@queries';
@@ -9,7 +8,6 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import useAsyncEffect from '@hooks/useAsyncEffect';
 
 const S = {
   Border: styled.View({
@@ -75,10 +73,10 @@ export const PageSettingInfo: React.FC = () => {
               navigation.push('WebView', {
                 // TODO url 변경 필요
                 url: '',
-                title: '서비스 이용약관',
+                title: '약관 및 정책',
               });
             }}
-            text={'서비스 이용약관'}
+            text={'약관 및 정책'}
             textColor={'WHITE'}
           />
         </L.Col>
