@@ -13,6 +13,7 @@ interface DayProps {
 
 const Day: React.FC<DayProps> = ({ day }) => {
   const activatedDates = useRecoilValue(activatedDatesState);
+  const isAfterToday = day && day > new Date();
 
   const handleDayPress = useCallback((day: Date) => {
     BottomSheet.show({
@@ -36,6 +37,16 @@ const Day: React.FC<DayProps> = ({ day }) => {
   const dateString = day.toISOString().split('T')[0];
   const isActivated = activatedDates.includes(dateString);
 
+  const getFontColor = () => {
+    if (isActivated) {
+      return 'WHITE';
+    } else if (isAfterToday) {
+      return 'WHITE';
+    } else {
+      return 'GREY1';
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => day && handleDayPress(day)}>
       <L.Row
@@ -50,10 +61,7 @@ const Day: React.FC<DayProps> = ({ day }) => {
             : Colors.TRANSPARENT,
         }}
       >
-        <Font
-          type={'BODY_SEMIBOLD'}
-          color={isActivated ? 'LUCK_GREEN' : 'GREY1'}
-        >
+        <Font type={'BODY_SEMIBOLD'} color={getFontColor()}>
           {day?.getDate()}
         </Font>
       </L.Row>
