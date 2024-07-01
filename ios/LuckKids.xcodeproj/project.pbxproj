@@ -61,7 +61,7 @@
 		078912722B128835000D6C5D /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
 		0789C3D32AF072B000285C72 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LuckKids/Images.xcassets; sourceTree = "<group>"; };
 		0789C3D42AF072B100285C72 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = LuckKids/BootSplash.storyboard; sourceTree = "<group>"; };
-		07A447FA2B5E575400C2AC6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		07A447FA2B5E575400C2AC6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		07B625E22BF9E818006DA892 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		07B625E42BF9E820006DA892 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		13B07F961A680F5B00A75B9A /* luckkids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = luckkids.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -578,7 +578,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
@@ -614,7 +613,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
-				CURRENT_PROJECT_VERSION = 5;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
@@ -736,6 +734,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -808,6 +808,8 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-Wl",
+					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
 					"-Wl",

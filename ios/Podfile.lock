@@ -640,7 +640,7 @@ PODS:
     - React-Core
   - RNCClipboard (1.14.1):
     - React-Core
-  - RNDateTimePicker (7.7.0):
+  - RNDateTimePicker (7.6.2):
     - React-Core
   - RNDeviceInfo (10.14.0):
     - React-Core
@@ -1072,7 +1072,7 @@ SPEC CHECKSUMS:
   RNBootSplash: 334668c563e44287ca39d03aa3f738a3c35a74a6
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
-  RNDateTimePicker: 4f3c4dbd4f908be32ec8c93f086e8924bd4a2e07
+  RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
   RNDeviceInfo: 59344c19152c4b2b32283005f9737c5c64b42fba
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBApp: c21258de1485419a845efbba9c09ec946c89891d
@@ -1093,6 +1093,6 @@ SPEC CHECKSUMS:
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 6fe60c3e63dc56304fccaab90842678b0b2b9fd5
+PODFILE CHECKSUM: 9f73909f55b7448aa53985daa2a409d25a539823
 
 COCOAPODS: 1.14.3
