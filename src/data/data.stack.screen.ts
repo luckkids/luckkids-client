@@ -37,6 +37,7 @@ import { PageTutorialSettingMission } from '@page/tutorial/page.tutorial.setting
 import { PageTutorialSettingNoti } from '@page/tutorial/page.tutorial.setting.noti';
 import { PageTutorialStart } from '@page/tutorial/page.tutorial.start';
 import { IStackScreen } from '@types-common/page.types';
+import { PageMissionRepairPublic } from '@page/mission/page.mission.repair.public';
 
 export const DataStackScreen: Array<IStackScreen> = [
   {
@@ -137,6 +138,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'MissionRepair',
     component: PageMissionRepair,
+  },
+  {
+    name: 'MissionRepairPublic',
+    component: PageMissionRepairPublic,
   },
   {
     name: 'MissionAdd',

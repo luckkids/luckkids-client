@@ -2,9 +2,9 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
-import { Font, SvgIcon } from '@design-system';
+import { CONSTANTS, Font, SvgIcon } from '@design-system';
 import Colors from '../../design-system/colors';
-import Constants from "../../design-system/constants";
+import Constants from '../../design-system/constants';
 
 interface IActionIcon {
   title: string;
@@ -14,11 +14,14 @@ interface IActionIcon {
   onPress: () => void;
 }
 
+const bottom = Constants.BOTTOM_TABBAR_HEIGHT + 35;
+const buttonPadding = 14;
+
 const S = {
   wrap: styled.View({
     position: 'absolute',
     paddingHorizontal: 25,
-    bottom: Constants.BOTTOM_TABBAR_HEIGHT + 35,
+    bottom: bottom,
     width: '100%',
   }),
   button: styled.View(
@@ -26,7 +29,7 @@ const S = {
       flexDirection: 'row',
       justifyContent: 'center',
       paddingHorizontal: 20,
-      paddingVertical: 14,
+      paddingVertical: buttonPadding,
       borderRadius: 15,
       width: '100%',
     },
@@ -37,7 +40,7 @@ const S = {
     },
   ),
   dimWrap: styled.View({
-    height: 132,
+    height: bottom + buttonPadding + 80,
   }),
 };
 
@@ -53,6 +56,8 @@ export const ActionIcon: React.FC<IActionIcon> = ({
       {isDim !== false && (
         <Dim
           colors={['transparent', '#000']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 0.4 }}
           style={{
             position: 'absolute',
             bottom: 0,

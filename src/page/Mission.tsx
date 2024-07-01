@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { SCREEN_HEIGHT } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
-import { Colors, Font, L, SvgIcon } from '@design-system';
+import { Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
-import Constants from '../design-system/constants';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
-import { MissionItem } from '@components/page/mission/mission.item';
+import { MissionSwipeItem } from '@components/page/mission/mission.swipe.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
@@ -15,20 +13,18 @@ import { IMissionListData } from '@types-common/page.types';
 export const Mission: React.FC = () => {
   const [hide, setHide] = useState<boolean>(false);
   const [data, setData] = useState<Array<IMissionListData>>([]);
-  const [hideData, setHideData] = useState<Array<IMissionListData>>([]);
   const [count, setCount] = useState<number>(0);
   const [total, setTotal] = useState<number>(0);
+  const [accumulate, setAccumulate] = useState<number>(0);
   const navigation = useNavigationService();
   const isFocused = useIsFocused();
-  const { onFetch: missionList, isSuccess: missionListIsSuccess } = useFetch({
+  const { onFetch: missionList } = useFetch({
     method: 'GET',
     url: '/missionOutcomes',
     value: {},
     onSuccessCallback: (rtn) => {
+      console.log('---->', rtn);
       setData(rtn);
-      setHideData(
-        rtn.filter((item: IMissionListData) => item.missionStatus === 'FAILED'),
-      );
       setTotal(rtn.length);
       setCount(
         rtn.filter((item: IMissionListData) => item.missionStatus === 'SUCCEED')
@@ -36,24 +32,44 @@ export const Mission: React.FC = () => {
       );
     },
   });
+  const { onFetch: accumulateCount } = useFetch({
+    method: 'GET',
+    url: '/missionOutcomes/count',
+    value: {},
+    onSuccessCallback: (rtn) => {
+      setAccumulate(rtn.count);
+    },
+  });
   useEffect(() => {
-    if (isFocused) missionList();
-  }, [isFocused]);
+    if (isFocused) {
+      missionList();
+      accumulateCount();
+    }
+  }, [isFocused, count]);
+  const resultItemData = useMemo(() => {
+    if (data.length === 0) return [];
+    if (hide) {
+      return data.filter((item) => {
+        return item.missionStatus === 'FAILED';
+      });
+    } else {
+      return data;
+    }
+  }, [hide, data]);
 
   return (
     <>
       <FrameLayout>
-        <L.Row>
-          <Font type={'FOOTNOTE_REGULAR'}>클로버</Font>
-          <Font type={'FOOTNOTE_REGULAR'}>+3</Font>
+        <L.Row ph={24} justify={'flex-end'}>
+          <Font type={'FOOTNOTE_REGULAR'}>누적된 수행 습관 {accumulate}</Font>
         </L.Row>
-        <L.Row p={24} justify={'space-between'}>
-          <Font type={'LARGE_TITLE_BOLD'}>미션 달성하기</Font>
+        <L.Row p={24} pt={40} justify={'space-between'}>
+          <Font type={'LARGE_TITLE_BOLD'}>오늘의 습관</Font>
           <Font type={'LARGE_TITLE_REGULAR'} color={'LUCK_GREEN'}>
             {count}/{total}
           </Font>
         </L.Row>
-        <L.Row ph={24} pt={48} justify={'space-between'}>
+        <L.Row ph={24} pt={48} pb={10} justify={'space-between'}>
           <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
             지금까지 {count}개 완료했어요!
           </Font>
@@ -64,32 +80,32 @@ export const Mission: React.FC = () => {
             textColor={'LUCK_GREEN'}
           />
         </L.Row>
-        <ScrollView style={{ height: SCREEN_HEIGHT - 82 }}>
-          {hide
-            ? hideData.map((item, i) => {
-                return (
-                  <MissionItem
-                    {...item}
-                    key={i}
-                    setCount={setCount}
-                    prevCount={count}
-                  />
-                );
-              })
-            : data.map((item, i) => {
-                return (
-                  <MissionItem
-                    {...item}
-                    key={i}
-                    setCount={setCount}
-                    prevCount={count}
-                  />
-                );
-              })}
+        <ScrollView
+          contentInset={{
+            bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
+          }}
+        >
+          {data.length === 0 && (
+            <L.Col w={'100%'} items={'center'} mt={100}>
+              <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
+                아직 선택한 습관이 없어요.
+              </Font>
+            </L.Col>
+          )}
+          {resultItemData.map((item, i) => {
+            return (
+              <MissionSwipeItem
+                {...item}
+                key={`${hide}-${i}`}
+                setCount={setCount}
+                prevCount={count}
+              />
+            );
+          })}
         </ScrollView>
       </FrameLayout>
       <FloatingButton
-        paddingBottom={Constants.BOTTOM_TABBAR_HEIGHT + 38}
+        paddingBottom={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 38}
         onPress={() => navigation.navigate('MissionRepair', {})}
         containerStyle={{
           width: 36,

@@ -56,6 +56,9 @@ const Colors = {
   // TUTORIAL
   TUTORIAL_GUIDE_BG: '#47562B',
   TUTORIAL_SETTING_BG: '#313B21',
+
+  //MISSION ITEM BG
+  MISSION_IS_SWIPE_BG: '#1A1B18',
 };
 
 export type ColorType = typeof Colors;
