@@ -58,7 +58,7 @@ export type AppScreensParamList = {
   SettingAlarm: undefined;
   SettingInfo: undefined;
   SettingNotice: undefined;
-  SettingSecurityPass: undefined;
+  SettingInfoPassword: undefined;
   SettingAccount: undefined;
   WebView: { url: string; title?: string };
   Garden: undefined;
@@ -145,6 +145,8 @@ export interface ISettingAlarm {
 }
 
 export interface ISettingNotice {
+  id: number;
   title: string;
   createdDate: string;
+  url: string;
 }

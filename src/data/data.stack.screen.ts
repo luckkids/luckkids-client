@@ -184,7 +184,7 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageSettingNotice,
   },
   {
-    name: 'SettingSecurityPass',
+    name: 'SettingInfoPassword',
     component: PageSettingInfoPassword,
   },
   {

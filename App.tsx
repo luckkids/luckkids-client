@@ -1,26 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import {
   NavigationContainer,
   NavigationState,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LottieView from 'lottie-react-native';
 import BootSplash from 'react-native-bootsplash';
 import CodePush from 'react-native-code-push';
+import DeviceInfo from 'react-native-device-info';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
+import { SocialType } from '@types-index';
 import { DataStackScreen } from './src/data/data.stack.screen';
-import { LoginRequest } from '@apis/auth';
 import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useLocalMessage from '@hooks/notification/useLocalMessage';
-import { StorageKeys } from '@hooks/storage/keys';
+import { RememberMeType, StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
@@ -32,7 +34,10 @@ const RootNavigator = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
   const [initializing, setInitializing] = useState(true);
+  const [isNavigationReady, setIsNavigatorReady] = useState(false);
 
+  const [deviceId, setDeviceId] = useState('');
+  const { getToken } = useFirebaseMessage();
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
 
@@ -59,33 +64,37 @@ const RootNavigator = () => {
   const { storedValue: storyTelling, loading: isLoadingStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
 
-  const { login } = useAuth();
+  const { login, oauthLogin } = useAuth();
 
-  const handleLogin = async (loginInfo: LoginRequest) => {
-    const res = await login(loginInfo);
+  const handleRememberMeLogin = async (rememberMe: RememberMeType) => {
+    const pushKey = await getToken();
+    const res =
+      rememberMe.snsType === 'NORMAL'
+        ? await login({
+            email: rememberMe.email || '',
+            password: rememberMe.credential,
+            pushKey,
+            deviceId,
+          })
+        : await oauthLogin({
+            snsType: rememberMe.snsType as SocialType,
+            token: rememberMe.credential,
+            pushKey,
+            deviceId,
+          });
+
     if (!res) {
       return setInitialRoute({
         screenName: 'Login',
         screenParams: undefined,
       });
     } else {
-      return navigationRef.current?.reset({
-        index: 0,
-        routes: [
-          { name: res.settingStatus === 'COMPLETE' ? 'Home' : 'TutorialStart' },
-        ],
+      return setInitialRoute({
+        screenName: res.settingStatus === 'COMPLETE' ? 'Home' : 'TutorialStart',
+        screenParams: undefined,
       });
     }
   };
-
-  useEffect(() => {
-    initializeFirebaseMessage();
-    initializeLocalMessage();
-  }, []);
-
-  useEffect(() => {
-    StatusBar.setBarStyle('light-content', true);
-  }, []);
 
   useEffect(() => {
     // 코드 푸시 DEV 에서 테스트하는 경우 아니면 return 해두기
@@ -110,8 +119,17 @@ const RootNavigator = () => {
   }, []);
 
   useAsyncEffect(async () => {
+    await BootSplash.hide({ fade: false });
     try {
       if (!initializing) {
+        // push 관련 initializing
+        initializeFirebaseMessage();
+        initializeLocalMessage();
+
+        // status bar 색은 항상 light-content
+        // NEXT: 다크모드 테마 생기면 변경 필요
+        StatusBar.setBarStyle('light-content', true);
+
         // Fast refresh 때 아래 로직 자꾸 도는거 방지
         return console.log('App Reload');
       }
@@ -119,30 +137,20 @@ const RootNavigator = () => {
       console.error(error);
     } finally {
       setInitializing(false);
-      await BootSplash.hide({ fade: true });
     }
   }, [initializing]);
 
   useAsyncEffect(async () => {
     if (isLoadingRememberMe || isLoadingStoryTelling) return;
 
-    // 스토리텔링
-    console.log('storyTelling ====>', storyTelling);
     if (!storyTelling || !storyTelling.viewed) {
-      return navigationRef.current?.reset({
-        index: 0,
-        routes: [{ name: 'StoryTelling' }],
+      setInitialRoute({
+        screenName: 'StoryTelling',
+        screenParams: undefined,
       });
-    }
-
-    // 자동 로그인
-    console.log('rememberMe ====>', rememberMe);
-    if (rememberMe) {
-      handleLogin({
-        email: rememberMe.email,
-        password: rememberMe.password,
-        deviceId: rememberMe.deviceId,
-        pushKey: rememberMe.pushKey,
+    } else if (rememberMe) {
+      await handleRememberMeLogin({
+        ...rememberMe,
       });
     } else {
       setInitialRoute({
@@ -150,30 +158,65 @@ const RootNavigator = () => {
         screenParams: undefined,
       });
     }
+
+    setIsNavigatorReady(true);
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
+
+  useAsyncEffect(async () => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    setDeviceId(deviceId);
+  }, []);
+
+  useEffect(() => {
+    console.log(177, isNavigationReady);
+  }, []);
+
+  if (!isNavigationReady) {
+    return (
+      <View style={styles.lottieContainer}>
+        <LottieView
+          source={require('assets/lotties/levelup-motion-2.json')}
+          autoPlay
+          loop
+          style={styles.lottie}
+        />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer<AppScreensParamList>
       ref={navigationRef}
       onReady={async () => {
-        console.log('onReady');
         if (!navigationRef.current) return;
         NavigationService.setNavigation(navigationRef.current);
       }}
       onStateChange={onStateChange}
     >
-      <Stack.Navigator initialRouteName={initialRoute.screenName}>
-        {DataStackScreen.map((item) => {
-          return (
-            <Stack.Screen
-              name={item.name}
-              component={item.component}
-              options={{ ...item.options, headerShown: false }}
-              key={item.name}
-            />
-          );
-        })}
-      </Stack.Navigator>
+      {initializing ? ( // 초기화 중일 때 LottieView를 보여줌
+        <View style={styles.lottieContainer}>
+          <LottieView
+            source={require('assets/lotties/levelup-motion-2.json')}
+            autoPlay
+            loop
+            style={styles.lottie}
+          />
+        </View>
+      ) : (
+        // 초기화가 완료되면 Stack.Navigator를 보여줌
+        <Stack.Navigator initialRouteName={initialRoute.screenName}>
+          {DataStackScreen.map((item) => {
+            return (
+              <Stack.Screen
+                name={item.name}
+                component={item.component}
+                options={{ ...item.options, headerShown: false }}
+                key={item.name}
+              />
+            );
+          })}
+        </Stack.Navigator>
+      )}
     </NavigationContainer>
   );
 };
@@ -193,5 +236,19 @@ const App = () => (
     </QueryClientProvider>
   </GestureHandlerRootView>
 );
+
+const styles = StyleSheet.create({
+  lottieContainer: {
+    // 새로 추가된 스타일
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lottie: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff', // BootSplash 배경색과 동일하게 설정
+  },
+});
 
 export default App;

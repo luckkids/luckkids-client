@@ -101,6 +101,58 @@ const checkEmail = async (email: string) => {
   return res.data;
 };
 
+// 비밀번호 재설정
+export type ResetPasswordRequest = {
+  email: string;
+  password: string;
+};
+
+export type ResetPasswordResponse = {
+  email: string;
+};
+
+const resetPassword = async (request: ResetPasswordRequest) => {
+  const res = await API.patch<ResetPasswordResponse>('/user/password', request);
+  return res.data;
+};
+
+// 이메일 존재하는지 확인 (존재 X --> error)
+export type FindEmailRequest = {
+  email: string;
+};
+
+export type FindEmailResponse = {
+  snsType: SocialType;
+};
+
+const findEmail = async (request: FindEmailRequest) => {
+  const res = await API.post<FindEmailResponse>('/user/findEmail', request);
+  return res.data;
+};
+
+type DeleteUserResponse = {
+  id: number;
+};
+
+const deleteUser = async () => {
+  const res = await API.delete<DeleteUserResponse>(`/user/withdraw/`);
+  return res.data;
+};
+
+type RegisterWithdrawReasonResponse = {
+  id: number;
+};
+
+const registerWithdrawReason = async (reason: string) => {
+  const res = await API.post<RegisterWithdrawReasonResponse>(
+    '/withdraw/reason',
+    {
+      reason,
+    },
+  );
+  return res.data;
+};
+
 export const authApis = {
   login,
   sendEmail,
@@ -109,4 +161,8 @@ export const authApis = {
   confirmEmail,
   signUp,
   checkEmail,
+  resetPassword,
+  findEmail,
+  deleteUser,
+  registerWithdrawReason,
 };

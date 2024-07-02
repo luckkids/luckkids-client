@@ -18,4 +18,11 @@ export interface IJoinInfo {
   password: string;
 }
 
+export interface ILoginInfo {
+  email: string;
+  password: string;
+  deviceId: string;
+  pushKey: string | null;
+}
+
 export interface IInitialSetting extends InitialSetting {}
