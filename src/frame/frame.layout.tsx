@@ -26,6 +26,7 @@ interface FrameLayoutProps {
   backgroundImage?: ImageSourcePropType;
   backgroundStyle?: StyleProp<ViewStyle>;
   stickToTop?: boolean;
+  enableKeyboardAvoidingView?: boolean;
 }
 
 export const FrameLayout = ({
@@ -37,6 +38,7 @@ export const FrameLayout = ({
   backgroundImage,
   backgroundStyle,
   stickToTop = false,
+  enableKeyboardAvoidingView = true,
 }: FrameLayoutProps) => {
   const theme = useTheme();
   const { top, bottom } = useSafeAreaInsets();
@@ -49,6 +51,7 @@ export const FrameLayout = ({
         width: SCREEN_WIDTH,
         flex: 1,
       }}
+      enabled={enableKeyboardAvoidingView}
     >
       <MyStatusBar
         backgroundColor={Colors[statusBarColor || 'BG_PRIMARY']}

@@ -191,6 +191,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
       backgroundImage={
         step === 3 ? tutorialGuideBgImage : tutorialSettingBgImage
       }
+      enableKeyboardAvoidingView={false}
     >
       <L.Col
         w="100%"
