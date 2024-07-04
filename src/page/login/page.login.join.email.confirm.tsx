@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
@@ -10,7 +10,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useAppState } from '@hooks/useAppState';
+import useAppStateEffect from '@hooks/useAppStateEffect';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
 
 export const PageLoginJoinEmailConfirm: React.FC = () => {
@@ -41,26 +41,25 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
   };
 
   const handleConfirmEmail = useCallback(async () => {
-    await authApis
-      .confirmEmail({
+    try {
+      await authApis.confirmEmail({
         email: joinInfo.email,
         authKey: authKey,
-      })
-      .then(() => {
-        setEmailConfirmed(true);
-      })
-      .catch((error) => {
-        console.error('confirmEmail', error);
-        AlertPopup.show({
-          title: '이메일 인증 실패',
-          body: error.response.data.message,
-          yesText: '확인',
-        });
-        setEmailConfirmed(false);
       });
+      setEmailConfirmed(true);
+    } catch (error: any) {
+      console.error('confirmEmail', error);
+      AlertPopup.show({
+        title: '이메일 인증 실패',
+        body:
+          error.response?.data?.message || '알 수 없는 오류가 발생했습니다.',
+        yesText: '확인',
+      });
+      setEmailConfirmed(false);
+    }
   }, [joinInfo, authKey]);
 
-  useAppState(handleConfirmEmail);
+  useAppStateEffect(handleConfirmEmail, []);
 
   return (
     <FrameLayout>
