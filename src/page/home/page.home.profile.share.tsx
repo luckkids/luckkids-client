@@ -65,7 +65,7 @@ export const PageHomeProfileShare: React.FC = () => {
         pb={100}
       >
         {/* 캐릭터 */}
-        <L.Row w="100%" justify="center" outline="WHITE" rounded={25}>
+        <L.Row w="100%" justify="center" rounded={25}>
           {inProgressCharacter && (
             <Image
               source={{
