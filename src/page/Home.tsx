@@ -65,13 +65,12 @@ export const Home: React.FC = () => {
       <FrameLayout
         NavBar={<HomeNavbar onPressLuckkids={scrollToLuckkids} />}
         backgroundImage={
-          inProgressCharacter && {
-            uri: getCharacterImage(
-              inProgressCharacter?.characterType,
-              inProgressCharacter?.level,
-              'back',
-            ),
-          }
+          inProgressCharacter &&
+          getCharacterImage(
+            inProgressCharacter?.characterType,
+            inProgressCharacter?.level,
+            'back',
+          )
         }
         stickToTop
         paddingBottom={0}

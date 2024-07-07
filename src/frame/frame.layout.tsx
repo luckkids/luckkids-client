@@ -16,6 +16,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { CONSTANTS, ColorKeys, Colors } from '@design-system';
+import FastImage from 'react-native-fast-image';
 
 interface FrameLayoutProps {
   NavBar?: React.ReactNode;
@@ -23,7 +24,7 @@ interface FrameLayoutProps {
   backgroundColor?: ColorKeys;
   statusBarColor?: ColorKeys;
   statusBarStyle?: 'light-content' | 'dark-content';
-  backgroundImage?: ImageSourcePropType;
+  backgroundImage?: string | number;
   backgroundStyle?: StyleProp<ViewStyle>;
   stickToTop?: boolean;
   enableKeyboardAvoidingView?: boolean;
@@ -44,6 +45,8 @@ export const FrameLayout = ({
 }: FrameLayoutProps) => {
   const theme = useTheme();
   const { top, bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  const isLocalImage = typeof backgroundImage === 'number';
 
   return (
     <KeyboardAvoidingView
@@ -84,13 +87,20 @@ export const FrameLayout = ({
               backgroundColor: 'transparent',
             }}
           >
-            <ImageBackground
-              source={backgroundImage}
+            <FastImage
+              source={
+                isLocalImage
+                  ? backgroundImage
+                  : {
+                      uri: backgroundImage,
+                      priority: FastImage.priority.normal,
+                    }
+              }
               style={{
                 width: SCREEN_WIDTH,
                 height: (SCREEN_WIDTH * 844) / 390,
               }}
-              resizeMode="cover"
+              resizeMode={FastImage.resizeMode.cover}
             />
           </View>
         )}

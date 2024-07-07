@@ -9,6 +9,7 @@ import { getCharacterImage } from '@utils';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import FastImage from 'react-native-fast-image';
 
 export const PageHomeProfile: React.FC = () => {
   const navigation = useNavigationService();
@@ -88,7 +89,7 @@ export const PageHomeProfile: React.FC = () => {
         {/* 캐릭터 */}
         <L.Row w="100%" justify="center">
           {inProgressCharacter && (
-            <Image
+            <FastImage
               source={{
                 uri: getCharacterImage(
                   inProgressCharacter?.characterType,
