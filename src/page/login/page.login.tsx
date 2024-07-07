@@ -34,7 +34,7 @@ export const PageLogin: React.FC = () => {
   };
 
   const handlePressLogin = () => {
-    navigation.navigate('LoginId');
+    navigation.push('LoginId');
   };
 
   const { oauthLogin } = useAuth();
