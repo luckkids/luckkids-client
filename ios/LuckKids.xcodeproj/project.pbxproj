@@ -580,7 +580,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LuckKids/Info.plist;
@@ -615,7 +615,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				INFOPLIST_FILE = LuckKids/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
@@ -736,6 +736,9 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -834,6 +837,9 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

@@ -16,6 +16,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { CONSTANTS, ColorKeys, Colors } from '@design-system';
+import FastImage from 'react-native-fast-image';
 
 interface FrameLayoutProps {
   NavBar?: React.ReactNode;
@@ -23,9 +24,11 @@ interface FrameLayoutProps {
   backgroundColor?: ColorKeys;
   statusBarColor?: ColorKeys;
   statusBarStyle?: 'light-content' | 'dark-content';
-  backgroundImage?: ImageSourcePropType;
+  backgroundImage?: string | number;
   backgroundStyle?: StyleProp<ViewStyle>;
   stickToTop?: boolean;
+  enableKeyboardAvoidingView?: boolean;
+  paddingBottom?: number;
 }
 
 export const FrameLayout = ({
@@ -37,9 +40,13 @@ export const FrameLayout = ({
   backgroundImage,
   backgroundStyle,
   stickToTop = false,
+  enableKeyboardAvoidingView = true,
+  paddingBottom = 0,
 }: FrameLayoutProps) => {
   const theme = useTheme();
-  const { top, bottom } = useSafeAreaInsets();
+  const { top, bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  const isLocalImage = typeof backgroundImage === 'number';
 
   return (
     <KeyboardAvoidingView
@@ -49,6 +56,7 @@ export const FrameLayout = ({
         width: SCREEN_WIDTH,
         flex: 1,
       }}
+      enabled={enableKeyboardAvoidingView}
     >
       <MyStatusBar
         backgroundColor={Colors[statusBarColor || 'BG_PRIMARY']}
@@ -60,7 +68,8 @@ export const FrameLayout = ({
             backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
             width: SCREEN_WIDTH,
             flex: 1,
-            paddingBottom: bottom,
+            paddingBottom:
+              paddingBottom === undefined ? safeAreaBottom : paddingBottom,
           },
           backgroundStyle,
         ])}
@@ -71,19 +80,27 @@ export const FrameLayout = ({
               position: 'absolute',
               top: stickToTop ? -top : 0,
               left: 0,
-              bottom: bottom + CONSTANTS.BOTTOM_TABBAR_HEIGHT,
+              bottom: safeAreaBottom + CONSTANTS.BOTTOM_TABBAR_HEIGHT,
               width: SCREEN_WIDTH,
               height: (SCREEN_WIDTH * 790) / 390,
               zIndex: -1,
+              backgroundColor: 'transparent',
             }}
           >
-            <ImageBackground
-              source={backgroundImage}
+            <FastImage
+              source={
+                isLocalImage
+                  ? backgroundImage
+                  : {
+                      uri: backgroundImage,
+                      priority: FastImage.priority.normal,
+                    }
+              }
               style={{
                 width: SCREEN_WIDTH,
-                height: (SCREEN_WIDTH * 790) / 390,
+                height: (SCREEN_WIDTH * 844) / 390,
               }}
-              resizeMode="cover"
+              resizeMode={FastImage.resizeMode.cover}
             />
           </View>
         )}

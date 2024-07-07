@@ -64,14 +64,14 @@ const AlertPopupContent: React.FC<AlertPopupProps> = ({
           )}
           {headerComponent}
           {!!body && (
-            <L.Layout pb={footerComponent ? 10 : 25}>
+            <L.Layout pb={footerComponent ? 10 : 0}>
               <Font type={'BODY_REGULAR'} color={'GREY0'}>
                 {body}
               </Font>
             </L.Layout>
           )}
           {footerComponent}
-          <L.Row g={8} w={'100%'}>
+          <L.Row g={8} w={'100%'} mt={24}>
             {!!noText && (
               <L.Row flex-1>
                 <Button

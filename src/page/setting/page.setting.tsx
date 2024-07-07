@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import DeviceInfo from 'react-native-device-info';
+import { useResetRecoilState } from 'recoil';
 import styled from 'styled-components/native';
 import { Font, SvgIcon, L } from '@design-system';
+import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
-import { useFetch } from '@hooks/useFetch';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { useResetRecoilState } from 'recoil';
+import { useFetch } from '@hooks/useFetch';
 import { RecoilToken } from '@recoil/recoil.token';
-import { useMe } from '@queries';
+import { settingApis } from '@apis/setting';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 
 const S = {
   Wrap: styled.View({
@@ -28,42 +30,54 @@ const S = {
 
 export const PageSetting: React.FC = () => {
   const navigation = useNavigationService();
-  const [version, setVersion] = useState<string>('최신 버전이에요!');
   const applicationVersion = DeviceInfo.getVersion();
   const { removeValue: removeRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+
+  const [needUpdate, setNeedUpdate] = useState(false);
 
   const { removeValue: removeAccessToken } =
     useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
   const resetAccessToken = useResetRecoilState(RecoilToken);
 
   const { data: me } = useMe();
-  const { luckPhrase, nickname } = me || {};
+  const { nickname } = me || {};
   const { getToken } = useFirebaseMessage();
-  const { onFetch } = useFetch({
-    method: 'GET',
-    url: '/versions/',
-    value: {},
-    onSuccessCallback: (rtn) => {
-      // if (rtn.versionNum === applicationVersion) setVersion(rtn.versionNum);
-      setVersion(rtn);
-    },
-  });
-  useEffect(() => {
-    // onFetch();
-    console.log(applicationVersion);
-  }, []);
+
+  const fetchVersionInfo = async () => {
+    settingApis.getVersion().then((res) => {
+      if (res.data.versionNum !== applicationVersion) {
+        setNeedUpdate(true);
+      }
+    });
+  };
 
   const handleLogout = () => {
-    // delete remember me
-    removeRememberMe();
-    // delete token
-    removeAccessToken();
-    resetAccessToken();
+    // 정말 로그아웃?
 
-    // go to login page
-    return navigation.replace('Login');
+    AlertPopup.show({
+      title: '정말 로그아웃하실 건가요?',
+      noText: '네!',
+      yesText: '아니요!',
+      onPressNo: async () => {
+        // delete remember me
+        removeRememberMe();
+        // delete token
+        removeAccessToken();
+        resetAccessToken();
+        // go to login page
+        return navigation.replace('Login');
+      },
+      onPressYes: async () => {
+        AlertPopup.hide();
+      },
+    });
   };
+
+  useEffect(() => {
+    //TODO 백엔드 오류 수정되면 주석 해제
+    // fetchVersionInfo();
+  }, []);
 
   return (
     <FrameLayout
@@ -115,11 +129,33 @@ export const PageSetting: React.FC = () => {
             <SvgIcon name={'arrow_right_gray'} size={14} />
           </L.Row>
         </ButtonText>
-        <L.Row justify={'space-between'} ph={25} pv={20}>
-          <Font type={'BODY_REGULAR'}>버전 정보</Font>
-          <Font type={'BODY_REGULAR'} color={'GREY1'}>
-            {version}
-          </Font>
+        <ButtonText onPress={() => navigation.navigate('SettingNotice')}>
+          <L.Row justify={'space-between'} ph={25} pv={20} items="center">
+            <L.Col g={7}>
+              <Font type={'BODY_REGULAR'}>피드백 보내기</Font>
+              <Font type={'FOOTNOTE_REGULAR'} color="GREY1">
+                하찮은 피드백도 환영이에요!
+              </Font>
+            </L.Col>
+            <SvgIcon name={'arrow_right_gray'} size={14} />
+          </L.Row>
+        </ButtonText>
+        <L.Row justify={'space-between'} ph={25} pv={20} items="center">
+          <L.Col g={7}>
+            <Font type={'BODY_REGULAR'}>앱 버전</Font>
+            {needUpdate && (
+              <Font type={'FOOTNOTE_REGULAR'} color="GREY1">
+                업데이트가 필요해요!
+              </Font>
+            )}
+          </L.Col>
+          {needUpdate ? (
+            <SvgIcon name={'arrow_right_gray'} size={14} />
+          ) : (
+            <Font type={'SUBHEADLINE_REGULAR'} color="GREY1">
+              최신 버전이에요!
+            </Font>
+          )}
         </L.Row>
         <ButtonText
           text={'로그아웃'}
@@ -139,7 +175,8 @@ export const PageSetting: React.FC = () => {
           }}
           onPress={() => navigation.navigate('SettingAccount')}
         />
-        <ButtonText
+        {/* TODO admin인 경우 추가 */}
+        {/* <ButtonText
           text={'내 푸시 토큰 복사하기'}
           textColor={'WHITE'}
           cssProp={{
@@ -153,7 +190,7 @@ export const PageSetting: React.FC = () => {
               Alert.alert('푸시 토큰이 복사되었습니다.');
             } else Alert.alert('푸시 토큰이 없습니다.');
           }}
-        />
+        /> */}
       </ScrollView>
     </FrameLayout>
   );
