@@ -39,8 +39,19 @@ const getNotices = async () => {
   return res;
 };
 
+export type GetVersionResponse = {
+  id: number;
+  versionNum: string;
+};
+
+const getVersion = async () => {
+  const res = await API.get<GetVersionResponse>('/versions/');
+  return res;
+};
+
 export const settingApis = {
   getAlertSetting,
   updateAlertSetting,
   getNotices,
+  getVersion,
 };
