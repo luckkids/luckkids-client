@@ -6,7 +6,11 @@ import { useHomeInfo } from '@queries';
 import { getCompletedCharacterCount } from '@utils';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
-const HomeNavbar: React.FC = () => {
+type HomeNavbarProps = {
+  onPressLuckkids: () => void;
+};
+
+const HomeNavbar: React.FC<HomeNavbarProps> = ({ onPressLuckkids }) => {
   const navigation = useNavigationService();
 
   const handlePressAlarm = () => {
@@ -16,10 +20,6 @@ const HomeNavbar: React.FC = () => {
   const { data: homeInfo } = useHomeInfo();
   const { userCharacterSummaryResponse, hasUncheckedAlerts } = homeInfo || {};
   const { completedCharacterCount } = userCharacterSummaryResponse || {};
-
-  const handlePressLuckKids = () => {
-    //TODO 이쪽 기획 확정되면 진행
-  };
 
   return (
     <L.Row
@@ -39,7 +39,7 @@ const HomeNavbar: React.FC = () => {
       />
       <L.Row g={16}>
         {/* 레벨 */}
-        <TouchableWithoutFeedback onPress={handlePressLuckKids}>
+        <TouchableWithoutFeedback onPress={onPressLuckkids}>
           <L.Row items="center" g={8}>
             <SvgIcon name="iconHomeLuckkids" size={20} />
             {completedCharacterCount && (

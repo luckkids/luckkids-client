@@ -27,6 +27,7 @@ interface FrameLayoutProps {
   backgroundStyle?: StyleProp<ViewStyle>;
   stickToTop?: boolean;
   enableKeyboardAvoidingView?: boolean;
+  paddingBottom?: number;
 }
 
 export const FrameLayout = ({
@@ -39,9 +40,10 @@ export const FrameLayout = ({
   backgroundStyle,
   stickToTop = false,
   enableKeyboardAvoidingView = true,
+  paddingBottom = 0,
 }: FrameLayoutProps) => {
   const theme = useTheme();
-  const { top, bottom } = useSafeAreaInsets();
+  const { top, bottom: safeAreaBottom } = useSafeAreaInsets();
 
   return (
     <KeyboardAvoidingView
@@ -63,7 +65,8 @@ export const FrameLayout = ({
             backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
             width: SCREEN_WIDTH,
             flex: 1,
-            paddingBottom: bottom,
+            paddingBottom:
+              paddingBottom === undefined ? safeAreaBottom : paddingBottom,
           },
           backgroundStyle,
         ])}
@@ -74,17 +77,18 @@ export const FrameLayout = ({
               position: 'absolute',
               top: stickToTop ? -top : 0,
               left: 0,
-              bottom: bottom + CONSTANTS.BOTTOM_TABBAR_HEIGHT,
+              bottom: safeAreaBottom + CONSTANTS.BOTTOM_TABBAR_HEIGHT,
               width: SCREEN_WIDTH,
               height: (SCREEN_WIDTH * 790) / 390,
               zIndex: -1,
+              backgroundColor: 'transparent',
             }}
           >
             <ImageBackground
               source={backgroundImage}
               style={{
                 width: SCREEN_WIDTH,
-                height: (SCREEN_WIDTH * 790) / 390,
+                height: (SCREEN_WIDTH * 844) / 390,
               }}
               resizeMode="cover"
             />

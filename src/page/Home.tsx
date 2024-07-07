@@ -1,8 +1,14 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import { Animated, GestureResponderEvent, Image, View } from 'react-native';
+import {
+  Animated,
+  GestureResponderEvent,
+  Image,
+  ScrollView,
+  View,
+} from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
-import { ChipButton, Font, L, SvgIcon } from '@design-system';
+import { CONSTANTS, ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
 import { getCharacterImage, getLevelToolTipText } from '@utils';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
@@ -12,6 +18,7 @@ import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -21,18 +28,25 @@ const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
   const navigation = useNavigationService();
+  const scrollViewRef = useRef<ScrollView>(null);
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const { bottom } = useSafeAreaInsets();
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
     navigation.push('HomeProfile');
   };
-
-  const scrollY = useRef(new Animated.Value(0)).current;
 
   const infoTranslateY = scrollY.interpolate({
     inputRange: [0, 200],
     outputRange: [0, -100],
     extrapolate: 'clamp',
   });
+
+  const scrollToLuckkids = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  };
 
   useLayoutEffect(() => {
     LoadingIndicator.show({});
@@ -49,8 +63,7 @@ export const Home: React.FC = () => {
   return (
     <>
       <FrameLayout
-        // statusBarColor={'HOME_BG'}
-        NavBar={<HomeNavbar />}
+        NavBar={<HomeNavbar onPressLuckkids={scrollToLuckkids} />}
         backgroundImage={
           inProgressCharacter && {
             uri: getCharacterImage(
@@ -61,6 +74,7 @@ export const Home: React.FC = () => {
           }
         }
         stickToTop
+        paddingBottom={0}
       >
         {/* 캘린더 */}
         <View style={{ height: 100 }}>
@@ -69,10 +83,11 @@ export const Home: React.FC = () => {
         {/* 정보 */}
         <Animated.ScrollView
           style={{ flex: 1 }}
+          ref={scrollViewRef}
           contentContainerStyle={{
             paddingHorizontal: DEFAULT_MARGIN,
             paddingTop: SCREEN_HEIGHT * 0.4, // 초기 스크롤 위치 조정
-            paddingBottom: 20, // 하단 여백 추가
+            paddingBottom: 20 + bottom, // 하단 여백 추가,
           }}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }],
