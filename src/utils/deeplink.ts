@@ -1,5 +1,5 @@
 // 기본 URL을 정의합니다. 실제 앱의 URL로 변경해주세요.
-const BASE_URL = 'luckkids://';
+export const DEEP_LINK_BASE_URL = 'luckkids://';
 
 type DeepLinkInfo = {
   type: 'FRIEND_INVITE';
@@ -10,7 +10,7 @@ type DeepLinkInfo = {
 export function generateDeepLink(info: DeepLinkInfo): string {
   switch (info.type) {
     case 'FRIEND_INVITE':
-      return `${BASE_URL}/friend-invite/${info.params.code}`;
+      return `${DEEP_LINK_BASE_URL}/friend-invite/${info.params.code}`;
     default:
       throw new Error('Unknown screen');
   }
@@ -19,12 +19,12 @@ export function generateDeepLink(info: DeepLinkInfo): string {
 //  ex) url : luckkids://friend-invite/CODE
 export function parseDeepLink(url: string): DeepLinkInfo {
   // URL이 BASE_URL로 시작하는지 확인
-  if (!url.startsWith(BASE_URL)) {
+  if (!url.startsWith(DEEP_LINK_BASE_URL)) {
     throw new Error('Invalid URL: Does not match BASE_URL');
   }
 
   // BASE_URL을 제거하고 경로만 추출
-  const path = url.slice(BASE_URL.length);
+  const path = url.slice(DEEP_LINK_BASE_URL.length);
 
   const friendInviteMatch = path.match(/^\/friend-invite\/(\w+)$/);
   if (friendInviteMatch) {

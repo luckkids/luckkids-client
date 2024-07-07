@@ -8,6 +8,7 @@ export interface GetHomeInfoResponse {
   luckkidsAchievementRate: number;
   userCharacterSummaryResponse: UserCharacterSummaryResponse;
   missionOutcomeForWeekResponse: MissionOutcomeForWeekResponse;
+  hasUncheckedAlerts: boolean;
 }
 
 export interface UserCharacterSummaryResponse {

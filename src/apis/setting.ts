@@ -1,6 +1,15 @@
-import { ISettingNotice } from '@types-common/page.types';
 import API from './API';
+import { ISettingAlarm, ISettingNotice } from '@types-common/page.types';
 import { AlertStatus, AlertType } from '@types-common/setting.types';
+
+export type GetAlertSettingResponse = ISettingAlarm;
+
+const getAlertSetting = async (deviceId: string) => {
+  const res = await API.post<GetAlertSettingResponse>('/alertSetting', {
+    deviceId,
+  });
+  return res;
+};
 
 export type UpdateAlertStatusRequest = {
   alertType: AlertType;
@@ -31,6 +40,7 @@ const getNotices = async () => {
 };
 
 export const settingApis = {
+  getAlertSetting,
   updateAlertSetting,
   getNotices,
 };
