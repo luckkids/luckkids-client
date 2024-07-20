@@ -69,7 +69,7 @@ export const MissionSwipeRepairItem: React.FC<IProps> = (props) => {
       onSwipeableOpenStartDrag={() => setIsSwiping(true)}
       onSwipeableClose={() => setIsSwiping(false)}
     >
-      <MissionRepairItem {...props} isSwipeOpen={isSwiping} />
+      {/*<MissionRepairItem {...props} isSwipeOpen={isSwiping} />*/}
     </Swipeable>
   );
 };

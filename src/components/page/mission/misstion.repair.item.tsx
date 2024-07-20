@@ -9,6 +9,7 @@ import { IMissionDataItem } from '@types-common/page.types';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;
+  isActive: boolean;
   isSwipeOpen?: boolean;
   isRepair?: boolean;
 }
@@ -18,10 +19,12 @@ const S = {
 };
 export const MissionRepairItem: React.FC<IProps> = ({
   missionDescription,
+  luckkidsMissionId,
   id,
   alertTime,
   alertStatus,
   missionType,
+  isActive,
   isRepair = false,
   isCheck,
 }) => {
@@ -104,7 +107,13 @@ export const MissionRepairItem: React.FC<IProps> = ({
   }, []);
 
   return (
-    <L.Row ph={25} pv={15} items={'center'} justify={'space-between'}>
+    <L.Row
+      ph={25}
+      pv={15}
+      items={'center'}
+      justify={'space-between'}
+      bg={luckkidsMissionId !== null ? 'LABEL_QUATERNARY' : 'TRANSPARENT'}
+    >
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'} w={'69%'}>
           <S.description>
@@ -122,7 +131,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
         >
           <View>
             <SvgIcon
-              name={isChecked ? 'lucky_check' : 'lucky_uncheck'}
+              name={isActive ? 'lucky_check' : 'lucky_uncheck'}
               size={30}
             />
           </View>

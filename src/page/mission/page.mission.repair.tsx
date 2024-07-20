@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,6 +15,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
+import Link from '@components/common/Link/Link';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
@@ -30,6 +31,9 @@ export const PageMissionRepair = () => {
   const [isRemove, setIsRemove] = useState<boolean>(false);
   const [listCategory, setListCategory] = useState<Array<string>>([]);
   const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
+  const [dataLuckkidsDicArray, setDataLuckkidsDicArray] = useState<IDataKey>(
+    {},
+  );
   const isFocus = useIsFocused();
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
@@ -40,9 +44,20 @@ export const PageMissionRepair = () => {
     url: '/missions',
     value: {},
     onSuccessCallback: (rtn) => {
-      setListCategory(Object.keys(rtn));
-      setAllCategory(Object.keys(rtn));
-      setDataDicArray({ ...rtn });
+      setListCategory([
+        ...new Set([
+          ...Object.keys(rtn.luckkidsMissions),
+          ...Object.keys(rtn.userMissions),
+        ]),
+      ]);
+      setAllCategory([
+        ...new Set([
+          ...Object.keys(rtn.luckkidsMissions),
+          ...Object.keys(rtn.userMissions),
+        ]),
+      ]);
+      setDataDicArray({ ...rtn.userMissions });
+      setDataLuckkidsDicArray({ ...rtn.luckkidsMissions });
     },
   });
   useEffect(() => {
@@ -96,14 +111,18 @@ export const PageMissionRepair = () => {
         };
     }
   }, []);
+
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
-        <MissionRepairCategoryItem
+        {/**
+         * TODO: (GIL) 완료 후 주석 및 컴퍼넌트 삭제하기
+         * */}
+        {/*<MissionRepairCategoryItem
           isAddButton={true}
           label={'대표미션'}
           onPress={() => navigation.navigate('MissionRepairPublic')}
-        />
+        />*/}
         <L.Row p={24}>
           <Font type={'TITLE2_BOLD'}>
             행운의 습관을 선택하고 알림을 설정해 보세요!
@@ -158,12 +177,23 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
+                {/*{dataLuckkidsDicArray[item]?.map((luckItem, i) => {
+                  return (
+                    <MissionRepairItem
+                      isRepair={true}
+                      isCheck={true}
+                      {...luckItem}
+                      isActive={false}
+                      key={i}
+                    />
+                  );
+                })}*/}
                 {dataDicArray[item]?.map((value, i) => {
                   return (
                     <MissionRepairItem
                       isRepair={true}
                       {...value}
-                      isCheck={value.alertStatus === 'CHECKED'}
+                      isActive={value.missionActive === 'TRUE'}
                       key={i}
                     />
                   );
@@ -171,6 +201,20 @@ export const PageMissionRepair = () => {
               </React.Fragment>
             );
           })}
+          <Link url={'https://forms.gle/W3sx8v5TJeniYoje6'}>
+            <L.Col ph={DEFAULT_MARGIN / 2}>
+              <L.Col p={25} bg={'LUCK_GREEN'} rounded={15}>
+                <Font type={'BODY_SEMIBOLD'} color={'BLACK'}>
+                  습관을 추가하고 싶어요!
+                </Font>
+                <Font type={'BODY_REGULAR'} color={'GREY2'}>
+                  추가하고 싶은 ‘행운을 키우는 습관’이 있다면 알려주세요!
+                  럭키즈가 감사히 살펴 보고 일부 습관을 공식 습관으로
+                  추가할게요.
+                </Font>
+              </L.Col>
+            </L.Col>
+          </Link>
         </ScrollView>
         {type === 'INITIAL_SETTING' && (
           <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>

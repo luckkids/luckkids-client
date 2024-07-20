@@ -91,8 +91,10 @@ export interface IMissionData {
 
 export interface IMissionDataItem {
   id: number;
+  luckkidsMissionId: number;
   missionType: string;
   missionDescription: null | string;
+  missionActive: 'TRUE' | 'FALSE';
   alertTime: string;
   alertStatus?: string;
 }

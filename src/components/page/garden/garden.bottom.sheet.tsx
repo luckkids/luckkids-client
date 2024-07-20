@@ -1,10 +1,11 @@
 import { createElement } from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import { Platform, TouchableWithoutFeedback } from 'react-native';
 import { login } from '@react-native-seoul/kakao-login';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, SvgIcon } from '@design-system';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import Share from 'react-native-share';
 
 const S = {
   popupWrap: styled.View({
@@ -51,8 +52,24 @@ const onSnackBarHandler = () => {
   });
 };
 
+const shareOptions = {
+  title: 'KaKao Title',
+  message: '초대합니다',
+  url: 'https://www.naver.com',
+};
+
+const onShare = async () => {
+  try {
+    const kakaoURL = `kakaolink://send?url=${encodeURIComponent(shareOptions.url)}&text=${encodeURIComponent(shareOptions.message)}`;
+    const result = await Share.open(shareOptions);
+    console.log(result);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export default function GardenBottomSheet() {
-  const onSendMessage = async () => {
+  /* const onSendMessage = async () => {
     try {
       const result = await login();
       if (result) {
@@ -66,17 +83,17 @@ export default function GardenBottomSheet() {
       }
     } catch (error) {
       console.log('[Error Code]: ', error);
-      /*snackBar.show({
-            })*/
+      /!*snackBar.show({
+            })*!/
     }
-  };
+  };*/
 
   return (
     <S.popupWrap>
       <Font type={'HEADLINE_SEMIBOLD'} style={{ marginBottom: 10 }}>
         친구를 어떻게 부를까요?
       </Font>
-      <TouchableWithoutFeedback onPress={() => onSendMessage()}>
+      <TouchableWithoutFeedback onPress={() => onShare()}>
         <S.popupItemContainer>
           <S.popupItemWrap>
             <S.popupItemLogo style={{ backgroundColor: Colors.KAKAO_YELLOW }}>
