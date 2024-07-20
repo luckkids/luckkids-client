@@ -5,9 +5,9 @@ import { AlertStatus, AlertType } from '@types-common/setting.types';
 export type GetAlertSettingResponse = ISettingAlarm;
 
 const getAlertSetting = async (deviceId: string) => {
-  const res = await API.post<GetAlertSettingResponse>('/alertSetting', {
-    deviceId,
-  });
+  const res = await API.get<GetAlertSettingResponse>(
+    `/alertSetting?deviceId=${deviceId}`,
+  );
   return res;
 };
 
