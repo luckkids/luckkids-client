@@ -4,8 +4,10 @@ import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components/native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
+import Link from '@components/common/Link/Link';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
@@ -15,8 +17,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
-import Link from '@components/common/Link/Link';
-import styled from 'styled-components/native';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
