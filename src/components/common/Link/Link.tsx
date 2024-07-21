@@ -14,9 +14,7 @@ export default function Link(props: ILink) {
   };
   return (
     <View>
-      <TouchableWithoutFeedback
-        onPress={() => openURL('https://www.example.com')}
-      >
+      <TouchableWithoutFeedback onPress={() => openURL(props.url)}>
         {props.children}
       </TouchableWithoutFeedback>
     </View>

@@ -89,6 +89,7 @@ export const PageMissionAdd: React.FC = () => {
     method: 'POST',
     url: '/missions/new',
     value: {
+      luckkidsMissionId: null,
       missionType: category[current].type,
       missionDescription: text,
       alertStatus: isDisabled ? 'UNCHECKED' : 'CHECKED',
@@ -101,9 +102,6 @@ export const PageMissionAdd: React.FC = () => {
     setDate(currentDate);
 
     const tempDate = new Date(currentDate);
-    /*const fTime = `${
-      tempDate.getHours() < 12 ? '오전' : '오후'
-    } ${tempDate.getHours()}${tempDate.getMinutes()}`;*/
     const fTime = `${
       tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
     }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
@@ -111,9 +109,6 @@ export const PageMissionAdd: React.FC = () => {
     setRtnTime(fTime);
   };
 
-  useEffect(() => {
-    // onFetch();
-  }, []);
   return (
     <FrameLayout
       NavBar={
@@ -127,13 +122,13 @@ export const PageMissionAdd: React.FC = () => {
           <Font type={'HEADLINE_SEMIBOLD'}>새 습관</Font>
           <ButtonText
             onPress={() => {
-              console.log('texttext');
+              navigation.goBack();
               onFetch();
             }}
             fontType={'HEADLINE_SEMIBOLD'}
             text={'추가'}
             disabled={false}
-            textColor={!isAdd ? 'GREY3' : 'LUCK_GREEN'}
+            textColor={text.length > 0 ? 'LUCK_GREEN' : 'GREY3'}
           />
         </L.Row>
       }

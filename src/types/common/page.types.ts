@@ -90,13 +90,13 @@ export interface IMissionData {
 }
 
 export interface IMissionDataItem {
-  id: number;
+  id: number | undefined;
   luckkidsMissionId: number;
   missionType: string;
   missionDescription: null | string;
   missionActive: 'TRUE' | 'FALSE';
   alertTime: string;
-  alertStatus?: string;
+  alertStatus?: 'CHECKED' | 'UNCHECKED';
 }
 
 export interface IMissionCategoryItem {

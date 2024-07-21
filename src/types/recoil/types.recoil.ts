@@ -10,7 +10,7 @@ export interface IResponse extends Response {
 }
 
 export interface IStringDictionary {
-  [index: string]: string | null;
+  [index: string]: string | number | null;
 }
 
 export interface IJoinInfo {

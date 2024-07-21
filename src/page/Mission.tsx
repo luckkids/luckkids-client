@@ -23,7 +23,6 @@ export const Mission: React.FC = () => {
     url: '/missionOutcomes',
     value: {},
     onSuccessCallback: (rtn) => {
-      console.log('---->', rtn);
       setData(rtn);
       setTotal(rtn.length);
       setCount(

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,10 +16,19 @@ import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
 import Link from '@components/common/Link/Link';
+import styled from 'styled-components/native';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
 }
+
+const S = {
+  IconArrowWrap: styled.View({
+    position: 'absolute',
+    top: 29,
+    right: 25,
+  }),
+};
 
 export const PageMissionRepair = () => {
   const {
@@ -166,6 +175,21 @@ export const PageMissionRepair = () => {
           }}
         >
           {listCategory.map((item, i) => {
+            const itemArraySort = dataDicArray[item].sort((a, b) => {
+              if (
+                a.luckkidsMissionId !== null &&
+                b.luckkidsMissionId === null
+              ) {
+                return -1;
+              }
+              if (
+                a.luckkidsMissionId === null &&
+                b.luckkidsMissionId !== null
+              ) {
+                return 1;
+              }
+              return 0;
+            });
             return (
               <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
@@ -177,23 +201,24 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {/*{dataLuckkidsDicArray[item]?.map((luckItem, i) => {
+                {dataLuckkidsDicArray[item]?.map((luckItem, i) => {
                   return (
                     <MissionRepairItem
                       isRepair={true}
                       isCheck={true}
                       {...luckItem}
-                      isActive={false}
+                      isDisable={true}
                       key={i}
                     />
                   );
-                })}*/}
-                {dataDicArray[item]?.map((value, i) => {
+                })}
+                {itemArraySort.map((value, i) => {
                   return (
                     <MissionRepairItem
-                      isRepair={true}
                       {...value}
-                      isActive={value.missionActive === 'TRUE'}
+                      isRepair={true}
+                      isCheck={value.alertStatus === 'CHECKED'}
+                      isDisable={value.missionActive === 'FALSE'}
                       key={i}
                     />
                   );
@@ -202,16 +227,19 @@ export const PageMissionRepair = () => {
             );
           })}
           <Link url={'https://forms.gle/W3sx8v5TJeniYoje6'}>
-            <L.Col ph={DEFAULT_MARGIN / 2}>
-              <L.Col p={25} bg={'LUCK_GREEN'} rounded={15}>
+            <L.Col ph={DEFAULT_MARGIN} mt={40}>
+              <L.Col p={25} bg={'LUCK_GREEN'} rounded={15} w={'100%'}>
                 <Font type={'BODY_SEMIBOLD'} color={'BLACK'}>
                   습관을 추가하고 싶어요!
                 </Font>
-                <Font type={'BODY_REGULAR'} color={'GREY2'}>
+                <Font type={'BODY_REGULAR'} color={'GREY2'} mt={12}>
                   추가하고 싶은 ‘행운을 키우는 습관’이 있다면 알려주세요!
                   럭키즈가 감사히 살펴 보고 일부 습관을 공식 습관으로
                   추가할게요.
                 </Font>
+                <S.IconArrowWrap>
+                  <SvgIcon name={'arrow_right'} size={12} />
+                </S.IconArrowWrap>
               </L.Col>
             </L.Col>
           </Link>
