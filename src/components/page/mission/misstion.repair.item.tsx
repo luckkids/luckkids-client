@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Font, L, SvgIcon } from '@design-system';
@@ -32,7 +32,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
   const [isDisabled, setIsDisabled] = useState<boolean>(isDisable);
   const [rtnTime, setRtnTime] = useState(alertTime);
   const [buttonClicked, setButtonClicked] = useState<boolean>(false);
-  const { onFetch: onRepairFn, isSuccess } = useFetch({
+  const { onFetch: onRepairFn } = useFetch({
     method: 'PATCH',
     url: `/missions/${id}`,
     value: {
@@ -79,7 +79,6 @@ export const MissionRepairItem: React.FC<IProps> = ({
                   setRtnTime={setRtnTime}
                   setIsCheckFn={(value: boolean) => {
                     setIsChecked(value);
-                    console.log('setIs Checked Call!', value);
                   }}
                   onConfirm={() => {
                     onRepairFn();

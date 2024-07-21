@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -81,7 +81,6 @@ export const PageMissionAdd: React.FC = () => {
   const navigation = useNavigationService();
   const [date, setDate] = useState(new Date(1598051730000));
   const [rtnTime, setRtnTime] = useState<string>('');
-  const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [text, setText] = useState<string>('');
   const [current, setCurrent] = useState<number>(0);
@@ -105,7 +104,6 @@ export const PageMissionAdd: React.FC = () => {
     const fTime = `${
       tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
     }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
-    console.log('time =======>', tempDate);
     setRtnTime(fTime);
   };
 

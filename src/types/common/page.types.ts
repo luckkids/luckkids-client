@@ -1,8 +1,8 @@
 import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RemotePackage } from 'react-native-code-push';
-import { SocialType } from '../user';
 import { CharacterType } from './character.types';
+import { SocialType } from '../user';
 
 export const DefaultTypeUnit = {
   CHECKED: 'CHECKED',
