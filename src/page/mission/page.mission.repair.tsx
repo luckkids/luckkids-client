@@ -175,7 +175,7 @@ export const PageMissionRepair = () => {
           }}
         >
           {listCategory.map((item, i) => {
-            const itemArraySort = dataDicArray[item].sort((a, b) => {
+            const itemArraySort = dataDicArray[item]?.sort((a, b) => {
               if (
                 a.luckkidsMissionId !== null &&
                 b.luckkidsMissionId === null
@@ -212,7 +212,7 @@ export const PageMissionRepair = () => {
                     />
                   );
                 })}
-                {itemArraySort.map((value, i) => {
+                {itemArraySort?.map((value, i) => {
                   return (
                     <MissionRepairItem
                       {...value}
