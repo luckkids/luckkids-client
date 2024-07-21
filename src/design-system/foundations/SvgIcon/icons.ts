@@ -5,6 +5,7 @@ import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
+import bell_white from '../../assets/icons/bell_white.svg';
 
 import iconApple from '../../assets/icons/icon-apple.svg';
 import iconCategoryAddOff from '../../assets/icons/icon-category-add-off.svg';
@@ -129,4 +130,5 @@ export {
   iconAddCategorySelfDevelopment,
   iconCategoryAddOn,
   iconCategoryAddOff,
+  bell_white,
 };

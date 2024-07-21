@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { StatusBar, StyleSheet, View } from 'react-native';
+import { Linking, StatusBar, StyleSheet, View } from 'react-native';
 import {
+  LinkingOptions,
   NavigationContainer,
   NavigationState,
+  useFocusEffect,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -27,6 +29,8 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
+import useAppStateEffect from '@hooks/useAppStateEffect';
+import { DEEP_LINK_BASE_URL } from '@utils';
 
 const Stack = createNativeStackNavigator();
 
@@ -167,10 +171,6 @@ const RootNavigator = () => {
     setDeviceId(deviceId);
   }, []);
 
-  useEffect(() => {
-    console.log(177, isNavigationReady);
-  }, []);
-
   if (!isNavigationReady) {
     return (
       <View style={styles.lottieContainer}>
@@ -184,6 +184,16 @@ const RootNavigator = () => {
     );
   }
 
+  const linking: LinkingOptions<AppScreensParamList> = {
+    prefixes: [DEEP_LINK_BASE_URL], // 앱의 URL 스킴과 도메인을 여기에 지정
+    config: {
+      screens: {
+        //TODO 여기에 각 화면의 이름과 경로를 지정
+        // Home: 'home',
+      },
+    },
+  };
+
   return (
     <NavigationContainer<AppScreensParamList>
       ref={navigationRef}
@@ -192,6 +202,7 @@ const RootNavigator = () => {
         NavigationService.setNavigation(navigationRef.current);
       }}
       onStateChange={onStateChange}
+      linking={linking}
     >
       {initializing ? ( // 초기화 중일 때 LottieView를 보여줌
         <View style={styles.lottieContainer}>

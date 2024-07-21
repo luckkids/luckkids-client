@@ -134,7 +134,9 @@ export const LoginJoinId: React.FC = () => {
         <L.Row ph={DEFAULT_MARGIN}>
           <Button
             type={'action'}
-            status={!email || !isValidEmail ? 'disabled' : 'normal'}
+            status={
+              !email || !isValidEmail || isDuplicate ? 'disabled' : 'normal'
+            }
             text={'다음'}
             onPress={handleConfirmEmail}
             sizing="stretch"

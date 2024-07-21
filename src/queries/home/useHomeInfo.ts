@@ -11,7 +11,9 @@ export const useHomeInfo = () => {
     },
     {
       select: (response) => response,
-      refetchOnReconnect: true,
+      refetchOnMount: true,
+      staleTime: 0,
+      cacheTime: 0,
     },
   );
 };

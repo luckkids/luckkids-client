@@ -7,6 +7,7 @@ import { authApis } from '@apis/auth';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 
 const WITHDRAW_REASON_LIST = [
   '잘 사용하지 않는 앱이에요',
@@ -22,10 +23,21 @@ export const PageSettingAccount: React.FC = () => {
   const [reason, setReason] = useState<string>('');
 
   const handleConfirm = async () => {
-    await authApis.registerWithdrawReason(reason);
-    await authApis.deleteUser();
+    AlertPopup.show({
+      title: '정말 탈퇴하실 건가요..?',
+      body: '럭키즈와 함께해줘서 정말 고마웠어요! 🥺',
+      noText: '탈퇴할게요.',
+      yesText: '안할게요!',
+      onPressNo: async () => {
+        await authApis.registerWithdrawReason(reason);
+        await authApis.deleteUser();
 
-    return navigation.replace('LoginId');
+        return navigation.replace('LoginId');
+      },
+      onPressYes: async () => {
+        AlertPopup.hide();
+      },
+    });
   };
 
   return (
