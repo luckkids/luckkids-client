@@ -55,6 +55,7 @@ yarn-error.log
 **/fastlane/.env*
 **/fastlane/README.md
 **/fastlane/derived_data
+**/fastlane/Appfile
 
 # Certificates & provisioning profiles
 **/*.cer
