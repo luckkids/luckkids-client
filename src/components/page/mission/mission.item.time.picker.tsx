@@ -49,8 +49,8 @@ const S = {
 interface IProps {
   isCheck: boolean;
   setRtnTime: Dispatch<string>;
-  setIsCheckFn: () => void;
-  isOnFetchFn: () => void;
+  setIsCheckFn: Dispatch<boolean>;
+  onConfirm: () => void;
 }
 export default function MissionItemTimePicker(props: IProps) {
   const [isChange, setIsChange] = useState(props.isCheck);
@@ -75,15 +75,16 @@ export default function MissionItemTimePicker(props: IProps) {
       <TouchableWithoutFeedback
         onPress={() => {
           setIsChange(!isChange);
+          props.setIsCheckFn(!isChange);
         }}
       >
         <S.disabledButton>
-          <Font type={'BODY_REGULAR'} color={!isChange ? 'GREY1' : 'WHITE'}>
+          <Font type={'BODY_REGULAR'} color={isChange ? 'GREY1' : 'WHITE'}>
             알림끄기
           </Font>
           <L.Row ml={12}>
             <SvgIcon
-              name={!isChange ? 'iconCheckAlarmOff' : 'iconCheckAlarmOn'}
+              name={isChange ? 'iconCheckAlarmOff' : 'iconCheckAlarmOn'}
               size={10}
             />
           </L.Row>
@@ -105,8 +106,7 @@ export default function MissionItemTimePicker(props: IProps) {
           text={'확인'}
           bgColor={'LUCK_GREEN'}
           onPress={() => {
-            BottomSheet.hide;
-            props.isOnFetchFn();
+            BottomSheet.hide().then(() => props.onConfirm());
           }}
         />
       </S.buttonWrap>

@@ -4,8 +4,10 @@ import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
+import styled from 'styled-components/native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
+import Link from '@components/common/Link/Link';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
@@ -20,6 +22,14 @@ interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
 }
 
+const S = {
+  IconArrowWrap: styled.View({
+    position: 'absolute',
+    top: 29,
+    right: 25,
+  }),
+};
+
 export const PageMissionRepair = () => {
   const {
     params: { type },
@@ -30,6 +40,9 @@ export const PageMissionRepair = () => {
   const [isRemove, setIsRemove] = useState<boolean>(false);
   const [listCategory, setListCategory] = useState<Array<string>>([]);
   const [dataDicArray, setDataDicArray] = useState<IDataKey>({});
+  const [dataLuckkidsDicArray, setDataLuckkidsDicArray] = useState<IDataKey>(
+    {},
+  );
   const isFocus = useIsFocused();
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
@@ -40,9 +53,20 @@ export const PageMissionRepair = () => {
     url: '/missions',
     value: {},
     onSuccessCallback: (rtn) => {
-      setListCategory(Object.keys(rtn));
-      setAllCategory(Object.keys(rtn));
-      setDataDicArray({ ...rtn });
+      setListCategory([
+        ...new Set([
+          ...Object.keys(rtn.luckkidsMissions),
+          ...Object.keys(rtn.userMissions),
+        ]),
+      ]);
+      setAllCategory([
+        ...new Set([
+          ...Object.keys(rtn.luckkidsMissions),
+          ...Object.keys(rtn.userMissions),
+        ]),
+      ]);
+      setDataDicArray({ ...rtn.userMissions });
+      setDataLuckkidsDicArray({ ...rtn.luckkidsMissions });
     },
   });
   useEffect(() => {
@@ -96,14 +120,18 @@ export const PageMissionRepair = () => {
         };
     }
   }, []);
+
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
-        <MissionRepairCategoryItem
+        {/**
+         * TODO: (GIL) 완료 후 주석 및 컴퍼넌트 삭제하기
+         * */}
+        {/*<MissionRepairCategoryItem
           isAddButton={true}
           label={'대표미션'}
           onPress={() => navigation.navigate('MissionRepairPublic')}
-        />
+        />*/}
         <L.Row p={24}>
           <Font type={'TITLE2_BOLD'}>
             행운의 습관을 선택하고 알림을 설정해 보세요!
@@ -147,6 +175,21 @@ export const PageMissionRepair = () => {
           }}
         >
           {listCategory.map((item, i) => {
+            const itemArraySort = dataDicArray[item]?.sort((a, b) => {
+              if (
+                a.luckkidsMissionId !== null &&
+                b.luckkidsMissionId === null
+              ) {
+                return -1;
+              }
+              if (
+                a.luckkidsMissionId === null &&
+                b.luckkidsMissionId !== null
+              ) {
+                return 1;
+              }
+              return 0;
+            });
             return (
               <React.Fragment key={i}>
                 <L.Row items={'center'} mt={40} mb={30} ph={25}>
@@ -158,12 +201,24 @@ export const PageMissionRepair = () => {
                     {categoryButton(item).label}
                   </Font>
                 </L.Row>
-                {dataDicArray[item]?.map((value, i) => {
+                {dataLuckkidsDicArray[item]?.map((luckItem, i) => {
                   return (
                     <MissionRepairItem
                       isRepair={true}
+                      isCheck={true}
+                      {...luckItem}
+                      isDisable={true}
+                      key={i}
+                    />
+                  );
+                })}
+                {itemArraySort?.map((value, i) => {
+                  return (
+                    <MissionRepairItem
                       {...value}
+                      isRepair={true}
                       isCheck={value.alertStatus === 'CHECKED'}
+                      isDisable={value.missionActive === 'FALSE'}
                       key={i}
                     />
                   );
@@ -171,6 +226,23 @@ export const PageMissionRepair = () => {
               </React.Fragment>
             );
           })}
+          <Link url={'https://forms.gle/W3sx8v5TJeniYoje6'}>
+            <L.Col ph={DEFAULT_MARGIN} mt={40}>
+              <L.Col p={25} bg={'LUCK_GREEN'} rounded={15} w={'100%'}>
+                <Font type={'BODY_SEMIBOLD'} color={'BLACK'}>
+                  습관을 추가하고 싶어요!
+                </Font>
+                <Font type={'BODY_REGULAR'} color={'GREY2'} mt={12}>
+                  추가하고 싶은 ‘행운을 키우는 습관’이 있다면 알려주세요!
+                  럭키즈가 감사히 살펴 보고 일부 습관을 공식 습관으로
+                  추가할게요.
+                </Font>
+                <S.IconArrowWrap>
+                  <SvgIcon name={'arrow_right'} size={12} />
+                </S.IconArrowWrap>
+              </L.Col>
+            </L.Col>
+          </Link>
         </ScrollView>
         {type === 'INITIAL_SETTING' && (
           <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>

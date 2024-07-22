@@ -9,6 +9,7 @@ import { IMissionDataItem } from '@types-common/page.types';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;
+  isDisable: boolean;
   isSwipeOpen?: boolean;
   isRepair?: boolean;
 }
@@ -18,20 +19,25 @@ const S = {
 };
 export const MissionRepairItem: React.FC<IProps> = ({
   missionDescription,
+  luckkidsMissionId,
   id,
   alertTime,
   alertStatus,
   missionType,
+  isDisable,
   isRepair = false,
   isCheck,
 }) => {
   const [isChecked, setIsChecked] = useState<boolean>(Boolean(isCheck));
+  const [isDisabled, setIsDisabled] = useState<boolean>(isDisable);
   const [rtnTime, setRtnTime] = useState(alertTime);
-  const { onFetch: onRepairFn, isSuccess } = useFetch({
+  const [buttonClicked, setButtonClicked] = useState<boolean>(false);
+  const { onFetch: onRepairFn } = useFetch({
     method: 'PATCH',
     url: `/missions/${id}`,
     value: {
       missionType: missionType,
+      missionActive: isDisabled ? 'FALSE' : 'TRUE',
       missionDescription: missionDescription,
       alertStatus: isChecked ? 'CHECKED' : 'UNCHECKED',
       alertTime: rtnTime,
@@ -42,6 +48,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
     method: 'POST',
     url: '/missions/new',
     value: {
+      luckkidsMissionId: isRepair ? luckkidsMissionId : null,
       missionType: missionType,
       missionDescription: missionDescription,
       alertStatus: 'CHECKED',
@@ -50,9 +57,15 @@ export const MissionRepairItem: React.FC<IProps> = ({
   });
 
   useEffect(() => {
-    console.log('change!!!');
-    if (isRepair && isCheck !== isChecked) onRepairFn();
-  }, [isChecked]);
+    if (isRepair && isDisable !== isDisabled && id) onRepairFn();
+  }, [isDisabled]);
+
+  useEffect(() => {
+    if (buttonClicked) {
+      onRepairFn();
+      setButtonClicked(false);
+    }
+  }, [isChecked, buttonClicked]);
 
   const timePickerHandler = useMemo(() => {
     if (isRepair) {
@@ -64,8 +77,13 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 <MissionItemTimePicker
                   isCheck={isChecked}
                   setRtnTime={setRtnTime}
-                  setIsCheckFn={() => setIsChecked(!isChecked)}
-                  isOnFetchFn={() => onRepairFn()}
+                  setIsCheckFn={(value: boolean) => {
+                    setIsChecked(value);
+                  }}
+                  onConfirm={() => {
+                    onRepairFn();
+                    setButtonClicked(true);
+                  }}
                 />
               ),
             })
@@ -101,10 +119,16 @@ export const MissionRepairItem: React.FC<IProps> = ({
         {alertTime}
       </Font>
     );
-  }, []);
+  }, [isChecked, rtnTime]);
 
   return (
-    <L.Row ph={25} pv={15} items={'center'} justify={'space-between'}>
+    <L.Row
+      ph={25}
+      pv={22}
+      items={'center'}
+      justify={'space-between'}
+      bg={luckkidsMissionId !== null ? 'LABEL_QUATERNARY' : 'TRANSPARENT'}
+    >
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'} w={'69%'}>
           <S.description>
@@ -116,13 +140,20 @@ export const MissionRepairItem: React.FC<IProps> = ({
         </L.Row>
         <TouchableWithoutFeedback
           onPress={() => {
-            if (isRepair) return setIsChecked(!isChecked);
+            if (isRepair) {
+              if (luckkidsMissionId === null) return setIsDisabled(!isDisabled);
+              else {
+                setIsDisabled(true);
+                onCopyFn();
+                return;
+              }
+            }
             return onCopyFn();
           }}
         >
           <View>
             <SvgIcon
-              name={isChecked ? 'lucky_check' : 'lucky_uncheck'}
+              name={isDisabled ? 'lucky_uncheck' : 'lucky_check'}
               size={30}
             />
           </View>
