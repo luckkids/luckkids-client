@@ -524,6 +524,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 7Y82CDD85J;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -542,7 +543,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LuckKids.app/LuckKids";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/luckkids.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/luckkids";
 			};
 			name = Debug;
 		};
@@ -553,6 +554,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 7Y82CDD85J;
 				INFOPLIST_FILE = LuckKidsTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -567,7 +569,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LuckKids.app/LuckKids";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/luckkids.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/luckkids";
 			};
 			name = Release;
 		};
@@ -580,7 +582,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LuckKids/Info.plist;
@@ -615,7 +617,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				INFOPLIST_FILE = LuckKids/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
@@ -738,7 +740,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -839,7 +842,8 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

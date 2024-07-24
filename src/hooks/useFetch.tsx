@@ -35,7 +35,7 @@ export const useFetch = (args: {
       // Use provided value or default to args.value
       const requestData = value ? value : args.value;
 
-      console.log('requestData ====>', requestData);
+      console.log('RequestData ====>', requestData);
       const loadData = async () => {
         try {
           const requestOptions: RequestInit = {
@@ -62,7 +62,7 @@ export const useFetch = (args: {
 
       loadData()
         .then((result) => {
-          console.log('result ====>', result);
+          // console.log('result ====>', result);
           if (result.statusCode === STATUS.UNAUTHORIZED) {
             //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
             return setExpiredAccessToken();
@@ -85,7 +85,7 @@ export const useFetch = (args: {
             //4. 완료 후 컴퍼넌트에서 던져주는 결과후 실행할 함수 실행
             args.onSuccessCallback && args.onSuccessCallback(result.data);
           }
-          console.log('RESULT(data) ====>', result.data);
+          // console.log('RESULT(data) ====>', result.data);
           //5. 데이터 참조 가능하도록 추가
           setResultData(result.data);
           return result.data;

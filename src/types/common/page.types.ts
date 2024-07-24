@@ -1,8 +1,8 @@
 import React from 'react';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RemotePackage } from 'react-native-code-push';
-import { SocialType } from '../user';
 import { CharacterType } from './character.types';
+import { SocialType } from '../user';
 
 export const DefaultTypeUnit = {
   CHECKED: 'CHECKED',
@@ -90,11 +90,13 @@ export interface IMissionData {
 }
 
 export interface IMissionDataItem {
-  id: number;
+  id: number | undefined;
+  luckkidsMissionId: number;
   missionType: string;
   missionDescription: null | string;
+  missionActive: 'TRUE' | 'FALSE';
   alertTime: string;
-  alertStatus?: string;
+  alertStatus?: 'CHECKED' | 'UNCHECKED';
 }
 
 export interface IMissionCategoryItem {

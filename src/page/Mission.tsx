@@ -4,7 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
-import { MissionSwipeItem } from '@components/page/mission/mission.swipe.item';
+import { MissionItem } from '@components/page/mission/mission.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
@@ -23,7 +23,6 @@ export const Mission: React.FC = () => {
     url: '/missionOutcomes',
     value: {},
     onSuccessCallback: (rtn) => {
-      console.log('---->', rtn);
       setData(rtn);
       setTotal(rtn.length);
       setCount(
@@ -94,7 +93,7 @@ export const Mission: React.FC = () => {
           )}
           {resultItemData.map((item, i) => {
             return (
-              <MissionSwipeItem
+              <MissionItem
                 {...item}
                 key={`${hide}-${i}`}
                 setCount={setCount}
