@@ -9,7 +9,6 @@ import { MissionRepairItem } from '@components/page/mission/misstion.repair.item
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
-import { animate } from '@gorhom/bottom-sheet/lib/typescript/utilities';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;

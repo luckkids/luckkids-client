@@ -10,6 +10,7 @@ import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import Link from '@components/common/Link/Link';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
+import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
 import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
@@ -17,9 +18,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
-import Accordion from '@components/common/Accordian';
-import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
-import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;

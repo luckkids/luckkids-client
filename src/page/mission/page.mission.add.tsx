@@ -112,8 +112,6 @@ export const PageMissionAdd: React.FC = () => {
     if (isSuccess) navigation.goBack();
   }, [isSuccess]);
 
-  console.log('isSubmit', isSubmit);
-
   return (
     <FrameLayout
       NavBar={
