@@ -17,6 +17,9 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionDataItem } from '@types-common/page.types';
+import Accordion from '@components/common/Accordian';
+import { MissionSwipeRepairItem } from '@components/page/mission/mission.swipe.repair.item';
+import { DataDummyMissionRepair } from '../../data/dummy/data.dummy.mission.repair';
 
 interface IDataKey {
   [key: string]: Array<IMissionDataItem>;
@@ -66,12 +69,14 @@ export const PageMissionRepair = () => {
         ]),
       ]);
       setDataDicArray({ ...rtn.userMissions });
-      setDataLuckkidsDicArray({ ...rtn.luckkidsMissions });
+      setDataLuckkidsDicArray({
+        ...rtn.luckkidsMissions,
+      });
     },
   });
   useEffect(() => {
     if (isFocus) onFetch();
-  }, [isSuccess]);
+  }, [isSuccess, isFocus]);
 
   const handleConfirm = () => {
     setInitialSetting({
@@ -124,19 +129,14 @@ export const PageMissionRepair = () => {
   return (
     <>
       <FrameLayout NavBar={<StackNavBar useBackButton />}>
-        {/**
-         * TODO: (GIL) 완료 후 주석 및 컴퍼넌트 삭제하기
-         * */}
-        {/*<MissionRepairCategoryItem
-          isAddButton={true}
-          label={'대표미션'}
-          onPress={() => navigation.navigate('MissionRepairPublic')}
-        />*/}
         <L.Row p={24}>
           <Font type={'TITLE2_BOLD'}>
             행운의 습관을 선택하고 알림을 설정해 보세요!
           </Font>
         </L.Row>
+        {/*<Accordion>
+          <Font type={'TITLE3_SEMIBOLD'}>리스트</Font>
+        </Accordion>*/}
         <L.Row ph={25} pv={15}>
           <MissionRepairCategoryItem
             isAddButton={true}
@@ -192,15 +192,27 @@ export const PageMissionRepair = () => {
             });
             return (
               <React.Fragment key={i}>
-                <L.Row items={'center'} mt={40} mb={30} ph={25}>
-                  <SvgIcon
-                    name={categoryButton(item).icon as IconNames}
-                    size={62}
-                  />
-                  <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
-                    {categoryButton(item).label}
-                  </Font>
+                <L.Row
+                  items={'center'}
+                  justify={'space-between'}
+                  mt={40}
+                  mb={30}
+                  ph={25}
+                >
+                  <L.Row items={'center'}>
+                    <SvgIcon
+                      name={categoryButton(item).icon as IconNames}
+                      size={62}
+                    />
+                    <Font type={'TITLE3_SEMIBOLD'} style={{ marginLeft: 16 }}>
+                      {categoryButton(item).label}
+                    </Font>
+                  </L.Row>
+                  <L.Row>
+                    <SvgIcon name={'arrowUp'} size={14} />
+                  </L.Row>
                 </L.Row>
+
                 {dataLuckkidsDicArray[item]?.map((luckItem, i) => {
                   return (
                     <MissionRepairItem
@@ -208,17 +220,30 @@ export const PageMissionRepair = () => {
                       isCheck={true}
                       {...luckItem}
                       isDisable={true}
+                      onClick={() => onFetch()}
                       key={i}
                     />
                   );
                 })}
                 {itemArraySort?.map((value, i) => {
+                  if (value.luckkidsMissionId !== null) {
+                    return (
+                      <MissionRepairItem
+                        {...value}
+                        isRepair={true}
+                        isCheck={value.alertStatus === 'CHECKED'}
+                        isDisable={value.missionActive === 'FALSE'}
+                        key={i}
+                      />
+                    );
+                  }
                   return (
-                    <MissionRepairItem
+                    <MissionSwipeRepairItem
                       {...value}
                       isRepair={true}
                       isCheck={value.alertStatus === 'CHECKED'}
                       isDisable={value.missionActive === 'FALSE'}
+                      onDeleteAfterFn={() => onFetch()}
                       key={i}
                     />
                   );

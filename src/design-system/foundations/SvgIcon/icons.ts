@@ -1,12 +1,20 @@
 import album from '../../assets/icons/album.svg';
+import arrowDown from '../../assets/icons/arrow_down.svg';
 import arrow_left from '../../assets/icons/arrow_left.svg';
 import arrow_right from '../../assets/icons/arrow_right.svg';
 import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
+import arrowUp from '../../assets/icons/arrow_up.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
 import bell_off from '../../assets/icons/bell_off.svg';
 import bell_white from '../../assets/icons/bell_white.svg';
 
+import iconAddCategoryHealth from '../../assets/icons/icon-add-category-health.svg';
+import iconAddCategoryHouseKeeping from '../../assets/icons/icon-add-category-house-keeping.svg';
+import iconAddCategoryMineSet from '../../assets/icons/icon-add-category-mind-set.svg';
+import iconAddCategorySelfCare from '../../assets/icons/icon-add-category-self-care.svg';
+import iconAddCategorySelfDevelopment from '../../assets/icons/icon-add-category-self-development.svg';
+import iconAddCategoryWork from '../../assets/icons/icon-add-category-work.svg';
 import iconApple from '../../assets/icons/icon-apple.svg';
 import iconCategoryAddOff from '../../assets/icons/icon-category-add-off.svg';
 import iconCategoryAddOn from '../../assets/icons/icon-category-add-on.svg';
@@ -18,13 +26,6 @@ import iconCategorySelfDevelopment from '../../assets/icons/icon-category-self-d
 import iconCategoryWork from '../../assets/icons/icon-category-work.svg';
 import iconCheckAlarmOff from '../../assets/icons/icon-check-alarm-off.svg';
 import iconCheckAlarmOn from '../../assets/icons/icon-check-alarm-on.svg';
-
-import iconAddCategoryHealth from '../../assets/icons/icon-add-category-health.svg';
-import iconAddCategoryHouseKeeping from '../../assets/icons/icon-add-category-house-keeping.svg';
-import iconAddCategoryMineSet from '../../assets/icons/icon-add-category-mind-set.svg';
-import iconAddCategorySelfCare from '../../assets/icons/icon-add-category-self-care.svg';
-import iconAddCategorySelfDevelopment from '../../assets/icons/icon-add-category-self-development.svg';
-import iconAddCategoryWork from '../../assets/icons/icon-add-category-work.svg';
 
 import iconClip from '../../assets/icons/icon-clip.svg';
 import iconGardenOff from '../../assets/icons/icon-garden-off.svg';
@@ -44,15 +45,17 @@ import iconMedal3 from '../../assets/icons/icon-medal-3.svg';
 import iconMindSet from '../../assets/icons/icon-mind-set-1.svg';
 import iconMissionOff from '../../assets/icons/icon-mission-off.svg';
 import iconMissionOn from '../../assets/icons/icon-mission-on.svg';
-import iconPlus from '../../assets/icons/icon-plus.svg';
 import iconPlusDark from '../../assets/icons/icon-plus-dark.svg';
+import iconPlus from '../../assets/icons/icon-plus.svg';
 import iconSelfCare from '../../assets/icons/icon-self-care-1.svg';
 import iconSettingOff from '../../assets/icons/icon-setting-off.svg';
 import iconSettingOn from '../../assets/icons/icon-setting-on.svg';
 import iconWorking from '../../assets/icons/icon-working-1.svg';
+import icon_download_green from '../../assets/icons/icon_download_green.svg';
 import icon_edit from '../../assets/icons/icon_edit.svg';
 import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
 import icon_lock from '../../assets/icons/icon_lock.svg';
+import icon_share_green from '../../assets/icons/icon_share_green.svg';
 import list from '../../assets/icons/list.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
@@ -63,8 +66,6 @@ import validation_check from '../../assets/icons/validation_check.svg';
 import validation_check_gray from '../../assets/icons/validation_check_gray.svg';
 import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
-import icon_download_green from '../../assets/icons/icon_download_green.svg';
-import icon_share_green from '../../assets/icons/icon_share_green.svg';
 
 export {
   bell,
@@ -131,4 +132,6 @@ export {
   iconCategoryAddOn,
   iconCategoryAddOff,
   bell_white,
+  arrowDown,
+  arrowUp,
 };

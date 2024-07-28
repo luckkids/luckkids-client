@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Animated, Keyboard, StyleSheet } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
@@ -9,9 +9,12 @@ import { MissionRepairItem } from '@components/page/mission/misstion.repair.item
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
+import { animate } from '@gorhom/bottom-sheet/lib/typescript/utilities';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;
+  isRepair?: boolean;
+  isDisable?: boolean;
   onDeleteAfterFn: () => void;
 }
 
@@ -28,6 +31,8 @@ const onDeleteSnackBar = () => {
 
 export const MissionSwipeRepairItem: React.FC<IProps> = (props) => {
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
+  const swipeableRef = useRef<Swipeable>(null);
+  const [visible, setVisible] = useState<boolean>(true);
   const { onFetch: deleteFn } = useFetch({
     method: 'DELETE',
     url: `/missions/${props.id}`,
@@ -37,7 +42,6 @@ export const MissionSwipeRepairItem: React.FC<IProps> = (props) => {
     progress: Animated.AnimatedInterpolation<number>,
     dragX: Animated.AnimatedInterpolation<number>,
   ) => {
-    console.log('progress', progress);
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
       outputRange: [1, 1],
@@ -48,10 +52,10 @@ export const MissionSwipeRepairItem: React.FC<IProps> = (props) => {
       <RectButton
         style={styles.rightAction}
         onPress={() => {
-          console.log('delete');
           deleteFn();
           props.onDeleteAfterFn();
           onDeleteSnackBar();
+          setVisible(false);
         }}
       >
         <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>
@@ -63,13 +67,19 @@ export const MissionSwipeRepairItem: React.FC<IProps> = (props) => {
     );
   };
 
+  if (!visible) return <></>;
   return (
     <Swipeable
+      ref={swipeableRef}
       renderRightActions={renderRightActions}
       onSwipeableOpenStartDrag={() => setIsSwiping(true)}
       onSwipeableClose={() => setIsSwiping(false)}
     >
-      {/*<MissionRepairItem {...props} isSwipeOpen={isSwiping} />*/}
+      <MissionRepairItem
+        isDisable={props.isDisable ?? false}
+        {...props}
+        isRepair={props.isRepair}
+      />
     </Swipeable>
   );
 };

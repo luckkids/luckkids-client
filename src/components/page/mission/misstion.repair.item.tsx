@@ -10,8 +10,8 @@ import { IMissionDataItem } from '@types-common/page.types';
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;
   isDisable: boolean;
-  isSwipeOpen?: boolean;
   isRepair?: boolean;
+  onClick?: () => void;
 }
 
 const S = {
@@ -25,6 +25,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
   alertStatus,
   missionType,
   isDisable,
+  onClick,
   isRepair = false,
   isCheck,
 }) => {
@@ -81,7 +82,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                     setIsChecked(value);
                   }}
                   onConfirm={() => {
-                    onRepairFn();
+                    // onRepairFn();
                     setButtonClicked(true);
                   }}
                 />
@@ -127,7 +128,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
       pv={22}
       items={'center'}
       justify={'space-between'}
-      bg={luckkidsMissionId !== null ? 'LABEL_QUATERNARY' : 'TRANSPARENT'}
+      bg={luckkidsMissionId !== null ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
     >
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'} w={'69%'}>
@@ -141,14 +142,13 @@ export const MissionRepairItem: React.FC<IProps> = ({
         <TouchableWithoutFeedback
           onPress={() => {
             if (isRepair) {
-              if (luckkidsMissionId === null) return setIsDisabled(!isDisabled);
-              else {
-                setIsDisabled(true);
+              setIsDisabled(!isDisabled);
+
+              if (onClick) {
                 onCopyFn();
-                return;
+                onClick();
               }
             }
-            return onCopyFn();
           }}
         >
           <View>
