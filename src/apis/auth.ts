@@ -87,6 +87,9 @@ const confirmEmail = async (request: ConfirmEmailRequest) => {
 export type SignUpRequest = {
   email: string;
   password: string;
+  termUserAgreement: 'AGREE' | 'DISAGREE';
+  personalInfoAgreement: 'AGREE' | 'DISAGREE';
+  marketingAgreement: 'AGREE' | 'DISAGREE';
 };
 
 const signUp = async (request: SignUpRequest) => {
@@ -135,7 +138,7 @@ type DeleteUserResponse = {
 };
 
 const deleteUser = async () => {
-  const res = await API.delete<DeleteUserResponse>(`/user/withdraw/`);
+  const res = await API.delete<DeleteUserResponse>(`/user/withdraw`);
   return res.data;
 };
 
