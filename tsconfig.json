@@ -3,6 +3,8 @@
     "baseUrl": "./",
     "rootDir": ".",
     "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@components/*": ["src/components/*"],
       "@constants": ["src/constants/index"],

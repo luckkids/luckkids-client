@@ -4,7 +4,6 @@ import {
   LinkingOptions,
   NavigationContainer,
   NavigationState,
-  useFocusEffect,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -29,8 +28,8 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
-import useAppStateEffect from '@hooks/useAppStateEffect';
-import { DEEP_LINK_BASE_URL } from '@utils';
+import { DEEP_LINK_BASE_URL, parseDeepLink, subscribeBranch } from '@utils';
+import branch from 'react-native-branch';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +41,7 @@ const RootNavigator = () => {
 
   const [deviceId, setDeviceId] = useState('');
   const { getToken } = useFirebaseMessage();
+
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
 
@@ -99,6 +99,28 @@ const RootNavigator = () => {
       });
     }
   };
+
+  useEffect(() => {
+    console.log('aas');
+    //브랜치 io 동작
+    let unsubscribeBranch: (() => void) | null = null;
+
+    const setupBranch = () => {
+      if (navigationRef.current) {
+        unsubscribeBranch = subscribeBranch(navigationRef.current);
+      }
+    };
+
+    if (isNavigationReady) {
+      setupBranch();
+    }
+
+    return () => {
+      if (unsubscribeBranch) {
+        unsubscribeBranch();
+      }
+    };
+  }, [isNavigationReady]);
 
   useEffect(() => {
     // 코드 푸시 DEV 에서 테스트하는 경우 아니면 return 해두기

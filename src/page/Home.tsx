@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import {
   Animated,
   GestureResponderEvent,
@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
-import { CONSTANTS, ChipButton, Font, L, SvgIcon } from '@design-system';
+import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
 import { getCharacterImage, getLevelToolTipText } from '@utils';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
@@ -19,6 +19,8 @@ import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -26,14 +28,45 @@ const luckkidsRabbit = require('assets/images/luckkids-rabbit.png');
 const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
-export const Home: React.FC = () => {
-  const navigation = useNavigationService();
+type RootStackParamList = {
+  Home: { friendCode?: string };
+  // 다른 라우트들도 여기에 정의...
+};
+
+type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Home'
+>;
+
+type HomeProps = {
+  route: HomeScreenRouteProp;
+  navigation: HomeScreenNavigationProp;
+};
+
+export const Home: React.FC<HomeProps> = ({ route, navigation }) => {
+  const navigationService = useNavigationService();
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
 
+  const { friendCode } = route.params || {};
+  console.log('HOME friendCode:', friendCode);
+
+  useEffect(() => {
+    if (friendCode) {
+      console.log('Received friendCode:', friendCode);
+    }
+  }, [friendCode]);
+
+  // 기존의 useEffect 로직
+  useEffect(() => {
+    console.log('Route params:', route.params);
+    console.log('Navigation state:', navigation.getState());
+  }, [route.params, navigation]);
+
   const handleViewProfile = (_e: GestureResponderEvent) => {
-    navigation.push('HomeProfile');
+    navigationService.push('HomeProfile');
   };
 
   const infoTranslateY = scrollY.interpolate({

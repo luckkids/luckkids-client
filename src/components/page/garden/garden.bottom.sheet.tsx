@@ -1,11 +1,12 @@
-import { createElement } from 'react';
-import { Platform, TouchableWithoutFeedback } from 'react-native';
-import { login } from '@react-native-seoul/kakao-login';
+import { useEffect, useState } from 'react';
+import { Linking, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, SvgIcon } from '@design-system';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import Share from 'react-native-share';
+import { createAndCopyBranchLink, parseDeepLink } from '@utils';
+import { useFetch } from '@hooks/useFetch';
+import { useMe } from '@queries';
 
 const S = {
   popupWrap: styled.View({
@@ -40,18 +41,6 @@ const S = {
   }),
 };
 
-const onSnackBarHandler = () => {
-  SnackBar.show({
-    leftElement: createElement(SvgIcon, {
-      name: 'lucky_check',
-      size: 20,
-    }),
-    width: 185,
-    title: `링크가 복사됐어요`,
-    position: 'bottom',
-  });
-};
-
 const shareOptions = {
   title: 'KaKao Title',
   message: '초대합니다',
@@ -69,24 +58,22 @@ const onShare = async () => {
 };
 
 export default function GardenBottomSheet() {
-  /* const onSendMessage = async () => {
-    try {
-      const result = await login();
-      if (result) {
-        console.log(result);
-        const msg = {
-          templateId: '',
-          templateArgs: {},
-        };
-      } else {
-        console.log('Login Failed');
-      }
-    } catch (error) {
-      console.log('[Error Code]: ', error);
-      /!*snackBar.show({
-            })*!/
-    }
-  };*/
+  const [code, setCode] = useState<string>('');
+
+  useEffect(() => {
+    onFetch();
+  }, []);
+
+  const { onFetch } = useFetch({
+    method: 'GET',
+    url: '/friendcode',
+    value: {},
+    onSuccessCallback: (rtn) => {
+      setCode(rtn.code);
+    },
+  });
+
+  const Me = useMe().data;
 
   return (
     <S.popupWrap>
@@ -106,7 +93,9 @@ export default function GardenBottomSheet() {
           <SvgIcon name={'arrow_right_gray'} size={8} />
         </S.popupItemContainer>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => onSnackBarHandler()}>
+      <TouchableWithoutFeedback
+        onPress={() => createAndCopyBranchLink(code, Me ? Me.nickname : null)}
+      >
         <S.popupItemContainer>
           <S.popupItemWrap>
             <S.popupItemLogo>
@@ -119,6 +108,7 @@ export default function GardenBottomSheet() {
           <SvgIcon name={'arrow_right_gray'} size={8} />
         </S.popupItemContainer>
       </TouchableWithoutFeedback>
+      {/*<KakaoShareableLinkPreview url="https://example.com" />*/}
       <S.buttonWrap>
         <Button
           type={'action'}

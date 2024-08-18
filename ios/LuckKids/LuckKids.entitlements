@@ -11,6 +11,10 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:luckkids.page.link/</string>
+		<string>applinks:44puj.test-app.link</string>
+		<string>applinks:44puj-alternate.test-app.link</string>
+		<string>applinks:44puj.app.link</string>
+		<string>applinks:44puj-alternate.app.link</string>
 	</array>
 </dict>
 </plist>

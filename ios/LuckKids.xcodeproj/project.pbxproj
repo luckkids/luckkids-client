@@ -20,6 +20,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		15272065431E438B9D45E64E /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C090505A2B3748329B6C9841 /* Pretendard-Bold.otf */; };
 		2B1B976D2C14C97300156BD1 /* RNShare.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B1B976C2C14C97300156BD1 /* RNShare.h */; };
+		2B81D42C2C71DC7800686F89 /* libreact-native-branch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B81D42B2C71DC7800686F89 /* libreact-native-branch.a */; };
 		2DFE8DA9824246B285CB6D61 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 36A122E7D5F8422AB0D89BB5 /* Pretendard-Regular.otf */; };
 		32E74D8427914262B8234823 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = D26EB5F29FD14B05A0F09AE1 /* Pretendard-Black.otf */; };
 		7699B88040F8A987B510C191 /* libPods-LuckKids-LuckKidsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-LuckKids-LuckKidsTests.a */; };
@@ -72,6 +73,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LuckKids/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-LuckKids-LuckKidsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LuckKids-LuckKidsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B1B976C2C14C97300156BD1 /* RNShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNShare.h; path = "../node_modules/react-native-share/ios/RNShare.h"; sourceTree = "<group>"; };
+		2B81D42B2C71DC7800686F89 /* libreact-native-branch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-branch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		36A122E7D5F8422AB0D89BB5 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.otf"; path = "../assets/fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-LuckKids.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.debug.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-LuckKids.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.release.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.release.xcconfig"; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B1B976D2C14C97300156BD1 /* RNShare.h in Frameworks */,
+				2B81D42C2C71DC7800686F89 /* libreact-native-branch.a in Frameworks */,
 				07B625E32BF9E818006DA892 /* Social.framework in Frameworks */,
 				07B625E52BF9E820006DA892 /* MessageUI.framework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-LuckKids.a in Frameworks */,
@@ -147,6 +150,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2B81D42B2C71DC7800686F89 /* libreact-native-branch.a */,
 				2B1B976C2C14C97300156BD1 /* RNShare.h */,
 				07B625E42BF9E820006DA892 /* MessageUI.framework */,
 				07B625E22BF9E818006DA892 /* Social.framework */,
@@ -744,6 +748,15 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -848,6 +861,15 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl",
+					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
