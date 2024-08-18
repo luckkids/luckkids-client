@@ -15,21 +15,25 @@ type AgreementContent = {
   text: string;
   isNecessary: boolean;
   url: string;
+  type: 'termUserAgreement' | 'personalInfoAgreement' | 'marketingAgreement';
 };
 
 const AGREEMENT_CONTENT: AgreementContent[] = [
   {
     text: '럭키즈 이용약관 필수동의',
+    type: 'termUserAgreement',
     isNecessary: true,
     url: 'https://www.notion.so/1f210857eb944efcb575dc674249cda3?pvs=4',
   },
   {
     text: '개인정보 필수동의',
+    type: 'personalInfoAgreement',
     isNecessary: true,
     url: 'https://www.notion.so/4bfd637b63324d93b5deb2360a14fb26?pvs=4',
   },
   {
     text: '마케팅 수신 동의 (선택)',
+    type: 'marketingAgreement',
     isNecessary: false,
     url: 'https://www.notion.so/df134f4ec1c24461a8dd7393774c0c92?pvs=4',
   },
@@ -79,6 +83,21 @@ export const PageLoginJoinAgreement: React.FC = () => {
     await authApis.signUp({
       email: joinInfo.email,
       password: joinInfo.password,
+      termUserAgreement: agreementInfo.find(
+        (info) => info.type === 'termUserAgreement',
+      )?.isChecked
+        ? 'AGREE'
+        : 'DISAGREE',
+      personalInfoAgreement: agreementInfo.find(
+        (info) => info.type === 'personalInfoAgreement',
+      )?.isChecked
+        ? 'AGREE'
+        : 'DISAGREE',
+      marketingAgreement: agreementInfo.find(
+        (info) => info.type === 'marketingAgreement',
+      )?.isChecked
+        ? 'AGREE'
+        : 'DISAGREE',
     });
     navigation.navigate('LoginId');
     LoadingIndicator.hide();

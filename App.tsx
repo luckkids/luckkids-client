@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Linking, StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import {
   LinkingOptions,
   NavigationContainer,
   NavigationState,
-  useFocusEffect,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -163,7 +162,10 @@ const RootNavigator = () => {
       });
     }
 
-    setIsNavigatorReady(true);
+    // 로딩 화면 3초동안 보여줌
+    setTimeout(() => {
+      setIsNavigatorReady(true);
+    }, 3000);
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   useAsyncEffect(async () => {

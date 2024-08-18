@@ -6,8 +6,8 @@ import { Button, Font, L } from '@design-system';
 import { authApis } from '@apis/auth';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const WITHDRAW_REASON_LIST = [
   '잘 사용하지 않는 앱이에요',
@@ -32,7 +32,7 @@ export const PageSettingAccount: React.FC = () => {
         await authApis.registerWithdrawReason(reason);
         await authApis.deleteUser();
 
-        return navigation.replace('LoginId');
+        return navigation.replace('Login');
       },
       onPressYes: async () => {
         AlertPopup.hide();

@@ -12,3 +12,13 @@ export const getDayOfWeek = (date: string) => {
   const dayOfWeekList = ['일', '월', '화', '수', '목', '금', '토'];
   return dayOfWeekList[dayOfWeek];
 };
+
+// 07:00:00 -> 오후 7시
+// 23:00:00 -> 오후 11시
+export const formatLuckTime = (time: string) => {
+  const [hour, minute, second] = time.split(':');
+  const hourInt = parseInt(hour, 10);
+  const ampm = hourInt >= 12 ? '오후' : '오전';
+  const formattedHour = hourInt % 12 || 12;
+  return `${ampm} ${formattedHour}:${minute}`;
+};
