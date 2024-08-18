@@ -17,13 +17,14 @@ platform :ios do
     version_file = 'version.txt'
     if File.exist?(version_file)
       content = File.read(version_file).strip
-      if content =~ /(\d+\.\d+\.\d+) \((\d+)\)/
+      UI.message("Version file content: #{content}")
+      if content =~ /(\d+\.\d+) \((\d+)\)/
         { version: $1, build: $2 }
       else
-        UI.user_error!("Invalid version format in version.txt. Expected format: X.Y.Z (Build)")
+        UI.user_error!("Invalid version format in version.txt. Expected format: X.Y (Build)")
       end
     else
-      UI.user_error!("version.txt file not found")
+      UI.user_error!("version.txt file not found in fastlane directory")
     end
   end
 
@@ -40,12 +41,16 @@ platform :ios do
     
     if options[:version]
       new_version = options[:version]
+      new_build = "1"  # 새 버전일 때 항상 1로 초기화
     else
       new_version = prompt(text: "Enter new version (current: #{current_version_info[:version]}) or 'skip' to use current: ")
-      new_version = current_version_info[:version] if new_version.downcase == 'skip' || new_version.empty?
+      if new_version.downcase == 'skip' || new_version.empty?
+        new_version = current_version_info[:version]
+        new_build = (current_version_info[:build].to_i + 1).to_s  # 버전이 같으면 빌드 번호만 증가
+      else
+        new_build = "1"  # 새 버전이면 1로 초기화
+      end
     end
-  
-    new_build = (current_version_info[:build].to_i + 1).to_s
   
     File.write('version.txt', "#{new_version} (#{new_build})")
     
@@ -72,33 +77,29 @@ platform :ios do
   end
 
   def commit_and_push_version_bump(lane)
-    # Ensure we're on the main branch
     ensure_git_branch(branch: 'main')
     
-    # Check if there are any changes
     status = Actions.sh("git status --porcelain")
     if status.empty?
       UI.message("No changes to commit.")
       return
     end
 
-    # Commit the version bump
     version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
     build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
     commit_message = "Bump version to #{version} (#{build}) [#{lane}]"
     
     git_add(path: "*.plist")
     git_add(path: "*.pbxproj")
-    git_add(path: "version.txt")
+    git_add(path: "fastlane/version.txt")
     git_commit(path: ".", message: commit_message)
 
-    # Push to remote using push_to_git_remote action
     push_to_git_remote(
-      remote: "origin",  # remote name, usually "origin"
-      local_branch: "main",  # local branch name
-      remote_branch: "main",  # remote branch name
-      force: false,  # set to true if you need to force push
-      tags: false  # set to true if you want to push tags as well
+      remote: "origin",
+      local_branch: "main",
+      remote_branch: "main",
+      force: false,
+      tags: false
     )
 
     UI.success("Successfully pushed version bump!")
