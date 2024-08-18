@@ -4,16 +4,16 @@ import DeviceInfo from 'react-native-device-info';
 import styled from 'styled-components/native';
 import { ButtonText, Font, SvgIcon, L, Colors, Toggle } from '@design-system';
 import { useSettingAlarmSetting } from '@queries';
+import { formatLuckTime } from '@utils';
 import { settingApis } from '@apis/setting';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import SettingAlarmLuckTimePicker from '@components/page/setting/setting.alarm.luck.time.picker';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { AlertType } from '@types-common/setting.types';
-import { useFocusEffect } from '@react-navigation/native';
-import useAppStateEffect from '@hooks/useAppStateEffect';
 
 const S = {
   onAlarm: styled.View({
@@ -34,12 +34,10 @@ const S = {
 };
 
 export const PageSettingAlarm: React.FC = () => {
-  const [deviceId, setDeviceId] = useState('');
   const { hasPermission } = useFirebaseMessage();
   const [showPushSetting, setShowPushSetting] = useState(false);
 
-  //TODO API 수정되면 주석 해제
-  const { data: setting } = useSettingAlarmSetting({ deviceId });
+  const { data: setting, refetch } = useSettingAlarmSetting();
 
   const handlePressAllowAlarm = () => {
     Linking.openSettings();
@@ -47,16 +45,28 @@ export const PageSettingAlarm: React.FC = () => {
 
   const handleUpdateAlarm = async (type: AlertType, value: boolean) => {
     try {
-      // 왜 DeviceID가 빈 스트링?
-      console.log(44, deviceId);
-      if (!deviceId) return;
-      settingApis.updateAlertSetting({
+      await settingApis.updateAlertSetting({
         alertType: type,
         alertStatus: value ? 'CHECKED' : 'UNCHECKED',
-        deviceId,
+        deviceId: await DeviceInfo.getUniqueId(),
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
+    } finally {
+      await refetch();
+    }
+  };
+
+  const handleUpdateLuckTime = async (time: string) => {
+    try {
+      await settingApis.setLuckMessageAlertTime({
+        deviceId: await DeviceInfo.getUniqueId(),
+        luckMessageAlertTime: time,
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      await refetch();
     }
   };
 
@@ -67,11 +77,6 @@ export const PageSettingAlarm: React.FC = () => {
 
   useAsyncEffect(syncHasPermission, []);
   useAppStateEffect(syncHasPermission, []);
-
-  useAsyncEffect(async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
-    setDeviceId(deviceId);
-  }, []);
 
   return (
     <FrameLayout NavBar={<StackNavBar title={'알림'} useBackButton />}>
@@ -116,37 +121,33 @@ export const PageSettingAlarm: React.FC = () => {
           </Font>
         </L.Col>
         <Toggle
-          value={true} // TODO 실제 값으로 변경
+          value={setting?.luck === 'CHECKED'}
           onChange={(value) => handleUpdateAlarm('LUCK', value)}
         />
       </L.Row>
       {/* LUCK 시간 변경 */}
-      {/* {!!setting?.luck && ( */}
-      <L.Row ph={25} pv={20} justify={'space-between'} items={'center'}>
-        <Font type={'BODY_REGULAR'}>행운의 한마디 알림 시간</Font>
-        <L.Row items="center" g={15}>
-          <ButtonText
-            onPress={() => {
-              BottomSheet.show({
-                component: (
-                  <SettingAlarmLuckTimePicker
-                    onConfirmTime={(time) => {
-                      console.log(time);
-                    }}
-                    initialTime={new Date(
-                      new Date().setHours(7, 0, 0, 0),
-                    ).getTime()}
-                  />
-                ),
-              });
-            }}
-            text={'오전 7:00'}
-            textColor="GREY1"
-          />
-          <SvgIcon name={'arrow_right_gray'} size={14} />
+      {setting?.luck === 'CHECKED' && !!setting?.luckMessageAlertTime && (
+        <L.Row ph={25} pv={20} justify={'space-between'} items={'center'}>
+          <Font type={'BODY_REGULAR'}>행운의 한마디 알림 시간</Font>
+          <L.Row items="center" g={15}>
+            <ButtonText
+              onPress={() => {
+                BottomSheet.show({
+                  component: (
+                    <SettingAlarmLuckTimePicker
+                      onConfirmTime={handleUpdateLuckTime}
+                      initialTime={setting?.luckMessageAlertTime}
+                    />
+                  ),
+                });
+              }}
+              text={formatLuckTime(setting?.luckMessageAlertTime || '')}
+              textColor="GREY1"
+            />
+            <SvgIcon name={'arrow_right_gray'} size={14} />
+          </L.Row>
         </L.Row>
-      </L.Row>
-      {/* )} */}
+      )}
       {/* MISSION */}
       <L.Row ph={25} pv={20} justify={'space-between'} items={'center'}>
         <L.Col g={8}>
@@ -156,7 +157,7 @@ export const PageSettingAlarm: React.FC = () => {
           </Font>
         </L.Col>
         <Toggle
-          value={true} // TODO 실제 값으로 변경
+          value={setting?.mission === 'CHECKED'}
           onChange={(value) => handleUpdateAlarm('MISSION', value)}
         />
       </L.Row>
@@ -169,7 +170,7 @@ export const PageSettingAlarm: React.FC = () => {
           </Font>
         </L.Col>
         <Toggle
-          value={true} // TODO 실제 값으로 변경
+          value={setting?.mission === 'CHECKED'}
           onChange={(value) => handleUpdateAlarm('MISSION', value)}
         />
       </L.Row>
@@ -179,12 +180,14 @@ export const PageSettingAlarm: React.FC = () => {
           럭키즈 소식
         </Font>
         <L.Row w="100%" pv={20} justify={'space-between'} items={'center'}>
-          <Font type={'BODY_REGULAR'}>공지사항</Font>
-          <Font type={'FOOTNOTE_REGULAR'} color={'GREY1'}>
-            업데이트, 이벤트, 콘텐츠 관련 마케팅 알림이에요.
-          </Font>
+          <L.Col g={8}>
+            <Font type={'BODY_REGULAR'}>공지사항</Font>
+            <Font type={'FOOTNOTE_REGULAR'} color={'GREY1'}>
+              업데이트, 이벤트, 콘텐츠 관련 마케팅 알림이에요.
+            </Font>
+          </L.Col>
           <Toggle
-            value={true} // TODO 실제 값으로 변경
+            value={setting?.notice === 'CHECKED'}
             onChange={(value) => handleUpdateAlarm('NOTICE', value)}
           />
         </L.Row>

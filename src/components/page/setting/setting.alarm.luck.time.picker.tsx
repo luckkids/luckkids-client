@@ -19,18 +19,27 @@ const S = {
 };
 
 interface IProps {
-  onConfirmTime: (time: number) => void;
-  initialTime: number;
+  onConfirmTime: (time: string) => void;
+  initialTime: string;
 }
 
 const MERIDIEM_OPTIONS = ['오전', '오후'];
-const HOUR_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1);
+const HOUR_OPTIONS = Array.from({ length: 12 }, (_, i) => i + 1); // 1 ~ 12
 
 export default function SettingAlarmLuckTimePicker({
   onConfirmTime,
   initialTime,
 }: IProps) {
-  const [date, setDate] = useState(new Date(initialTime));
+  const [meridiem, setMeridiem] = useState<string>(
+    12 <= Number(initialTime.split(':')[0]) ? '오후' : '오전',
+  );
+  const [hour, setHour] = useState(Number(initialTime.split(':')[0]) + 12);
+
+  const handlConfirmTime = () => {
+    const time = `${meridiem === '오후' ? hour + 12 : hour}:00:00`;
+    onConfirmTime(time);
+    BottomSheet.hide();
+  };
 
   return (
     <S.popupWrap>
@@ -41,16 +50,13 @@ export default function SettingAlarmLuckTimePicker({
         {/* meridiem */}
         <WheelPicker
           selectedIndex={
-            date.getHours() > 12
-              ? MERIDIEM_OPTIONS.indexOf('오후')
-              : MERIDIEM_OPTIONS.indexOf('오전')
+            0 <= MERIDIEM_OPTIONS.indexOf(meridiem)
+              ? MERIDIEM_OPTIONS.indexOf(meridiem)
+              : 0
           }
           options={MERIDIEM_OPTIONS}
           onChange={(index) => {
-            const tempDate = new Date(date);
-            const newHour = date.getHours() + (index === 0 ? -12 : 12);
-            tempDate.setHours(newHour);
-            setDate(tempDate);
+            setMeridiem(MERIDIEM_OPTIONS[index]);
           }}
           itemTextStyle={{
             ...FontSettings.TITLE2_REGULAR,
@@ -66,14 +72,12 @@ export default function SettingAlarmLuckTimePicker({
         />
         {/* 시간 */}
         <WheelPicker
-          selectedIndex={HOUR_OPTIONS.indexOf(date.getHours() % 12 || 12)}
+          selectedIndex={
+            0 <= HOUR_OPTIONS.indexOf(hour) ? HOUR_OPTIONS.indexOf(hour) : 0
+          }
           options={HOUR_OPTIONS.map(String)}
           onChange={(index) => {
-            const tempDate = new Date(date);
-            tempDate.setHours(
-              HOUR_OPTIONS[index] + (date.getHours() >= 12 ? 12 : 0),
-            );
-            setDate(tempDate);
+            setHour(index + 1);
           }}
           visibleRest={2}
           itemTextStyle={{
@@ -112,10 +116,7 @@ export default function SettingAlarmLuckTimePicker({
           type={'action'}
           text={'확인'}
           bgColor={'LUCK_GREEN'}
-          onPress={() => {
-            BottomSheet.hide();
-            onConfirmTime(date.getTime());
-          }}
+          onPress={handlConfirmTime}
         />
       </S.buttonWrap>
     </S.popupWrap>
