@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
@@ -84,7 +84,7 @@ export const PageMissionAdd: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [text, setText] = useState<string>('');
   const [current, setCurrent] = useState<number>(0);
-  const { onFetch } = useFetch({
+  const { onFetch, isSubmit, isSuccess } = useFetch({
     method: 'POST',
     url: '/missions/new',
     value: {
@@ -92,7 +92,8 @@ export const PageMissionAdd: React.FC = () => {
       missionType: category[current].type,
       missionDescription: text,
       alertStatus: isDisabled ? 'UNCHECKED' : 'CHECKED',
-      alertTime: rtnTime,
+      alertTime: isDisabled ? '00:00:00' : rtnTime,
+      missionActive: 'TRUE',
     },
   });
 
@@ -107,6 +108,10 @@ export const PageMissionAdd: React.FC = () => {
     setRtnTime(fTime);
   };
 
+  useEffect(() => {
+    if (isSuccess) navigation.goBack();
+  }, [isSuccess]);
+
   return (
     <FrameLayout
       NavBar={
@@ -120,13 +125,12 @@ export const PageMissionAdd: React.FC = () => {
           <Font type={'HEADLINE_SEMIBOLD'}>새 습관</Font>
           <ButtonText
             onPress={() => {
-              navigation.goBack();
-              onFetch();
+              if (!isSubmit) onFetch();
             }}
             fontType={'HEADLINE_SEMIBOLD'}
             text={'추가'}
             disabled={false}
-            textColor={text.length > 0 ? 'LUCK_GREEN' : 'GREY3'}
+            textColor={text.length > 0 && !isSubmit ? 'LUCK_GREEN' : 'GREY3'}
           />
         </L.Row>
       }

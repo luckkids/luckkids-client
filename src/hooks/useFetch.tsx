@@ -24,6 +24,7 @@ export const useFetch = (args: {
 }) => {
   const [token, setToken] = useRecoilState(RecoilToken);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   const [resultData, setResultData] = useState<IResponse>();
 
   const { setValue: setAccessToken } = useAsyncStorage<StorageKeys.AccessToken>(
@@ -32,6 +33,7 @@ export const useFetch = (args: {
 
   const onFetch = useCallback(
     (value?: IStringDictionary) => {
+      setIsSubmit(true);
       // Use provided value or default to args.value
       const requestData = value ? value : args.value;
 
@@ -79,9 +81,13 @@ export const useFetch = (args: {
               refreshToken: result.data.refreshToken,
             });
           }
-          if (result.statusCode === STATUS.SUCCESS) {
+          if (
+            result.statusCode === STATUS.SUCCESS ||
+            result.statusCode === STATUS.CREATED
+          ) {
             //3. 결과가 200일경우 isSuccess 불리언값 참조 가능
             setIsSuccess(true);
+            setIsSubmit(false);
             //4. 완료 후 컴퍼넌트에서 던져주는 결과후 실행할 함수 실행
             args.onSuccessCallback && args.onSuccessCallback(result.data);
           }
@@ -93,6 +99,7 @@ export const useFetch = (args: {
         .catch((e) => {
           console.log(e);
           setIsSuccess(false);
+          setIsSubmit(false);
           args.onFailCallback && args.onFailCallback();
           console.log('서버 통신 에러');
         });
@@ -124,7 +131,10 @@ export const useFetch = (args: {
         body: JSON.stringify(args.value),
       });
 
-      if (rtnData.statusCode !== STATUS.SUCCESS)
+      if (
+        rtnData.statusCode !== STATUS.SUCCESS ||
+        rtnData.statusCode !== STATUS.CREATED
+      )
         return new Error(rtnData.statusText);
       return await rtnData.json();
     } catch (error) {
@@ -135,6 +145,7 @@ export const useFetch = (args: {
   return {
     onFetch: onFetch,
     resultData: resultData,
+    isSubmit: isSubmit,
     isSuccess: isSuccess,
   };
 };
