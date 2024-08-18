@@ -10,76 +10,98 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
 
 platform :ios do
-  def update_version(options)
-    if options[:version]
-      version = options[:version]
-    else
-      version = prompt(text: "Enter version (e.g., 1.0.0) or 'skip' to only increment build number: ")
-    end
-
-    if version.downcase == 'skip'
-      puts "Skipping version update, only incrementing build number."
-    else
-      re = /\d+.\d+.\d+/
-      version_num = version[re, 0]
-
-      if version_num
-        increment_version_number(version_number: version_num)
-        UI.message("Version number updated to #{version_num}")
-      elsif ['major', 'minor', 'patch'].include?(version)
-        increment_version_number(bump_type: version)
-        new_version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
-        UI.message("Version number bumped to #{new_version} (#{version})")
+  def read_version_file
+    version_file = 'version.txt'
+    if File.exist?(version_file)
+      content = File.read(version_file).strip
+      if content =~ /(\d+\.\d+\.\d+) \((\d+)\)/
+        { version: $1, build: $2 }
       else
-        UI.user_error!("[ERROR] Invalid version format!")
+        UI.user_error!("Invalid version format in version.txt. Expected format: X.Y.Z (Build)")
       end
+    else
+      UI.user_error!("version.txt file not found")
     end
+  end
+
+  def generate_build_number
+    last_build = get_build_number(xcodeproj: "LuckKids.xcodeproj").to_i
+    new_build_base = last_build + 1
+    date = Time.now.strftime("%Y%m%d")
+    commit_count = number_of_commits
+    "#{new_build_base}.#{date}.#{commit_count}"
+  end
+
+  def update_version(options)
+    current_version_info = read_version_file
+    
+    if options[:version]
+      new_version = options[:version]
+    else
+      new_version = prompt(text: "Enter new version (current: #{current_version_info[:version]}) or 'skip' to use current: ")
+      new_version = current_version_info[:version] if new_version.downcase == 'skip' || new_version.empty?
+    end
+  
+    new_build = (current_version_info[:build].to_i + 1).to_s
+  
+    File.write('version.txt', "#{new_version} (#{new_build})")
+    
+    increment_version_number(
+      version_number: new_version,
+      xcodeproj: "LuckKids.xcodeproj"
+    )
+    increment_build_number(
+      build_number: new_build,
+      xcodeproj: "LuckKids.xcodeproj"
+    )
+  
+    UI.message("Version updated to #{new_version} (#{new_build})")
   end
 
   def update_build_number
-    current_build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
-    new_build = current_build.to_i + 1
-    increment_build_number(build_number: new_build, xcodeproj: "LuckKids.xcodeproj")
-    UI.message("Build number incremented from #{current_build} to #{new_build}")
+    new_build = generate_build_number
+    increment_build_number(
+      build_number: new_build,
+      xcodeproj: "LuckKids.xcodeproj"
+    )
+    UI.message("Build number set to #{new_build}")
+    new_build
   end
 
-  def notify_slack(success, lane, version, build)
-    if success
-      message = "새로운 LuckKids 빌드가 TestFlight에 성공적으로 업로드되었습니다! :rocket:\n버전: #{version}\n빌드: #{build}\n레인: #{lane}"
-      slack(
-        message: message,
-        success: true,
-        slack_url: ENV["SLACK_WEBHOOK_URL"]
-      )
-    else
-      message = "LuckKids 빌드 업로드에 실패했습니다. :x:\n버전: #{version}\n빌드: #{build}\n레인: #{lane}"
-      slack(
-        message: message,
-        success: false,
-        slack_url: ENV["SLACK_WEBHOOK_URL"]
-      )
+  def commit_and_push_version_bump(lane)
+    # Ensure we're on the main branch
+    ensure_git_branch(branch: 'main')
+    
+    # Check if there are any changes
+    status = Actions.sh("git status --porcelain")
+    if status.empty?
+      UI.message("No changes to commit.")
+      return
     end
+
+    # Commit the version bump
+    version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
+    build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
+    commit_message = "Bump version to #{version} (#{build}) [#{lane}]"
+    
+    git_add(path: "*.plist")
+    git_add(path: "*.pbxproj")
+    git_add(path: "version.txt")
+    git_commit(path: ".", message: commit_message)
+
+    # Push to remote using push_to_git_remote action
+    push_to_git_remote(
+      remote: "origin",  # remote name, usually "origin"
+      local_branch: "main",  # local branch name
+      remote_branch: "main",  # remote branch name
+      force: false,  # set to true if you need to force push
+      tags: false  # set to true if you want to push tags as well
+    )
+
+    UI.success("Successfully pushed version bump!")
   end
 
   desc "Push a new beta build to TestFlight with version prompt"
@@ -87,35 +109,24 @@ platform :ios do
     cert
     sigh(force: true)
     update_version(options)
-    update_build_number
     build_app(workspace: "LuckKids.xcworkspace", scheme: "LuckKids")
     upload_to_testflight
-
-    version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
-    build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
-    # notify_slack(true, "beta", version, build)
-  rescue => ex
-    version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
-    build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
-    # notify_slack(false, "beta", version, build)
-    raise ex
+    commit_and_push_version_bump("beta")
   end
-
-  desc "Push a new beta build to TestFlight, only incrementing build number"
+  
+  desc "Push a new beta build to TestFlight, only updating build number"
   lane :beta_build_only do
     cert
     sigh(force: true)
-    update_build_number
+    current_version_info = read_version_file
+    new_build = (current_version_info[:build].to_i + 1).to_s
+    File.write('version.txt', "#{current_version_info[:version]} (#{new_build})")
+    increment_build_number(
+      build_number: new_build,
+      xcodeproj: "LuckKids.xcodeproj"
+    )
     build_app(workspace: "LuckKids.xcworkspace", scheme: "LuckKids")
     upload_to_testflight
-
-    version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
-    build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
-    # notify_slack(true, "beta_build_only", version, build)
-  rescue => ex
-    version = get_version_number(xcodeproj: "LuckKids.xcodeproj")
-    build = get_build_number(xcodeproj: "LuckKids.xcodeproj")
-    # notify_slack(false, "beta_build_only", version, build)
-    raise ex
+    commit_and_push_version_bump("beta_build_only")
   end
 end
