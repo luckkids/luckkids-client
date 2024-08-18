@@ -18,6 +18,7 @@ import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { SocialType } from '@types-index';
+import { DEEP_LINK_BASE_URL } from '@utils';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
@@ -28,8 +29,12 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
-import useAppStateEffect from '@hooks/useAppStateEffect';
-import { DEEP_LINK_BASE_URL } from '@utils';
+
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
+  installMode: CodePush.InstallMode.IMMEDIATE,
+  mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -264,4 +269,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default CodePush(codePushOptions)(App);
