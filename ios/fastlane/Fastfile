@@ -32,7 +32,7 @@ platform :ios do
     new_build_base = last_build + 1
     date = Time.now.strftime("%Y%m%d")
     commit_count = number_of_commits
-    "#{new_build_base}.#{date}.#{commit_count}"
+    "#{new_build_base}#{date}#{commit_count}"
   end
 
   def update_version(options)
