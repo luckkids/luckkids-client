@@ -163,7 +163,10 @@ const RootNavigator = () => {
       });
     }
 
-    setIsNavigatorReady(true);
+    // 로딩 화면 3초동안 보여줌
+    setTimeout(() => {
+      setIsNavigatorReady(true);
+    }, 3000);
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   useAsyncEffect(async () => {
