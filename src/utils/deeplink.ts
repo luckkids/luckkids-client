@@ -118,19 +118,13 @@ function extractFriendCodeFromUrl(url: string) {
 
 export const subscribeBranch = (navigationRef: NavigationContainerRef<any>) => {
   const handleBranchUrl = (url: string) => {
-    console.log('Handling Branch URL:', url);
     const friendCode = extractFriendCodeFromUrl(url);
-    console.log('Extracted friendCode:', friendCode);
     if (friendCode) {
       if (navigationRef.isReady()) {
-        console.log('Resetting navigation with params:', friendCode.params);
-        /*navigationRef.reset({
+        navigationRef.reset({
           index: 0,
           routes: [{ name: 'Home', params: { code: friendCode.params.code } }],
-        });*/
-        navigationRef.navigate('Home', { code: friendCode.params.code });
-        console.log('Current route:', navigationRef.getCurrentRoute());
-        console.log('Navigation reset completed');
+        });
       } else {
         const checkNavReady = setInterval(() => {
           if (navigationRef.isReady()) {
