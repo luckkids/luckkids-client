@@ -101,7 +101,7 @@ const RootNavigator = () => {
   };
 
   useEffect(() => {
-    console.log('aas');
+    console.log('aas', isNavigationReady);
     //브랜치 io 동작
     let unsubscribeBranch: (() => void) | null = null;
 

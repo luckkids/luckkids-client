@@ -20,7 +20,7 @@ import LoadingIndicator from '@global-components/common/LoadingIndicator/Loading
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -30,7 +30,6 @@ const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 type RootStackParamList = {
   Home: { friendCode?: string };
-  // 다른 라우트들도 여기에 정의...
 };
 
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -44,26 +43,30 @@ type HomeProps = {
   navigation: HomeScreenNavigationProp;
 };
 
-export const Home: React.FC<HomeProps> = ({ route, navigation }) => {
+export const Home: React.FC<HomeProps> = ({ route }) => {
   const navigationService = useNavigationService();
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
 
-  const { friendCode } = route.params || {};
-  console.log('HOME friendCode:', friendCode);
-
   useEffect(() => {
+    console.log('route-->', route);
+  }, [route.params]);
+
+  // const { friendCode } = route.params || {};
+  // console.log('HOME friendCode:', friendCode);
+
+  /*useEffect(() => {
     if (friendCode) {
       console.log('Received friendCode:', friendCode);
     }
-  }, [friendCode]);
+  }, [friendCode]);*/
 
   // 기존의 useEffect 로직
-  useEffect(() => {
+  /*useEffect(() => {
     console.log('Route params:', route.params);
     console.log('Navigation state:', navigation.getState());
-  }, [route.params, navigation]);
+  }, [route.params, navigation]);*/
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
     navigationService.push('HomeProfile');

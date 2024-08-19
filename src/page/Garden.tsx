@@ -80,6 +80,7 @@ export const Garden: React.FC = () => {
             {...friendData[i]}
             isDimProfile={true}
             onPress={() => {}}
+            key={i}
           />,
         );
       }
@@ -90,6 +91,7 @@ export const Garden: React.FC = () => {
             {...friendData[i]}
             isDimProfile={true}
             onPress={() => {}}
+            key={i}
           />,
         );
       }

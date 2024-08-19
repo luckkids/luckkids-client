@@ -1,10 +1,14 @@
 import branch from 'react-native-branch';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { NavigationContainerRef } from '@react-navigation/native';
+import {
+  NavigationContainerRef,
+  useNavigation,
+} from '@react-navigation/native';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { SvgIcon } from '@design-system';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { createElement } from 'react';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const DEEP_LINK_BASE_URL = 'luckkids://';
 
@@ -119,11 +123,14 @@ export const subscribeBranch = (navigationRef: NavigationContainerRef<any>) => {
     console.log('Extracted friendCode:', friendCode);
     if (friendCode) {
       if (navigationRef.isReady()) {
-        console.log('if==>', friendCode);
-        navigationRef.reset({
+        console.log('Resetting navigation with params:', friendCode.params);
+        /*navigationRef.reset({
           index: 0,
-          routes: [{ name: 'Home', params: friendCode.params }],
-        });
+          routes: [{ name: 'Home', params: { code: friendCode.params.code } }],
+        });*/
+        navigationRef.navigate('Home', { code: friendCode.params.code });
+        console.log('Current route:', navigationRef.getCurrentRoute());
+        console.log('Navigation reset completed');
       } else {
         const checkNavReady = setInterval(() => {
           if (navigationRef.isReady()) {
@@ -134,7 +141,7 @@ export const subscribeBranch = (navigationRef: NavigationContainerRef<any>) => {
               routes: [
                 {
                   name: 'Home',
-                  params: { friendCode: friendCode.params },
+                  params: { code: friendCode.params.code },
                 },
               ],
             });
@@ -151,6 +158,7 @@ export const subscribeBranch = (navigationRef: NavigationContainerRef<any>) => {
       console.log('Branch onOpenStart:', { uri, cachedInitialEvent });
     },
     onOpenComplete: ({ error, params, uri }) => {
+      console.log('Branch onOpenComplete');
       if (error) {
         return console.log('onOpenComplete', error);
       }
