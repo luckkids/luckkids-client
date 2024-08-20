@@ -18,10 +18,10 @@ platform :ios do
     if File.exist?(version_file)
       content = File.read(version_file).strip
       UI.message("Version file content: #{content}")
-      if content =~ /(\d+\.\d+) \((\d+)\)/
+      if content =~ /(\d+\.\d+\.\d+) \((\d+)\)/
         { version: $1, build: $2 }
       else
-        UI.user_error!("Invalid version format in version.txt. Expected format: X.Y (Build)")
+        UI.user_error!("Invalid version format in version.txt. Expected format: X.Y.Z (Build)")
       end
     else
       UI.user_error!("version.txt file not found in fastlane directory")
@@ -43,7 +43,7 @@ platform :ios do
       new_version = options[:version]
       new_build = "1"  # 새 버전일 때 항상 1로 초기화
     else
-      new_version = prompt(text: "Enter new version (current: #{current_version_info[:version]}) or 'skip' to use current: ")
+      new_version = prompt(text: "Enter new version (format: X.Y.Z, current: #{current_version_info[:version]}) or 'skip' to use current: ")
       if new_version.downcase == 'skip' || new_version.empty?
         new_version = current_version_info[:version]
         new_build = (current_version_info[:build].to_i + 1).to_s  # 버전이 같으면 빌드 번호만 증가
