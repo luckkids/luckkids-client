@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Linking, StatusBar, StyleSheet, View } from 'react-native';
+import { StatusBar, StyleSheet, View } from 'react-native';
 import {
-  LinkingOptions,
   NavigationContainer,
   NavigationState,
   useNavigationContainerRef,
@@ -18,6 +17,7 @@ import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { SocialType } from '@types-index';
+import { subscribeBranch } from '@utils';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
@@ -28,8 +28,6 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
-import { DEEP_LINK_BASE_URL, parseDeepLink, subscribeBranch } from '@utils';
-import branch from 'react-native-branch';
 
 const Stack = createNativeStackNavigator();
 
@@ -100,27 +98,16 @@ const RootNavigator = () => {
     }
   };
 
+  // branch io 로직
   useEffect(() => {
-    console.log('aas', isNavigationReady);
-    //브랜치 io 동작
-    let unsubscribeBranch: (() => void) | null = null;
-
-    const setupBranch = () => {
-      if (navigationRef.current) {
-        unsubscribeBranch = subscribeBranch(navigationRef.current);
-      }
-    };
-
-    if (isNavigationReady) {
-      setupBranch();
-    }
+    const unsubscribeBranch = subscribeBranch(navigationRef);
 
     return () => {
       if (unsubscribeBranch) {
         unsubscribeBranch();
       }
     };
-  }, [isNavigationReady]);
+  }, []);
 
   useEffect(() => {
     // 코드 푸시 DEV 에서 테스트하는 경우 아니면 return 해두기
@@ -206,16 +193,6 @@ const RootNavigator = () => {
     );
   }
 
-  const linking: LinkingOptions<AppScreensParamList> = {
-    prefixes: [DEEP_LINK_BASE_URL], // 앱의 URL 스킴과 도메인을 여기에 지정
-    config: {
-      screens: {
-        //TODO 여기에 각 화면의 이름과 경로를 지정
-        // Home: 'home',
-      },
-    },
-  };
-
   return (
     <NavigationContainer<AppScreensParamList>
       ref={navigationRef}
@@ -224,7 +201,6 @@ const RootNavigator = () => {
         NavigationService.setNavigation(navigationRef.current);
       }}
       onStateChange={onStateChange}
-      linking={linking}
     >
       {initializing ? ( // 초기화 중일 때 LottieView를 보여줌
         <View style={styles.lottieContainer}>

@@ -3,7 +3,6 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RemotePackage } from 'react-native-code-push';
 import { CharacterType } from './character.types';
 import { SocialType } from '../user';
-import { DeepLinkInfo } from '@utils';
 
 export const DefaultTypeUnit = {
   CHECKED: 'CHECKED',
@@ -36,7 +35,7 @@ export type AppScreensParamList = {
   CharacterMake: undefined;
   CharacterSelect: undefined;
   CharacterName: undefined;
-  Home: { friendCode?: string | undefined };
+  Home: { friendCode?: string };
   HomeAlarm: undefined;
   HomeCalendar: undefined;
   HomeLevel: {

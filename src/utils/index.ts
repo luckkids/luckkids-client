@@ -1,3 +1,3 @@
 export * from './common';
 export * from './user';
-export * from './deeplink';
+export * from './branch';
