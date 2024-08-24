@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
@@ -17,10 +18,8 @@ import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp, useFocusEffect } from '@react-navigation/native';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -28,45 +27,17 @@ const luckkidsRabbit = require('assets/images/luckkids-rabbit.png');
 const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
-type RootStackParamList = {
-  Home: { friendCode?: string };
-};
-
-type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
-type HomeScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Home'
->;
-
-type HomeProps = {
-  route: HomeScreenRouteProp;
-  navigation: HomeScreenNavigationProp;
-};
-
-export const Home: React.FC<HomeProps> = ({ route }) => {
+export const Home: React.FC = () => {
   const navigationService = useNavigationService();
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
 
-  useEffect(() => {
-    console.log('route-->', route);
-  }, [route.params]);
+  const {
+    params: { friendCode = '' },
+  } = useNavigationRoute('Home');
 
-  // const { friendCode } = route.params || {};
-  // console.log('HOME friendCode:', friendCode);
-
-  /*useEffect(() => {
-    if (friendCode) {
-      console.log('Received friendCode:', friendCode);
-    }
-  }, [friendCode]);*/
-
-  // 기존의 useEffect 로직
-  /*useEffect(() => {
-    console.log('Route params:', route.params);
-    console.log('Navigation state:', navigation.getState());
-  }, [route.params, navigation]);*/
+  console.log('Home', friendCode);
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
     navigationService.push('HomeProfile');

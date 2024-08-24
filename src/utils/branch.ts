@@ -1,16 +1,14 @@
-import branch from 'react-native-branch';
-import Clipboard from '@react-native-clipboard/clipboard';
-import {
-  NavigationContainerRef,
-  useNavigation,
-} from '@react-navigation/native';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import { SvgIcon } from '@design-system';
-import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { createElement } from 'react';
-import useNavigationService from '@hooks/navigation/useNavigationService';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { NavigationContainerRef } from '@react-navigation/native';
+import { debounce } from 'lodash';
+import branch from 'react-native-branch';
+import { SvgIcon } from '@design-system';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import { AppScreensParamList } from '@types-common/page.types';
 
-export const DEEP_LINK_BASE_URL = 'luckkids://';
+const BASE_URL = 'luckkids://';
 
 const onSnackBarHandler = () => {
   SnackBar.show({
@@ -23,43 +21,6 @@ const onSnackBarHandler = () => {
     position: 'bottom',
   });
 };
-
-export type DeepLinkInfo = {
-  type: 'FRIEND_INVITE';
-  screenName: null;
-  params: { code: string };
-};
-
-export function generateDeepLink(info: DeepLinkInfo): string {
-  switch (info.type) {
-    case 'FRIEND_INVITE':
-      return `${DEEP_LINK_BASE_URL}friend-invite/${info.params.code}`;
-    default:
-      throw new Error('Unknown screen');
-  }
-}
-
-//  ex) url : luckkids://friend-invite/CODE
-export function parseDeepLink(url: string): DeepLinkInfo {
-  // URL이 BASE_URL로 시작하는지 확인
-  if (!url.startsWith(DEEP_LINK_BASE_URL)) {
-    throw new Error('Invalid URL: Does not match BASE_URL');
-  }
-
-  // BASE_URL을 제거하고 경로만 추출
-  const path = url.slice(DEEP_LINK_BASE_URL.length);
-
-  const friendInviteMatch = path.match(/^\/friend-invite\/(\w+)$/);
-  if (friendInviteMatch) {
-    return {
-      type: 'FRIEND_INVITE',
-      screenName: null,
-      params: { code: friendInviteMatch[1] },
-    };
-  }
-
-  throw new Error('Unknown URL format');
-}
 
 export const createAndCopyBranchLink = async (
   code: string,
@@ -81,7 +42,7 @@ export const createAndCopyBranchLink = async (
     );
 
     const controlParams = {
-      $ios_url: `${DEEP_LINK_BASE_URL}friend-invite/${code}`,
+      $ios_url: `${BASE_URL}friend-invite/${code}`,
     };
 
     const { url } = await branchUniversalObject.generateShortUrl(
@@ -93,13 +54,11 @@ export const createAndCopyBranchLink = async (
       ? `[Luckkids]\n럭키즈 | 💌 [띵동] ${nickName}님이 친구 요청을 보냈어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`
       : `[Luckkids]\n럭키즈 | 💌 [띵동] 친구 요청이 도착했어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`;
 
-    // 클립보드에 URL 복사
     if (url) {
       Clipboard.setString(chatBalloon + url);
       BottomSheet.hide();
       onSnackBarHandler();
     }
-    return;
   } catch (err) {
     console.error('Link creation or copying error', err);
   }
@@ -110,58 +69,54 @@ function extractFriendCodeFromUrl(url: string) {
   return match
     ? {
         type: 'FRIEND_INVITE',
-        screenName: null,
+        screenName: 'Home',
         params: { code: match[1] },
       }
     : null;
 }
 
-export const subscribeBranch = (navigationRef: NavigationContainerRef<any>) => {
-  const handleBranchUrl = (url: string) => {
+export const subscribeBranch = (
+  navigationRef: NavigationContainerRef<AppScreensParamList>,
+) => {
+  const handleBranchUrl = debounce((url: string) => {
+    console.log('Handling Branch params:', url);
+
     const friendCode = extractFriendCodeFromUrl(url);
-    if (friendCode) {
-      if (navigationRef.isReady()) {
-        navigationRef.reset({
-          index: 0,
-          routes: [{ name: 'Home', params: { code: friendCode.params.code } }],
-        });
-      } else {
-        const checkNavReady = setInterval(() => {
-          if (navigationRef.isReady()) {
-            console.log('else==>', friendCode);
-            clearInterval(checkNavReady);
-            navigationRef.reset({
-              index: 0,
-              routes: [
-                {
-                  name: 'Home',
-                  params: { code: friendCode.params.code },
-                },
-              ],
-            });
-          }
-        }, 100);
-      }
+
+    console.log('Friend Code:', friendCode);
+
+    if (friendCode?.params && navigationRef.isReady()) {
+      navigationRef.reset({
+        index: 0,
+        routes: [
+          {
+            name: friendCode?.screenName,
+            params: { friendCode: friendCode?.params.code },
+          },
+        ],
+      });
     } else {
-      console.log('No friendCode found in URL');
+      console.log('No valid friend code found in Branch params');
     }
-  };
+  }, 300);
 
   return branch.subscribe({
     onOpenStart: ({ uri, cachedInitialEvent }) => {
       console.log('Branch onOpenStart:', { uri, cachedInitialEvent });
     },
     onOpenComplete: ({ error, params, uri }) => {
-      console.log('Branch onOpenComplete');
       if (error) {
-        return console.log('onOpenComplete', error);
+        console.error('Branch onOpenComplete error:', error);
+        return;
       }
 
       if (!params || params['+non_branch_link']) {
         if (params) {
           handleBranchUrl(params['+non_branch_link'] as string);
         }
-      } else if (uri) {
+      }
+
+      if (uri) {
         handleBranchUrl(uri);
       } else {
         console.log('No valid link found in Branch params');
