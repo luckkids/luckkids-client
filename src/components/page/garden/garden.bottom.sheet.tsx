@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Linking, TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, SvgIcon } from '@design-system';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';

@@ -23,7 +23,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useSetRecoilState } from 'recoil';
 import { RecoilPopupState } from '@recoil/recoil.popup';
 import { useFetch } from '@hooks/useFetch';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -43,16 +43,18 @@ export const Home: React.FC = () => {
   //undefined
   console.log('home', useNavigationRoute('Home'));
   //undefined
-  console.log('friendCode', friendCode);
-  //undefined
   console.log('route', route);
-  /*const {
+  //undefined
+  console.log('friendCode', friendCode);
+  /*console.log('route', route);
+
+  const {
     params: { friendCode = '' },
   } = useNavigationRoute('Home');*/
   const [sendFriend, setSendFriend] = useState<string>('');
   const setStatePopup = useSetRecoilState(RecoilPopupState);
 
-  /*const { onFetch: addFriend } = useFetch({
+  const { onFetch: addFriend } = useFetch({
     method: 'POST',
     url: '/friendcode/create',
     value: {
@@ -136,7 +138,7 @@ export const Home: React.FC = () => {
     if (friendCode !== undefined && friendCode !== '') {
       onCheckFriend();
     }
-  }, [friendCode]);*/
+  }, [friendCode]);
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
     navigationService.push('HomeProfile');
