@@ -33,11 +33,11 @@ export const PageHomeLevel: React.FC = () => {
   const navigation = useNavigationService();
 
   const handleNext = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Home', {});
   };
 
   const handlePressBack = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Home', {});
   };
 
   useEffect(() => {

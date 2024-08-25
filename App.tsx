@@ -12,7 +12,7 @@ import CodePush from 'react-native-code-push';
 import DeviceInfo from 'react-native-device-info';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useRecoilValue } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
@@ -28,6 +28,8 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
+import FramePopup from '@frame/frame.popup';
+import { RecoilPopupState } from '@recoil/recoil.popup';
 
 const Stack = createNativeStackNavigator();
 
@@ -226,6 +228,7 @@ const RootNavigator = () => {
           })}
         </Stack.Navigator>
       )}
+      <FramePopup />
     </NavigationContainer>
   );
 };

@@ -1,8 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
-  Image,
-  ImageBackground,
-  ImageSourcePropType,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -12,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from 'styled-components/native';
 import { CONSTANTS, ColorKeys, Colors } from '@design-system';

@@ -1,4 +1,5 @@
 import { InitialSetting } from '../user';
+import { IPopup } from '@frame/frame.popup';
 
 export interface ILogin {
   accessToken: string;
@@ -23,6 +24,10 @@ export interface ILoginInfo {
   password: string;
   deviceId: string;
   pushKey: string | null;
+}
+
+export interface IPopupState extends IPopup {
+  isShow: boolean;
 }
 
 export interface IInitialSetting extends InitialSetting {}

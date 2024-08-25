@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { Button, Colors, Font, SvgIcon } from '@design-system';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import Share from 'react-native-share';
-import { createAndCopyBranchLink, parseDeepLink } from '@utils';
+import { createAndCopyBranchLink } from '@utils';
 import { useFetch } from '@hooks/useFetch';
 import { useMe } from '@queries';
 

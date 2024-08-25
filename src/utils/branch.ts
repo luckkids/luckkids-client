@@ -86,12 +86,13 @@ export const subscribeBranch = (
     console.log('Friend Code:', friendCode);
 
     if (friendCode?.params && navigationRef.isReady()) {
+      console.log('Friend Code:', friendCode.params.code);
       navigationRef.reset({
         index: 0,
         routes: [
           {
             name: friendCode?.screenName,
-            params: { friendCode: friendCode?.params.code },
+            params: { friendCode: friendCode.params.code },
           },
         ],
       });

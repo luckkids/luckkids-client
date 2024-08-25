@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   GestureResponderEvent,
@@ -20,6 +20,10 @@ import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useSetRecoilState } from 'recoil';
+import { RecoilPopupState } from '@recoil/recoil.popup';
+import { useFetch } from '@hooks/useFetch';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -32,12 +36,107 @@ export const Home: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
+  const { params } = useNavigationRoute('Home');
+  const route = useRoute();
+  const friendCode = params?.friendCode || '';
 
-  const {
+  //undefined
+  console.log('home', useNavigationRoute('Home'));
+  //undefined
+  console.log('friendCode', friendCode);
+  //undefined
+  console.log('route', route);
+  /*const {
     params: { friendCode = '' },
-  } = useNavigationRoute('Home');
+  } = useNavigationRoute('Home');*/
+  const [sendFriend, setSendFriend] = useState<string>('');
+  const setStatePopup = useSetRecoilState(RecoilPopupState);
 
-  console.log('Home', friendCode);
+  /*const { onFetch: addFriend } = useFetch({
+    method: 'POST',
+    url: '/friendcode/create',
+    value: {
+      code: friendCode,
+    },
+    onSuccessCallback: () => {
+      return setStatePopup({
+        isShow: true,
+        title: `${sendFriend}님이 \n가든 목록에 추가되었어요!`,
+        onCancel: {
+          label: '닫기',
+          action: () => setStatePopup({ isShow: false }),
+        },
+        onClick: {
+          label: '가든으로 가기',
+          isActive: true,
+          action: () => {
+            setStatePopup({ isShow: false });
+            navigationService.push('Garden');
+          },
+        },
+      });
+    },
+  });
+
+  const { onFetch: onCheckFriend } = useFetch({
+    method: 'GET',
+    url: `/friendcode/${friendCode}/nickname`,
+    onSuccessCallback: (rtn) => {
+      setSendFriend(rtn.nickname);
+      if (rtn.status === 'ME') {
+        return setStatePopup({
+          isShow: true,
+          title:
+            '내가 보낸 초대에요. \n친구가 초대를 수락할 때까지 기다려주세요!',
+          onCancel: {
+            label: '확인',
+            isActive: true,
+            action: () => setStatePopup({ isShow: false }),
+          },
+        });
+      } else if (rtn.status === 'ALREADY') {
+        return setStatePopup({
+          isShow: true,
+          title: `이미 ${rtn.nickname}님과 친구예요.`,
+          onCancel: {
+            label: '닫기',
+            action: () => setStatePopup({ isShow: false }),
+          },
+          onClick: {
+            label: '가든으로 가기',
+            isActive: true,
+            action: () => {
+              setStatePopup({ isShow: false });
+              navigationService.push('Garden');
+            },
+          },
+        });
+      } else {
+        return setStatePopup({
+          isShow: true,
+          title: `${rtn.nickname}님이 \n친구 초대를 보냈어요!`,
+          txt: '친구 초대에 응하면 가든 목록에 추가됩니다.',
+          onCancel: {
+            label: '거절하기',
+            action: () => setStatePopup({ isShow: false }),
+          },
+          onClick: {
+            label: '친구하기',
+            isActive: true,
+            action: () => {
+              setStatePopup({ isShow: false });
+              addFriend();
+            },
+          },
+        });
+      }
+    },
+  });
+  useEffect(() => {
+    if (friendCode !== undefined && friendCode !== '') {
+      onCheckFriend();
+    }
+  }, [friendCode]);*/
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
     navigationService.push('HomeProfile');
