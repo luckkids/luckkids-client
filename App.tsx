@@ -12,7 +12,7 @@ import CodePush from 'react-native-code-push';
 import DeviceInfo from 'react-native-device-info';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';

@@ -46,11 +46,6 @@ export const Home: React.FC = () => {
   console.log('route', route);
   //undefined
   console.log('friendCode', friendCode);
-  /*console.log('route', route);
-
-  const {
-    params: { friendCode = '' },
-  } = useNavigationRoute('Home');*/
   const [sendFriend, setSendFriend] = useState<string>('');
   const setStatePopup = useSetRecoilState(RecoilPopupState);
 
