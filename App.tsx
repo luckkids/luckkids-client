@@ -18,6 +18,7 @@ import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { SocialType } from '@types-index';
 import { subscribeBranch } from '@utils';
+import { DEEP_LINK_BASE_URL } from '@utils';
 import { DataStackScreen } from './src/data/data.stack.screen';
 import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
@@ -29,6 +30,12 @@ import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 import FramePopup from '@frame/frame.popup';
+
+const codePushOptions = {
+  checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
+  installMode: CodePush.InstallMode.IMMEDIATE,
+  mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -173,7 +180,10 @@ const RootNavigator = () => {
       });
     }
 
-    setIsNavigatorReady(true);
+    // 로딩 화면 3초동안 보여줌
+    setTimeout(() => {
+      setIsNavigatorReady(true);
+    }, 3000);
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   useAsyncEffect(async () => {
@@ -262,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default CodePush(codePushOptions)(App);

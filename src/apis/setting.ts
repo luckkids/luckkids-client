@@ -5,9 +5,9 @@ import { AlertStatus, AlertType } from '@types-common/setting.types';
 export type GetAlertSettingResponse = ISettingAlarm;
 
 const getAlertSetting = async (deviceId: string) => {
-  const res = await API.post<GetAlertSettingResponse>('/alertSetting', {
-    deviceId,
-  });
+  const res = await API.get<GetAlertSettingResponse>(
+    `/alertSetting?deviceId=${deviceId}`,
+  );
   return res;
 };
 
@@ -49,9 +49,24 @@ const getVersion = async () => {
   return res;
 };
 
+type SetLuckMessageAlertTimeRequest = {
+  deviceId: string;
+  luckMessageAlertTime: string;
+};
+
+const setLuckMessageAlertTime = async (
+  request: SetLuckMessageAlertTimeRequest,
+) => {
+  const res = await API.patch('/alertSetting/luckMessageAlertTime/update', {
+    ...request,
+  });
+  return res;
+};
+
 export const settingApis = {
   getAlertSetting,
   updateAlertSetting,
+  setLuckMessageAlertTime,
   getNotices,
   getVersion,
 };

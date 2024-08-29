@@ -7793,6 +7793,11 @@ react-native-webview@13.6.3:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
 
+react-native-wheely@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-wheely/-/react-native-wheely-0.6.0.tgz#c977dfc98b5111818a37e6fd4ad9541e9afb50b8"
+  integrity sha512-WDnynKOdHZ3m0VnXF5pC11dXSJZDC/6/e9LuZ6UKs4IjIRI1NTTd14pRwKYEnTgWmJdlDjqJvNSIVbd7EuMxHQ==
+
 react-native@0.72.5:
   version "0.72.5"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.72.5.tgz#2c343fa6f3ead362cf07376634a33a4078864357"

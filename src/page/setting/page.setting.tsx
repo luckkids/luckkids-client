@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
+import { ScrollView } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useResetRecoilState } from 'recoil';
 import styled from 'styled-components/native';
 import { Font, SvgIcon, L } from '@design-system';
 import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
+import { settingApis } from '@apis/setting';
 import { FrameLayout } from '@frame/frame.layout';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { useFetch } from '@hooks/useFetch';
 import { RecoilToken } from '@recoil/recoil.token';
-import { settingApis } from '@apis/setting';
-import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 
 const S = {
   Wrap: styled.View({
@@ -129,7 +127,14 @@ export const PageSetting: React.FC = () => {
             <SvgIcon name={'arrow_right_gray'} size={14} />
           </L.Row>
         </ButtonText>
-        <ButtonText onPress={() => navigation.navigate('SettingNotice')}>
+        <ButtonText
+          onPress={() =>
+            navigation.navigate('WebView', {
+              url: 'https://forms.gle/isFjTdZ2aybSqfq48',
+              title: '피드백 보내기',
+            })
+          }
+        >
           <L.Row justify={'space-between'} ph={25} pv={20} items="center">
             <L.Col g={7}>
               <Font type={'BODY_REGULAR'}>피드백 보내기</Font>

@@ -1,32 +1,34 @@
-import React from 'react';
-import { FlatList, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, ActivityIndicator, Linking } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { SvgIcon, L, Font, ButtonText } from '@design-system';
+import styled from 'styled-components/native';
+import { SvgIcon, Font, ButtonText, Colors } from '@design-system';
 import { useInfiniteHomeNotification } from '@queries';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import HomeAlarmItem from '@components/page/home/home.alarm.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
+import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import { NotificationItem } from '@types-common/noti.types';
 
 export const PageHomeAlarm: React.FC = () => {
   const [deviceId, setDeviceId] = React.useState<string>('');
-  const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
+  const { hasPermission } = useFirebaseMessage();
+  const [showPushSetting, setShowPushSetting] = useState(false);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteHomeNotification(deviceId);
 
-  //TODO 이쪽 기획 확정되면 진행
   const handlePressAllowAlarm = () => {
-    // requestPermissionIfNot().then(() => {
-    // })
+    Linking.openSettings();
   };
 
   useAsyncEffect(async () => {
     setDeviceId(await DeviceInfo.getUniqueId());
   }, []);
 
-  const renderItem = ({ item }: { item: any }) => (
+  const renderItem = ({ item }: { item: NotificationItem }) => (
     <HomeAlarmItem
       key={item.id}
       title={item.alertDescription}
@@ -45,22 +47,39 @@ export const PageHomeAlarm: React.FC = () => {
     return <ActivityIndicator style={{ marginVertical: 20 }} />;
   };
 
+  const syncHasPermission = async () => {
+    const isPermitted = await hasPermission();
+    setShowPushSetting(isPermitted);
+  };
+
+  useAsyncEffect(syncHasPermission, []);
+  useAppStateEffect(syncHasPermission, []);
+
   return (
     <FrameLayout NavBar={<StackNavbar title="알림" />}>
       {/* 알림 허용 정보 */}
-      <L.Row w="100%" ph={25} pv={30} justify="flex-start">
-        <SvgIcon name="bell" size={20} />
-        <L.Col ml={16} g={20}>
-          <Font type="BODY_REGULAR" color="GREY0">
-            알림을 놓치지 마세요
-          </Font>
-          <ButtonText
-            textColor="LUCK_GREEN"
-            onPress={handlePressAllowAlarm}
-            text="알림 사용"
-          />
-        </L.Col>
-      </L.Row>
+      {!showPushSetting && (
+        <S.onAlarm>
+          <SvgIcon name={'bell'} size={20} />
+          <S.onAlarmWrap>
+            <Font type={'BODY_REGULAR'} color={'GREY0'}>
+              알림이 꺼져있어요!
+            </Font>
+            <ButtonText
+              onPress={handlePressAllowAlarm}
+              fontType={'CAPTION1_SEMIBOLD'}
+              text={'iOS 알림 설정'}
+              cssProp={{
+                backgroundColor: Colors.LUCK_GREEN,
+                paddingHorizontal: 14,
+                paddingVertical: 8,
+                borderRadius: 20,
+                marginTop: 20,
+              }}
+            />
+          </S.onAlarmWrap>
+        </S.onAlarm>
+      )}
       {/* 알림 리스트 */}
       {isLoading ? (
         <ActivityIndicator />
@@ -76,4 +95,22 @@ export const PageHomeAlarm: React.FC = () => {
       )}
     </FrameLayout>
   );
+};
+
+const S = {
+  onAlarm: styled.View({
+    paddingVertical: 25,
+    paddingHorizontal: 30,
+    flexDirection: 'row',
+    borderWidth: '0.5px',
+    borderStyle: 'solid',
+    borderTopColor: Colors.GREY5,
+    borderBottomColor: Colors.GREY5,
+  }),
+  onAlarmWrap: styled.View({
+    flexDirection: 'column',
+    alignItems: 'baseline',
+    marginLeft: 16,
+  }),
+  itemContainer: styled.View({}),
 };
