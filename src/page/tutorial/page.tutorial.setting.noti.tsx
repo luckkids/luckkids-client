@@ -39,7 +39,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
               },
             })
             .then(() => {
-              navigation.navigate('Home');
+              navigation.navigate('Home', {});
             });
         },
       });
@@ -55,7 +55,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
             },
           })
           .then(() => {
-            navigation.navigate('Home');
+            navigation.navigate('Home', {});
           });
       });
     }
@@ -73,7 +73,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
       })
       .then(() => {
         // 네비게이션 이동
-        navigation.navigate('Home');
+        navigation.navigate('Home', {});
       });
   };
 

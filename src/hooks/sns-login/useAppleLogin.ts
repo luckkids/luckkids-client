@@ -38,6 +38,7 @@ export function useAppleLogin() {
         identityToken,
         nonce,
         realUserStatus,
+        authorizationCode,
       } = appleAuthRequestResponse;
 
       setUser(newUser); // Update the user state
@@ -53,6 +54,8 @@ export function useAppleLogin() {
       }
 
       console.warn(`Apple Authentication Completed, ${newUser}`);
+
+      return identityToken;
     } catch (error) {
       console.error(error);
     }

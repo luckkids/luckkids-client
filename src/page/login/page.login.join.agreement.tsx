@@ -104,8 +104,7 @@ export const PageLoginJoinAgreement: React.FC = () => {
   };
 
   return (
-    <FrameLayout>
-      <StackNavbar useBackButton />
+    <FrameLayout paddingBottom={bottom} NavBar={<StackNavbar useBackButton />}>
       <L.Col
         w={'100%'}
         h={'100%'}

@@ -39,7 +39,7 @@ export const LoginJoinId: React.FC = () => {
     if (!isValidEmail) return '이메일 형식을 확인해주세요!';
     if (isDuplicate) return '이미 등록된 이메일입니다!';
     return '';
-  }, [isValidEmail, isDuplicate]);
+  }, [email, isValidEmail, isDuplicate]);
 
   const getIsError = useCallback(() => {
     if (!email) return false;

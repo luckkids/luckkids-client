@@ -6,6 +6,7 @@ import MissionItemTimePicker from '@components/page/mission/mission.item.time.pi
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
+import { formatMissionTime } from '@utils';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;
@@ -96,7 +97,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
               color={'WHITE'}
               style={{ marginLeft: 13 }}
             >
-              {rtnTime}
+              {formatMissionTime(rtnTime)}
             </Font>
           ) : (
             <Font

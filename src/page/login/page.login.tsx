@@ -53,7 +53,7 @@ export const PageLogin: React.FC = () => {
 
   const handleAfterLogin = (settingStatus: SettingStatus) => {
     if (settingStatus === 'COMPLETE') {
-      return navigation.navigate('Home');
+      return navigation.navigate('Home', {});
     } else {
       return navigation.navigate('TutorialStart');
     }

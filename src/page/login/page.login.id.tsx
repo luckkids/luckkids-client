@@ -60,7 +60,7 @@ export const PageLoginId: React.FC = () => {
 
   const handleAfterLogin = (settingStatus: SettingStatus) => {
     if (settingStatus === 'COMPLETE') {
-      return navigation.push('Home');
+      return navigation.push('Home', {});
     } else {
       return navigation.push('TutorialStart');
     }

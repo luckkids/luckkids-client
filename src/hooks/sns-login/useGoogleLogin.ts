@@ -8,19 +8,32 @@ export function useGoogleLogin() {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '564720223619-f0m9hug3t821piktg2an5rba8e3g0kqh.apps.googleusercontent.com',
+        '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com',
     });
   }, []);
 
   const handleGoogleLogin = useCallback(async () => {
     try {
-      await GoogleSignin.hasPlayServices();
+      console.log('Starting Google login process');
+      const hasPlayServices = await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+      console.log('Has Play Services:', hasPlayServices);
+
       const userInfo = await GoogleSignin.signIn();
-      console.log(userInfo);
+      console.log('User info:', userInfo);
+
       setUser(userInfo);
       setError(null);
+
+      return userInfo.idToken;
     } catch (error) {
-      console.error(error);
+      console.error('Google login error:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     }
   }, []);
 

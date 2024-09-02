@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   GestureResponderEvent,
@@ -7,8 +7,11 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { useRoute } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
-import { CONSTANTS, ChipButton, Font, L, SvgIcon } from '@design-system';
+import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
 import { getCharacterImage, getLevelToolTipText } from '@utils';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
@@ -16,9 +19,13 @@ import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import useAppStateEffect from '@hooks/useAppStateEffect';
+import { useFetch } from '@hooks/useFetch';
+import { RecoilPopupState } from '@recoil/recoil.popup';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -27,13 +34,69 @@ const luckkidsSun = require('assets/images/luckkids-sun.png');
 const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
-  const navigation = useNavigationService();
+  const navigationService = useNavigationService();
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
+  const { params } = useNavigationRoute('Home');
+  const friendCode = params?.friendCode || '';
+
+  const [sendFriend, setSendFriend] = useState<string>('');
+  const setStatePopup = useSetRecoilState(RecoilPopupState);
+
+  const { onFetch: addFriend } = useFetch({
+    method: 'POST',
+    url: '/friendcode/create',
+    value: {
+      code: friendCode,
+    },
+    onSuccessCallback: () => {
+      AlertPopup.show({
+        title: `${sendFriend}님이 \n가든 목록에 추가되었어요!`,
+        onPressYes: () => navigationService.push('Garden'),
+        yesText: '가든으로 가기',
+        noText: '닫기',
+      });
+    },
+    onFailCallback: (e) => {
+      console.error('error', e);
+    },
+  });
+
+  const { onFetch: onCheckFriend } = useFetch({
+    method: 'GET',
+    url: `/friendcode/${friendCode}/nickname`,
+    onSuccessCallback: (rtn) => {
+      setSendFriend(rtn.nickName);
+      if (rtn.status === 'ME') {
+        AlertPopup.show({
+          title:
+            '내가 보낸 초대에요. \n친구가 초대를 수락할 때까지 기다려주세요!',
+          onPressYes: () => setStatePopup({ isShow: false }),
+        });
+      } else if (rtn.status === 'ALREADY') {
+        AlertPopup.show({
+          title: `이미 ${rtn.nickName}님과 친구예요.`,
+          onPressYes: () => {
+            navigationService.push('Garden');
+          },
+          yesText: '가든으로 가기',
+          noText: '닫기',
+        });
+      } else {
+        AlertPopup.show({
+          title: `${rtn.nickName}님이 \n친구 초대를 보냈어요!`,
+          body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
+          onPressYes: addFriend,
+          yesText: '친구하기',
+          noText: '거절하기',
+        });
+      }
+    },
+  });
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
-    navigation.push('HomeProfile');
+    navigationService.push('HomeProfile');
   };
 
   const infoTranslateY = scrollY.interpolate({
@@ -59,6 +122,17 @@ export const Home: React.FC = () => {
   const { luckkidsAchievementRate = 0, userCharacterSummaryResponse } =
     homeInfo || {};
   const { inProgressCharacter } = userCharacterSummaryResponse || {};
+
+  useAppStateEffect(
+    (state) => {
+      if (state === 'active') {
+        if (friendCode) {
+          onCheckFriend();
+        }
+      }
+    },
+    [friendCode],
+  );
 
   return (
     <>

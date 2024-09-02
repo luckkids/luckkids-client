@@ -35,7 +35,7 @@ export type AppScreensParamList = {
   CharacterMake: undefined;
   CharacterSelect: undefined;
   CharacterName: undefined;
-  Home: undefined;
+  Home: { friendCode?: string };
   HomeAlarm: undefined;
   HomeCalendar: undefined;
   HomeLevel: {
