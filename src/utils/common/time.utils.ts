@@ -22,3 +22,12 @@ export const formatLuckTime = (time: string) => {
   const formattedHour = hourInt % 12 || 12;
   return `${ampm} ${formattedHour}:${minute}`;
 };
+
+// 18:00:00 -> 오후 6시
+export const formatMissionTime = (time: string) => {
+  const [hour, minute, second] = time.split(':');
+  const hourInt = parseInt(hour, 10);
+  const ampm = hourInt >= 12 ? '오후' : '오전';
+  const formattedHour = hourInt % 12 || 12;
+  return `${ampm} ${formattedHour}:${minute}`;
+};

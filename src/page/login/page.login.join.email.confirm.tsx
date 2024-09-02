@@ -59,7 +59,11 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
     }
   }, [joinInfo, authKey]);
 
-  useAppStateEffect(handleConfirmEmail, []);
+  useAppStateEffect((state) => {
+    if (state === 'active') {
+      handleConfirmEmail();
+    }
+  }, []);
 
   return (
     <FrameLayout>

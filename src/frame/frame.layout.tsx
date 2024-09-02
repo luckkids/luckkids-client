@@ -65,8 +65,7 @@ export const FrameLayout = ({
             backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
             width: SCREEN_WIDTH,
             flex: 1,
-            paddingBottom:
-              paddingBottom === undefined ? safeAreaBottom : paddingBottom,
+            paddingBottom: safeAreaBottom || paddingBottom,
           },
           backgroundStyle,
         ])}

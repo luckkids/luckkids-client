@@ -7,15 +7,62 @@ import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
+import { SettingStatus, SocialType } from '@types-index';
+import useAuth from '@hooks/auth/useAuth';
+import DeviceInfo from 'react-native-device-info';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const PageLoginAlready: React.FC = () => {
   const {
     params: { type },
   } = useNavigationRoute('LoginAlready');
+  const { oauthLogin } = useAuth();
 
   const { handleAppleLogin } = useAppleLogin();
   const { handleGoogleLogin } = useGoogleLogin();
   const { handleKakaoLogin } = useKakaoLogin();
+  const navigation = useNavigationService();
+
+  const getOauthHandler = async (type: SocialType) => {
+    switch (type) {
+      case 'APPLE':
+        return await handleAppleLogin();
+      case 'GOOGLE':
+        return await handleGoogleLogin();
+      case 'KAKAO':
+      default:
+        return await handleKakaoLogin();
+    }
+  };
+
+  const handleAfterLogin = (settingStatus: SettingStatus) => {
+    if (settingStatus === 'COMPLETE') {
+      return navigation.navigate('Home', {});
+    } else {
+      return navigation.navigate('TutorialStart');
+    }
+  };
+
+  const handleOauthLogin = async (type: SocialType) => {
+    const deviceId = await DeviceInfo.getUniqueId();
+    const token = await getOauthHandler?.(type);
+    if (token) {
+      try {
+        const res = await oauthLogin({
+          snsType: type,
+          deviceId,
+          pushKey: null,
+          token,
+        });
+
+        if (!res) return;
+
+        return handleAfterLogin(res.settingStatus);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
 
   return (
     <FrameLayout>
@@ -48,7 +95,10 @@ export const PageLoginAlready: React.FC = () => {
                   Apple
                 </Font>
               </L.Row>
-              <ChipButton text={'로그인'} onPress={handleAppleLogin} />
+              <ChipButton
+                text={'로그인'}
+                onPress={() => handleOauthLogin('APPLE')}
+              />
             </L.Row>
           )}
           {type === 'KAKAO' && (
@@ -69,7 +119,12 @@ export const PageLoginAlready: React.FC = () => {
                   카카오
                 </Font>
               </L.Row>
-              <ChipButton text={'로그인'} onPress={handleKakaoLogin} />
+              <ChipButton
+                text={'로그인'}
+                onPress={() => {
+                  handleOauthLogin('KAKAO');
+                }}
+              />
             </L.Row>
           )}
           {type === 'GOOGLE' && (
@@ -90,7 +145,12 @@ export const PageLoginAlready: React.FC = () => {
                   Google
                 </Font>
               </L.Row>
-              <ChipButton text={'로그인'} onPress={handleGoogleLogin} />
+              <ChipButton
+                text={'로그인'}
+                onPress={() => {
+                  handleOauthLogin('GOOGLE');
+                }}
+              />
             </L.Row>
           )}
         </L.Col>

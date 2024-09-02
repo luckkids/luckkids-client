@@ -104,16 +104,18 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             <Font textAlign="left" type={'TITLE1_BOLD'} color={'WHITE'} mt={76}>
               {'두근두근,\n럭키즈가 탄생하고 있어요!'}
             </Font>
-            <LottieView
-              source={require(
-                `../../../assets/lotties/tutorial-character-change.json`,
-              )}
-              style={{
-                width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
-                height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
-              }}
-              autoPlay
-            />
+            <L.Row h={'100%'} flex-1 items="center">
+              <LottieView
+                source={require(
+                  `../../../assets/lotties/tutorial-character-change.json`,
+                )}
+                style={{
+                  width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                  height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                }}
+                autoPlay
+              />
+            </L.Row>
           </>
         );
       case 2:

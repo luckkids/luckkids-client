@@ -18,8 +18,8 @@ import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
 import { SocialType } from '@types-index';
 import { subscribeBranch } from '@utils';
-import { DEEP_LINK_BASE_URL } from '@utils';
 import { DataStackScreen } from './src/data/data.stack.screen';
+import FramePopup from '@frame/frame.popup';
 import useAuth from '@hooks/auth/useAuth';
 import withGlobalComponents from '@hooks/hoc/withGlobalComponents';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
@@ -29,7 +29,7 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
-import FramePopup from '@frame/frame.popup';
+import { FrameLayout } from '@frame/frame.layout';
 
 const codePushOptions = {
   checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
@@ -45,7 +45,6 @@ const RootNavigator = () => {
   const [initializing, setInitializing] = useState(true);
   const [isNavigationReady, setIsNavigatorReady] = useState(false);
 
-  const [deviceId, setDeviceId] = useState('');
   const { getToken } = useFirebaseMessage();
 
   const onStateChange = (state: NavigationState | undefined) => {
@@ -78,6 +77,8 @@ const RootNavigator = () => {
 
   const handleRememberMeLogin = async (rememberMe: RememberMeType) => {
     const pushKey = await getToken();
+    const deviceId = await DeviceInfo.getUniqueId();
+
     const res =
       rememberMe.snsType === 'NORMAL'
         ? await login({
@@ -118,6 +119,7 @@ const RootNavigator = () => {
   }, []);
 
   useEffect(() => {
+    console.log('__DEV__', __DEV__);
     // 코드 푸시 DEV 에서 테스트하는 경우 아니면 return 해두기
     if (__DEV__) return;
 
@@ -169,7 +171,10 @@ const RootNavigator = () => {
         screenName: 'StoryTelling',
         screenParams: undefined,
       });
-    } else if (rememberMe) {
+    }
+
+    // NOTE 자동 로그인 로직에 잠시 오류가 있어서 주석 처리
+    else if (rememberMe) {
       await handleRememberMeLogin({
         ...rememberMe,
       });
@@ -185,11 +190,6 @@ const RootNavigator = () => {
       setIsNavigatorReady(true);
     }, 3000);
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
-
-  useAsyncEffect(async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
-    setDeviceId(deviceId);
-  }, []);
 
   if (!isNavigationReady) {
     return (
@@ -213,30 +213,18 @@ const RootNavigator = () => {
       }}
       onStateChange={onStateChange}
     >
-      {initializing ? ( // 초기화 중일 때 LottieView를 보여줌
-        <View style={styles.lottieContainer}>
-          <LottieView
-            source={require('assets/lotties/levelup-motion-2.json')}
-            autoPlay
-            loop
-            style={styles.lottie}
-          />
-        </View>
-      ) : (
-        // 초기화가 완료되면 Stack.Navigator를 보여줌
-        <Stack.Navigator initialRouteName={initialRoute.screenName}>
-          {DataStackScreen.map((item) => {
-            return (
-              <Stack.Screen
-                name={item.name}
-                component={item.component}
-                options={{ ...item.options, headerShown: false }}
-                key={item.name}
-              />
-            );
-          })}
-        </Stack.Navigator>
-      )}
+      <Stack.Navigator initialRouteName={initialRoute.screenName}>
+        {DataStackScreen.map((item) => {
+          return (
+            <Stack.Screen
+              name={item.name}
+              component={item.component}
+              options={{ ...item.options, headerShown: false }}
+              key={item.name}
+            />
+          );
+        })}
+      </Stack.Navigator>
       <FramePopup />
     </NavigationContainer>
   );
@@ -268,7 +256,7 @@ const styles = StyleSheet.create({
   lottie: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#fff', // BootSplash 배경색과 동일하게 설정
+    backgroundColor: Colors.LUCK_GREEN, // BootSplash 배경색과 동일하게 설정
   },
 });
 

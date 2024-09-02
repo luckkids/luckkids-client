@@ -81,7 +81,9 @@ export const PageMissionRepair = () => {
       ...initialSetting,
       missions: [],
     });
-    return navigation.navigate('TutorialSettingNoti');
+    return navigation.navigate(
+      type === 'INITIAL_SETTING' ? 'TutorialSettingNoti' : 'Mission',
+    );
   };
 
   const categoryButton = useCallback((key: string) => {
