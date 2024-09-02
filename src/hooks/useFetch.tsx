@@ -64,11 +64,12 @@ export const useFetch = (args: {
 
       loadData()
         .then((result) => {
-          // console.log('result ====>', result);
+          console.log('result ====>', result);
           if (result.statusCode === STATUS.UNAUTHORIZED) {
             //1. 토큰 만료시 리프레시 토큰으로 엑세스 토큰 재발행
             return setExpiredAccessToken();
           }
+
           if (result.data.refreshToken) {
             //2. 토큰이 있으면 recoil.token.ts에 저장(글로벌로 참조 가능하도록)
             setToken({

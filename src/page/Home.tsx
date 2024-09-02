@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   GestureResponderEvent,
@@ -7,7 +7,9 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
@@ -17,13 +19,13 @@ import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useSetRecoilState } from 'recoil';
-import { RecoilPopupState } from '@recoil/recoil.popup';
+import useAppStateEffect from '@hooks/useAppStateEffect';
 import { useFetch } from '@hooks/useFetch';
-import { useRoute } from '@react-navigation/native';
+import { RecoilPopupState } from '@recoil/recoil.popup';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -37,15 +39,8 @@ export const Home: React.FC = () => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();
   const { params } = useNavigationRoute('Home');
-  const route = useRoute();
   const friendCode = params?.friendCode || '';
 
-  //undefined
-  console.log('home', useNavigationRoute('Home'));
-  //undefined
-  console.log('route', route);
-  //undefined
-  console.log('friendCode', friendCode);
   const [sendFriend, setSendFriend] = useState<string>('');
   const setStatePopup = useSetRecoilState(RecoilPopupState);
 
@@ -56,22 +51,15 @@ export const Home: React.FC = () => {
       code: friendCode,
     },
     onSuccessCallback: () => {
-      return setStatePopup({
-        isShow: true,
+      AlertPopup.show({
         title: `${sendFriend}님이 \n가든 목록에 추가되었어요!`,
-        onCancel: {
-          label: '닫기',
-          action: () => setStatePopup({ isShow: false }),
-        },
-        onClick: {
-          label: '가든으로 가기',
-          isActive: true,
-          action: () => {
-            setStatePopup({ isShow: false });
-            navigationService.push('Garden');
-          },
-        },
+        onPressYes: () => navigationService.push('Garden'),
+        yesText: '가든으로 가기',
+        noText: '닫기',
       });
+    },
+    onFailCallback: (e) => {
+      console.error('error', e);
     },
   });
 
@@ -79,61 +67,33 @@ export const Home: React.FC = () => {
     method: 'GET',
     url: `/friendcode/${friendCode}/nickname`,
     onSuccessCallback: (rtn) => {
-      setSendFriend(rtn.nickname);
+      setSendFriend(rtn.nickName);
       if (rtn.status === 'ME') {
-        return setStatePopup({
-          isShow: true,
+        AlertPopup.show({
           title:
             '내가 보낸 초대에요. \n친구가 초대를 수락할 때까지 기다려주세요!',
-          onCancel: {
-            label: '확인',
-            isActive: true,
-            action: () => setStatePopup({ isShow: false }),
-          },
+          onPressYes: () => setStatePopup({ isShow: false }),
         });
       } else if (rtn.status === 'ALREADY') {
-        return setStatePopup({
-          isShow: true,
-          title: `이미 ${rtn.nickname}님과 친구예요.`,
-          onCancel: {
-            label: '닫기',
-            action: () => setStatePopup({ isShow: false }),
+        AlertPopup.show({
+          title: `이미 ${rtn.nickName}님과 친구예요.`,
+          onPressYes: () => {
+            navigationService.push('Garden');
           },
-          onClick: {
-            label: '가든으로 가기',
-            isActive: true,
-            action: () => {
-              setStatePopup({ isShow: false });
-              navigationService.push('Garden');
-            },
-          },
+          yesText: '가든으로 가기',
+          noText: '닫기',
         });
       } else {
-        return setStatePopup({
-          isShow: true,
-          title: `${rtn.nickname}님이 \n친구 초대를 보냈어요!`,
-          txt: '친구 초대에 응하면 가든 목록에 추가됩니다.',
-          onCancel: {
-            label: '거절하기',
-            action: () => setStatePopup({ isShow: false }),
-          },
-          onClick: {
-            label: '친구하기',
-            isActive: true,
-            action: () => {
-              setStatePopup({ isShow: false });
-              addFriend();
-            },
-          },
+        AlertPopup.show({
+          title: `${rtn.nickName}님이 \n친구 초대를 보냈어요!`,
+          body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
+          onPressYes: addFriend,
+          yesText: '친구하기',
+          noText: '거절하기',
         });
       }
     },
   });
-  useEffect(() => {
-    if (friendCode !== undefined && friendCode !== '') {
-      onCheckFriend();
-    }
-  }, [friendCode]);
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
     navigationService.push('HomeProfile');
@@ -162,6 +122,17 @@ export const Home: React.FC = () => {
   const { luckkidsAchievementRate = 0, userCharacterSummaryResponse } =
     homeInfo || {};
   const { inProgressCharacter } = userCharacterSummaryResponse || {};
+
+  useAppStateEffect(
+    (state) => {
+      if (state === 'active') {
+        if (friendCode) {
+          onCheckFriend();
+        }
+      }
+    },
+    [friendCode],
+  );
 
   return (
     <>

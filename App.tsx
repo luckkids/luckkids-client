@@ -29,10 +29,9 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
-import { FrameLayout } from '@frame/frame.layout';
 
 const codePushOptions = {
-  checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME,
+  checkFrequency: CodePush.CheckFrequency.ON_APP_START,
   installMode: CodePush.InstallMode.IMMEDIATE,
   mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
 };
@@ -174,11 +173,12 @@ const RootNavigator = () => {
     }
 
     // NOTE 자동 로그인 로직에 잠시 오류가 있어서 주석 처리
-    else if (rememberMe) {
-      await handleRememberMeLogin({
-        ...rememberMe,
-      });
-    } else {
+    // else if (rememberMe) {
+    //   await handleRememberMeLogin({
+    //     ...rememberMe,
+    //   });
+    // }
+    else {
       setInitialRoute({
         screenName: 'Login',
         screenParams: undefined,

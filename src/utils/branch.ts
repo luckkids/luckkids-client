@@ -87,14 +87,9 @@ export const subscribeBranch = (
 
     if (friendCode?.params && navigationRef.isReady()) {
       console.log('Friend Code:', friendCode.params.code);
-      navigationRef.reset({
-        index: 0,
-        routes: [
-          {
-            name: friendCode?.screenName,
-            params: { friendCode: friendCode.params.code },
-          },
-        ],
+
+      navigationRef.navigate('Home', {
+        friendCode: friendCode.params.code,
       });
     } else {
       console.log('No valid friend code found in Branch params');
