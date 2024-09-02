@@ -82,6 +82,7 @@
 		903F27485784B1C204B995B8 /* Pods-LuckKids.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.release.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.release.xcconfig"; sourceTree = "<group>"; };
 		AC7DB032DCF001483006AA52 /* Pods-LuckKids.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.debug.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.debug.xcconfig"; sourceTree = "<group>"; };
 		C090505A2B3748329B6C9841 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.otf"; path = "../assets/fonts/Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		C5A75BF2D4A2E53767A30200 /* Pods-LuckKids-LuckKidsTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids-LuckKidsTests.staging.xcconfig"; path = "Target Support Files/Pods-LuckKids-LuckKidsTests/Pods-LuckKids-LuckKidsTests.staging.xcconfig"; sourceTree = "<group>"; };
 		D26EB5F29FD14B05A0F09AE1 /* Pretendard-Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Black.otf"; path = "../assets/fonts/Pretendard-Black.otf"; sourceTree = "<group>"; };
 		D493FE982BD74E3F87C733FC /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-SemiBold.otf"; path = "../assets/fonts/Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		E6931079C59F64FB5CDF73E2 /* Pods-LuckKids-LuckKidsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids-LuckKidsTests.release.xcconfig"; path = "Target Support Files/Pods-LuckKids-LuckKidsTests/Pods-LuckKids-LuckKidsTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -685,6 +686,7 @@
 					"-ld_classic",
 					"-Wl",
 					"-ld_classic",
+					"-Wl -ld_classic ",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -701,7 +703,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				INFOPLIST_FILE = LuckKids/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
@@ -761,7 +763,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LuckKids/Info.plist;
@@ -796,7 +798,7 @@
 				CODE_SIGN_ENTITLEMENTS = LuckKids/LuckKids.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 29;
+				CURRENT_PROJECT_VERSION = 32;
 				DEVELOPMENT_TEAM = PLZY9FTCGS;
 				INFOPLIST_FILE = LuckKids/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = luckkids;
