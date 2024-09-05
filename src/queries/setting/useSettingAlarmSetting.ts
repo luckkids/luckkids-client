@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import DeviceInfo from 'react-native-device-info';
+import { useRecoilValue } from 'recoil';
 import getSettingQueryKey from './getSettingQueryKey';
 import { GetAlertSettingResponse, settingApis } from '@apis/setting';
+import { RecoilDevice } from '@recoil/recoil.device';
 
 export const useSettingAlarmSetting = () => {
-  return useQuery<GetAlertSettingResponse>(
+  const { deviceId } = useRecoilValue(RecoilDevice);
+
+  return useQuery<GetAlertSettingResponse | null>(
     getSettingQueryKey('SETTING_NOTICES'),
     async () => {
-      const deviceId = await DeviceInfo.getUniqueId();
+      if (!deviceId) return null;
       const res = await settingApis.getAlertSetting(deviceId);
       return res.data;
     },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, ActivityIndicator, Linking } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components/native';
 import { SvgIcon, Font, ButtonText, Colors } from '@design-system';
 import { useInfiniteHomeNotification } from '@queries';
@@ -10,12 +10,13 @@ import { FrameLayout } from '@frame/frame.layout';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import { RecoilDevice } from '@recoil/recoil.device';
 import { NotificationItem } from '@types-common/noti.types';
 
 export const PageHomeAlarm: React.FC = () => {
-  const [deviceId, setDeviceId] = React.useState<string>('');
   const { hasPermission } = useFirebaseMessage();
   const [showPushSetting, setShowPushSetting] = useState(false);
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteHomeNotification(deviceId);
@@ -23,10 +24,6 @@ export const PageHomeAlarm: React.FC = () => {
   const handlePressAllowAlarm = () => {
     Linking.openSettings();
   };
-
-  useAsyncEffect(async () => {
-    setDeviceId(await DeviceInfo.getUniqueId());
-  }, []);
 
   const renderItem = ({ item }: { item: NotificationItem }) => (
     <HomeAlarmItem

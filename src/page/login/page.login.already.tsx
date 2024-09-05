@@ -11,6 +11,8 @@ import { SettingStatus, SocialType } from '@types-index';
 import useAuth from '@hooks/auth/useAuth';
 import DeviceInfo from 'react-native-device-info';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useRecoilValue } from 'recoil';
+import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLoginAlready: React.FC = () => {
   const {
@@ -22,6 +24,7 @@ export const PageLoginAlready: React.FC = () => {
   const { handleGoogleLogin } = useGoogleLogin();
   const { handleKakaoLogin } = useKakaoLogin();
   const navigation = useNavigationService();
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const getOauthHandler = async (type: SocialType) => {
     switch (type) {
@@ -44,7 +47,7 @@ export const PageLoginAlready: React.FC = () => {
   };
 
   const handleOauthLogin = async (type: SocialType) => {
-    const deviceId = await DeviceInfo.getUniqueId();
+    if (!deviceId) return;
     const token = await getOauthHandler?.(type);
     if (token) {
       try {

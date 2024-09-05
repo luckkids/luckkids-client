@@ -7,12 +7,10 @@ import {
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LottieView from 'lottie-react-native';
-import BootSplash from 'react-native-bootsplash';
 import CodePush from 'react-native-code-push';
-import DeviceInfo from 'react-native-device-info';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useRecoilValue } from 'recoil';
 import { ThemeProvider } from 'styled-components/native';
 import { Colors } from '@design-system';
 import { QueryClientProvider } from '@queries';
@@ -29,6 +27,7 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
+import { RecoilDevice } from '@recoil/recoil.device';
 
 const codePushOptions = {
   checkFrequency: CodePush.CheckFrequency.ON_APP_START,
@@ -42,7 +41,7 @@ const RootNavigator = () => {
   const navigationRef = useNavigationContainerRef<AppScreensParamList>();
   const screenName = useRef<string | null>(null);
   const [initializing, setInitializing] = useState(true);
-  const [isNavigationReady, setIsNavigatorReady] = useState(false);
+  const [isNavigationReady, setIsNavigationReady] = useState(false);
 
   const { getToken } = useFirebaseMessage();
 
@@ -73,11 +72,11 @@ const RootNavigator = () => {
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
 
   const { login, oauthLogin } = useAuth();
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const handleRememberMeLogin = async (rememberMe: RememberMeType) => {
     const pushKey = await getToken();
-    const deviceId = await DeviceInfo.getUniqueId();
-
+    if (!deviceId) return;
     const res =
       rememberMe.snsType === 'NORMAL'
         ? await login({
@@ -141,7 +140,6 @@ const RootNavigator = () => {
   }, []);
 
   useAsyncEffect(async () => {
-    await BootSplash.hide({ fade: false });
     try {
       if (!initializing) {
         // push 관련 initializing
@@ -187,8 +185,8 @@ const RootNavigator = () => {
 
     // 로딩 화면 3초동안 보여줌
     setTimeout(() => {
-      setIsNavigatorReady(true);
-    }, 3000);
+      setIsNavigationReady(true);
+    }, 2000);
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   if (!isNavigationReady) {
@@ -256,7 +254,7 @@ const styles = StyleSheet.create({
   lottie: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.LUCK_GREEN, // BootSplash 배경색과 동일하게 설정
+    backgroundColor: Colors.LUCK_GREEN,
   },
 });
 

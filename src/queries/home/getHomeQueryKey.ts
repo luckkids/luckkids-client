@@ -9,7 +9,7 @@ export type HomeQueryList = {
     missionDate?: string;
   };
   HOME_NOTIFICATION: {
-    deviceId: string;
+    deviceId: string | null;
   };
 };
 

@@ -31,3 +31,7 @@ export interface IPopupState extends IPopup {
 }
 
 export interface IInitialSetting extends InitialSetting {}
+
+export interface IDevice {
+  deviceId: string | null;
+}
