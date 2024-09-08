@@ -22,7 +22,6 @@ import { PageLoginJoinEmailConfirm } from '@page/login/page.login.join.email.con
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
 import { PageMissionRepair } from '@page/mission/page.mission.repair';
-import { PageMissionRepairPublic } from '@page/mission/page.mission.repair.public';
 import { My } from '@page/My';
 import { PageSetting } from '@page/setting/page.setting';
 import { PageSettingAccount } from '@page/setting/page.setting.account';
@@ -139,10 +138,6 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'MissionRepair',
     component: PageMissionRepair,
-  },
-  {
-    name: 'MissionRepairPublic',
-    component: PageMissionRepairPublic,
   },
   {
     name: 'MissionAdd',
