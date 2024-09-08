@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { Colors, Font, IconNames, L, SvgIcon } from '@design-system';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionListData } from '@types-common/page.types';
+import { formatMissionTime } from '@utils';
 
 const S = {
   item: styled.View({
@@ -140,7 +141,7 @@ export const MissionItem: React.FC<IProps> = (props) => {
           }}
         >
           <Font type={'SUBHEADLINE_REGULAR'}>
-            {isChecked ? rtnTime : '알림 끔'}
+            {isChecked ? formatMissionTime(rtnTime) : '알림 끔'}
           </Font>
         </TouchableWithoutFeedback>
       </L.Row>
