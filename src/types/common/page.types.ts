@@ -52,6 +52,9 @@ export type AppScreensParamList = {
   MissionAdd: undefined;
   GardenAlbum: undefined;
   GardenRank: undefined;
+  GardenFriendProfile: {
+    friendId: number;
+  };
   Setting: undefined;
   SettingProfile: undefined;
   SettingComment: undefined;

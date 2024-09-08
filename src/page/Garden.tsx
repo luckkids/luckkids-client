@@ -98,6 +98,18 @@ export const Garden: React.FC = () => {
     }
     return temArray;
   }, [isList, data]);
+
+  const handlePressFriendProfile = (friendItem: IGardenItem) => {
+    setShow({ isShow: true, ...friendItem });
+    const { friendId } = friendItem;
+
+    if (!friendId) return;
+
+    return navigation.navigate('GardenFriendProfile', {
+      friendId,
+    });
+  };
+
   return (
     <FrameLayout NavBar={<GardenNavbar />}>
       <L.Row pt={20} pb={24} ph={25} justify={'space-between'}>
@@ -133,7 +145,7 @@ export const Garden: React.FC = () => {
               return (
                 <GardenHorizontalItem
                   {...item}
-                  onPress={() => setShow({ isShow: true, ...item })}
+                  onPress={() => handlePressFriendProfile(item)}
                   key={i}
                 />
               );
@@ -141,7 +153,7 @@ export const Garden: React.FC = () => {
               return (
                 <GardenItem
                   {...item}
-                  onPress={() => setShow({ isShow: true, ...item })}
+                  onPress={() => handlePressFriendProfile(item)}
                   key={i}
                 />
               );
