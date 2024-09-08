@@ -37,8 +37,16 @@ const setInitialSetting = async (initialSetting: InitialSetting) => {
   return res;
 };
 
+export type GetUserResponse = GetMeResponse;
+
+const getUserInfo = async (id: number) => {
+  const res = await API.get<GetUserResponse>(`/user/${id}`);
+  return res;
+};
+
 export const userApis = {
   getInitialCharacter,
   getMe,
   setInitialSetting,
+  getUserInfo,
 };

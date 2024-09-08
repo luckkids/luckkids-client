@@ -48,10 +48,12 @@ export type AppScreensParamList = {
   MissionRepair: {
     type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
   };
-  MissionRepairPublic: undefined;
   MissionAdd: undefined;
   GardenAlbum: undefined;
   GardenRank: undefined;
+  GardenFriendProfile: {
+    friendId: number;
+  };
   Setting: undefined;
   SettingProfile: undefined;
   SettingComment: undefined;

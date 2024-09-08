@@ -186,15 +186,15 @@ export const PageMissionAdd: React.FC = () => {
           </L.Col>
         </L.Col>
         <L.Col p={DEFAULT_MARGIN}>
-          <L.Col
-            p={DEFAULT_MARGIN}
-            bg={'BG_SECONDARY'}
-            style={{ borderRadius: 12 }}
-          >
+          <L.Col p={DEFAULT_MARGIN} bg={'BG_SECONDARY'} rounded={12}>
             <Font type={'BODY_REGULAR'} color={'WHITE'}>
               습관 카테고리
             </Font>
-            <L.Row g={11} style={{ flexWrap: 'wrap' }}>
+            <L.Row
+              style={{
+                flexWrap: 'wrap',
+              }}
+            >
               {category.map((item, i) => {
                 return (
                   <MissionAddCategory

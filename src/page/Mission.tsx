@@ -4,6 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 import { MissionItem } from '@components/page/mission/mission.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -103,21 +104,40 @@ export const Mission: React.FC = () => {
           })}
         </ScrollView>
       </FrameLayout>
-      <FloatingButton
-        paddingBottom={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 38}
-        onPress={() => navigation.navigate('MissionRepair', {})}
-        containerStyle={{
-          width: 36,
-          height: 36,
-          paddingVertical: 0,
-          paddingHorizontal: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Colors.WHITE,
-        }}
+
+      <L.Absolute
+        b={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 20}
+        w="100%"
+        justify={'center'}
       >
-        <SvgIcon name={'iconPlusDark'} size={'16.6'} />
-      </FloatingButton>
+        <L.Col g={50}>
+          {data.length === 0 && (
+            <L.Row w="100%" justify="center">
+              <Tooltip
+                text={'습관을 추가해보세요!'}
+                bgColor={'LUCK_GREEN'}
+                opacity={1}
+                textColor="BLACK"
+              />
+            </L.Row>
+          )}
+          <FloatingButton
+            onPress={() => navigation.navigate('MissionRepair', {})}
+            containerStyle={{
+              width: 36,
+              height: 36,
+              paddingVertical: 0,
+              paddingHorizontal: 0,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: Colors.WHITE,
+            }}
+            paddingBottom={0}
+          >
+            <SvgIcon name={'iconPlusDark'} size={'16.6'} />
+          </FloatingButton>
+        </L.Col>
+      </L.Absolute>
     </>
   );
 };

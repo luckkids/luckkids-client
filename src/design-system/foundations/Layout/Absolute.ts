@@ -9,16 +9,18 @@ type AbsoluteStyle = {
   l?: number | string;
   r?: number | string;
   opacity?: number;
+  z?: number;
 };
 
 export const Absolute = styled(Layout)<AbsoluteStyle>`
   position: absolute;
-  ${({ b, t, l, r, flexDirection, opacity }) => css`
+  ${({ b, t, l, r, flexDirection, opacity, z }) => css`
     ${toStyle('flex-direction', flexDirection || 'row')}
     ${toStyle('bottom', b)}
     ${toStyle('top', t)}
     ${toStyle('left', l)}
     ${toStyle('right', r)}
     ${toStyle('opacity', opacity, false)}
+    ${toStyle('z-index', z, false)}
   `}
 `;

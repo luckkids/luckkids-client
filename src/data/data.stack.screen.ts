@@ -6,6 +6,7 @@ import PageUpdateScreen from '@page/common/page.common.update';
 import { PageWebView } from '@page/common/page.common.webview';
 import { Garden } from '@page/Garden';
 import { PageGardenAlbum } from '@page/garden/page.garden.album';
+import { PageGardenFriendProfile } from '@page/garden/page.garden.friend.profile';
 import { PageGardenRank } from '@page/garden/page.garden.rank';
 import { PageHomeAlarm } from '@page/home/page.home.alarm';
 import { PageHomeCalendar } from '@page/home/page.home.calendar';
@@ -21,7 +22,6 @@ import { PageLoginJoinEmailConfirm } from '@page/login/page.login.join.email.con
 import { Mission } from '@page/Mission';
 import { PageMissionAdd } from '@page/mission/page.mission.add';
 import { PageMissionRepair } from '@page/mission/page.mission.repair';
-import { PageMissionRepairPublic } from '@page/mission/page.mission.repair.public';
 import { My } from '@page/My';
 import { PageSetting } from '@page/setting/page.setting';
 import { PageSettingAccount } from '@page/setting/page.setting.account';
@@ -140,10 +140,6 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageMissionRepair,
   },
   {
-    name: 'MissionRepairPublic',
-    component: PageMissionRepairPublic,
-  },
-  {
     name: 'MissionAdd',
     component: PageMissionAdd,
   },
@@ -158,6 +154,10 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'GardenRank',
     component: PageGardenRank,
+  },
+  {
+    name: 'GardenFriendProfile',
+    component: PageGardenFriendProfile,
   },
   {
     name: 'Setting',
@@ -195,6 +195,7 @@ export const DataStackScreen: Array<IStackScreen> = [
     name: 'WebView',
     component: PageWebView,
   },
+
   {
     name: 'UpdateScreen',
     component: PageUpdateScreen,

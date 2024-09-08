@@ -72,9 +72,6 @@ export const PageMissionRepair = () => {
       });
     },
   });
-  useEffect(() => {
-    if (isFocus) onFetch();
-  }, [isSuccess, isFocus]);
 
   const handleConfirm = () => {
     setInitialSetting({
@@ -124,6 +121,10 @@ export const PageMissionRepair = () => {
           icon: 'iconHomeCare',
         };
     }
+  }, []);
+
+  useEffect(() => {
+    onFetch();
   }, []);
 
   return (
@@ -251,23 +252,6 @@ export const PageMissionRepair = () => {
               </React.Fragment>
             );
           })}
-          <Link url={'https://forms.gle/W3sx8v5TJeniYoje6'}>
-            <L.Col ph={DEFAULT_MARGIN} mt={40}>
-              <L.Col p={25} bg={'LUCK_GREEN'} rounded={15} w={'100%'}>
-                <Font type={'BODY_SEMIBOLD'} color={'BLACK'}>
-                  습관을 추가하고 싶어요!
-                </Font>
-                <Font type={'BODY_REGULAR'} color={'GREY2'} mt={12}>
-                  추가하고 싶은 ‘행운을 키우는 습관’이 있다면 알려주세요!
-                  럭키즈가 감사히 살펴 보고 일부 습관을 공식 습관으로
-                  추가할게요.
-                </Font>
-                <S.IconArrowWrap>
-                  <SvgIcon name={'arrow_right'} size={12} />
-                </S.IconArrowWrap>
-              </L.Col>
-            </L.Col>
-          </Link>
         </ScrollView>
         {type === 'INITIAL_SETTING' && (
           <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>

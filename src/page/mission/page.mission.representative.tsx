@@ -160,6 +160,7 @@ export const PageMissionRepair = () => {
                       isDisable={false}
                       isCheck={value.alertStatus === 'CHECKED'}
                       key={i}
+                      isDisable={false}
                     />
                   );
                 })}

@@ -7,7 +7,7 @@ import { getCompletedCharacterCount } from '@utils';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
 type HomeNavbarProps = {
-  onPressLuckkids: () => void;
+  onPressLuckkids?: () => void;
 };
 
 const HomeNavbar: React.FC<HomeNavbarProps> = ({ onPressLuckkids }) => {
