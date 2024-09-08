@@ -8,7 +8,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
-import { MisstionRepairItem } from '@components/page/mission/misstion.repair.item';
+import { MissionRepairItem } from '@components/page/mission/misstion.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -155,8 +155,9 @@ export const PageMissionRepair = () => {
                 </L.Row>
                 {dataDicArray[item]?.map((value, i) => {
                   return (
-                    <MisstionRepairItem
+                    <MissionRepairItem
                       {...value}
+                      isDisable={false}
                       isCheck={value.alertStatus === 'CHECKED'}
                       key={i}
                     />
