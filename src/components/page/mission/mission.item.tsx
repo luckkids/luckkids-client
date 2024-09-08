@@ -16,6 +16,7 @@ const S = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   }),
   iconRound: styled.View({
     position: 'relative',
@@ -117,12 +118,14 @@ export const MissionItem: React.FC<IProps> = (props) => {
             <S.iconType>
               <SvgIcon name={iconType} size={24} />
             </S.iconType>
-            <Font
-              type={'BODY_SEMIBOLD'}
-              color={missionState === 'SUCCEED' ? 'GREY1' : 'WHITE'}
-            >
-              {props.missionDescription}
-            </Font>
+            <L.Row mr={12} flex-1>
+              <Font
+                type={'BODY_SEMIBOLD'}
+                color={missionState === 'SUCCEED' ? 'GREY1' : 'WHITE'}
+              >
+                {props.missionDescription}
+              </Font>
+            </L.Row>
           </S.Title>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
