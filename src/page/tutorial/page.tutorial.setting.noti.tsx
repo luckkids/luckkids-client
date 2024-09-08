@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import DeviceInfo from 'react-native-device-info';
 import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
@@ -10,7 +9,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
-import useAsyncEffect from '@hooks/useAsyncEffect';
+import { RecoilDevice } from '@recoil/recoil.device';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 
 const bgImage = require('assets/images/tutorial-setting-bg.png');
@@ -19,11 +18,12 @@ const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
 export const PageTutorialSettingNoti: React.FC = () => {
   const navigation = useNavigationService();
   const initialSetting = useRecoilValue(RecoilInitialSetting);
-  const [deviceId, setDeviceId] = useState('');
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
   const handleTurnOnNoti = async () => {
+    if (!deviceId) return;
     // 이미 알림이 허용되어 있으면
     if (await hasPermission()) {
       AlertPopup.show({
@@ -62,6 +62,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
   };
 
   const handleKeepGoing = () => {
+    if (!deviceId) return;
     // 상태 업데이트
     userApis
       .setInitialSetting({
@@ -76,11 +77,6 @@ export const PageTutorialSettingNoti: React.FC = () => {
         navigation.navigate('Home', {});
       });
   };
-
-  useAsyncEffect(async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
-    setDeviceId(deviceId);
-  }, []);
 
   return (
     <FrameLayout

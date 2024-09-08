@@ -1,6 +1,5 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
-#import "RNBootSplash.h"
 #import <React/RCTBundleURLProvider.h>
 #import <RNKakaoLogins.h>
 #import <GoogleSignIn/GoogleSignIn.h>
@@ -53,8 +52,6 @@
   UIView *rootView = [super createRootViewWithBridge:bridge
                                           moduleName:moduleName
                                            initProps:initProps];
-
-  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
 
   return rootView;
 }

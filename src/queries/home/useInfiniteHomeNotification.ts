@@ -5,7 +5,7 @@ import { GetNotificationListResponse, getNotificationList } from '@apis/home';
 
 const PAGE_SIZE = 15;
 
-export const useInfiniteHomeNotification = (deviceId: string) => {
+export const useInfiniteHomeNotification = (deviceId: string | null) => {
   return useInfiniteQuery<
     GetNotificationListResponse,
     Error,
@@ -23,6 +23,17 @@ export const useInfiniteHomeNotification = (deviceId: string) => {
         offset: number;
         limit: number;
       }) => {
+        if (!deviceId) {
+          return {
+            content: [],
+            pageInfo: {
+              currentPage: 0,
+              totalPage: 0,
+              totalElement: 0,
+            },
+            isEnd: true,
+          };
+        }
         const res = await getNotificationList({
           deviceId,
           page: offset + 1,

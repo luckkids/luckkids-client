@@ -1,14 +1,14 @@
 import React, { createElement, useEffect, useRef, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilValue } from 'recoil';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import { SettingStatus } from '@types-index';
-import { LoginResponse, authApis } from '@apis/auth';
+import { LoginResponse } from '@apis/auth';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
@@ -18,16 +18,16 @@ import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
+import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLoginId: React.FC = () => {
-  const [deviceId, setDeviceId] = useState('');
   const { bottom } = useSafeAreaInsets();
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const emailInput$ = useRef(new Subject<string>()).current;
 
   const navigation = useNavigationService();
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
@@ -119,6 +119,7 @@ export const PageLoginId: React.FC = () => {
   };
 
   const handleLogin = async () => {
+    if (!deviceId) return;
     const res = await login({
       ...loginInfo,
       deviceId: deviceId,
@@ -159,11 +160,6 @@ export const PageLoginId: React.FC = () => {
       });
     },
   });
-
-  useAsyncEffect(async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
-    setDeviceId(deviceId);
-  }, []);
 
   const handleEmailChange = (text: string) => {
     setLoginInfo((prev) => ({ ...prev, email: text }));
