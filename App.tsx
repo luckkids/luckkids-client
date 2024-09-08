@@ -186,6 +186,11 @@ const RootNavigator = () => {
     setTimeout(() => {
       setIsNavigationReady(true);
     }, 2000);
+
+    // setInitialRoute({
+    //   screenName: 'TutorialGuide',
+    //   screenParams: undefined,
+    // });
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   if (!isNavigationReady) {

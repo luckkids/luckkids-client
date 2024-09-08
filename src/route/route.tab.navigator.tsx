@@ -3,8 +3,8 @@ import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from 'styled-components/native';
 import { CONSTANTS, Colors, FontSettings, SvgIcon } from '@design-system';
+import useHapticFeedback from '@hooks/useHapticFeedback';
 import { Garden } from '@page/Garden';
 import { Home } from '@page/Home';
 import { Mission } from '@page/Mission';
@@ -15,6 +15,8 @@ const Stack = createNativeStackNavigator();
 
 export const BottomTabNavigator = () => {
   const { top, bottom } = useSafeAreaInsets();
+
+  const { haptic } = useHapticFeedback();
 
   return (
     <Tab.Navigator
@@ -55,6 +57,9 @@ export const BottomTabNavigator = () => {
             <SvgIcon name={focused ? 'iconHomeOn' : 'iconHomeOff'} size={20} />
           ),
         }}
+        listeners={{
+          tabPress: haptic,
+        }}
       />
       <Tab.Screen
         name={'습관'}
@@ -66,6 +71,9 @@ export const BottomTabNavigator = () => {
               size={20}
             />
           ),
+        }}
+        listeners={{
+          tabPress: haptic,
         }}
       />
       <Tab.Screen
@@ -79,6 +87,9 @@ export const BottomTabNavigator = () => {
             />
           ),
         }}
+        listeners={{
+          tabPress: haptic,
+        }}
       />
       <Tab.Screen
         name={'설정'}
@@ -90,6 +101,9 @@ export const BottomTabNavigator = () => {
               size={20}
             />
           ),
+        }}
+        listeners={{
+          tabPress: haptic,
         }}
       />
     </Tab.Navigator>
