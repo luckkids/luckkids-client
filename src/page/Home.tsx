@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
@@ -26,6 +26,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAppStateEffect from '@hooks/useAppStateEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -40,6 +41,7 @@ export const Home: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
   const { params } = useNavigationRoute('Home');
   const friendCode = params?.friendCode || '';
+  const isFocused = useIsFocused();
 
   const [sendFriend, setSendFriend] = useState<string>('');
   const setStatePopup = useSetRecoilState(RecoilPopupState);
@@ -118,7 +120,7 @@ export const Home: React.FC = () => {
     }, 500);
   }, []);
 
-  const { data: homeInfo } = useHomeInfo();
+  const { data: homeInfo, refetch: refetchHomeInfo } = useHomeInfo();
   const { luckkidsAchievementRate = 0, userCharacterSummaryResponse } =
     homeInfo || {};
   const { inProgressCharacter } = userCharacterSummaryResponse || {};
@@ -133,6 +135,12 @@ export const Home: React.FC = () => {
     },
     [friendCode],
   );
+
+  // 홈 화면 focus 될때마다 홈 정보 가져오기
+  useAsyncEffect(async () => {
+    if (!isFocused) return;
+    await refetchHomeInfo();
+  }, [isFocused]);
 
   return (
     <>
