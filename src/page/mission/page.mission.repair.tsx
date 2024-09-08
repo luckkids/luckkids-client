@@ -72,9 +72,6 @@ export const PageMissionRepair = () => {
       });
     },
   });
-  useEffect(() => {
-    if (isFocus) onFetch();
-  }, [isSuccess, isFocus]);
 
   const handleConfirm = () => {
     setInitialSetting({
@@ -124,6 +121,10 @@ export const PageMissionRepair = () => {
           icon: 'iconHomeCare',
         };
     }
+  }, []);
+
+  useEffect(() => {
+    onFetch();
   }, []);
 
   return (
