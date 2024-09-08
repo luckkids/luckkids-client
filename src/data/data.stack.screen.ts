@@ -6,6 +6,7 @@ import PageUpdateScreen from '@page/common/page.common.update';
 import { PageWebView } from '@page/common/page.common.webview';
 import { Garden } from '@page/Garden';
 import { PageGardenAlbum } from '@page/garden/page.garden.album';
+import { PageGardenFriendProfile } from '@page/garden/page.garden.friend.profile';
 import { PageGardenRank } from '@page/garden/page.garden.rank';
 import { PageHomeAlarm } from '@page/home/page.home.alarm';
 import { PageHomeCalendar } from '@page/home/page.home.calendar';
@@ -160,6 +161,10 @@ export const DataStackScreen: Array<IStackScreen> = [
     component: PageGardenRank,
   },
   {
+    name: 'GardenFriendProfile',
+    component: PageGardenFriendProfile,
+  },
+  {
     name: 'Setting',
     component: PageSetting,
   },
@@ -195,6 +200,7 @@ export const DataStackScreen: Array<IStackScreen> = [
     name: 'WebView',
     component: PageWebView,
   },
+
   {
     name: 'UpdateScreen',
     component: PageUpdateScreen,
