@@ -1,7 +1,6 @@
 import React, { createElement, useEffect, useRef, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue } from 'recoil';
 import { Subject } from 'rxjs';

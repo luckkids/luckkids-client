@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
@@ -11,7 +12,6 @@ import { SettingStatus, SocialType } from '@types-index';
 import useAuth from '@hooks/auth/useAuth';
 import DeviceInfo from 'react-native-device-info';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useRecoilValue } from 'recoil';
 import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLoginAlready: React.FC = () => {
@@ -33,6 +33,7 @@ export const PageLoginAlready: React.FC = () => {
       case 'GOOGLE':
         return await handleGoogleLogin();
       case 'KAKAO':
+        return await handleKakaoLogin();
       default:
         return await handleKakaoLogin();
     }
@@ -152,6 +153,33 @@ export const PageLoginAlready: React.FC = () => {
                 text={'로그인'}
                 onPress={() => {
                   handleOauthLogin('GOOGLE');
+                }}
+              />
+            </L.Row>
+          )}
+          {type === 'NORMAL' && (
+            <L.Row w="100%" items="center" justify="space-between">
+              <L.Row items="center">
+                <L.Row
+                  bg="WHITE"
+                  w={ICON_SIZE}
+                  h={ICON_SIZE}
+                  rounded={ICON_SIZE / 2}
+                  justify="center"
+                  items="center"
+                  mr={14}
+                >
+                  {/* TODO: icon 바꿔야 함 */}
+                  <SvgIcon name="iconGoogle" size={20} />
+                </L.Row>
+                <Font type="HEADLINE_SEMIBOLD" color="WHITE">
+                  이메일
+                </Font>
+              </L.Row>
+              <ChipButton
+                text={'로그인'}
+                onPress={() => {
+                  handleOauthLogin('NORMAL');
                 }}
               />
             </L.Row>

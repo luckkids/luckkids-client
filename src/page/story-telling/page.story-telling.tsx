@@ -32,15 +32,16 @@ export const PageStoryTelling: React.FC = () => {
   };
 
   useEffect(() => {
-    const subscription = interval(3000)
-      .pipe(take(1))
-      .subscribe(() => {
-        if (step < STORY_TELLING_CONTENTS.length + 1)
-          setStep((prev) => prev + 1);
+    const sub = interval(1000)
+      .pipe(take(STORY_TELLING_CONTENTS.length))
+      .subscribe((v) => {
+        if (v === STORY_TELLING_CONTENTS.length) {
+          sub.unsubscribe();
+        }
+        setStep(v + 1);
       });
-
     return () => {
-      subscription.unsubscribe();
+      sub.unsubscribe();
     };
   }, []);
 

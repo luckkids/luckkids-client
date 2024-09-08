@@ -171,19 +171,18 @@ const RootNavigator = () => {
     }
 
     // NOTE 자동 로그인 로직에 잠시 오류가 있어서 주석 처리
-    // else if (rememberMe) {
-    //   await handleRememberMeLogin({
-    //     ...rememberMe,
-    //   });
-    // }
-    else {
+    else if (rememberMe) {
+      await handleRememberMeLogin({
+        ...rememberMe,
+      });
+    } else {
       setInitialRoute({
         screenName: 'Login',
         screenParams: undefined,
       });
     }
 
-    // 로딩 화면 3초동안 보여줌
+    // 로딩 화면 2초동안 보여줌
     setTimeout(() => {
       setIsNavigationReady(true);
     }, 2000);
