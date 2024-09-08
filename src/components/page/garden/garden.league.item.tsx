@@ -10,15 +10,15 @@ export const GardenLeagueItem: React.FC<IProps> = (props) => {
   const setMedal = useMemo(() => {
     switch (props.rank) {
       case 0:
-        return <SvgIcon name={'iconMedal1'} size={20} />;
+        return <SvgIcon name={'iconMedal1'} size={25} />;
       case 1:
-        return <SvgIcon name={'iconMedal2'} size={20} />;
+        return <SvgIcon name={'iconMedal2'} size={25} />;
       default:
-        return <SvgIcon name={'iconMedal3'} size={20} />;
+        return <SvgIcon name={'iconMedal3'} size={25} />;
     }
   }, [props.rank]);
   return (
-    <L.Col justify={'center'} items={'center'}>
+    <L.Col justify={'center'} items={'center'} g={10}>
       {setMedal}
       <Image
         source={{ uri: props.imageFileUrl }}
