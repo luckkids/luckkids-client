@@ -26,11 +26,7 @@ export const PageHomeAlarm: React.FC = () => {
   };
 
   const renderItem = ({ item }: { item: NotificationItem }) => (
-    <HomeAlarmItem
-      key={item.id}
-      title={item.alertDescription}
-      createdAt={item.createdDate}
-    />
+    <HomeAlarmItem {...item} />
   );
 
   const loadMore = () => {

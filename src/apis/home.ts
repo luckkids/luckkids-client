@@ -98,7 +98,7 @@ export const getNotificationList = async (
   return res;
 };
 
-export const readNotification = async (id: string) => {
+export const readNotification = async (id: number) => {
   const res = await API.patch(`/alertHistories/${id}`);
   return res;
 };
