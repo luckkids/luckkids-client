@@ -2,16 +2,15 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
+import { SettingStatus, SocialType } from '@types-index';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
+import useAuth from '@hooks/auth/useAuth';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
-import { SettingStatus, SocialType } from '@types-index';
-import useAuth from '@hooks/auth/useAuth';
-import DeviceInfo from 'react-native-device-info';
-import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLoginAlready: React.FC = () => {
@@ -59,13 +58,17 @@ export const PageLoginAlready: React.FC = () => {
           token,
         });
 
-        if (!res) return;
+        if (!res || typeof res === 'string') return;
 
         return handleAfterLogin(res.settingStatus);
       } catch (e) {
         console.log(e);
       }
     }
+  };
+
+  const handleNormalLogin = () => {
+    navigation.push('LoginId');
   };
 
   return (
@@ -170,18 +173,13 @@ export const PageLoginAlready: React.FC = () => {
                   mr={14}
                 >
                   {/* TODO: icon 바꿔야 함 */}
-                  <SvgIcon name="iconGoogle" size={20} />
+                  {/* <SvgIcon name="iconGoogle" size={20} /> */}
                 </L.Row>
                 <Font type="HEADLINE_SEMIBOLD" color="WHITE">
                   이메일
                 </Font>
               </L.Row>
-              <ChipButton
-                text={'로그인'}
-                onPress={() => {
-                  handleOauthLogin('NORMAL');
-                }}
-              />
+              <ChipButton text={'로그인'} onPress={handleNormalLogin} />
             </L.Row>
           )}
         </L.Col>

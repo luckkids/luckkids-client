@@ -9,6 +9,7 @@ export function useGoogleLogin() {
     GoogleSignin.configure({
       webClientId:
         '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com',
+      offlineAccess: true,
     });
   }, []);
 
@@ -23,10 +24,9 @@ export function useGoogleLogin() {
       const userInfo = await GoogleSignin.signIn();
       console.log('User info:', userInfo);
 
-      setUser(userInfo);
-      setError(null);
+      const tokens = await GoogleSignin.getTokens();
 
-      return userInfo.idToken;
+      return tokens.accessToken;
     } catch (error) {
       console.error('Google login error:', error);
       if (error instanceof Error) {

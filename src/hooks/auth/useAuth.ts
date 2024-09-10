@@ -5,12 +5,14 @@ import {
   LoginResponse,
   OauthLoginRequest,
   OauthLoginResponse,
+  SocialTypeValues,
   authApis,
 } from '@apis/auth';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
+import { SocialType } from '@types-index';
 
 const useAuth = () => {
   const {
@@ -49,7 +51,7 @@ const useAuth = () => {
 
   const oauthLogin = async (
     loginInfo: OauthLoginRequest,
-  ): Promise<OauthLoginResponse | null> => {
+  ): Promise<OauthLoginResponse | null | string> => {
     return await authApis
       .oauthLogin({
         ...loginInfo,
@@ -67,7 +69,15 @@ const useAuth = () => {
         return res.data;
       })
       .catch((error) => {
-        console.error('Oauth Login Error', error);
+        console.error(error);
+
+        if (error.response && error.response.data) {
+          const { message } = error.response.data;
+          if (Object.values(SocialTypeValues).includes(message)) {
+            return message;
+          }
+        }
+
         return null;
       });
   };

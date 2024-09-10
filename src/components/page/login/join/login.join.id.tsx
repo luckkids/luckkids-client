@@ -6,18 +6,11 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, L, SvgIcon, TextInputField } from '@design-system';
-import { authApis } from '@apis/auth';
+import { authApis, SocialTypeValues } from '@apis/auth';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilJoinInfo } from '@recoil/recoil.join';
-
-const socialTypeValues = {
-  APPLE: 'APPLE',
-  KAKAO: 'KAKAO',
-  GOOGLE: 'GOOGLE',
-  NORMAL: 'NORMAL',
-} as const;
 
 export const LoginJoinId: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -65,7 +58,7 @@ export const LoginJoinId: React.FC = () => {
       LoadingIndicator.hide();
       if (error.response && error.response.data) {
         const { message } = error.response.data;
-        if (Object.values(socialTypeValues).includes(message)) {
+        if (Object.values(SocialTypeValues).includes(message)) {
           if (message === 'NORMAL') {
             setIsDuplicate(true);
           } else {

@@ -48,6 +48,13 @@ const refreshToken = async (refreshTokenInfo: RefreshTokenRequest) => {
   return res.data;
 };
 
+export const SocialTypeValues = {
+  APPLE: 'APPLE',
+  KAKAO: 'KAKAO',
+  GOOGLE: 'GOOGLE',
+  NORMAL: 'NORMAL',
+} as const;
+
 export type OauthLoginRequest = {
   snsType: SocialType;
   deviceId: string;

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { SettingStatus, SocialType } from '@types-index';
+import { SocialTypeValues } from '@apis/auth';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
@@ -15,7 +16,7 @@ import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import useAsyncEffect from '@hooks/useAsyncEffect';
+import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLogin: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -23,9 +24,9 @@ export const PageLogin: React.FC = () => {
   const { handleGoogleLogin } = useGoogleLogin();
   const { handleKakaoLogin } = useKakaoLogin();
   const navigation = useNavigationService();
-  const [deviceId, setDeviceId] = React.useState<string>('');
   const { storedValue: rememberMe, setValue: setRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const handlePressJoin = () => {
     navigation.navigate('LoginJoin', {
@@ -60,6 +61,7 @@ export const PageLogin: React.FC = () => {
   };
 
   const handleOauthLogin = async (type: SocialType) => {
+    if (!deviceId) return;
     const token = await getOauthHandler?.(type);
     if (token) {
       try {
@@ -71,6 +73,11 @@ export const PageLogin: React.FC = () => {
         });
 
         if (!res) return;
+        // social login 실패시 error message로 받아서 어떤 타입 계정이 존재하는지 확인
+        // 있으면 catch block으로 이동
+        if (typeof res === 'string') {
+          throw new Error(res);
+        }
 
         // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
         if (!rememberMe || rememberMe?.snsType === 'NORMAL') {
@@ -102,15 +109,18 @@ export const PageLogin: React.FC = () => {
         } else {
           return handleAfterLogin(res.settingStatus);
         }
-      } catch (e) {
-        console.log(e);
+      } catch (error: any) {
+        if (error.message) {
+          const type = error.message;
+          if (Object.values(SocialTypeValues).includes(type)) {
+            navigation.navigate('LoginAlready', {
+              type: type as SocialType,
+            });
+          }
+        }
       }
     }
   };
-
-  useAsyncEffect(async () => {
-    setDeviceId(await DeviceInfo.getUniqueId());
-  }, []);
 
   return (
     <FrameLayout>
