@@ -1,8 +1,10 @@
 import React from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors, Font } from '@design-system';
 import { IGardenItem } from '@types-common/page.types';
+import { getCharacterImage } from '@utils';
 
 const S = {
   Container: styled.View({
@@ -31,29 +33,38 @@ const S = {
   }),
 };
 
-interface IProps extends IGardenItem {
-  isDimProfile?: boolean;
+interface IProps {
+  item: IGardenItem | null;
+  onPress?: () => void;
+  isSelf?: boolean;
 }
-export const GardenItem: React.FC<IProps> = (props) => {
+
+export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
+  const characterImageUrl = getCharacterImage(
+    !item ? null : item.characterType,
+    !item ? null : item.level,
+    'normal',
+  );
+
   return (
     <S.Container>
-      <TouchableWithoutFeedback onPress={props.onPress}>
+      <TouchableWithoutFeedback onPress={onPress}>
         <S.Wrapper>
-          <Image
-            source={
-              !props.isDimProfile
-                ? { uri: props.imageFileUrl }
-                : require('assets/images/garden/garden-character-disabled.png')
-            }
+          <FastImage
+            source={{
+              uri: characterImageUrl,
+              priority: FastImage.priority.normal,
+            }}
             style={{
               width: '100%',
               height: '100%',
-              opacity: !props.isDimProfile ? 1 : 0.3,
+              opacity: isSelf ? 1 : 0.3,
             }}
+            resizeMode={FastImage.resizeMode.contain}
           />
         </S.Wrapper>
       </TouchableWithoutFeedback>
-      {props.isSelf && (
+      {isSelf && (
         <S.BadgeWrap>
           <Font
             type={'CAPTION1_SEMIBOLD'}

@@ -24,9 +24,9 @@ import LoadingIndicator from '@global-components/common/LoadingIndicator/Loading
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAppStateEffect from '@hooks/useAppStateEffect';
+import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
-import useAsyncEffect from '@hooks/useAsyncEffect';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');

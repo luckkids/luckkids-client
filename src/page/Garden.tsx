@@ -58,49 +58,34 @@ export const Garden: React.FC = () => {
       navigation.goBack();
     },
   });
-  useEffect(() => {
-    if (isFocusScreen) onFetch();
-  }, [isFocusScreen]);
+
   const friendData: Array<IGardenItem> | undefined = data?.friendList.content;
-  const myData = data?.myProfile;
+
   const [isList, setIsList] = useState<boolean>(false);
-  const [show, setShow] = useState<IGardenItem>({
-    isShow: false,
-    nickname: '',
-    luckPhrase: '',
-    imageFileUrl: '',
-  });
+
+  const [show, setShow] = useState<IGardenItem | null>(null);
+
+  const myData = data?.myProfile;
+
   const dimProfile = useMemo(() => {
-    if (!friendData) return;
+    if (!friendData) return [];
     const temArray = [];
     if (isList) {
       for (let i = 0; i < 5 - (friendData.length + 1); i++) {
         temArray.push(
-          <GardenHorizontalItem
-            {...friendData[i]}
-            isDimProfile={true}
-            onPress={() => {}}
-            key={i}
-          />,
+          <GardenHorizontalItem item={null} key={i} isSelf={false} />,
         );
       }
     } else {
       for (let i = 0; i < 15 - (friendData.length + 1); i++) {
-        temArray.push(
-          <GardenItem
-            {...friendData[i]}
-            isDimProfile={true}
-            onPress={() => {}}
-            key={i}
-          />,
-        );
+        temArray.push(<GardenItem item={null} key={i} isSelf={false} />);
       }
     }
     return temArray;
-  }, [isList, data]);
+  }, [isList, friendData]);
 
   const handlePressFriendProfile = (friendItem: IGardenItem) => {
-    setShow({ isShow: true, ...friendItem });
+    setShow({ ...friendItem });
     const { friendId } = friendItem;
 
     if (!friendId) return;
@@ -109,6 +94,10 @@ export const Garden: React.FC = () => {
       friendId,
     });
   };
+
+  useEffect(() => {
+    if (isFocusScreen) onFetch();
+  }, [isFocusScreen]);
 
   return (
     <FrameLayout NavBar={<GardenNavbar />}>
@@ -129,14 +118,14 @@ export const Garden: React.FC = () => {
           {myData &&
             (isList ? (
               <GardenHorizontalItem
-                {...myData}
-                onPress={() => setShow({ isShow: true, ...myData })}
+                item={myData}
+                onPress={() => setShow({ ...myData })}
                 isSelf={true}
               />
             ) : (
               <GardenItem
-                {...myData}
-                onPress={() => setShow({ isShow: true, ...myData })}
+                item={myData}
+                onPress={() => setShow({ ...myData })}
                 isSelf={true}
               />
             ))}
@@ -144,7 +133,7 @@ export const Garden: React.FC = () => {
             if (isList) {
               return (
                 <GardenHorizontalItem
-                  {...item}
+                  item={item}
                   onPress={() => handlePressFriendProfile(item)}
                   key={i}
                 />
@@ -152,7 +141,7 @@ export const Garden: React.FC = () => {
             } else {
               return (
                 <GardenItem
-                  {...item}
+                  item={item}
                   onPress={() => handlePressFriendProfile(item)}
                   key={i}
                 />
@@ -167,13 +156,7 @@ export const Garden: React.FC = () => {
         isIcon={true}
         onPress={() => onInviteHandler()}
       />
-      <GardenPopup
-        title={show.luckPhrase}
-        img={show.imageFileUrl}
-        name={show.nickname}
-        isShow={show.isShow ? show.isShow : false}
-        setShow={setShow}
-      />
+      {show && <GardenPopup show={show} setShow={setShow} />}
     </FrameLayout>
   );
 };
