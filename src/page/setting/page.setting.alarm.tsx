@@ -14,6 +14,7 @@ import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { AlertType } from '@types-common/setting.types';
+import Sound from 'react-native-sound';
 
 const S = {
   onAlarm: styled.View({
@@ -32,6 +33,8 @@ const S = {
   }),
   itemContainer: styled.View({}),
 };
+
+const luckAlarmSound = new Sound('noti_luckluck.wav', Sound.MAIN_BUNDLE);
 
 export const PageSettingAlarm: React.FC = () => {
   const { hasPermission } = useFirebaseMessage();
@@ -106,7 +109,8 @@ export const PageSettingAlarm: React.FC = () => {
         <Font type={'BODY_REGULAR'}>알림음</Font>
         <ButtonText
           onPress={() => {
-            //TODO 나중에 알림음 추가되면 수정
+            luckAlarmSound.setCategory('Playback');
+            luckAlarmSound.play();
           }}
           text={'럭럭'}
           textColor={'LUCK_GREEN'}
