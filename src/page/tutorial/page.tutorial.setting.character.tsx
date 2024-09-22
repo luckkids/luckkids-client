@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import {
+  Image,
+  ImageBackground,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { interval, take } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SimpleTextInput } from '@design-system';
+import { userApis } from '@apis/user';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { userApis } from '@apis/user';
 
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
@@ -187,33 +192,46 @@ export const PageTutorialSettingCharacter: React.FC = () => {
     }
   };
 
+  const renderBackgroundImage = () => {
+    switch (step) {
+      case 0:
+      case 1:
+        return tutorialSettingBgImage;
+      case 2:
+        return tutorialSettingCharacterNickname;
+      case 3:
+        return tutorialGuideBgImage;
+      default:
+        return tutorialSettingBgImage;
+    }
+  };
+
   return (
     <FrameLayout
       statusBarColor={step === 3 ? 'TUTORIAL_GUIDE_BG' : 'TUTORIAL_SETTING_BG'}
-      backgroundImage={
-        step === 3 ? tutorialGuideBgImage : tutorialSettingBgImage
-      }
-      enableKeyboardAvoidingView={false}
-    >
-      <L.Col
-        w="100%"
-        items={step === 1 ? 'flex-start' : 'center'}
-        ph={DEFAULT_MARGIN}
-        h="100%"
-      >
-        {renderContent()}
-      </L.Col>
-      {step === 2 && (
-        <L.Absolute flex-1 b={0} items="flex-end">
-          <Image
-            source={tutorialSettingCharacterNickname}
-            style={{
+      backgroundImage={renderBackgroundImage()}
+      backgroundColor={step === 3 ? 'TUTORIAL_GUIDE_BG' : 'TUTORIAL_SETTING_BG'}
+      backgroundImageStyle={
+        step === 2
+          ? {
               width: SCREEN_WIDTH,
               height: SCREEN_WIDTH * (500 / 375),
-            }}
-          />
-        </L.Absolute>
-      )}
+              position: 'absolute',
+              bottom: 0,
+            }
+          : {}
+      }
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <L.Col
+          w="100%"
+          items={step === 1 ? 'flex-start' : 'center'}
+          ph={DEFAULT_MARGIN}
+          h="100%"
+        >
+          {renderContent()}
+        </L.Col>
+      </TouchableWithoutFeedback>
       {step === 2 && !!nickname && (
         <L.Absolute b={bottom} w={SCREEN_WIDTH}>
           <L.Row ph={DEFAULT_MARGIN}>
