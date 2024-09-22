@@ -47,14 +47,16 @@ export const PageSettingInfo: React.FC = () => {
           </L.Col>
         </L.Col>
       </L.Col>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('SettingInfoPassword')}
-      >
-        <L.Row ph={25} pv={20} items={'center'} justify={'space-between'}>
-          <Font type={'BODY_REGULAR'}>비밀번호 변경</Font>
-          <SvgIcon name={'arrow_right_gray'} size={14} />
-        </L.Row>
-      </TouchableWithoutFeedback>
+      {me?.snsType === 'NORMAL' && (
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate('SettingInfoPassword')}
+        >
+          <L.Row ph={25} pv={20} items={'center'} justify={'space-between'}>
+            <Font type={'BODY_REGULAR'}>비밀번호 변경</Font>
+            <SvgIcon name={'arrow_right_gray'} size={14} />
+          </L.Row>
+        </TouchableWithoutFeedback>
+      )}
       <L.Row ph={25} pv={20} justify={'space-between'} items={'center'}>
         <Font type={'BODY_REGULAR'}>자동 로그인</Font>
         <Toggle
@@ -71,8 +73,7 @@ export const PageSettingInfo: React.FC = () => {
           <ButtonText
             onPress={() => {
               navigation.push('WebView', {
-                // TODO url 변경 필요
-                url: '',
+                url: 'https://www.notion.so/1f210857eb944efcb575dc674249cda3?pvs=4',
                 title: '약관 및 정책',
               });
             }}
