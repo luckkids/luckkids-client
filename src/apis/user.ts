@@ -22,7 +22,6 @@ export type GetInitialCharacterResponse = {
   characterType: CharacterType;
   level: number;
   lottieFile: string;
-  imageFile: string;
 };
 
 const getInitialCharacter = async () => {

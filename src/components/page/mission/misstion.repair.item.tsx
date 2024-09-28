@@ -82,6 +82,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                   setIsCheckFn={(value: boolean) => {
                     setIsChecked(value);
                   }}
+                  rtnTime={rtnTime}
                   onConfirm={() => {
                     // onRepairFn();
                     setButtonClicked(true);

@@ -104,7 +104,7 @@ export const PageMissionAdd: React.FC = () => {
     const tempDate = new Date(currentDate);
     const fTime = `${
       tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
-    }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
+    }:${tempDate.getMinutes()}:00`;
     setRtnTime(fTime);
   };
 
@@ -182,6 +182,7 @@ export const PageMissionAdd: React.FC = () => {
               onChange={onChange}
               textColor={Colors.WHITE}
               disabled={isDisabled}
+              minuteInterval={5}
             />
           </L.Col>
         </L.Col>

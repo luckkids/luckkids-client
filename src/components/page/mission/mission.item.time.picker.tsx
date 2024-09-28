@@ -51,19 +51,21 @@ interface IProps {
   setRtnTime: Dispatch<string>;
   setIsCheckFn: Dispatch<boolean>;
   onConfirm: () => void;
+  rtnTime: string;
 }
+
 export default function MissionItemTimePicker(props: IProps) {
   const [isChange, setIsChange] = useState(props.isCheck);
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(props.rtnTime);
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
-    setDate(currentDate);
+    // setDate(currentDate);
 
     const tempDate = new Date(currentDate);
     const fTime = `${
       tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
-    }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
+    }:${tempDate.getMinutes()}:00`;
     props.setRtnTime(fTime);
   };
 
@@ -92,13 +94,14 @@ export default function MissionItemTimePicker(props: IProps) {
       </TouchableWithoutFeedback>
       <DateTimePicker
         testID="dateTimePicker"
-        value={date}
+        value={new Date(date)}
         is24Hour={false}
         display="spinner"
         mode={'time'}
         onChange={onChange}
         textColor={Colors.WHITE}
         disabled={!isChange}
+        minuteInterval={5}
       />
       <S.buttonWrap>
         <Button

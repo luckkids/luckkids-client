@@ -98,6 +98,7 @@ const RootNavigator = () => {
         screenParams: undefined,
       });
     } else {
+      if (typeof res === 'string') return;
       return setInitialRoute({
         screenName: res.settingStatus === 'COMPLETE' ? 'Home' : 'TutorialStart',
         screenParams: undefined,
