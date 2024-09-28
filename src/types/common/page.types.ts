@@ -92,7 +92,7 @@ export interface IMissionData {
 }
 
 export interface IMissionDataItem {
-  id: number | undefined;
+  id: number;
   luckkidsMissionId: number;
   missionType: string;
   missionDescription: null | string;

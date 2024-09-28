@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import styled from 'styled-components/native';
 import { Font, L, SvgIcon } from '@design-system';
+import { formatMissionTime } from '@utils';
 import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { useFetch } from '@hooks/useFetch';
 import { IMissionDataItem } from '@types-common/page.types';
-import { formatMissionTime } from '@utils';
 
 interface IProps extends IMissionDataItem {
   isCheck?: boolean;
@@ -95,7 +95,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
           {isChecked ? (
             <Font
               type={'FOOTNOTE_REGULAR'}
-              color={'WHITE'}
+              color={'GREY2'}
               style={{ marginLeft: 13 }}
             >
               {formatMissionTime(rtnTime)}
