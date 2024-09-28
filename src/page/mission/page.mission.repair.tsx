@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -162,15 +162,14 @@ export const PageMissionRepair = () => {
     );
   };
 
-  useEffect(() => {
-    if (selectedCategory && flatListRef.current) {
-      const categoryIndex = allCategories.findIndex(
-        (category) => category === selectedCategory,
-      );
+  // 카테고리 스크롤 이동
+  const scrollToCategory = (category: string) => {
+    if (category && flatListRef.current) {
+      const categoryIndex = allCategories.findIndex((c) => c === category);
       if (categoryIndex !== -1) {
         // 해당 cateogry open (이미 열려있을때에도 처리 필요)
-        if (!openedCategories.includes(selectedCategory)) {
-          setOpenedCategories([...openedCategories, selectedCategory]);
+        if (!openedCategories.includes(category)) {
+          setOpenedCategories([...openedCategories, category]);
         }
 
         flatListRef.current.scrollToIndex({
@@ -180,7 +179,11 @@ export const PageMissionRepair = () => {
         });
       }
     }
-  }, [selectedCategory, allCategories]);
+  };
+
+  useEffect(() => {
+    setOpenedCategories(allCategories);
+  }, [missionData]);
 
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
@@ -204,7 +207,10 @@ export const PageMissionRepair = () => {
                   <MissionRepairCategoryItem
                     isActive={selectedCategory === item ? true : null}
                     label={item}
-                    onPress={() => setSelectedCategory(item)}
+                    onPress={() => {
+                      scrollToCategory(item);
+                      setSelectedCategory(item);
+                    }}
                     key={item}
                   />
                 );
