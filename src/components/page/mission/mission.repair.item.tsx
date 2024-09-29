@@ -1,161 +1,190 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
-import styled from 'styled-components/native';
-import { Font, L, SvgIcon } from '@design-system';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  Animated,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { DEFAULT_MARGIN } from '@constants';
+import { Colors, Font, L, SvgIcon } from '@design-system';
+import { useMissionList } from '@queries';
 import { formatMissionTime } from '@utils';
+import { missionApis } from '@apis/mission';
 import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import { useFetch } from '@hooks/useFetch';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { IMissionDataItem } from '@types-common/page.types';
 
 interface IProps extends IMissionDataItem {
-  isCheck?: boolean;
-  isDisable: boolean;
-  isRepair?: boolean;
-  onClick?: () => void;
+  isSelected: boolean;
+  onSelect?: (isSelected: boolean) => void;
+  type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
 }
 
-const S = {
-  description: styled.View({}),
-};
 export const MissionRepairItem: React.FC<IProps> = ({
-  missionDescription,
-  luckkidsMissionId,
-  id,
-  alertTime,
-  alertStatus,
-  missionType,
-  isDisable,
-  onClick,
-  isRepair = false,
-  isCheck,
+  isSelected,
+  onSelect,
+  type = 'MISSION_REPAIR',
+  ...item
 }) => {
-  const [isChecked, setIsChecked] = useState<boolean>(Boolean(isCheck));
-  const [isDisabled, setIsDisabled] = useState<boolean>(isDisable);
-  const [rtnTime, setRtnTime] = useState(alertTime);
-  const [buttonClicked, setButtonClicked] = useState<boolean>(false);
-  const { onFetch: onRepairFn } = useFetch({
-    method: 'PATCH',
-    url: `/missions/${id}`,
-    value: {
-      missionType: missionType,
-      missionActive: isDisabled ? 'FALSE' : 'TRUE',
-      missionDescription: missionDescription,
-      alertStatus: isChecked ? 'CHECKED' : 'UNCHECKED',
-      alertTime: rtnTime,
-    },
-  });
+  const {
+    missionActive,
+    missionDescription,
+    missionType,
+    luckkidsMissionId,
+    alertTime,
+    alertStatus,
+    id,
+  } = item;
+  // 수정 data (수정 시 사용)
+  const [itemData, setItemData] = useState<IMissionDataItem>(item);
+  const swipeableRef = useRef<Swipeable>(null);
+  const [isSwiping, setIsSwiping] = useState<boolean>(false);
 
-  const { onFetch: onCopyFn } = useFetch({
-    method: 'POST',
-    url: '/missions/new',
-    value: {
-      luckkidsMissionId: isRepair ? luckkidsMissionId : null,
-      missionType: missionType,
-      missionDescription: missionDescription,
-      alertStatus: 'CHECKED',
-      alertTime: alertTime,
-    },
-  });
+  const { refetch: refetchMissionData } = useMissionList();
 
-  useEffect(() => {
-    if (isRepair && isDisable !== isDisabled && id) onRepairFn();
-  }, [isDisabled]);
+  // 미션 수정
+  const handleEdit = async () => {
+    if (!itemData) return;
+    const {
+      missionType,
+      missionDescription,
+      missionActive,
+      alertStatus,
+      alertTime,
+    } = itemData;
 
-  useEffect(() => {
-    if (buttonClicked) {
-      onRepairFn();
-      setButtonClicked(false);
-    }
-  }, [isChecked, buttonClicked]);
+    await missionApis.editMission({
+      missionId: id,
+      data: {
+        missionType,
+        missionActive,
+        missionDescription,
+        alertStatus,
+        alertTime,
+      },
+    });
 
-  const timePickerHandler = useMemo(() => {
-    if (isRepair) {
-      return (
-        <TouchableWithoutFeedback
-          onPress={() =>
-            BottomSheet.show({
-              component: (
-                <MissionItemTimePicker
-                  isCheck={isChecked}
-                  setRtnTime={setRtnTime}
-                  setIsCheckFn={(value: boolean) => {
-                    setIsChecked(value);
-                  }}
-                  rtnTime={rtnTime}
-                  onConfirm={() => {
-                    // onRepairFn();
-                    setButtonClicked(true);
-                  }}
-                />
-              ),
-            })
-          }
-        >
-          {isChecked ? (
-            <Font
-              type={'FOOTNOTE_REGULAR'}
-              color={'GREY2'}
-              style={{ marginLeft: 13 }}
-            >
-              {formatMissionTime(rtnTime)}
-            </Font>
-          ) : (
-            <Font
-              type={'FOOTNOTE_REGULAR'}
-              color={'GREY1'}
-              style={{ marginLeft: 13 }}
-            >
-              알림 끔
-            </Font>
-          )}
-        </TouchableWithoutFeedback>
-      );
-    }
+    // 수정 성공 팝업
+  };
+
+  const handleToggleSelect = () => {
+    onSelect && onSelect(!isSelected);
+  };
+
+  // 미션 생성
+  const handleCreate = async () => {
+    if (!itemData) return;
+    const { luckkidsMissionId, missionType, missionDescription, alertTime } =
+      itemData;
+
+    await missionApis.createMission({
+      luckkidsMissionId,
+      missionType,
+      missionActive,
+      missionDescription,
+      alertStatus,
+      alertTime,
+    });
+  };
+
+  // 알림 설정 바텀 시트
+  const handlePressAlertTime = useCallback(() => {
+    if (!itemData) return;
+    BottomSheet.show({
+      component: (
+        <MissionItemTimePicker
+          alertTime={itemData?.alertTime}
+          alertStatus={itemData?.alertStatus}
+          onConfirm={async ({ alertTime, alertStatus }) => {
+            const res = await missionApis.editMission({
+              missionId: luckkidsMissionId || id,
+              data: {
+                alertStatus,
+                alertTime,
+              },
+            });
+
+            if (res) {
+              SnackBar.show({
+                title: `습관 알림 시간이 변경되었습니다.`,
+                width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+                position: 'bottom',
+                rounded: 25,
+                offsetY: 110,
+              });
+
+              setItemData({
+                ...itemData,
+                alertTime,
+              });
+
+              refetchMissionData();
+            }
+          }}
+        />
+      ),
+    });
+  }, [itemData]);
+
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation<number>,
+    dragX: Animated.AnimatedInterpolation<number>,
+  ) => {
+    const scale = dragX.interpolate({
+      inputRange: [-100, 0],
+      outputRange: [1, 1],
+      extrapolate: 'clamp',
+    });
 
     return (
-      <Font
-        type={'FOOTNOTE_REGULAR'}
-        color={'WHITE'}
-        style={{ marginLeft: 13 }}
-      >
-        {alertTime}
-      </Font>
+      <RectButton style={styles.rightAction} onPress={() => {}}>
+        <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>
+          <Font type={'BODY_REGULAR'} color={'WHITE'} textAlign={'center'}>
+            삭제
+          </Font>
+        </Animated.Text>
+      </RectButton>
     );
-  }, [isChecked, rtnTime]);
+  };
 
-  return (
+  const MissionContent = () => (
     <L.Row
       ph={25}
       pv={22}
       items={'center'}
       justify={'space-between'}
-      bg={luckkidsMissionId !== null ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
+      bg={!luckkidsMissionId ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
     >
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'} w={'69%'}>
-          <S.description>
-            <Font type={'HEADLINE_SEMIBOLD'} color={'WHITE'}>
+          <View>
+            <Font type={'BODY_SEMIBOLD'} color={'WHITE'}>
               {missionDescription}
             </Font>
-          </S.description>
-          {timePickerHandler}
+          </View>
+          {/* 알림 */}
+          <TouchableWithoutFeedback onPress={handlePressAlertTime}>
+            <Font
+              type={'FOOTNOTE_REGULAR'}
+              color={'GREY2'}
+              ml={13}
+              style={{
+                flexWrap: 'wrap',
+              }}
+            >
+              {itemData?.alertTime
+                ? formatMissionTime(itemData.alertTime)
+                : '알림 끔'}
+            </Font>
+          </TouchableWithoutFeedback>
         </L.Row>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            if (isRepair) {
-              setIsDisabled(!isDisabled);
-
-              if (onClick) {
-                onCopyFn();
-                onClick();
-              }
-            }
-          }}
-        >
+        <TouchableWithoutFeedback onPress={handleToggleSelect}>
           <View>
             <SvgIcon
-              name={isDisabled ? 'lucky_uncheck' : 'lucky_check'}
+              name={!isSelected ? 'lucky_uncheck' : 'lucky_check'}
               size={30}
             />
           </View>
@@ -163,4 +192,29 @@ export const MissionRepairItem: React.FC<IProps> = ({
       </L.Row>
     </L.Row>
   );
+
+  return luckkidsMissionId ? (
+    <MissionContent />
+  ) : (
+    <Swipeable
+      ref={swipeableRef}
+      renderRightActions={renderRightActions}
+      onSwipeableOpenStartDrag={() => setIsSwiping(true)}
+      onSwipeableClose={() => setIsSwiping(false)}
+    >
+      <MissionContent />
+    </Swipeable>
+  );
 };
+
+const styles = StyleSheet.create({
+  rightAction: {
+    justifyContent: 'center',
+    backgroundColor: Colors.RED,
+    width: 74,
+  },
+  actionText: {
+    color: 'white',
+    justifyContent: 'center',
+  },
+});

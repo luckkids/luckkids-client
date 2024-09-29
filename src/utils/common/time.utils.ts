@@ -32,7 +32,7 @@ export const formatLuckTime = (time: string) => {
   return `${ampm} ${formattedHour}:${minute}`;
 };
 
-// 18:00:00 -> 오후 6시
+// 18:00:00 -> 오후 6:00
 export const formatMissionTime = (time: string) => {
   const [hour, minute, second] = time.split(':');
   const hourInt = parseInt(hour, 10);

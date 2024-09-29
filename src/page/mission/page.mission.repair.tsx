@@ -6,10 +6,13 @@ import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
 import { useMissionList } from '@queries';
+import { MissionType } from '@types-index';
+import { missionApis } from '@apis/mission';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MissionRepairItem } from '@components/page/mission/mission.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
+import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
@@ -17,31 +20,48 @@ import { IMissionData, IMissionDataItem } from '@types-common/page.types';
 
 export const PageMissionRepair = () => {
   const {
-    params: { type },
+    params: { type = 'MISSION_REPAIR' },
   } = useNavigationRoute('MissionRepair');
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
     useRecoilState(RecoilInitialSetting);
 
-  const { data: missionData, refetch: refetchMissionData } = useMissionList();
+  const [selectedMissions, setSelectedMissions] = useState<IMissionDataItem[]>(
+    [],
+  );
+
+  const {
+    data: missionData,
+    refetch: refetchMissionData,
+    isFetching,
+  } = useMissionList();
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  const allCategories = Object.keys(missionData?.userMissions || {}).concat(
-    Object.keys(missionData?.luckkidsMissions || {}),
+  const allCategories = Array.from(
+    new Set([
+      ...Object.keys(missionData?.userMissions || {}),
+      ...Object.keys(missionData?.luckkidsMissions || {}),
+    ]),
   );
   const [openedCategories, setOpenedCategories] =
     useState<string[]>(allCategories);
   const flatListRef = useRef<FlatList>(null);
 
   const handleConfirm = () => {
-    setInitialSetting({
-      ...initialSetting,
-      missions: [],
-    });
-    return navigation.navigate(
-      type === 'INITIAL_SETTING' ? 'TutorialSettingNoti' : 'Mission',
-    );
+    if (type === 'INITIAL_SETTING') {
+      setInitialSetting({
+        ...initialSetting,
+        missions: selectedMissions.map((selectedMission) => ({
+          missionType: selectedMission.missionType as MissionType,
+          missionDescription: selectedMission.missionDescription || '',
+          alertTime: selectedMission.alertTime,
+        })),
+      });
+      return navigation.navigate('TutorialSettingNoti');
+    } else {
+      return 'Mission';
+    }
   };
 
   const categoryButton = useCallback((key: string) => {
@@ -95,12 +115,44 @@ export const PageMissionRepair = () => {
       const luckkidsMissions =
         missionData?.luckkidsMissions[item as keyof IMissionData];
 
+      // userMissions의 luckkidsMissionsId와 luckkidsMissions의 id 중복 검사
+      // 그런데 겹치는게 있다면 luckkidsMissionId가 없는 것을 가져온다
+      // 그런데 겹치는게 없다면 luckkidsMissionId가 있는 것을 가져온다
+
+      const filteredMissions = [
+        ...(userMissions || []).filter((mission) => !mission.luckkidsMissionId),
+        ...(luckkidsMissions || []).filter(
+          (luckkidsMission) =>
+            !(userMissions || []).some(
+              (userMission) =>
+                userMission.luckkidsMissionId === luckkidsMission.id,
+            ),
+        ),
+      ];
+
       return {
         id: item,
         missionType: item,
-        missions: [...(userMissions || []), ...(luckkidsMissions || [])],
+        missions: filteredMissions,
       };
     });
+  };
+
+  const handleToggleMissionActive = async (
+    mission: IMissionDataItem,
+    isSelected: boolean,
+  ) => {
+    // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
+    const res = await missionApis.editMission({
+      missionId: mission.luckkidsMissionId || mission.id,
+      data: {
+        missionActive: isSelected ? 'TRUE' : 'FALSE',
+      },
+    });
+
+    if (res) {
+      refetchMissionData();
+    }
   };
 
   const renderCategoryMissionList = ({
@@ -146,13 +198,31 @@ export const PageMissionRepair = () => {
         {isOpened && (
           <L.Col mb={20}>
             {missions.map((mission, i) => {
+              const isSelected =
+                type === 'INITIAL_SETTING'
+                  ? selectedMissions.includes(mission)
+                  : mission.missionActive === 'TRUE';
+
               return (
                 <MissionRepairItem
-                  isRepair={true}
-                  isCheck={true}
-                  {...mission}
-                  isDisable={true}
                   key={i}
+                  {...mission}
+                  type={type}
+                  isSelected={isSelected}
+                  onSelect={(isSelected) => {
+                    // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
+                    if (type === 'MISSION_REPAIR') {
+                      handleToggleMissionActive(mission, isSelected);
+                    } else {
+                      if (!isSelected) {
+                        setSelectedMissions(
+                          selectedMissions.filter((m) => m.id !== mission.id),
+                        );
+                      } else {
+                        setSelectedMissions([...selectedMissions, mission]);
+                      }
+                    }
+                  }}
                 />
               );
             })}
@@ -184,6 +254,11 @@ export const PageMissionRepair = () => {
   useEffect(() => {
     setOpenedCategories(allCategories);
   }, [missionData]);
+
+  useEffect(() => {
+    if (isFetching) LoadingIndicator.show({});
+    else LoadingIndicator.hide();
+  }, [isFetching]);
 
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
@@ -242,7 +317,7 @@ export const PageMissionRepair = () => {
         }}
       />
       {type === 'INITIAL_SETTING' && (
-        <L.Absolute b={bottom + 35} w={SCREEN_WIDTH}>
+        <L.Absolute b={bottom} w={SCREEN_WIDTH}>
           <L.Row ph={DEFAULT_MARGIN}>
             <Button
               type={'action'}

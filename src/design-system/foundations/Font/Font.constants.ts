@@ -69,7 +69,7 @@ export default {
   },
   BODY_SEMIBOLD: {
     fontSize: 16,
-    lineHeight: 21,
+    lineHeight: 24,
     fontFamily: PretendardFont.SemiBold,
   },
   SUBHEADLINE_REGULAR: {
