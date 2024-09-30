@@ -1,12 +1,21 @@
 export const formatCreatedAt = (createdAt: string) => {
-  // 현재와 비교해서
-  // 1시간 미만이면 n분 전
-  // 하루 미만이면 n시간 전
-  // 하루 이상이면 n일전
-  // 이틀 이상이면 날짜 그대로
-  return createdAt;
-};
+  const now = new Date();
+  const createdAtDate = new Date(createdAt);
+  const diffInMilliseconds = now.getTime() - createdAtDate.getTime();
+  const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+  const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
+  if (diffInDays > 1) {
+    return createdAtDate.toLocaleDateString();
+  } else if (diffInHours > 0) {
+    return `${diffInHours}시간 전`;
+  } else if (diffInMinutes > 0) {
+    return `${diffInMinutes}분 전`;
+  } else {
+    return '방금 전';
+  }
+};
 export const getDayOfWeek = (date: string) => {
   const dayOfWeek = new Date(date).getDay();
   const dayOfWeekList = ['일', '월', '화', '수', '목', '금', '토'];
@@ -23,7 +32,7 @@ export const formatLuckTime = (time: string) => {
   return `${ampm} ${formattedHour}:${minute}`;
 };
 
-// 18:00:00 -> 오후 6시
+// 18:00:00 -> 오후 6:00
 export const formatMissionTime = (time: string) => {
   const [hour, minute, second] = time.split(':');
   const hourInt = parseInt(hour, 10);

@@ -92,13 +92,13 @@ export interface IMissionData {
 }
 
 export interface IMissionDataItem {
-  id: number | undefined;
+  id: number;
   luckkidsMissionId: number;
   missionType: string;
-  missionDescription: null | string;
-  missionActive: 'TRUE' | 'FALSE';
+  missionDescription: string;
+  missionActive?: 'TRUE' | 'FALSE'; // luckkidsMission의 경우 없을 수 있음
   alertTime: string;
-  alertStatus?: 'CHECKED' | 'UNCHECKED';
+  alertStatus: 'CHECKED' | 'UNCHECKED';
 }
 
 export interface IMissionCategoryItem {
@@ -124,21 +124,20 @@ export interface IGarden {
 }
 
 export interface IGardenItem {
-  onPress?: () => void;
-  isSelf?: boolean;
-  imageFileUrl: string;
-  nickname: string;
   myId?: number;
   friendId?: number;
-  characterCount?: number;
+  nickname: string;
   luckPhrase: string;
-  isShow?: boolean;
+  characterType: CharacterType;
+  level: number;
+  characterCount: number;
 }
 
 export interface IGardenLeagueItem {
-  nickname: string;
-  imageFileUrl: string;
+  nickname?: string;
   characterCount: number;
+  characterType: CharacterType;
+  level: number;
 }
 
 export interface ISettingAlarm {

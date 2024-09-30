@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
@@ -14,6 +14,9 @@ import {
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
+import { missionApis } from '@apis/mission';
+import { format } from 'date-fns';
+import { useMissionList } from '@queries';
 
 const category: Array<IAddCategory> = [
   {
@@ -81,36 +84,44 @@ export const PageMissionAdd: React.FC = () => {
   const navigation = useNavigationService();
   const [date, setDate] = useState(new Date(1598051730000));
   const [rtnTime, setRtnTime] = useState<string>('');
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
-  const [current, setCurrent] = useState<number>(0);
-  const { onFetch, isSubmit, isSuccess } = useFetch({
-    method: 'POST',
-    url: '/missions/new',
-    value: {
+  const [numColumns, setNumColumns] = useState<number>(4);
+  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
+
+  const { refetch: refetchMissionData } = useMissionList();
+
+  // 미션 생성
+  const handleCreate = async () => {
+    if (!currentCategory) return;
+    const res = await missionApis.createMission({
       luckkidsMissionId: null,
-      missionType: category[current].type,
+      missionType: currentCategory,
       missionDescription: text,
       alertStatus: isDisabled ? 'UNCHECKED' : 'CHECKED',
       alertTime: isDisabled ? '00:00:00' : rtnTime,
-      missionActive: 'TRUE',
-    },
-  });
+    });
 
-  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-
-    const tempDate = new Date(currentDate);
-    const fTime = `${
-      tempDate.getHours() < 10 ? `0${tempDate.getHours()}` : tempDate.getHours()
-    }:${tempDate.getMinutes()}:${tempDate.getSeconds()}`;
-    setRtnTime(fTime);
+    if (res) {
+      navigation.goBack();
+      refetchMissionData();
+    }
   };
 
-  useEffect(() => {
-    if (isSuccess) navigation.goBack();
-  }, [isSuccess]);
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (!selectedDate) return;
+
+    const formattedTime = format(selectedDate, 'HH:mm:00');
+
+    setRtnTime(formattedTime);
+  };
+
+  const isReadyToCreate = () => {
+    if (!currentCategory) return false;
+    if (text.length < 1) return false;
+    if (isDisabled && !rtnTime) return false;
+    return true;
+  };
 
   return (
     <FrameLayout
@@ -124,13 +135,11 @@ export const PageMissionAdd: React.FC = () => {
           />
           <Font type={'HEADLINE_SEMIBOLD'}>새 습관</Font>
           <ButtonText
-            onPress={() => {
-              if (!isSubmit) onFetch();
-            }}
+            onPress={handleCreate}
             fontType={'HEADLINE_SEMIBOLD'}
             text={'추가'}
             disabled={false}
-            textColor={text.length > 0 && !isSubmit ? 'LUCK_GREEN' : 'GREY3'}
+            textColor={isReadyToCreate() ? 'LUCK_GREEN' : 'GREY3'}
           />
         </L.Row>
       }
@@ -182,6 +191,8 @@ export const PageMissionAdd: React.FC = () => {
               onChange={onChange}
               textColor={Colors.WHITE}
               disabled={isDisabled}
+              minuteInterval={5}
+              locale="ko"
             />
           </L.Col>
         </L.Col>
@@ -190,21 +201,38 @@ export const PageMissionAdd: React.FC = () => {
             <Font type={'BODY_REGULAR'} color={'WHITE'}>
               습관 카테고리
             </Font>
-            <L.Row
-              style={{
-                flexWrap: 'wrap',
-              }}
-            >
-              {category.map((item, i) => {
-                return (
-                  <MissionAddCategory
-                    {...item}
-                    key={i}
-                    isActive={current === i}
-                    onPress={() => setCurrent(i)}
-                  />
-                );
-              })}
+            <L.Row>
+              <ScrollView
+                horizontal
+                contentContainerStyle={{
+                  width: '100%',
+                }}
+              >
+                <FlatList
+                  data={category}
+                  horizontal={false}
+                  columnWrapperStyle={{
+                    justifyContent: 'flex-start',
+                  }}
+                  renderItem={({ item }) => {
+                    return (
+                      <L.Row
+                        key={item.type}
+                        w={`${100 / numColumns}%`}
+                        justify={'center'}
+                      >
+                        <MissionAddCategory
+                          {...item}
+                          isActive={currentCategory === item.type}
+                          onPress={() => setCurrentCategory(item.type)}
+                        />
+                      </L.Row>
+                    );
+                  }}
+                  keyExtractor={(item) => item.type}
+                  numColumns={numColumns}
+                />
+              </ScrollView>
             </L.Row>
           </L.Col>
         </L.Col>

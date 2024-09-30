@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Linking } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import Sound from 'react-native-sound';
 import styled from 'styled-components/native';
 import { ButtonText, Font, SvgIcon, L, Colors, Toggle } from '@design-system';
 import { useSettingAlarmSetting } from '@queries';
@@ -32,6 +33,8 @@ const S = {
   }),
   itemContainer: styled.View({}),
 };
+
+const luckAlarmSound = new Sound('noti_luckluck.wav', Sound.MAIN_BUNDLE);
 
 export const PageSettingAlarm: React.FC = () => {
   const { hasPermission } = useFirebaseMessage();
@@ -106,7 +109,8 @@ export const PageSettingAlarm: React.FC = () => {
         <Font type={'BODY_REGULAR'}>알림음</Font>
         <ButtonText
           onPress={() => {
-            //TODO 나중에 알림음 추가되면 수정
+            luckAlarmSound.setCategory('Playback');
+            luckAlarmSound.play();
           }}
           text={'럭럭'}
           textColor={'LUCK_GREEN'}

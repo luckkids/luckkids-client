@@ -15,7 +15,7 @@ const QueryClientProvider = ({ children }: { children: React.ReactNode }) =>
             refetchOnWindowFocus: false,
             refetchOnReconnect: true,
             refetchOnMount: false,
-            retry: 0,
+            retry: 1,
             cacheTime: HOUR_AS_MILLISECOND,
           },
         },

@@ -4,13 +4,11 @@ import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import { Font, L } from '@design-system';
 import { IGardenItem } from '@types-common/page.types';
+import { getCharacterImage } from '@utils';
 
 interface IGardenPopup {
-  title: string;
-  img: string;
-  isShow: boolean;
-  name: string;
-  setShow: React.Dispatch<IGardenItem>;
+  show: IGardenItem;
+  setShow: React.Dispatch<IGardenItem | null>;
 }
 
 const S = {
@@ -51,26 +49,14 @@ const S = {
     borderRadius: 15,
   }),
 };
-export const GardenPopup: React.FC<IGardenPopup> = ({
-  title,
-  img,
-  isShow,
-  name,
-  setShow,
-}) => {
+export const GardenPopup: React.FC<IGardenPopup> = ({ show, setShow }) => {
+  const { luckPhrase, nickname, characterType, level } = show;
+
+  const characterImageUrl = getCharacterImage(characterType, level, 'normal');
   return (
-    <S.popupContainer visible={isShow} transparent={true}>
+    <S.popupContainer visible={!!show} transparent={true}>
       <S.popupWrap>
-        <TouchableWithoutFeedback
-          onPress={() =>
-            setShow({
-              isShow: false,
-              nickname: '',
-              luckPhrase: '',
-              imageFileUrl: '',
-            })
-          }
-        >
+        <TouchableWithoutFeedback onPress={() => setShow(null)}>
           <Dim
             colors={['#3E4A33', '#314540']}
             style={{
@@ -87,14 +73,14 @@ export const GardenPopup: React.FC<IGardenPopup> = ({
         <L.Col w={'100%'} ph={35}>
           <S.commentWrap>
             <Font type={'BODY_REGULAR'} textAlign={'center'}>
-              {title}
+              {luckPhrase}
             </Font>
           </S.commentWrap>
         </L.Col>
         <S.imgWrap>
-          <S.imgEl source={{ uri: img }} />
+          <S.imgEl source={{ uri: characterImageUrl }} />
         </S.imgWrap>
-        <Font type={'TITLE3_SEMIBOLD'}>{name}</Font>
+        <Font type={'TITLE3_SEMIBOLD'}>{nickname}</Font>
       </S.popupWrap>
     </S.popupContainer>
   );

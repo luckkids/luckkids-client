@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { Image } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Font, L, SvgIcon } from '@design-system';
+import { getCharacterImage } from '@utils';
 import { IGardenLeagueItem } from '@types-common/page.types';
 
 interface IProps extends IGardenLeagueItem {
@@ -17,20 +18,27 @@ export const GardenLeagueItem: React.FC<IProps> = (props) => {
         return <SvgIcon name={'iconMedal3'} size={25} />;
     }
   }, [props.rank]);
+
+  const characterImageUrl = getCharacterImage(
+    props.characterType,
+    props.level,
+    'normal',
+  );
+
   return (
     <L.Col justify={'center'} items={'center'} g={10}>
       {setMedal}
-      <Image
-        source={{ uri: props.imageFileUrl }}
+      <FastImage
+        source={{ uri: characterImageUrl }}
         style={{
           width: props.rank === 0 ? 95 : 67,
           height: props.rank === 0 ? 95 : 67,
           marginVertical: 20,
         }}
       />
-      <Font type={'SUBTITLE_LEAGUE'}>{props.nickname}</Font>
+      <Font type={'SUBTITLE_LEAGUE'}>{props.nickname || '-'}</Font>
       <Font type={'FOOTNOTE_REGULAR'} color={'GREY1'}>
-        {props.characterCount} 네잎
+        모든 럭키즈 {props.characterCount}
       </Font>
     </L.Col>
   );

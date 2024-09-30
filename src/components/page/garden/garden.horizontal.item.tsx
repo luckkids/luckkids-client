@@ -3,6 +3,8 @@ import { Image, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font, L, SvgIcon } from '@design-system';
 import { IGardenItem } from '@types-common/page.types';
+import FastImage from 'react-native-fast-image';
+import { getCharacterImage } from '@utils';
 
 const S = {
   Container: styled.View(
@@ -39,29 +41,42 @@ const S = {
   TextWrap: styled.View({}),
 };
 
-interface IProps extends IGardenItem {
-  isDimProfile?: boolean;
+interface IProps {
+  item: IGardenItem | null;
+  isSelf?: boolean;
+  onPress?: () => void;
 }
-export const GardenHorizontalItem: React.FC<IProps> = (props) => {
+
+export const GardenHorizontalItem: React.FC<IProps> = ({
+  isSelf,
+  onPress,
+  item,
+}) => {
+  const characterImageUrl = getCharacterImage(
+    !item ? null : item.characterType,
+    !item ? null : item.level,
+    'normal',
+  );
+
   return (
-    <S.Container isSelf={props.isSelf}>
-      <TouchableWithoutFeedback onPress={props.onPress}>
+    <S.Container isSelf={isSelf}>
+      <TouchableWithoutFeedback onPress={onPress}>
         <L.Row justify={'space-between'} items={'center'}>
           <L.Row>
             <S.Wrapper>
-              <Image
+              <FastImage
                 source={
-                  !props.isDimProfile
-                    ? { uri: props.imageFileUrl }
+                  isSelf
+                    ? { uri: characterImageUrl }
                     : require('assets/images/garden/garden-character-disabled.png')
                 }
                 style={{
                   width: '100%',
                   height: '100%',
-                  opacity: !props.isDimProfile ? 1 : 0.3,
+                  opacity: isSelf ? 1 : 0.3,
                 }}
               />
-              {props.isSelf && (
+              {isSelf && (
                 <S.BadgeWrap>
                   <Font
                     type={'CAPTION1_SEMIBOLD'}
@@ -75,9 +90,9 @@ export const GardenHorizontalItem: React.FC<IProps> = (props) => {
               )}
             </S.Wrapper>
             <L.Col justify={'center'} ml={16} h={80}>
-              <Font type={'BODY_SEMIBOLD'}>{props.nickname}</Font>
+              <Font type={'BODY_SEMIBOLD'}>{item ? item.nickname : '-'}</Font>
               <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
-                {props.characterCount}네잎
+                {item ? `모은 럭키즈 ${item.characterCount}` : '-'}
               </Font>
             </L.Col>
           </L.Row>

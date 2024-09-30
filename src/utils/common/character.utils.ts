@@ -3,18 +3,22 @@ import { CompletedCharacterCount } from '@apis/home';
 import { CharacterType } from '@types-common/character.types';
 
 export const getCharacterImage = (
-  characterType: CharacterType,
-  level: number,
+  characterType: CharacterType | null,
+  level: number | null,
   type?: 'normal' | 'back' | 'wood',
 ) => {
-  const paddedLevel = level.toString().padStart(2, '0');
-
   let folderPath = 'characters';
   if (type === 'back') {
     folderPath = 'characters-with-back';
   } else if (type === 'wood') {
     folderPath = 'characters-with-wood';
   }
+
+  if (!characterType || !level) {
+    return `${CLOUD_FRONT_PREFIX}/${folderPath}/01_first.png`;
+  }
+
+  const paddedLevel = level.toString().padStart(2, '0');
 
   return level === 1
     ? `${CLOUD_FRONT_PREFIX}/${folderPath}/01_first.png`
