@@ -15,7 +15,7 @@ import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLoginAlready: React.FC = () => {
   const {
-    params: { type },
+    params: { type, email },
   } = useNavigationRoute('LoginAlready');
   const { oauthLogin } = useAuth();
 
@@ -162,9 +162,9 @@ export const PageLoginAlready: React.FC = () => {
           )}
           {type === 'NORMAL' && (
             <L.Row w="100%" items="center" justify="space-between">
-              <L.Row items="center">
+              <L.Row items="center" flex-1>
                 <L.Row
-                  bg="WHITE"
+                  bg="LUCK_GREEN"
                   w={ICON_SIZE}
                   h={ICON_SIZE}
                   rounded={ICON_SIZE / 2}
@@ -172,11 +172,19 @@ export const PageLoginAlready: React.FC = () => {
                   items="center"
                   mr={14}
                 >
-                  {/* TODO: icon 바꿔야 함 */}
-                  {/* <SvgIcon name="iconGoogle" size={20} /> */}
+                  <SvgIcon name="iconHomeLuckkids" size={20} />
                 </L.Row>
-                <Font type="HEADLINE_SEMIBOLD" color="WHITE">
-                  이메일
+                <Font
+                  type="HEADLINE_SEMIBOLD"
+                  color="WHITE"
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={{
+                    width: 212,
+                  }}
+                  mr={20}
+                >
+                  {email}
                 </Font>
               </L.Row>
               <ChipButton text={'로그인'} onPress={handleNormalLogin} />

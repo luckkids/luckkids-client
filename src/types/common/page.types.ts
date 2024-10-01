@@ -20,7 +20,7 @@ export type InitialRoute = {
 export type AppScreensParamList = {
   StoryTelling: undefined;
   Login: undefined;
-  LoginAlready: { type: SocialType };
+  LoginAlready: { type: SocialType; email: string };
   LoginJoin: { step: 'Id' | 'Password' };
   LoginJoinEmailConfirm: {
     authKey: string;
@@ -108,12 +108,12 @@ export interface IMissionCategoryItem {
 }
 
 export interface IMissionListData {
-  missionStatus: string;
-  alertTime: string;
-  alertStatus?: 'CHECKED' | 'UNCHECKED';
   id: number;
-  missionDescription: string;
   missionType: string;
+  missionDescription: string;
+  alertStatus: 'CHECKED' | 'UNCHECKED';
+  alertTime: string;
+  missionStatus: 'SUCCEED' | 'FAILED';
 }
 
 export interface IGarden {
