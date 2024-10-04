@@ -38,7 +38,7 @@ export const GardenLeagueItem: React.FC<IProps> = (props) => {
       />
       <Font type={'SUBTITLE_LEAGUE'}>{props.nickname || '-'}</Font>
       <Font type={'FOOTNOTE_REGULAR'} color={'GREY1'}>
-        모든 럭키즈 {props.characterCount}
+        모은 럭키즈 {props.characterCount}
       </Font>
     </L.Col>
   );
