@@ -11,7 +11,6 @@ export const useMissionList = () => {
     },
     {
       select: (response) => response,
-      refetchOnMount: true,
     },
   );
 };
