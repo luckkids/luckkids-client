@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
-import { useMissionList } from '@queries';
+import { useMissionList, useMissionOutcomeList } from '@queries';
 import { MissionType } from '@types-index';
 import { missionApis } from '@apis/mission';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
@@ -36,6 +36,8 @@ export const PageMissionRepair = () => {
     refetch: refetchMissionData,
     isFetching,
   } = useMissionList();
+
+  const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
   const allCategories = Array.from(
@@ -115,25 +117,15 @@ export const PageMissionRepair = () => {
       const luckkidsMissions =
         missionData?.luckkidsMissions[item as keyof IMissionData];
 
-      // userMissions의 luckkidsMissionsId와 luckkidsMissions의 id 중복 검사
-      // 그런데 겹치는게 있다면 luckkidsMissionId가 없는 것을 가져온다
-      // 그런데 겹치는게 없다면 luckkidsMissionId가 있는 것을 가져온다
-
-      const filteredMissions = [
-        ...(userMissions || []).filter((mission) => !mission.luckkidsMissionId),
-        ...(luckkidsMissions || []).filter(
-          (luckkidsMission) =>
-            !(userMissions || []).some(
-              (userMission) =>
-                userMission.luckkidsMissionId === luckkidsMission.id,
-            ),
-        ),
-      ];
+      const missions = [
+        ...(userMissions || []),
+        ...(luckkidsMissions || []),
+      ] as IMissionDataItem[];
 
       return {
         id: item,
         missionType: item,
-        missions: filteredMissions,
+        missions: missions,
       };
     });
   };
@@ -143,15 +135,24 @@ export const PageMissionRepair = () => {
     isSelected: boolean,
   ) => {
     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
-    const res = await missionApis.editMission({
-      missionId: mission.luckkidsMissionId || mission.id,
-      data: {
-        missionActive: isSelected ? 'TRUE' : 'FALSE',
-      },
-    });
+    const res = mission.luckkidsMissionId
+      ? await missionApis.createMission({
+          luckkidsMissionId: mission.luckkidsMissionId,
+          missionType: mission.missionType,
+          missionDescription: mission.missionDescription,
+          alertStatus: 'CHECKED',
+          alertTime: mission.alertTime,
+        })
+      : await missionApis.editMission({
+          missionId: mission.id,
+          data: {
+            missionActive: isSelected ? 'TRUE' : 'FALSE',
+          },
+        });
 
     if (res) {
       refetchMissionData();
+      refetchMissionOutcomeData();
     }
   };
 
@@ -207,7 +208,6 @@ export const PageMissionRepair = () => {
                 <MissionRepairItem
                   key={i}
                   {...mission}
-                  type={type}
                   isSelected={isSelected}
                   onSelect={(isSelected) => {
                     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행

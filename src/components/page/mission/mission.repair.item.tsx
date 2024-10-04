@@ -9,7 +9,7 @@ import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { DEFAULT_MARGIN } from '@constants';
 import { Colors, Font, L, SvgIcon } from '@design-system';
-import { useMissionList } from '@queries';
+import { useMissionList, useMissionOutcomeList } from '@queries';
 import { formatMissionTime } from '@utils';
 import { missionApis } from '@apis/mission';
 import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
@@ -20,13 +20,11 @@ import { IMissionDataItem } from '@types-common/page.types';
 interface IProps extends IMissionDataItem {
   isSelected: boolean;
   onSelect?: (isSelected: boolean) => void;
-  type?: 'INITIAL_SETTING' | 'MISSION_REPAIR';
 }
 
 export const MissionRepairItem: React.FC<IProps> = ({
   isSelected,
   onSelect,
-  type = 'MISSION_REPAIR',
   ...item
 }) => {
   const {
@@ -38,69 +36,45 @@ export const MissionRepairItem: React.FC<IProps> = ({
     alertStatus,
     id,
   } = item;
+
   // 수정 data (수정 시 사용)
-  const [itemData, setItemData] = useState<IMissionDataItem>(item);
   const swipeableRef = useRef<Swipeable>(null);
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
 
   const { refetch: refetchMissionData } = useMissionList();
-
-  // 미션 수정
-  const handleEdit = async () => {
-    if (!itemData) return;
-    const {
-      missionType,
-      missionDescription,
-      missionActive,
-      alertStatus,
-      alertTime,
-    } = itemData;
-
-    await missionApis.editMission({
-      missionId: id,
-      data: {
-        missionType,
-        missionActive,
-        missionDescription,
-        alertStatus,
-        alertTime,
-      },
-    });
-
-    // 수정 성공 팝업
-  };
+  const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
 
   const handleToggleSelect = () => {
     onSelect && onSelect(!isSelected);
   };
 
-  // 미션 생성
-  const handleCreate = async () => {
-    if (!itemData) return;
-    const { luckkidsMissionId, missionType, missionDescription, alertTime } =
-      itemData;
+  const handleDelete = async () => {
+    if (!item) return;
+    await missionApis.deleteMission(id);
 
-    await missionApis.createMission({
-      luckkidsMissionId,
-      missionType,
-      missionActive,
-      missionDescription,
-      alertStatus,
-      alertTime,
+    await refetchMissionData();
+    await refetchMissionOutcomeData();
+
+    SnackBar.show({
+      title: `습관이 삭제되었습니다.`,
+      width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+      position: 'bottom',
+      rounded: 25,
+      offsetY: 110,
     });
   };
 
   // 알림 설정 바텀 시트
   const handlePressAlertTime = useCallback(() => {
-    if (!itemData) return;
+    if (!item) return;
     BottomSheet.show({
       component: (
         <MissionItemTimePicker
-          alertTime={itemData?.alertTime}
-          alertStatus={itemData?.alertStatus}
+          alertTime={item?.alertTime}
+          alertStatus={item?.alertStatus}
           onConfirm={async ({ alertTime, alertStatus }) => {
             const res = await missionApis.editMission({
-              missionId: luckkidsMissionId || id,
+              missionId: id,
               data: {
                 alertStatus,
                 alertTime,
@@ -116,18 +90,14 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 offsetY: 110,
               });
 
-              setItemData({
-                ...itemData,
-                alertTime,
-              });
-
               refetchMissionData();
+              refetchMissionOutcomeData();
             }
           }}
         />
       ),
     });
-  }, [itemData]);
+  }, [item]);
 
   const renderRightActions = (
     progress: Animated.AnimatedInterpolation<number>,
@@ -140,7 +110,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
     });
 
     return (
-      <RectButton style={styles.rightAction} onPress={() => {}}>
+      <RectButton style={styles.rightAction} onPress={handleDelete}>
         <Animated.Text style={[styles.actionText, { transform: [{ scale }] }]}>
           <Font type={'BODY_REGULAR'} color={'WHITE'} textAlign={'center'}>
             삭제
@@ -175,9 +145,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 flexWrap: 'wrap',
               }}
             >
-              {itemData?.alertTime
-                ? formatMissionTime(itemData.alertTime)
-                : '알림 끔'}
+              {item?.alertTime ? formatMissionTime(item.alertTime) : '알림 끔'}
             </Font>
           </TouchableWithoutFeedback>
         </L.Row>

@@ -4,7 +4,7 @@ import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
-const bgImage = require('assets/images/tutorial-start-bg.png');
+const bgImage = require('assets/images/home-bg.png');
 
 export const PageTutorialStart: React.FC = () => {
   const navigation = useNavigationService();
@@ -17,8 +17,7 @@ export const PageTutorialStart: React.FC = () => {
     <FrameLayout
       statusBarColor={'HOME_BG'}
       backgroundColor="WHITE"
-      // TODO(Gina): image path 가 이상한 듯 수정 필요
-      // backgroundImage={bgImage}
+      backgroundImage={bgImage}
     >
       <L.Col
         w="100%"
