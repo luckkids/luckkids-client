@@ -135,25 +135,34 @@ export const PageMissionRepair = () => {
     isSelected: boolean,
   ) => {
     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
-    const res = mission.luckkidsMissionId
-      ? await missionApis.createMission({
-          luckkidsMissionId: mission.luckkidsMissionId,
-          missionType: mission.missionType,
-          missionDescription: mission.missionDescription,
-          alertStatus: 'CHECKED',
-          alertTime: mission.alertTime,
-        })
-      : await missionApis.editMission({
-          missionId: mission.id,
-          data: {
-            missionActive: isSelected ? 'TRUE' : 'FALSE',
-          },
-        });
-
-    if (res) {
-      refetchMissionData();
-      refetchMissionOutcomeData();
+    if (isSelected) {
+      // 새로 추가하는 미션일 경우
+      mission.luckkidsMissionId
+        ? await missionApis.createMission({
+            luckkidsMissionId: mission.luckkidsMissionId,
+            missionType: mission.missionType,
+            missionDescription: mission.missionDescription,
+            alertStatus: 'CHECKED',
+            alertTime: mission.alertTime,
+          })
+        : await missionApis.editMission({
+            missionId: mission.id,
+            data: {
+              missionActive: 'TRUE',
+            },
+          });
+    } else {
+      // 삭제하는 미션
+      await missionApis.editMission({
+        missionId: mission.id,
+        data: {
+          missionActive: 'FALSE',
+        },
+      });
     }
+
+    await refetchMissionData();
+    await refetchMissionOutcomeData();
   };
 
   const renderCategoryMissionList = ({
