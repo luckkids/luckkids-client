@@ -94,7 +94,7 @@ const TUTORIAL_GUIDE_CONTENTS = [
     description:
       '100점이 완성되면 캐릭터 성장 완료! 100점\n이후에는 캐릭터를 다시 0점부터 키울 수 있어요.',
     buttonText: '이제 시작할래요',
-    lottieFile: require(`../../../assets/lotties/tutorial-guide-3.json`),
+    lottieFile: require(`../../../assets/lotties/tutorial-guide-3-2X.json`),
     size: SCREEN_WIDTH,
   },
 ];

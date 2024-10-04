@@ -1,10 +1,12 @@
-import React, { Dispatch, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font, IconNames, L, SvgIcon } from '@design-system';
-import { useFetch } from '@hooks/useFetch';
-import { IMissionListData } from '@types-common/page.types';
+import { useMissionOutcomeCount, useMissionOutcomeList } from '@queries';
 import { formatMissionTime } from '@utils';
+import { missionApis } from '@apis/mission';
+import useNavigationService from '@hooks/navigation/useNavigationService';
+import { IMissionListData } from '@types-common/page.types';
 
 const S = {
   item: styled.View({
@@ -40,41 +42,28 @@ const S = {
   }),
 };
 
-interface IProps extends IMissionListData {
-  prevCount: number;
-  setCount: Dispatch<number>;
-}
+interface IProps extends IMissionListData {}
 
 export const MissionItem: React.FC<IProps> = (props) => {
-  const [missionState, setMissionState] = useState<string>(props.missionStatus);
-  const onMount = useRef(false);
-  const [rtnTime, setRtnTime] = useState(props.alertTime);
-  const [isChecked, setIsChecked] = useState<boolean>(
-    props.alertStatus === 'CHECKED',
+  const { ...item } = props;
+  const {
+    missionStatus,
+    alertTime: _alertTime,
+    alertStatus: _alertStatus,
+    id,
+  } = item;
+  const navigation = useNavigationService();
+
+  const [alertTime, setAlertTime] = useState<string>(_alertTime);
+  const [alertStatus, setAlertStatus] = useState<'CHECKED' | 'UNCHECKED'>(
+    _alertStatus,
   );
 
-  const { onFetch: isSuccessCount } = useFetch({
-    method: 'PATCH',
-    url: `/missionOutcomes/${props.id}`,
-    value: {
-      missionStatus: missionState,
-    },
-    onSuccessCallback: () => {
-      if (missionState === 'SUCCEED') {
-        props.setCount(props.prevCount + 1);
-      } else {
-        props.setCount(props.prevCount - 1);
-      }
-    },
-  });
+  const [missionState, setMissionState] = useState<string>(missionStatus);
 
-  useEffect(() => {
-    if (onMount.current) {
-      isSuccessCount();
-    } else {
-      onMount.current = true;
-    }
-  }, [missionState]);
+  const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
+
+  const { refetch: refetchMissionOutcomeCountData } = useMissionOutcomeCount();
 
   const iconType = useMemo((): IconNames => {
     switch (props.missionType) {
@@ -99,55 +88,50 @@ export const MissionItem: React.FC<IProps> = (props) => {
     return missionState === 'SUCCEED' ? <S.dot /> : null;
   }, [missionState]);
 
-  // const setIsCheckFn = useCallback(() => {
-  //   return setIsChecked(!isChecked);
-  // }, []);
+  const handleChangeMissionState = async () => {
+    const updatedState = missionState === 'SUCCEED' ? 'FAILED' : 'SUCCEED';
+    const { data } = await missionApis.patchMissionOutcome(id, {
+      missionStatus: updatedState,
+    });
+
+    setMissionState(updatedState);
+
+    if (data.levelUpResult) {
+      // 레벨업 화면
+      const { level, characterType } = data;
+
+      navigation.push('HomeLevel', {
+        level,
+        type: characterType,
+      });
+    }
+
+    // refetch
+    refetchMissionOutcomeData();
+    refetchMissionOutcomeCountData();
+  };
 
   return (
-    <>
-      <L.Row ph={25} pv={20} justify={'space-between'}>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setMissionState((prev) => {
-              return prev === 'SUCCEED' ? 'FAILED' : 'SUCCEED';
-            });
-          }}
-        >
-          <S.Title>
-            <S.iconRound>{bullet}</S.iconRound>
-            <S.iconType>
-              <SvgIcon name={iconType} size={24} />
-            </S.iconType>
-            <L.Row mr={12} flex-1>
-              <Font
-                type={'BODY_SEMIBOLD'}
-                color={missionState === 'SUCCEED' ? 'GREY1' : 'WHITE'}
-              >
-                {props.missionDescription}
-              </Font>
-            </L.Row>
-          </S.Title>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            console.log('수정');
-            /*BottomSheet.show({
-              component: (
-                  <MissionItemTimePicker
-                      {...props}
-                      isCheck={isChecked}
-                      setIsCheckFn={setIsCheckFn}
-                      setRtnTime={setRtnTime}
-                  />
-              ),
-            })*/
-          }}
-        >
-          <Font type={'SUBHEADLINE_REGULAR'}>
-            {isChecked ? formatMissionTime(rtnTime) : '알림 끔'}
-          </Font>
-        </TouchableWithoutFeedback>
-      </L.Row>
-    </>
+    <L.Row ph={25} pv={20} justify={'space-between'} items="center">
+      <TouchableWithoutFeedback onPress={handleChangeMissionState}>
+        <S.Title>
+          <S.iconRound>{bullet}</S.iconRound>
+          <S.iconType>
+            <SvgIcon name={iconType} size={24} />
+          </S.iconType>
+          <L.Row mr={12} flex-1>
+            <Font
+              type={'BODY_SEMIBOLD'}
+              color={missionState === 'SUCCEED' ? 'GREY1' : 'WHITE'}
+            >
+              {props.missionDescription}
+            </Font>
+          </L.Row>
+        </S.Title>
+      </TouchableWithoutFeedback>
+      <Font type={'SUBHEADLINE_REGULAR'} color="GREY2">
+        {alertStatus === 'CHECKED' ? formatMissionTime(alertTime) : '알림 끔'}
+      </Font>
+    </L.Row>
   );
 };

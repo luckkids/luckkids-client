@@ -62,7 +62,7 @@ export const LoginJoinId: React.FC = () => {
           if (message === 'NORMAL') {
             setIsDuplicate(true);
           } else {
-            navigation.push('LoginAlready', { type: message });
+            navigation.push('LoginAlready', { type: message, email });
           }
         } else {
           AlertPopup.show({

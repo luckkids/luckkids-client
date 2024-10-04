@@ -1,4 +1,4 @@
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,

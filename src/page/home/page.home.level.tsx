@@ -14,16 +14,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const levelUpMotion1 = require('assets/lotties/levelup-motion-1.json');
 
-/**
- * NOTE:
- * You can navigate to the 'HomeLevel' screen with the following parameters:
- *
- * navigation.navigate('HomeLevel', {
- *   level: 2,
- *   type: 'CLOUD',
- * });
- */
-
 export const PageHomeLevel: React.FC = () => {
   const {
     params: { level, type },

@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
 import styled from 'styled-components/native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Colors, Font, L, SvgIcon, TextInputField } from '@design-system';
+import { useMissionList } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
+import { missionApis } from '@apis/mission';
 import {
   IAddCategory,
   MissionAddCategory,
 } from '@components/page/mission/mission.add.category';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useFetch } from '@hooks/useFetch';
-import { missionApis } from '@apis/mission';
-import { format } from 'date-fns';
-import { useMissionList } from '@queries';
 
 const category: Array<IAddCategory> = [
   {
@@ -82,8 +81,7 @@ const S = {
 
 export const PageMissionAdd: React.FC = () => {
   const navigation = useNavigationService();
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [rtnTime, setRtnTime] = useState<string>('');
+  const [alertTime, setAlertTime] = useState('07:00:00');
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const [numColumns, setNumColumns] = useState<number>(4);
@@ -99,11 +97,11 @@ export const PageMissionAdd: React.FC = () => {
       missionType: currentCategory,
       missionDescription: text,
       alertStatus: isDisabled ? 'UNCHECKED' : 'CHECKED',
-      alertTime: isDisabled ? '00:00:00' : rtnTime,
+      alertTime: alertTime,
     });
 
     if (res) {
-      navigation.goBack();
+      navigation.navigate('MissionRepair', {});
       refetchMissionData();
     }
   };
@@ -113,13 +111,13 @@ export const PageMissionAdd: React.FC = () => {
 
     const formattedTime = format(selectedDate, 'HH:mm:00');
 
-    setRtnTime(formattedTime);
+    setAlertTime(formattedTime);
   };
 
   const isReadyToCreate = () => {
     if (!currentCategory) return false;
     if (text.length < 1) return false;
-    if (isDisabled && !rtnTime) return false;
+    if (isDisabled && !alertTime) return false;
     return true;
   };
 
@@ -184,7 +182,7 @@ export const PageMissionAdd: React.FC = () => {
                 width: '100%',
               }}
               testID="dateTimePicker"
-              value={date}
+              value={new Date(`2021-01-01T${alertTime}`)}
               is24Hour={false}
               display="spinner"
               mode={'time'}
