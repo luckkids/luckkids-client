@@ -1,5 +1,11 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
-import { FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
+  ViewToken,
+} from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
@@ -38,7 +44,6 @@ export const PageMissionRepair = () => {
   } = useMissionList();
 
   const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
 
   const allCategories = Array.from(
     new Set([
@@ -46,9 +51,46 @@ export const PageMissionRepair = () => {
       ...Object.keys(missionData?.luckkidsMissions || {}),
     ]),
   );
+
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+
   const [openedCategories, setOpenedCategories] =
     useState<string[]>(allCategories);
   const flatListRef = useRef<FlatList>(null);
+  const categoryFlatListRef = useRef<FlatList>(null);
+  const [isManualScrolling, setIsManualScrolling] = useState(false);
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 10,
+  }).current;
+
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (viewableItems.length > 0 && !isManualScrolling) {
+        const firstVisibleItem = viewableItems[0];
+        const newCategory = firstVisibleItem.item.missionType;
+
+        const categoryIndex = allCategories.findIndex(
+          (category) => category === newCategory,
+        );
+
+        if (categoryIndex !== -1 && categoryFlatListRef.current) {
+          categoryFlatListRef.current.scrollToIndex({
+            index: categoryIndex,
+            animated: true,
+            viewPosition: 0.5,
+          });
+
+          setSelectedCategory(newCategory);
+        }
+      }
+    },
+    [allCategories, isManualScrolling, categoryFlatListRef],
+  );
+
+  const viewabilityConfigCallbackPairs = useRef([
+    { viewabilityConfig, onViewableItemsChanged },
+  ]);
 
   const handleConfirm = () => {
     if (type === 'INITIAL_SETTING') {
@@ -130,30 +172,81 @@ export const PageMissionRepair = () => {
     });
   };
 
+  // 카테고리 스크롤 이동
+  const scrollToCategory = useCallback(
+    (category: string) => {
+      if (category && flatListRef.current) {
+        const categoryIndex = allCategories.findIndex((c) => c === category);
+        if (categoryIndex !== -1) {
+          // 해당 category open (이미 열려있을때에도 처리 필요)
+          if (!openedCategories.includes(category)) {
+            setOpenedCategories([...openedCategories, category]);
+          }
+
+          setIsManualScrolling(true);
+          flatListRef.current.scrollToIndex({
+            index: categoryIndex,
+            animated: true,
+            viewPosition: 0,
+          });
+
+          // 스크롤 애니메이션이 끝난 후 isManualScrolling을 false로 설정
+          setTimeout(() => {
+            setIsManualScrolling(false);
+          }, 500); // 애니메이션 duration에 맞춰 조정 필요
+        }
+      }
+    },
+    [allCategories, openedCategories, setOpenedCategories],
+  );
+
+  const renderCategoryItem = useCallback(
+    ({ item }: { item: string }) => (
+      <MissionRepairCategoryItem
+        isActive={selectedCategory === item}
+        label={item}
+        onPress={() => {
+          scrollToCategory(item);
+          setSelectedCategory(item);
+        }}
+      />
+    ),
+    [selectedCategory, scrollToCategory],
+  );
+
   const handleToggleMissionActive = async (
     mission: IMissionDataItem,
     isSelected: boolean,
   ) => {
     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
-    const res = mission.luckkidsMissionId
-      ? await missionApis.createMission({
-          luckkidsMissionId: mission.luckkidsMissionId,
-          missionType: mission.missionType,
-          missionDescription: mission.missionDescription,
-          alertStatus: 'CHECKED',
-          alertTime: mission.alertTime,
-        })
-      : await missionApis.editMission({
-          missionId: mission.id,
-          data: {
-            missionActive: isSelected ? 'TRUE' : 'FALSE',
-          },
-        });
-
-    if (res) {
-      refetchMissionData();
-      refetchMissionOutcomeData();
+    if (isSelected) {
+      // 새로 추가하는 미션일 경우
+      mission.luckkidsMissionId
+        ? await missionApis.createMission({
+            luckkidsMissionId: mission.luckkidsMissionId,
+            missionType: mission.missionType,
+            missionDescription: mission.missionDescription,
+            alertStatus: 'CHECKED',
+            alertTime: mission.alertTime,
+          })
+        : await missionApis.editMission({
+            missionId: mission.id,
+            data: {
+              missionActive: 'TRUE',
+            },
+          });
+    } else {
+      // 삭제하는 미션
+      await missionApis.editMission({
+        missionId: mission.id,
+        data: {
+          missionActive: 'FALSE',
+        },
+      });
     }
+
+    await refetchMissionData();
+    await refetchMissionOutcomeData();
   };
 
   const renderCategoryMissionList = ({
@@ -232,25 +325,6 @@ export const PageMissionRepair = () => {
     );
   };
 
-  // 카테고리 스크롤 이동
-  const scrollToCategory = (category: string) => {
-    if (category && flatListRef.current) {
-      const categoryIndex = allCategories.findIndex((c) => c === category);
-      if (categoryIndex !== -1) {
-        // 해당 cateogry open (이미 열려있을때에도 처리 필요)
-        if (!openedCategories.includes(category)) {
-          setOpenedCategories([...openedCategories, category]);
-        }
-
-        flatListRef.current.scrollToIndex({
-          index: categoryIndex,
-          animated: true,
-          viewPosition: 0,
-        });
-      }
-    }
-  };
-
   useEffect(() => {
     setOpenedCategories(allCategories);
   }, [missionData]);
@@ -259,6 +333,10 @@ export const PageMissionRepair = () => {
     if (isFetching) LoadingIndicator.show({});
     else LoadingIndicator.hide();
   }, [isFetching]);
+
+  useEffect(() => {
+    setSelectedCategory(allCategories[0]);
+  }, [allCategories]);
 
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
@@ -275,23 +353,15 @@ export const PageMissionRepair = () => {
           onPress={() => navigation.navigate('MissionAdd')}
         />
         {allCategories?.length !== 0 && (
-          <ScrollView horizontal={true}>
-            <L.Row ml={8} g={8}>
-              {allCategories.map((item, i) => {
-                return (
-                  <MissionRepairCategoryItem
-                    isActive={selectedCategory === item ? true : null}
-                    label={item}
-                    onPress={() => {
-                      scrollToCategory(item);
-                      setSelectedCategory(item);
-                    }}
-                    key={item}
-                  />
-                );
-              })}
-            </L.Row>
-          </ScrollView>
+          <FlatList
+            ref={categoryFlatListRef}
+            data={allCategories}
+            renderItem={renderCategoryItem}
+            keyExtractor={(item) => item}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ marginLeft: 8, gap: 8, paddingRight: 20 }}
+          />
         )}
       </L.Row>
       {/* 습관 리스트 */}
@@ -315,6 +385,8 @@ export const PageMissionRepair = () => {
             });
           });
         }}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+        onMomentumScrollBegin={() => setIsManualScrolling(false)}
       />
       {type === 'INITIAL_SETTING' && (
         <L.Absolute b={bottom} w={SCREEN_WIDTH}>
