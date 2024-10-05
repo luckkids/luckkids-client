@@ -155,7 +155,6 @@ export const Home: React.FC = () => {
           )
         }
         stickToTop
-        paddingBottom={0}
       >
         {/* 캘린더 */}
         <View style={{ height: 100 }}>
