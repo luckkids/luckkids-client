@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { Image, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  GestureResponderEvent,
+  Image,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import styled from 'styled-components/native';
 import { DEFAULT_MARGIN } from '@constants';
 import { Font, L, SvgIcon } from '@design-system';
@@ -38,6 +43,19 @@ export const GardenNavbar = () => {
     onSuccessCallback: (rtn) => setLeague(rtn),
   });
 
+  const handleLeagueToggle = () => {
+    setShowLeague(!showLeague);
+    if (!showLeague) onGardenLeague();
+  };
+
+  const handleBackgroundPress = () => {
+    setShowLeague(false);
+  };
+
+  const handleContentPress = (event: GestureResponderEvent) => {
+    event.stopPropagation();
+  };
+
   return (
     <>
       <L.Row
@@ -55,12 +73,7 @@ export const GardenNavbar = () => {
           }}
         />
         <L.Row g={25}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              setShowLeague(!showLeague);
-              if (!showLeague) onGardenLeague();
-            }}
-          >
+          <TouchableWithoutFeedback onPress={handleLeagueToggle}>
             <View>
               <SvgIcon name={'icon_league'} size={20} />
             </View>
@@ -79,42 +92,46 @@ export const GardenNavbar = () => {
         </L.Row>
       </L.Row>
       {showLeague && (
-        <L.Absolute
-          t={0}
-          w="100%"
-          h="100%"
-          r={0}
-          z={1}
-          justify={'center'}
-          ph={DEFAULT_MARGIN}
-          items="center"
-          style={{
-            backgroundColor: 'rgba(0,0,0,0.8)',
-          }}
-        >
-          <L.Col w={'100%'} h={'100%'} mv={25} justify={'center'}>
-            <L.Row items={'center'} ml={15} mb={18} g={13}>
-              <S.Icon>
-                <SvgIcon name={'icon_league'} size={22} />
-              </S.Icon>
-              <Font type={'TITLE_League'}>리그</Font>
-            </L.Row>
-            <L.Row
-              justify="space-between"
-              w="100%"
-              rounded={15}
-              p={25}
-              items="flex-end"
-              style={{
-                backgroundColor: 'rgba(44,44,44,0.6)',
-              }}
-            >
-              <GardenLeagueItem {...league[1]} rank={1} />
-              <GardenLeagueItem {...league[0]} rank={0} />
-              <GardenLeagueItem {...league[2]} rank={2} />
-            </L.Row>
-          </L.Col>
-        </L.Absolute>
+        <TouchableWithoutFeedback onPress={handleBackgroundPress}>
+          <L.Absolute
+            t={0}
+            w="100%"
+            h="100%"
+            r={0}
+            z={1}
+            justify={'center'}
+            ph={DEFAULT_MARGIN}
+            items="center"
+            style={{
+              backgroundColor: 'rgba(0,0,0,0.8)',
+            }}
+          >
+            <TouchableWithoutFeedback onPress={handleContentPress}>
+              <L.Col w={'100%'} mv={25} justify={'center'}>
+                <L.Row items={'center'} ml={15} mb={18} g={13}>
+                  <S.Icon>
+                    <SvgIcon name={'icon_league'} size={22} />
+                  </S.Icon>
+                  <Font type={'TITLE_League'}>리그</Font>
+                </L.Row>
+                <L.Row
+                  justify="space-between"
+                  w="100%"
+                  rounded={15}
+                  p={25}
+                  items="flex-end"
+                  style={{
+                    backgroundColor: 'rgba(44,44,44,0.6)',
+                  }}
+                >
+                  <GardenLeagueItem {...league[1]} rank={1} />
+                  <GardenLeagueItem {...league[0]} rank={0} />
+                  <GardenLeagueItem {...league[2]} rank={2} />
+                </L.Row>
+              </L.Col>
+            </TouchableWithoutFeedback>
+          </L.Absolute>
+        </TouchableWithoutFeedback>
       )}
     </>
   );
