@@ -99,6 +99,7 @@ export interface IMissionDataItem {
   missionActive?: 'TRUE' | 'FALSE'; // luckkidsMission의 경우 없을 수 있음
   alertTime: string;
   alertStatus: 'CHECKED' | 'UNCHECKED';
+  isLuckkidsMission?: boolean;
 }
 
 export interface IMissionCategoryItem {

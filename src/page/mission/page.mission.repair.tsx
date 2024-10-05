@@ -33,6 +33,7 @@ export const PageMissionRepair = () => {
   const [initialSetting, setInitialSetting] =
     useRecoilState(RecoilInitialSetting);
 
+  // 초기 셋팅을 위헤 선택한 미션 리스트
   const [selectedMissions, setSelectedMissions] = useState<IMissionDataItem[]>(
     [],
   );
@@ -121,7 +122,7 @@ export const PageMissionRepair = () => {
     missionType: string;
     missions: IMissionDataItem[];
   }[] => {
-    return allCategories.map((item, i) => {
+    return allCategories.map((item) => {
       const userMissions =
         missionData?.userMissions[item as keyof IMissionData];
       const luckkidsMissions =
@@ -129,7 +130,10 @@ export const PageMissionRepair = () => {
 
       const missions = [
         ...(userMissions || []),
-        ...(luckkidsMissions || []),
+        ...(luckkidsMissions?.map((mission) => ({
+          ...mission,
+          isLuckkidsMission: true,
+        })) || []),
       ] as IMissionDataItem[];
 
       return {
@@ -184,17 +188,28 @@ export const PageMissionRepair = () => {
     if (isSelected) {
       // 새로 추가하는 미션일 경우
 
-      // 대표 미션
+      // 대표 미션이거나 대표 미션을 이용해서 만든 미션인 경우
       if (mission.luckkidsMissionId) {
-        await missionApis.createMission({
-          luckkidsMissionId: mission.luckkidsMissionId,
-          missionType: mission.missionType,
-          missionDescription: mission.missionDescription,
-          alertStatus: 'CHECKED',
-          alertTime: mission.alertTime,
-        });
+        if (mission.isLuckkidsMission) {
+          // 대표 미션 체크
+          await missionApis.createMission({
+            luckkidsMissionId: mission.luckkidsMissionId,
+            missionType: mission.missionType,
+            missionDescription: mission.missionDescription,
+            alertStatus: 'CHECKED',
+            alertTime: mission.alertTime,
+          });
+        } else {
+          // 대표 미션을 이용해서 만든 미션 체크
+          await missionApis.editMission({
+            missionId: mission.id,
+            data: {
+              missionActive: 'TRUE',
+            },
+          });
+        }
       } else {
-        // 유저 미션
+        // 유저가 직접 추가한 미션
         await missionApis.editMission({
           missionId: mission.id,
           data: {
