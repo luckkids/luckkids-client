@@ -1,4 +1,5 @@
 import React from 'react';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
@@ -15,9 +16,13 @@ export const PageTutorialStart: React.FC = () => {
 
   return (
     <FrameLayout
-      statusBarColor={'HOME_BG'}
       backgroundColor="WHITE"
       backgroundImage={bgImage}
+      paddingBottom={0}
+      stickToTop
+      backgroundImageStyle={{
+        height: (SCREEN_WIDTH * 850) / 390,
+      }}
     >
       <L.Col
         w="100%"
