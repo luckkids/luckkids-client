@@ -124,7 +124,7 @@ export const PageMissionAdd: React.FC = () => {
   return (
     <FrameLayout
       NavBar={
-        <L.Row pv={12} ph={16} justify={'space-between'}>
+        <L.Row pt={30} pb={12} ph={16} justify={'space-between'}>
           <ButtonText
             onPress={() => navigation.goBack()}
             text={'취소'}
