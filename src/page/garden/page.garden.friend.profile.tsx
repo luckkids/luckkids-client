@@ -1,15 +1,11 @@
 import React from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { DEFAULT_MARGIN } from '@constants';
-import { Button, Font, L, SvgIcon } from '@design-system';
-import { useHomeInfo, useMe, useUserInfo } from '@queries';
+import FastImage from 'react-native-fast-image';
+import { Font, L, SvgIcon } from '@design-system';
+import { useUserInfo } from '@queries';
 import { getCharacterImage } from '@utils';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
-import useNavigationService from '@hooks/navigation/useNavigationService';
-import FastImage from 'react-native-fast-image';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 
 export const PageGardenFriendProfile: React.FC = () => {
@@ -18,7 +14,7 @@ export const PageGardenFriendProfile: React.FC = () => {
   } = useNavigationRoute('GardenFriendProfile');
 
   const { data: userInfo } = useUserInfo(friendId);
-  const { luckPhrase, nickname } = userInfo || {};
+  const { luckPhrase, nickname, inProgressCharacter } = userInfo || {};
 
   return (
     <FrameLayout
@@ -44,16 +40,6 @@ export const PageGardenFriendProfile: React.FC = () => {
             h={58}
           />
           <L.Absolute
-            r={-14}
-            t={-14}
-            rounded={14}
-            style={{
-              backgroundColor: '#021911',
-            }}
-          >
-            <SvgIcon name={'icon_edit_comment'} size={28} />
-          </L.Absolute>
-          <L.Absolute
             flexDirection="row"
             justify="center"
             items="center"
@@ -67,8 +53,8 @@ export const PageGardenFriendProfile: React.FC = () => {
           </L.Absolute>
         </L.Row>
         {/* 캐릭터 */}
-        <L.Row w="100%" justify="center">
-          {/* {inProgressCharacter && (
+        <L.Row justify="center">
+          {inProgressCharacter && (
             <FastImage
               source={{
                 uri: getCharacterImage(
@@ -81,17 +67,17 @@ export const PageGardenFriendProfile: React.FC = () => {
                 height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
               }}
             />
-          )} */}
+          )}
         </L.Row>
-
         {/* 이름 수정 */}
         <L.Row mt={36} items="center">
           <Font type={'TITLE1_BOLD'} color={'WHITE'} mr={9}>
             {nickname}
           </Font>
-          <SvgIcon name={'icon_edit'} size={16} />
         </L.Row>
       </L.Col>
     </FrameLayout>
   );
 };
+
+const CHARACTER_MARGIN = 90;

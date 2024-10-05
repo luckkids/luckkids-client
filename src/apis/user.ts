@@ -36,7 +36,12 @@ const setInitialSetting = async (initialSetting: InitialSetting) => {
   return res;
 };
 
-export type GetUserResponse = GetMeResponse;
+export type GetUserResponse = GetMeResponse & {
+  inProgressCharacter: {
+    characterType: CharacterType;
+    level: number;
+  };
+};
 
 const getUserInfo = async (id: number) => {
   const res = await API.get<GetUserResponse>(`/user/${id}`);
