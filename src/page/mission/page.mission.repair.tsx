@@ -52,45 +52,13 @@ export const PageMissionRepair = () => {
     ]),
   );
 
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    allCategories[0],
+  );
 
   const [openedCategories, setOpenedCategories] =
     useState<string[]>(allCategories);
   const flatListRef = useRef<FlatList>(null);
-  const categoryFlatListRef = useRef<FlatList>(null);
-  const [isManualScrolling, setIsManualScrolling] = useState(false);
-
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 10,
-  }).current;
-
-  const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0 && !isManualScrolling) {
-        const firstVisibleItem = viewableItems[0];
-        const newCategory = firstVisibleItem.item.missionType;
-
-        const categoryIndex = allCategories.findIndex(
-          (category) => category === newCategory,
-        );
-
-        if (categoryIndex !== -1 && categoryFlatListRef.current) {
-          categoryFlatListRef.current.scrollToIndex({
-            index: categoryIndex,
-            animated: true,
-            viewPosition: 0.5,
-          });
-
-          setSelectedCategory(newCategory);
-        }
-      }
-    },
-    [allCategories, isManualScrolling, categoryFlatListRef],
-  );
-
-  const viewabilityConfigCallbackPairs = useRef([
-    { viewabilityConfig, onViewableItemsChanged },
-  ]);
 
   const handleConfirm = () => {
     if (type === 'INITIAL_SETTING') {
@@ -183,17 +151,11 @@ export const PageMissionRepair = () => {
             setOpenedCategories([...openedCategories, category]);
           }
 
-          setIsManualScrolling(true);
           flatListRef.current.scrollToIndex({
             index: categoryIndex,
             animated: true,
             viewPosition: 0,
           });
-
-          // 스크롤 애니메이션이 끝난 후 isManualScrolling을 false로 설정
-          setTimeout(() => {
-            setIsManualScrolling(false);
-          }, 500); // 애니메이션 duration에 맞춰 조정 필요
         }
       }
     },
@@ -221,20 +183,25 @@ export const PageMissionRepair = () => {
     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
     if (isSelected) {
       // 새로 추가하는 미션일 경우
-      mission.luckkidsMissionId
-        ? await missionApis.createMission({
-            luckkidsMissionId: mission.luckkidsMissionId,
-            missionType: mission.missionType,
-            missionDescription: mission.missionDescription,
-            alertStatus: 'CHECKED',
-            alertTime: mission.alertTime,
-          })
-        : await missionApis.editMission({
-            missionId: mission.id,
-            data: {
-              missionActive: 'TRUE',
-            },
-          });
+
+      // 대표 미션
+      if (mission.luckkidsMissionId) {
+        await missionApis.createMission({
+          luckkidsMissionId: mission.luckkidsMissionId,
+          missionType: mission.missionType,
+          missionDescription: mission.missionDescription,
+          alertStatus: 'CHECKED',
+          alertTime: mission.alertTime,
+        });
+      } else {
+        // 유저 미션
+        await missionApis.editMission({
+          missionId: mission.id,
+          data: {
+            missionActive: 'TRUE',
+          },
+        });
+      }
     } else {
       // 삭제하는 미션
       await missionApis.editMission({
@@ -334,10 +301,6 @@ export const PageMissionRepair = () => {
     else LoadingIndicator.hide();
   }, [isFetching]);
 
-  useEffect(() => {
-    setSelectedCategory(allCategories[0]);
-  }, [allCategories]);
-
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
       <L.Row pv={20} ph={25}>
@@ -354,7 +317,6 @@ export const PageMissionRepair = () => {
         />
         {allCategories?.length !== 0 && (
           <FlatList
-            ref={categoryFlatListRef}
             data={allCategories}
             renderItem={renderCategoryItem}
             keyExtractor={(item) => item}
@@ -385,8 +347,6 @@ export const PageMissionRepair = () => {
             });
           });
         }}
-        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
-        onMomentumScrollBegin={() => setIsManualScrolling(false)}
       />
       {type === 'INITIAL_SETTING' && (
         <L.Absolute b={bottom} w={SCREEN_WIDTH}>
