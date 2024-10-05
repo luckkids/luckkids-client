@@ -4,7 +4,7 @@ import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
-const bgImage = require('assets/images/home-bg.png');
+const bgImage = require('assets/images/tutorial-start-bg.png');
 
 export const PageTutorialStart: React.FC = () => {
   const navigation = useNavigationService();
