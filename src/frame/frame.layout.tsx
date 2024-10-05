@@ -40,7 +40,7 @@ export const FrameLayout = ({
   backgroundStyle,
   stickToTop = false,
   enableKeyboardAvoidingView = true,
-  paddingBottom = 0,
+  paddingBottom,
 }: FrameLayoutProps) => {
   const theme = useTheme();
   const { top, bottom: safeAreaBottom } = useSafeAreaInsets();
@@ -67,7 +67,9 @@ export const FrameLayout = ({
             backgroundColor: Colors[backgroundColor || 'BG_PRIMARY'],
             width: SCREEN_WIDTH,
             flex: 1,
-            paddingBottom: safeAreaBottom || paddingBottom,
+            ...(paddingBottom !== undefined && {
+              paddingBottom: paddingBottom || safeAreaBottom,
+            }),
           },
           backgroundStyle,
         ])}

@@ -136,7 +136,9 @@ export type FindEmailResponse = {
 };
 
 const findEmail = async (request: FindEmailRequest) => {
-  const res = await API.post<FindEmailResponse>('/user/findEmail', request);
+  const res = await API.get<FindEmailResponse>(
+    `/user/findEmail?email=${request.email}`,
+  );
   return res.data;
 };
 

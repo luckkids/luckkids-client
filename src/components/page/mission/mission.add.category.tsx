@@ -33,7 +33,7 @@ export const MissionAddCategory: React.FC<IProps> = (props) => {
         </L.Row>
         <Font
           type={'SUBTITLE_LEAGUE'}
-          color={'GREY1'}
+          color={props.isActive ? 'LUCK_GREEN' : 'GREY1'}
           textAlign={'center'}
           mt={14}
           style={{ width: '100%' }}
