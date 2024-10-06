@@ -1,11 +1,5 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
-import {
-  FlatList,
-  ScrollView,
-  TouchableWithoutFeedback,
-  View,
-  ViewToken,
-} from 'react-native';
+import { FlatList, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
@@ -132,7 +126,7 @@ export const PageMissionRepair = () => {
         ...(userMissions || []),
         ...(luckkidsMissions?.map((mission) => ({
           ...mission,
-          isLuckkidsMission: true,
+          isLuckkidsMission: true, // 대표 미션 여부
         })) || []),
       ] as IMissionDataItem[];
 
@@ -312,9 +306,12 @@ export const PageMissionRepair = () => {
   }, [missionData]);
 
   useEffect(() => {
-    if (isFetching) LoadingIndicator.show({});
-    else LoadingIndicator.hide();
-  }, [isFetching]);
+    if (isFetching) return LoadingIndicator.show({});
+    else {
+      LoadingIndicator.hide();
+      setSelectedCategory(allCategories[0]);
+    }
+  }, [isFetching, allCategories]);
 
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
