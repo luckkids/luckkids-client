@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import styled from 'styled-components/native';
-import { Button, Colors, Font, SvgIcon } from '@design-system';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import { createAndCopyBranchLink } from '@utils';
-import { useFetch } from '@hooks/useFetch';
-import { useMe } from '@queries';
 import Share, { ShareOptions } from 'react-native-share';
 import RNFetchBlob from 'rn-fetch-blob';
+import styled from 'styled-components/native';
+import { Button, Colors, Font, SvgIcon } from '@design-system';
+import { useMe } from '@queries';
+import { createAndCopyBranchLink } from '@utils';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import { useFetch } from '@hooks/useFetch';
 
 const S = {
   popupWrap: styled.View({
@@ -65,21 +65,13 @@ export default function GardenBottomSheet() {
     try {
       const branchData = await createAndCopyBranchLink(code, Me ? Me.nickname : null);
       if (branchData) {
-        const imageUrl = branchData.icon;
-        const imageType = imageUrl.split('.').pop(); // 파일 확장자로 타입 추정
-        const mimeType = `image/${imageType}`;
-        const imageBase64:string = await RNFetchBlob.fetch('GET', imageUrl)
-          .then(res => res.base64()).catch(err => {
-            console.log(err);
-            return null;
-          });;
 
         const shareOptions:ShareOptions = {
           activityItemSources:[
             {
               placeholderItem: {
                 type: 'url',
-                content: imageUrl,
+                content: branchData.url,
               },
               item: {
                 default: {
@@ -89,7 +81,7 @@ export default function GardenBottomSheet() {
               },
               linkMetadata: {
                 title:branchData.message,
-                icon: imageUrl,
+                icon: branchData.icon,
               },
             },
           ],

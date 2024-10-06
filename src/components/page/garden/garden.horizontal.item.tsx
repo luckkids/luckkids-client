@@ -1,10 +1,10 @@
 import React from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors, Font, L, SvgIcon } from '@design-system';
-import { IGardenItem } from '@types-common/page.types';
-import FastImage from 'react-native-fast-image';
 import { getCharacterImage } from '@utils';
+import { IGardenItem } from '@types-common/page.types';
 
 const S = {
   Container: styled.View(
