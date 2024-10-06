@@ -78,7 +78,7 @@ export const Garden: React.FC = () => {
       }
     } else {
       for (let i = 0; i < 15 - (friendData.length + 1); i++) {
-        temArray.push(<GardenItem item={null} key={i} isSelf={false} />);
+        temArray.push(<GardenItem item={null} key={i} isSelf={false}/>);
       }
     }
     return temArray;
@@ -90,9 +90,9 @@ export const Garden: React.FC = () => {
 
     if (!friendId) return;
 
-    return navigation.navigate('GardenFriendProfile', {
+   /* return navigation.navigate('GardenFriendProfile', {
       friendId,
-    });
+    });*/
   };
 
   useEffect(() => {
