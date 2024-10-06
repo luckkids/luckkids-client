@@ -6,12 +6,15 @@ import { Button, Font, L } from '@design-system';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native';
 
 const bgImage = require('assets/images/tutorial-guide-bg.png');
 
 export const PageTutorialGuide: React.FC = () => {
   const navigation = useNavigationService();
   const [step, setStep] = useState(0);
+  const { bottom } = useSafeAreaInsets();
 
   const handlePressNext = () => {
     if (step === TUTORIAL_GUIDE_CONTENTS.length - 1) {
@@ -22,7 +25,11 @@ export const PageTutorialGuide: React.FC = () => {
   };
 
   return (
-    <FrameLayout statusBarColor={'TUTORIAL_GUIDE_BG'} backgroundImage={bgImage}>
+    <FrameLayout
+      statusBarColor={'TUTORIAL_GUIDE_BG'}
+      backgroundImage={bgImage}
+      paddingBottom={0}
+    >
       <L.Col
         ph={DEFAULT_MARGIN}
         items="center"
@@ -30,46 +37,65 @@ export const PageTutorialGuide: React.FC = () => {
         h={'100%'}
         w={'100%'}
       >
-        <L.Col w={'100%'} items="center">
+        <L.Col w={'100%'} items="center" h="100%">
           <L.Row items={'center'}>
             <ProgressBar
               progress={(step + 1) / TUTORIAL_GUIDE_CONTENTS.length}
             />
           </L.Row>
-          <Font textAlign="center" type={'TITLE2_BOLD'} color={'WHITE'} mt={76}>
-            {TUTORIAL_GUIDE_CONTENTS[step].title}
-          </Font>
-          {TUTORIAL_GUIDE_CONTENTS[step].description && (
+          <ScrollView
+            style={{
+              flex: 1,
+              width: SCREEN_WIDTH,
+            }}
+            contentContainerStyle={{
+              paddingBottom: 50 + 20,
+            }}
+          >
             <Font
               textAlign="center"
-              type={'BODY_REGULAR'}
-              color={'GREY0'}
-              mt={20}
+              type={'TITLE2_BOLD'}
+              color={'WHITE'}
+              mt={50}
             >
-              {TUTORIAL_GUIDE_CONTENTS[step].description}
+              {TUTORIAL_GUIDE_CONTENTS[step].title}
             </Font>
-          )}
-          <L.Row w={'100%'} justify="center" mt={50}>
-            <LottieView
-              source={TUTORIAL_GUIDE_CONTENTS[step].lottieFile}
-              autoPlay
-              loop
-              style={{
-                width: TUTORIAL_GUIDE_CONTENTS[step].size,
-                height: TUTORIAL_GUIDE_CONTENTS[step].size,
-              }}
-            />
-          </L.Row>
+            {TUTORIAL_GUIDE_CONTENTS[step].description && (
+              <Font
+                textAlign="center"
+                type={'BODY_REGULAR'}
+                color={'GREY0'}
+                mt={20}
+              >
+                {TUTORIAL_GUIDE_CONTENTS[step].description}
+              </Font>
+            )}
+            <L.Row w={'100%'} justify="center" mt={50}>
+              <LottieView
+                source={TUTORIAL_GUIDE_CONTENTS[step].lottieFile}
+                autoPlay
+                loop
+                style={{
+                  width: TUTORIAL_GUIDE_CONTENTS[step].size,
+                  height: TUTORIAL_GUIDE_CONTENTS[step].size,
+                }}
+              />
+            </L.Row>
+          </ScrollView>
         </L.Col>
-        <Button
-          type={'action'}
-          text={TUTORIAL_GUIDE_CONTENTS[step].buttonText}
-          onPress={handlePressNext}
-          sizing="stretch"
-          bgColor={'LUCK_GREEN'}
-          textColor={'BLACK'}
-        />
       </L.Col>
+      <L.Absolute b={bottom || 20} w={SCREEN_WIDTH}>
+        <L.Row ph={DEFAULT_MARGIN}>
+          <Button
+            type={'action'}
+            text={TUTORIAL_GUIDE_CONTENTS[step].buttonText}
+            onPress={handlePressNext}
+            sizing="stretch"
+            bgColor={'LUCK_GREEN'}
+            textColor={'BLACK'}
+          />
+        </L.Row>
+      </L.Absolute>
     </FrameLayout>
   );
 };

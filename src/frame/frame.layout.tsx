@@ -68,7 +68,7 @@ export const FrameLayout = ({
             width: SCREEN_WIDTH,
             flex: 1,
             ...(paddingBottom !== undefined && {
-              paddingBottom: paddingBottom || safeAreaBottom,
+              paddingBottom: paddingBottom || (safeAreaBottom === 0 ? 20 : 0),
             }),
           },
           backgroundStyle,

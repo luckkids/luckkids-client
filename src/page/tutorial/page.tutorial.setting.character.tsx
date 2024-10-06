@@ -20,9 +20,8 @@ import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 const tutorialGuideBgImage = require('assets/images/tutorial-guide-bg.png');
 const tutorialSettingBgImage = require('assets/images/tutorial-setting-bg.png');
 const tutorialSettingCharacterCompleteImage = require('assets/images/tutorial-setting-character-complete.png');
-const tutorialSettingCharacterNickname = require('assets/images/tutorial-setting-nickname.png');
-
 const tutorialSettingCharacterImage = require('assets/images/tutorial-setting-character.png');
+const tutorialSettingCharacterNickname = require('assets/images/tutorial-setting-nickname.png');
 
 export const PageTutorialSettingCharacter: React.FC = () => {
   const navigation = useNavigationService();
@@ -221,6 +220,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             }
           : {}
       }
+      paddingBottom={0}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <L.Col

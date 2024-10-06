@@ -178,7 +178,7 @@ export const PageLoginId: React.FC = () => {
   }, [emailInput$]);
 
   return (
-    <FrameLayout>
+    <FrameLayout paddingBottom={0}>
       <StackNavbar title={'이메일 로그인'} useBackButton />
       <L.Col w={'100%'} justify="space-between" ph={DEFAULT_MARGIN}>
         <L.Col w={'100%'} g={10} mt={40}>

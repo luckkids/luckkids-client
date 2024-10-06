@@ -2,7 +2,7 @@ import React, { createElement, useEffect, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { of } from 'rxjs';
 import { debounceTime, switchMap, catchError } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
@@ -14,6 +14,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilLoignInfo } from '@recoil/recoil.login';
+import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const PageSettingInfoPassword: React.FC = () => {
   const { bottom } = useSafeAreaInsets();
@@ -28,8 +29,8 @@ export const PageSettingInfoPassword: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const { data: me } = useMe();
   const { email = '' } = me || {};
-
-  const savedLoginInfo = useRecoilValue(RecoilLoignInfo);
+  const navigation = useNavigationService();
+  const [savedLoginInfo, setSavedLoginInfo] = useRecoilState(RecoilLoignInfo);
 
   useEffect(() => {
     const newPassSubscription = of(newPass)
@@ -101,7 +102,6 @@ export const PageSettingInfoPassword: React.FC = () => {
           const { snsType } = res;
           if (snsType === 'NORMAL') {
             // 현재 비밀번호 틀린 경우
-            console.log('savedLoginInfo', savedLoginInfo);
             if (savedLoginInfo.password !== currentPass) {
               setCurrentPassError('이전 비밀번호가 일치하지 않아요!');
               return;
@@ -113,15 +113,23 @@ export const PageSettingInfoPassword: React.FC = () => {
             });
 
             if (emailRes) {
+              setSavedLoginInfo({
+                ...savedLoginInfo,
+                password: newPass,
+              });
+
               SnackBar.show({
                 leftElement: createElement(SvgIcon, {
                   name: 'lucky_check',
                   size: 20,
                 }),
                 title: `비밀번호가 변경되었어요!.`,
+                width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
                 position: 'bottom',
                 rounded: 25,
               });
+
+              navigation.navigate('Setting');
             } else {
               // TODO(Gina): oauthLogin을 한 유저는 비밀번호 재설정 안됨
             }
