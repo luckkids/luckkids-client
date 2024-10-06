@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useResetRecoilState } from 'recoil';
 import styled from 'styled-components/native';
-import { Font, SvgIcon, L } from '@design-system';
+import { Font, SvgIcon, L, CONSTANTS } from '@design-system';
 import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { settingApis } from '@apis/setting';
@@ -87,7 +87,11 @@ export const PageSetting: React.FC = () => {
         </L.Row>
       }
     >
-      <ScrollView>
+      <ScrollView
+        contentInset={{
+          bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
+        }}
+      >
         <S.Wrap>
           <Font type={'BODY_REGULAR'}>{nickname}</Font>
           <ButtonText
