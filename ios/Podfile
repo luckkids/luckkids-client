@@ -28,6 +28,7 @@ end
 target 'LuckKids' do
   config = use_native_modules!
 
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'RNShare', :path => '../node_modules/react-native-share'
