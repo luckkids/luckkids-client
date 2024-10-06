@@ -1,10 +1,10 @@
 import React from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors, Font, L, SvgIcon } from '@design-system';
-import { IGardenItem } from '@types-common/page.types';
-import FastImage from 'react-native-fast-image';
 import { getCharacterImage } from '@utils';
+import { IGardenItem } from '@types-common/page.types';
 
 const S = {
   Container: styled.View(
@@ -73,7 +73,7 @@ export const GardenHorizontalItem: React.FC<IProps> = ({
                 style={{
                   width: '100%',
                   height: '100%',
-                  opacity: isSelf ? 1 : 0.3,
+                  opacity: isSelf || item !== null ? 1 : 0.3,
                 }}
               />
               {isSelf && (
@@ -90,9 +90,9 @@ export const GardenHorizontalItem: React.FC<IProps> = ({
               )}
             </S.Wrapper>
             <L.Col justify={'center'} ml={16} h={80}>
-              <Font type={'BODY_SEMIBOLD'}>{item ? item.nickname : '-'}</Font>
+              <Font type={'BODY_SEMIBOLD'}>{item ? item.nickname : ' '}</Font>
               <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
-                {item ? `모은 럭키즈 ${item.characterCount}` : '-'}
+                {item ? `모은 럭키즈 ${item.characterCount}` : ' '}
               </Font>
             </L.Col>
           </L.Row>

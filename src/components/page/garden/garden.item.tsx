@@ -1,10 +1,10 @@
 import React from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import styled from 'styled-components/native';
 import { Colors, Font } from '@design-system';
-import { IGardenItem } from '@types-common/page.types';
 import { getCharacterImage } from '@utils';
+import { IGardenItem } from '@types-common/page.types';
 
 const S = {
   Container: styled.View({
@@ -46,6 +46,7 @@ export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
     'normal',
   );
 
+
   return (
     <S.Container>
       <TouchableWithoutFeedback onPress={onPress}>
@@ -58,7 +59,7 @@ export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
             style={{
               width: '100%',
               height: '100%',
-              opacity: isSelf ? 1 : 0.3,
+              opacity: isSelf || item !== null ? 1 : 0.3,
             }}
             resizeMode={FastImage.resizeMode.contain}
           />

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import Share, { ShareOptions } from 'react-native-share';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, SvgIcon } from '@design-system';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
-import Share from 'react-native-share';
-import { createAndCopyBranchLink } from '@utils';
-import { useFetch } from '@hooks/useFetch';
 import { useMe } from '@queries';
+import { createAndCopyBranchLink } from '@utils';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import { useFetch } from '@hooks/useFetch';
 
 const S = {
   popupWrap: styled.View({
@@ -41,22 +41,6 @@ const S = {
   }),
 };
 
-const shareOptions = {
-  title: 'KaKao Title',
-  message: '초대합니다',
-  url: 'https://www.naver.com',
-};
-
-const onShare = async () => {
-  try {
-    const kakaoURL = `kakaolink://send?url=${encodeURIComponent(shareOptions.url)}&text=${encodeURIComponent(shareOptions.message)}`;
-    const result = await Share.open(shareOptions);
-    console.log(result);
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export default function GardenBottomSheet() {
   const [code, setCode] = useState<string>('');
 
@@ -74,6 +58,41 @@ export default function GardenBottomSheet() {
   });
 
   const Me = useMe().data;
+
+
+  const onShare = async () => {
+    try {
+      const branchData = await createAndCopyBranchLink(code, Me ? Me.nickname : null);
+      if (branchData) {
+
+        const shareOptions:ShareOptions = {
+          activityItemSources:[
+            {
+              placeholderItem: {
+                type: 'url',
+                content: branchData.url,
+              },
+              item: {
+                default: {
+                  type: 'text',
+                  content: branchData.message + branchData.url,
+                },
+              },
+              linkMetadata: {
+                title:branchData.message,
+                icon: branchData.icon,
+              },
+            },
+          ],
+        };
+
+        const ShareResponse = await Share.open(shareOptions);
+        console.log(JSON.stringify(ShareResponse));
+      }
+    } catch (error) {
+      console.log('Error => ', error);
+    }
+  };
 
   return (
     <S.popupWrap>
