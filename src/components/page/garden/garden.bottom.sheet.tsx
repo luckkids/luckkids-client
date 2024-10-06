@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import Share, { ShareOptions } from 'react-native-share';
-import RNFetchBlob from 'rn-fetch-blob';
 import styled from 'styled-components/native';
 import { Button, Colors, Font, SvgIcon } from '@design-system';
 import { useMe } from '@queries';
