@@ -20,7 +20,7 @@ export type InitialRoute = {
 export type AppScreensParamList = {
   StoryTelling: undefined;
   Login: undefined;
-  LoginAlready: { type: SocialType; email: string };
+  LoginAlready: { type: SocialType; email: string | null };
   LoginJoin: { step: 'Id' | 'Password' };
   LoginJoinEmailConfirm: {
     authKey: string;

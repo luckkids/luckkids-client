@@ -21,6 +21,7 @@ API.interceptors.request.use(
     }
     console.log('url ====>', config.url);
     console.log('params ====>', config.params);
+    console.log('header ====>', config.headers);
     console.log('request ====>', config.data);
     return config;
   },

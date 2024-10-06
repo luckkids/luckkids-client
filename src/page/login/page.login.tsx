@@ -11,6 +11,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
@@ -27,6 +28,7 @@ export const PageLogin: React.FC = () => {
   const { storedValue: rememberMe, setValue: setRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
   const { deviceId } = useRecoilValue(RecoilDevice);
+  const { getToken } = useFirebaseMessage();
 
   const handlePressJoin = () => {
     navigation.navigate('LoginJoin', {
@@ -62,13 +64,14 @@ export const PageLogin: React.FC = () => {
 
   const handleOauthLogin = async (type: SocialType) => {
     if (!deviceId) return;
+    const pushKey = await getToken();
     const token = await getOauthHandler?.(type);
     if (token) {
       try {
         const res = await oauthLogin({
           snsType: type,
           deviceId,
-          pushKey: null,
+          pushKey,
           token,
         });
 
@@ -115,6 +118,7 @@ export const PageLogin: React.FC = () => {
           if (Object.values(SocialTypeValues).includes(type)) {
             navigation.navigate('LoginAlready', {
               type: type as SocialType,
+              email: null,
             });
           }
         }

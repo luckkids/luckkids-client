@@ -26,8 +26,8 @@ import { RememberMeType, StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import NavigationService from '@libs/NavigationService';
-import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 import { RecoilDevice } from '@recoil/recoil.device';
+import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 
 const codePushOptions = {
   checkFrequency: CodePush.CheckFrequency.ON_APP_START,
@@ -106,17 +106,6 @@ const RootNavigator = () => {
     }
   };
 
-  // branch io 로직
-  useEffect(() => {
-    const unsubscribeBranch = subscribeBranch(navigationRef);
-
-    return () => {
-      if (unsubscribeBranch) {
-        unsubscribeBranch();
-      }
-    };
-  }, []);
-
   useEffect(() => {
     console.log('__DEV__', __DEV__);
     // 코드 푸시 DEV 에서 테스트하는 경우 아니면 return 해두기
@@ -160,6 +149,18 @@ const RootNavigator = () => {
       setInitializing(false);
     }
   }, [initializing]);
+
+  useEffect(() => {
+    if (isNavigationReady) {
+      const unsubscribeBranch = subscribeBranch(navigationRef);
+
+      return () => {
+        if (unsubscribeBranch) {
+          unsubscribeBranch();
+        }
+      };
+    }
+  }, [isNavigationReady]);
 
   useAsyncEffect(async () => {
     if (isLoadingRememberMe || isLoadingStoryTelling) return;
