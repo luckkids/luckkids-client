@@ -74,7 +74,7 @@ export const PageSetting: React.FC = () => {
 
   useEffect(() => {
     //TODO 백엔드 오류 수정되면 주석 해제
-    // fetchVersionInfo();
+    fetchVersionInfo();
   }, []);
 
   return (

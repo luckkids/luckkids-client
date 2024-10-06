@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useRoute, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
@@ -23,7 +23,6 @@ import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
@@ -71,13 +70,13 @@ export const Home: React.FC = () => {
     onSuccessCallback: (rtn) => {
       setSendFriend(rtn.nickName);
       if (rtn.status === 'ME') {
-        AlertPopup.show({
+        return AlertPopup.show({
           title:
             '내가 보낸 초대에요. \n친구가 초대를 수락할 때까지 기다려주세요!',
           onPressYes: () => setStatePopup({ isShow: false }),
         });
       } else if (rtn.status === 'ALREADY') {
-        AlertPopup.show({
+        return AlertPopup.show({
           title: `이미 ${rtn.nickName}님과 친구예요.`,
           onPressYes: () => {
             navigationService.push('Garden');
@@ -86,7 +85,7 @@ export const Home: React.FC = () => {
           noText: '닫기',
         });
       } else {
-        AlertPopup.show({
+        return AlertPopup.show({
           title: `${rtn.nickName}님이 \n친구 초대를 보냈어요!`,
           body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
           onPressYes: addFriend,
@@ -125,22 +124,16 @@ export const Home: React.FC = () => {
     homeInfo || {};
   const { inProgressCharacter } = userCharacterSummaryResponse || {};
 
-  useAppStateEffect(
-    (state) => {
-      if (state === 'active') {
-        if (friendCode) {
-          onCheckFriend();
-        }
-      }
-    },
-    [friendCode],
-  );
-
   // 홈 화면 focus 될때마다 홈 정보 가져오기
   useAsyncEffect(async () => {
     if (!isFocused) return;
     await refetchHomeInfo();
   }, [isFocused]);
+
+  useAsyncEffect(async () => {
+    if (!friendCode) return;
+    onCheckFriend();
+  }, [friendCode]);
 
   return (
     <>
