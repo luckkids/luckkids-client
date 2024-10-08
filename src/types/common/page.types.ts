@@ -146,6 +146,7 @@ export interface ISettingAlarm {
   mission: TCheck;
   luck: TCheck;
   notice: TCheck;
+  friend: TCheck;
   luckMessageAlertTime: string;
 }
 

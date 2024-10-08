@@ -15,6 +15,8 @@ import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { AlertType } from '@types-common/setting.types';
+import { RecoilDevice } from '@recoil/recoil.device';
+import { useRecoilValue } from 'recoil';
 
 const S = {
   onAlarm: styled.View({
@@ -39,6 +41,7 @@ const luckAlarmSound = new Sound('noti_luckluck.wav', Sound.MAIN_BUNDLE);
 export const PageSettingAlarm: React.FC = () => {
   const { hasPermission } = useFirebaseMessage();
   const [showPushSetting, setShowPushSetting] = useState(false);
+  const { deviceId } = useRecoilValue(RecoilDevice);
 
   const { data: setting, refetch } = useSettingAlarmSetting();
 
@@ -47,11 +50,12 @@ export const PageSettingAlarm: React.FC = () => {
   };
 
   const handleUpdateAlarm = async (type: AlertType, value: boolean) => {
+    if (!deviceId) return;
     try {
       await settingApis.updateAlertSetting({
         alertType: type,
         alertStatus: value ? 'CHECKED' : 'UNCHECKED',
-        deviceId: await DeviceInfo.getUniqueId(),
+        deviceId,
       });
     } catch (e) {
       console.error(e);
@@ -61,9 +65,10 @@ export const PageSettingAlarm: React.FC = () => {
   };
 
   const handleUpdateLuckTime = async (time: string) => {
+    if (!deviceId) return;
     try {
       await settingApis.setLuckMessageAlertTime({
-        deviceId: await DeviceInfo.getUniqueId(),
+        deviceId,
         luckMessageAlertTime: time,
       });
     } catch (e) {
@@ -174,8 +179,8 @@ export const PageSettingAlarm: React.FC = () => {
           </Font>
         </L.Col>
         <Toggle
-          value={setting?.mission === 'CHECKED'}
-          onChange={(value) => handleUpdateAlarm('MISSION', value)}
+          value={setting?.friend === 'CHECKED'}
+          onChange={(value) => handleUpdateAlarm('FRIEND', value)}
         />
       </L.Row>
       {/* NOTICE */}
