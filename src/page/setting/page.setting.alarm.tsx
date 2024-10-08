@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Linking } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 import Sound from 'react-native-sound';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components/native';
 import { ButtonText, Font, SvgIcon, L, Colors, Toggle } from '@design-system';
 import { useSettingAlarmSetting } from '@queries';
@@ -14,9 +14,8 @@ import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
-import { AlertType } from '@types-common/setting.types';
 import { RecoilDevice } from '@recoil/recoil.device';
-import { useRecoilValue } from 'recoil';
+import { AlertType } from '@types-common/setting.types';
 
 const S = {
   onAlarm: styled.View({
