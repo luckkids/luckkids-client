@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { interval } from 'rxjs';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { authApis } from '@apis/auth';
@@ -49,12 +50,6 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
       setEmailConfirmed(true);
     } catch (error: any) {
       console.error('confirmEmail', error);
-      AlertPopup.show({
-        title: '이메일 인증 실패',
-        body:
-          error.response?.data?.message || '알 수 없는 오류가 발생했습니다.',
-        yesText: '확인',
-      });
       setEmailConfirmed(false);
     }
   }, [joinInfo, authKey]);
@@ -64,6 +59,14 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
       handleConfirmEmail();
     }
   }, []);
+
+  useEffect(() => {
+    const subscription = interval(5000).subscribe(() => {
+      handleConfirmEmail();
+    });
+
+    return () => subscription.unsubscribe();
+  }, [handleConfirmEmail]);
 
   return (
     <FrameLayout>
@@ -76,7 +79,7 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
         <Font
           type={'BODY_REGULAR'}
           mt={20}
-        >{`“${joinInfo.email}" 주소로 인증 요청 이메일이 전송되었습니다. 이메일의 링크를 탭한 후에 아래 [인증하기] 버튼을 눌러주세요.`}</Font>
+        >{`“${joinInfo.email}" 주소로 인증 요청 이메일이 전송되었습니다. 이메일의 링크를 탭한 후에 아래 [인증하기] 버튼을 눌러주세요.\n*이메일 [인증하기] 버튼을 누른 후 최대 5초간 기다려 주세요!`}</Font>
       </L.Row>
       <L.Absolute b={bottom} w={SCREEN_WIDTH}>
         <L.Col ph={DEFAULT_MARGIN} g={10}>
