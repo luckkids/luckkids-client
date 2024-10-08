@@ -55,8 +55,8 @@ export const PageSetting: React.FC = () => {
 
     AlertPopup.show({
       title: '정말 로그아웃하실 건가요?',
-      noText: '네!',
-      yesText: '아니요!',
+      noText: '네',
+      yesText: '아니오',
       onPressNo: async () => {
         // delete remember me
         removeRememberMe();
