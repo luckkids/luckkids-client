@@ -82,6 +82,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
     <FrameLayout
       statusBarColor={'TUTORIAL_SETTING_BG'}
       backgroundImage={bgImage}
+      paddingBottom={0}
     >
       <L.Col w="100%" items="center" ph={DEFAULT_MARGIN} h="100%">
         <Font textAlign="center" type={'TITLE1_BOLD'} color={'WHITE'} mt={200}>

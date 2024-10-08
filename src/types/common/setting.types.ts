@@ -1,3 +1,3 @@
-export type AlertType = 'ENTIRE' | 'MISSION' | 'LUCK' | 'NOTICE';
+export type AlertType = 'ENTIRE' | 'MISSION' | 'LUCK' | 'NOTICE' | 'FRIEND';
 
 export type AlertStatus = 'UNCHECKED' | 'CHECKED';
