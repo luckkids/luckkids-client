@@ -97,7 +97,7 @@ export const Home: React.FC = () => {
   });
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
-    navigationService.push('TutorialGuide');
+    navigationService.push('HomeProfile');
   };
 
   const infoTranslateY = scrollY.interpolate({
