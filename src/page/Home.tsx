@@ -204,7 +204,7 @@ export const Home: React.FC = () => {
                     </Font>
                   </L.Row>
                   <Font type="SUBHEADLINE_SEMIBOLD" color="HOME_INFO_TEXT">
-                    럭키즈 달성율
+                    럭키즈 성장율
                   </Font>
                 </L.Col>
                 <L.Absolute r={0} b={0}>
