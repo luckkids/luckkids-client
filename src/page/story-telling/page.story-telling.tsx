@@ -14,10 +14,12 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const PageStoryTelling: React.FC = () => {
   const [step, setStep] = useState(1);
   const navigation = useNavigationService();
+  const { bottom } = useSafeAreaInsets();
 
   const { setValue: setStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
@@ -46,7 +48,7 @@ export const PageStoryTelling: React.FC = () => {
   }, []);
 
   return (
-    <FrameLayout>
+    <FrameLayout paddingBottom={bottom}>
       <L.Col
         ph={DEFAULT_MARGIN}
         items="center"
