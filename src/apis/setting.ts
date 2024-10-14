@@ -45,7 +45,7 @@ export type GetVersionResponse = {
 };
 
 const getVersion = async () => {
-  const res = await API.get<GetVersionResponse>('/versions/');
+  const res = await API.get<GetVersionResponse>('/versions');
   return res;
 };
 
