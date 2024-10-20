@@ -26,7 +26,7 @@ export const PageSettingAccount: React.FC = () => {
     AlertPopup.show({
       title: '정말 탈퇴하실 건가요..?',
       body: '럭키즈와 함께해줘서 정말 고마웠어요! 🥺',
-      noText: '탈퇴할게요.',
+      noText: '탈퇴할게요',
       yesText: '안할게요!',
       onPressNo: async () => {
         await authApis.registerWithdrawReason(reason);

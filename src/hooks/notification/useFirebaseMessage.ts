@@ -49,6 +49,7 @@ const useFirebaseMessage = () => {
     isPermitted(await messaging().hasPermission());
 
   const initialize = useCallback(async () => {
+    console.log('[Firebase Message] : initialize');
     messaging().onMessage(handleOnMessage);
   }, []);
 
