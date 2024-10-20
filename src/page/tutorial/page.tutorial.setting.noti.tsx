@@ -11,6 +11,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { RecoilDevice } from '@recoil/recoil.device';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const bgImage = require('assets/images/tutorial-setting-bg.png');
 const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
@@ -19,6 +20,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
   const navigation = useNavigationService();
   const initialSetting = useRecoilValue(RecoilInitialSetting);
   const { deviceId } = useRecoilValue(RecoilDevice);
+  const { bottom } = useSafeAreaInsets();
 
   const { requestPermissionIfNot, hasPermission } = useFirebaseMessage();
 
@@ -82,7 +84,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
     <FrameLayout
       statusBarColor={'TUTORIAL_SETTING_BG'}
       backgroundImage={bgImage}
-      paddingBottom={0}
+      paddingBottom={bottom}
     >
       <L.Col w="100%" items="center" ph={DEFAULT_MARGIN} h="100%">
         <Font textAlign="center" type={'TITLE1_BOLD'} color={'WHITE'} mt={200}>
