@@ -4,11 +4,13 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const bgImage = require('assets/images/tutorial-start-bg.png');
 
 export const PageTutorialStart: React.FC = () => {
   const navigation = useNavigationService();
+  const { bottom } = useSafeAreaInsets();
 
   const handlePressStart = () => {
     navigation.navigate('TutorialGuide');
@@ -18,8 +20,8 @@ export const PageTutorialStart: React.FC = () => {
     <FrameLayout
       backgroundColor="WHITE"
       backgroundImage={bgImage}
-      paddingBottom={0}
       stickToTop
+      paddingBottom={bottom}
       backgroundImageStyle={{
         height: (SCREEN_WIDTH * 850) / 390,
       }}
