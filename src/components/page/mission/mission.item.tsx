@@ -46,18 +46,8 @@ interface IProps extends IMissionListData {}
 
 export const MissionItem: React.FC<IProps> = (props) => {
   const { ...item } = props;
-  const {
-    missionStatus,
-    alertTime: _alertTime,
-    alertStatus: _alertStatus,
-    id,
-  } = item;
+  const { missionStatus, alertTime, alertStatus, id } = item;
   const navigation = useNavigationService();
-
-  const [alertTime, setAlertTime] = useState<string>(_alertTime);
-  const [alertStatus, setAlertStatus] = useState<'CHECKED' | 'UNCHECKED'>(
-    _alertStatus,
-  );
 
   const [missionState, setMissionState] = useState<string>(missionStatus);
 

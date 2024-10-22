@@ -71,8 +71,7 @@ export const Home: React.FC = () => {
       setSendFriend(rtn.nickName);
       if (rtn.status === 'ME') {
         return AlertPopup.show({
-          title:
-            '내가 보낸 초대에요. \n친구가 초대를 수락할 때까지 기다려주세요!',
+          title: '내가 보낸 초대예요!',
           onPressYes: () => setStatePopup({ isShow: false }),
         });
       } else if (rtn.status === 'ALREADY') {

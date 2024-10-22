@@ -73,26 +73,32 @@ export const MissionRepairItem: React.FC<IProps> = ({
           alertTime={item?.alertTime}
           alertStatus={item?.alertStatus}
           onConfirm={async ({ alertTime, alertStatus }) => {
-            const res = await missionApis.editMission({
-              missionId: id,
-              data: {
-                alertStatus,
-                alertTime,
-              },
+            if (id) {
+              await missionApis.editMission({
+                missionId: id,
+                data: {
+                  alertStatus,
+                  alertTime,
+                },
+              });
+            } else {
+              await missionApis.createMission({
+                luckkidsMissionId: luckkidsMissionId,
+                missionType: missionType,
+                missionDescription: missionDescription,
+                alertStatus: alertStatus,
+                alertTime: alertTime,
+              });
+            }
+
+            SnackBar.show({
+              title: `습관 알림 시간이 변경되었습니다.`,
+              position: 'bottom',
+              rounded: 25,
             });
 
-            if (res) {
-              SnackBar.show({
-                title: `습관 알림 시간이 변경되었습니다.`,
-                width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
-                position: 'bottom',
-                rounded: 25,
-                offsetY: 110,
-              });
-
-              refetchMissionData();
-              refetchMissionOutcomeData();
-            }
+            await refetchMissionData();
+            await refetchMissionOutcomeData();
           }}
         />
       ),
@@ -145,7 +151,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 flexWrap: 'wrap',
               }}
             >
-              {item?.alertTime ? formatMissionTime(item.alertTime) : '알림 끔'}
+              {getAlertText()}
             </Font>
           </TouchableWithoutFeedback>
         </L.Row>
@@ -160,6 +166,16 @@ export const MissionRepairItem: React.FC<IProps> = ({
       </L.Row>
     </L.Row>
   );
+
+  const getAlertText = () => {
+    if (item.isLuckkidsMission) {
+      return formatMissionTime(item.alertTime);
+    }
+    if (item?.alertStatus === 'CHECKED') {
+      return formatMissionTime(item.alertTime);
+    }
+    return '알림 끔';
+  };
 
   return luckkidsMissionId ? (
     <MissionContent />

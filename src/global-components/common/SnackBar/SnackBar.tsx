@@ -11,29 +11,32 @@ interface Props extends SimpleSnackbarProps {
   width?: number;
 }
 
-const SnackBar = createPopup(({ rounded = 40, width, ...props }: Props) => {
-  const { top } = useSafeAreaInsets();
+const SnackBar = createPopup(
+  ({ rounded = 40, width, styles, ...props }: Props) => {
+    const { top } = useSafeAreaInsets();
 
-  return (
-    <SimpleSnackbarUI
-      offsetY={top || 8}
-      styles={{
-        title: FontSettings['SUBHEADLINE_REGULAR'],
-        container: {
-          borderRadius: rounded || 0,
-          width,
-          backgroundColor: Colors['GREY4'],
-          gap: 10,
-          display: 'flex',
-          flexWrap: 'nowrap',
-          flex: 1,
-          paddingHorizontal: 20,
-          paddingVertical: 16,
-        },
-      }}
-      {...props}
-    />
-  );
-});
+    return (
+      <SimpleSnackbarUI
+        offsetY={top || 8}
+        styles={{
+          title: FontSettings['SUBHEADLINE_REGULAR'],
+          container: {
+            borderRadius: rounded || 0,
+            width,
+            backgroundColor: Colors['GREY4'],
+            gap: 10,
+            display: 'flex',
+            flexWrap: 'nowrap',
+            flex: 1,
+            paddingHorizontal: 20,
+            paddingVertical: 16,
+          },
+          ...styles,
+        }}
+        {...props}
+      />
+    );
+  },
+);
 
 export default SnackBar;

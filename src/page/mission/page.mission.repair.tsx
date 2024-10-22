@@ -270,7 +270,9 @@ export const PageMissionRepair = () => {
             {missions.map((mission, i) => {
               const isSelected =
                 type === 'INITIAL_SETTING'
-                  ? selectedMissions.includes(mission)
+                  ? selectedMissions.some(
+                      (m) => m.luckkidsMissionId === mission.luckkidsMissionId,
+                    )
                   : mission.missionActive === 'TRUE';
 
               return (
@@ -311,7 +313,7 @@ export const PageMissionRepair = () => {
       LoadingIndicator.hide();
       setSelectedCategory(allCategories[0]);
     }
-  }, [isFetching, allCategories]);
+  }, [isFetching]);
 
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
