@@ -13,6 +13,10 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
 import { SocialType } from '@types-index';
+import {
+  checkKakaoTokenValidity,
+  useKakaoLogin,
+} from '@hooks/sns-login/useKakaoLogin';
 
 const useAuth = () => {
   const {
@@ -68,13 +72,25 @@ const useAuth = () => {
         });
         return res.data;
       })
-      .catch((error) => {
+      .catch(async (error) => {
         console.error(error);
 
-        if (error.response && error.response.data) {
-          const { message } = error.response.data;
-          if (Object.values(SocialTypeValues).includes(message)) {
-            return message;
+        const { message } = error.response.data;
+
+        if (message && Object.values(SocialTypeValues).includes(message)) {
+          return message;
+        } else {
+          const { snsType } = loginInfo;
+          // kakao 재로그인
+          if (snsType === 'KAKAO') {
+            console.log('Kakao token may be invalid. Trying to re-login...');
+            const newAccessToken = await checkKakaoTokenValidity();
+            if (newAccessToken) {
+              return await oauthLogin({
+                ...loginInfo,
+                token: newAccessToken,
+              });
+            }
           }
         }
 
