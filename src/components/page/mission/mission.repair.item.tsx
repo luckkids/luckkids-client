@@ -73,24 +73,32 @@ export const MissionRepairItem: React.FC<IProps> = ({
           alertTime={item?.alertTime}
           alertStatus={item?.alertStatus}
           onConfirm={async ({ alertTime, alertStatus }) => {
-            const res = await missionApis.editMission({
-              missionId: id,
-              data: {
-                alertStatus,
-                alertTime,
-              },
+            if (id) {
+              await missionApis.editMission({
+                missionId: id,
+                data: {
+                  alertStatus,
+                  alertTime,
+                },
+              });
+            } else {
+              await missionApis.createMission({
+                luckkidsMissionId: luckkidsMissionId,
+                missionType: missionType,
+                missionDescription: missionDescription,
+                alertStatus: alertStatus,
+                alertTime: alertTime,
+              });
+            }
+
+            SnackBar.show({
+              title: `습관 알림 시간이 변경되었습니다.`,
+              position: 'bottom',
+              rounded: 25,
             });
 
-            if (res) {
-              SnackBar.show({
-                title: `습관 알림 시간이 변경되었습니다.`,
-                position: 'bottom',
-                rounded: 25,
-              });
-
-              refetchMissionData();
-              refetchMissionOutcomeData();
-            }
+            await refetchMissionData();
+            await refetchMissionOutcomeData();
           }}
         />
       ),
