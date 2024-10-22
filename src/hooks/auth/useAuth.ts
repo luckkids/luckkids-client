@@ -17,6 +17,7 @@ import {
   checkKakaoTokenValidity,
   useKakaoLogin,
 } from '@hooks/sns-login/useKakaoLogin';
+import { checkGoogleTokenValidity } from '@hooks/sns-login/useGoogleLogin';
 
 const useAuth = () => {
   const {
@@ -86,6 +87,18 @@ const useAuth = () => {
             console.log('Kakao token may be invalid. Trying to re-login...');
             const newAccessToken = await checkKakaoTokenValidity();
             if (newAccessToken) {
+              return await oauthLogin({
+                ...loginInfo,
+                token: newAccessToken,
+              });
+            }
+          }
+          // google 재로그인
+          if (snsType === 'GOOGLE') {
+            console.log('Google token may be invalid. Trying to re-login...');
+            const newAccessToken = await checkGoogleTokenValidity();
+            if (newAccessToken) {
+              // 새로운 토큰을 받아서 다시 로그인 시도
               return await oauthLogin({
                 ...loginInfo,
                 token: newAccessToken,
