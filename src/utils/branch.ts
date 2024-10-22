@@ -32,8 +32,9 @@ export const createAndCopyBranchLink = async (
   code: string,
   nickName: string | null,
 ) => {
+  // const ImgUrl = 'https://cdn.branch.io/branch-assets/1723979173696-og_image.jpeg';
   const ImgUrl =
-    'https://cdn.branch.io/branch-assets/1723979173696-og_image.jpeg';
+    'https://info-luckkids.netlify.app/img/luckkids-invite-share.png';
   try {
     const branchUniversalObject = await branch.createBranchUniversalObject(
       'friend_invite',
