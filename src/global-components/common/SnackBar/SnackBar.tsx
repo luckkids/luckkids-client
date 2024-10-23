@@ -5,6 +5,8 @@ import {
 } from 'react-native-global-components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSettings } from '@design-system';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { DEFAULT_MARGIN } from '@constants';
 
 interface Props extends SimpleSnackbarProps {
   rounded?: number;
@@ -21,8 +23,9 @@ const SnackBar = createPopup(
         styles={{
           title: FontSettings['SUBHEADLINE_REGULAR'],
           container: {
-            borderRadius: rounded || 0,
+            borderRadius: rounded,
             width,
+            maxWidth: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
             backgroundColor: Colors['GREY4'],
             gap: 10,
             display: 'flex',
@@ -30,7 +33,9 @@ const SnackBar = createPopup(
             flex: 1,
             paddingHorizontal: 20,
             paddingVertical: 16,
+            height: 52,
           },
+
           ...styles,
         }}
         {...props}
