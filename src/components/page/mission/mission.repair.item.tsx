@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { createElement, useCallback, useRef, useState } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -92,9 +92,13 @@ export const MissionRepairItem: React.FC<IProps> = ({
             }
 
             SnackBar.show({
+              leftElement: createElement(SvgIcon, {
+                name: 'lucky_check',
+                size: 20,
+              }),
+              width: 280,
               title: `습관 알림 시간이 변경되었습니다.`,
               position: 'bottom',
-              rounded: 25,
             });
 
             await refetchMissionData();
