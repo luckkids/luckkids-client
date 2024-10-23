@@ -8,6 +8,8 @@ import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { StorageKeys } from '@hooks/storage/keys';
 
 const WITHDRAW_REASON_LIST = [
   '잘 사용하지 않는 앱이에요',
@@ -21,6 +23,9 @@ export const PageSettingAccount: React.FC = () => {
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
   const [reason, setReason] = useState<string>('');
+  const { setValue: setRememberMe } = useAsyncStorage<StorageKeys.RememberMe>(
+    StorageKeys.RememberMe,
+  );
 
   const handleConfirm = async () => {
     AlertPopup.show({
@@ -31,6 +36,8 @@ export const PageSettingAccount: React.FC = () => {
       onPressNo: async () => {
         await authApis.registerWithdrawReason(reason);
         await authApis.deleteUser();
+
+        setRememberMe(null);
 
         return navigation.replace('Login');
       },

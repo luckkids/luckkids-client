@@ -4,7 +4,7 @@ import { StorageValues } from './keys';
 
 type UseAsyncStorage<K extends keyof StorageValues> = {
   storedValue: StorageValues[K] | null;
-  setValue: (value: StorageValues[K]) => Promise<void>;
+  setValue: (value: StorageValues[K] | null) => Promise<void>;
   removeValue: () => Promise<void>;
   loading: boolean;
 };
@@ -35,7 +35,7 @@ const useAsyncStorage = <K extends keyof StorageValues>(
     loadStoredValue();
   }, [key]);
 
-  const setValue = async (value: StorageValues[K]) => {
+  const setValue = async (value: StorageValues[K] | null) => {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(key, jsonValue);
