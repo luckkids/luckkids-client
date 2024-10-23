@@ -18,6 +18,8 @@ export const MissionAddCategory: React.FC<IProps> = (props) => {
     <TouchableWithoutFeedback onPress={props.onPress}>
       <L.Col mt={25}>
         <L.Row
+          items="center"
+          justify="center"
           style={{
             width: 60,
             height: 60,
@@ -29,7 +31,7 @@ export const MissionAddCategory: React.FC<IProps> = (props) => {
               : Colors.GREY5,
           }}
         >
-          <SvgIcon name={props.icon} size={60} />
+          <SvgIcon name={props.icon} size={40} />
         </L.Row>
         <Font
           type={'SUBTITLE_LEAGUE'}

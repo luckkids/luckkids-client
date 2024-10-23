@@ -195,7 +195,7 @@ export const PageMissionAdd: React.FC = () => {
           </L.Col>
         </L.Col>
         <L.Col p={DEFAULT_MARGIN}>
-          <L.Col p={DEFAULT_MARGIN} bg={'BG_SECONDARY'} rounded={12}>
+          <L.Col p={DEFAULT_MARGIN} bg="BG_SECONDARY" rounded={12}>
             <Font type={'BODY_REGULAR'} color={'WHITE'}>
               습관 카테고리
             </Font>
