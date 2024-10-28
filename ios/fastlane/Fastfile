@@ -108,6 +108,7 @@ platform :ios do
   desc "Push a new beta build to TestFlight with version prompt"
   lane :beta do |options|
     clean_build_artifacts
+    sh("bundle install")
     sh("yarn install")
     sh("bundle exec pod install")
     cert
@@ -121,6 +122,7 @@ platform :ios do
   desc "Push a new beta build to TestFlight, only updating build number"
   lane :beta_build_only do
     clean_build_artifacts
+    sh("bundle install")
     sh("yarn install")
     sh("bundle exec pod install")
     cert
