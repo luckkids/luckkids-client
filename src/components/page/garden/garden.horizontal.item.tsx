@@ -11,6 +11,7 @@ const S = {
     {
       width: '100%',
       paddingHorizontal: 25,
+      paddingRight:22
     },
     (props: { isSelf?: boolean }) => {
       return {
@@ -96,7 +97,7 @@ export const GardenHorizontalItem: React.FC<IProps> = ({
               </Font>
             </L.Col>
           </L.Row>
-          <SvgIcon name={'arrow_right_gray'} size={8} />
+          {item !== null && <SvgIcon name={'arrow_right_gray'} size={14} />}
         </L.Row>
       </TouchableWithoutFeedback>
     </S.Container>
