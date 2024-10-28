@@ -28,6 +28,7 @@ const S = {
     {
       flexDirection: 'row',
       justifyContent: 'center',
+      alignItems:'center',
       paddingHorizontal: 20,
       paddingVertical: buttonPadding,
       borderRadius: 15,
