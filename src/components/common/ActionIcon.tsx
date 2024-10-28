@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
-import { CONSTANTS, Font, SvgIcon } from '@design-system';
+import { Font, SvgIcon } from '@design-system';
 import Colors from '../../design-system/colors';
 import Constants from '../../design-system/constants';
 
