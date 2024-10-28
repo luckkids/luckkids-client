@@ -109,7 +109,7 @@ export default function GardenBottomSheet() {
               카카오톡 열기
             </Font>
           </S.popupItemWrap>
-          <SvgIcon name={'arrow_right_gray'} size={8} />
+          <SvgIcon name={'arrow_right_gray'} size={14} />
         </S.popupItemContainer>
       </TouchableWithoutFeedback>
       <TouchableWithoutFeedback
@@ -124,7 +124,7 @@ export default function GardenBottomSheet() {
               초대 링크 복사
             </Font>
           </S.popupItemWrap>
-          <SvgIcon name={'arrow_right_gray'} size={8} />
+          <SvgIcon name={'arrow_right_gray'} size={14} />
         </S.popupItemContainer>
       </TouchableWithoutFeedback>
       {/*<KakaoShareableLinkPreview url="https://example.com" />*/}
