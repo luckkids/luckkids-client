@@ -31,8 +31,14 @@ target 'LuckKids' do
   pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseSessions', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'FirebaseInstallations', :modular_headers => true
+  pod 'GoogleDataTransport', :modular_headers => true
+  pod 'nanopb', :modular_headers => true
   pod 'RNShare', :path => '../node_modules/react-native-share'
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
+  pod 'RNFBCrashlytics', :path => '../node_modules/@react-native-firebase/crashlytics'
 
   flags = get_default_flags()
 
