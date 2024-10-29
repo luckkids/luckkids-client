@@ -107,10 +107,8 @@ platform :ios do
 
   desc "Push a new beta build to TestFlight with version prompt"
   lane :beta do |options|
-    clean_build_artifacts
-    sh("bundle install")
-    sh("yarn install")
-    sh("bundle exec pod install")
+    sh('cd .. && yarn install')
+    sh('NO_FLIPPER=1 pod install')
     cert
     sigh(force: true)
     update_version(options)
@@ -121,10 +119,8 @@ platform :ios do
   
   desc "Push a new beta build to TestFlight, only updating build number"
   lane :beta_build_only do
-    clean_build_artifacts
-    sh("bundle install")
-    sh("yarn install")
-    sh("bundle exec pod install")
+    sh('cd .. && yarn install')
+    sh('NO_FLIPPER=1 pod install')
     cert
     sigh(force: true)
     current_version_info = read_version_file

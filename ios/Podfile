@@ -9,7 +9,7 @@ end
 node_require('react-native/scripts/react_native_pods.rb')
 node_require('react-native-permissions/scripts/setup.rb')
 
-platform :ios, min_ios_version_supported
+platform :ios, '12.4'
 prepare_react_native_project!
 
 setup_permissions([
@@ -69,3 +69,4 @@ target 'LuckKids' do
     end
   end
 end
+
