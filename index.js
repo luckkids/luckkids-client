@@ -2,18 +2,15 @@
  * @format
  */
 import messaging from '@react-native-firebase/messaging';
-import notifee from '@notifee/react-native';
+import notifee, { EventType } from '@notifee/react-native';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
 import NavigationService from './src/libs/NavigationService';
 import App from './App';
-import { firebase } from '@react-native-firebase/crashlytics';
 
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('[Firebase remote message on background] : ', remoteMessage);
 });
-
-firebase.crashlytics().crash;
 
 notifee.onBackgroundEvent(async (event) => {
   console.log('[Notification on background] : ', event);
