@@ -1792,10 +1792,10 @@
     opencollective-postinstall "^2.0.3"
     superstruct "^0.6.2"
 
-"@react-native-firebase/crashlytics@^21.2.0":
-  version "21.2.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-21.2.0.tgz#0bab9baf26a2c3eedbd8c4a26d201fa74c3b72fb"
-  integrity sha512-4c0jg+fyns1VEqR7Y4Jr+0w+/QePKk4fReee8oHv+FvHVJgwWNp9gkFCQC8fX2+OnAFN+N94i9eIQOBIJFukGQ==
+"@react-native-firebase/crashlytics@18.7.3":
+  version "18.7.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-18.7.3.tgz#44248e8dc6eda9c71e50333407e4e96290d5cf1b"
+  integrity sha512-4deBolsDUDZGIunZ/MAXVTO3m9xoHae6kuEQqIg2QJqemOaAixwnAhttwyuUQtRly0X0wC9N6wGKIbyOKUQ8rg==
   dependencies:
     stacktrace-js "^2.0.2"
 

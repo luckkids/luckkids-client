@@ -9,6 +9,9 @@
     "start": "watchman watch-del-all && react-native start --reset-cache",
     "test": "jest",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
+    "deploy:ios": "./deploy-ios.sh",
+    "clean:ios": "./clean-ios.sh",
+    "install:ios": "./install-ios.sh",
     "postinstall": "patch-package"
   },
   "dependencies": {
@@ -20,7 +23,7 @@
     "@react-native-clipboard/clipboard": "^1.13.2",
     "@react-native-community/datetimepicker": "7.6.2",
     "@react-native-firebase/app": "18.7.3",
-    "@react-native-firebase/crashlytics": "^21.2.0",
+    "@react-native-firebase/crashlytics": "18.7.3",
     "@react-native-firebase/messaging": "18.7.3",
     "@react-native-google-signin/google-signin": "10.1.1",
     "@react-native-seoul/kakao-login": "5.3.1",
