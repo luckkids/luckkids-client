@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { createElement } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components/native';
+import { DEFAULT_MARGIN } from '@constants';
 import { ButtonText, Colors, Font, L, SvgIcon, Toggle } from '@design-system';
 import { useMe } from '@queries';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 
 const S = {
   Border: styled.View({
@@ -20,15 +25,34 @@ export const PageSettingInfo: React.FC = () => {
   const navigation = useNavigationService();
   const { storedValue: rememberMe, setValue: setRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const loginInfo = useRecoilValue(RecoilLoignInfo);
+  const oauthLoginInfo = useRecoilValue(RecoilOauthLoginInfo);
+
   const { data: me } = useMe();
   const { email } = me || {};
 
   const handleRememberMe = (value: boolean) => {
-    if (!rememberMe) return;
-    setRememberMe({
-      ...rememberMe,
-      isEnabled: value,
-    });
+    if (value) {
+      setRememberMe({
+        isEnabled: true,
+        email: loginInfo.email || null,
+        credential: loginInfo.password || oauthLoginInfo.token,
+        snsType: oauthLoginInfo.snsType || 'NORMAL',
+      });
+
+      SnackBar.show({
+        leftElement: createElement(SvgIcon, {
+          name: 'lucky_check',
+          size: 20,
+        }),
+        title: `자동 로그인이 설정되었어요.`,
+        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+        position: 'bottom',
+        rounded: 25,
+      });
+    } else {
+      setRememberMe(null);
+    }
   };
 
   return (
@@ -62,7 +86,6 @@ export const PageSettingInfo: React.FC = () => {
         <Toggle
           value={rememberMe?.isEnabled || false}
           onChange={handleRememberMe}
-          disabled={!rememberMe}
         />
       </L.Row>
       <L.Col ph={25} pt={25}>
