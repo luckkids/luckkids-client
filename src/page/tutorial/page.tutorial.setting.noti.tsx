@@ -46,8 +46,9 @@ export const PageTutorialSettingNoti: React.FC = () => {
         },
       });
     } else {
-      // 알림 허용 요청
-      requestPermissionIfNot().then(() => {
+      // 알림 허용이 되어있지 않으면 알림 허용 요청
+      requestPermissionIfNot().then((result) => {
+        if (!result) return navigation.navigate('Home', {});
         userApis
           .setInitialSetting({
             ...initialSetting,

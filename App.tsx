@@ -58,7 +58,8 @@ const RootNavigator = () => {
     screenName.current = routeName;
   };
 
-  const { initialize: initializeFirebaseMessage } = useFirebaseMessage();
+  const { initialize: initializeFirebaseMessage, requestPermissionIfNot } =
+    useFirebaseMessage();
   const { initialize: initializeLocalMessage } = useLocalMessage();
   const [initialRoute, setInitialRoute] = useState<InitialRoute>({
     screenName: 'Login',
@@ -188,12 +189,13 @@ const RootNavigator = () => {
     setTimeout(() => {
       setIsNavigationReady(true);
     }, 2000);
-
-    // setInitialRoute({
-    //   screenName: 'TutorialGuide',
-    //   screenParams: undefined,
-    // });
   }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
+
+  useAsyncEffect(async () => {
+    // 최초에 한번 notification permission 요청
+    // NOTE: 한번 거절하면 그 뒤로는 요청하지 않음
+    await requestPermissionIfNot();
+  }, []);
 
   if (!isNavigationReady) {
     return (
