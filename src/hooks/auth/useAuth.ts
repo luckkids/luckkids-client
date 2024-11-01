@@ -8,16 +8,12 @@ import {
   SocialTypeValues,
   authApis,
 } from '@apis/auth';
+import { checkGoogleTokenValidity } from '@hooks/sns-login/useGoogleLogin';
+import { checkKakaoTokenValidity } from '@hooks/sns-login/useKakaoLogin';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
-import { SocialType } from '@types-index';
-import {
-  checkKakaoTokenValidity,
-  useKakaoLogin,
-} from '@hooks/sns-login/useKakaoLogin';
-import { checkGoogleTokenValidity } from '@hooks/sns-login/useGoogleLogin';
 
 const useAuth = () => {
   const {
@@ -28,6 +24,8 @@ const useAuth = () => {
   const [token, setToken] = useRecoilState(RecoilToken);
   const setLoginInfo = useSetRecoilState(RecoilLoignInfo);
   const setOauthLoginInfo = useSetRecoilState(RecoilOauthLoginInfo);
+  const { storedValue: rememberMe, setValue: setRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const login = async (
     loginInfo: LoginRequest,
@@ -87,10 +85,20 @@ const useAuth = () => {
             console.log('Kakao token may be invalid. Trying to re-login...');
             const newAccessToken = await checkKakaoTokenValidity();
             if (newAccessToken) {
-              return await oauthLogin({
+              await oauthLogin({
                 ...loginInfo,
                 token: newAccessToken,
               });
+
+              // 자동 로그인 설정이 되어있으면 새로운 토큰으로 갱신
+              if (rememberMe?.isEnabled) {
+                setRememberMe({
+                  ...rememberMe,
+                  credential: newAccessToken,
+                });
+              }
+
+              return;
             }
           }
           // google 재로그인
@@ -99,10 +107,20 @@ const useAuth = () => {
             const newAccessToken = await checkGoogleTokenValidity();
             if (newAccessToken) {
               // 새로운 토큰을 받아서 다시 로그인 시도
-              return await oauthLogin({
+              await oauthLogin({
                 ...loginInfo,
                 token: newAccessToken,
               });
+
+              // 자동 로그인 설정이 되어있으면 새로운 토큰으로 갱신
+              if (rememberMe?.isEnabled) {
+                setRememberMe({
+                  ...rememberMe,
+                  credential: newAccessToken,
+                });
+              }
+
+              return;
             }
           }
         }
@@ -118,6 +136,7 @@ const useAuth = () => {
         accessToken: '',
         refreshToken: '',
       });
+      setAccessToken({ accessToken: '', refreshToken: '' });
     } catch (error) {
       console.error('Logout Error', error);
     }
