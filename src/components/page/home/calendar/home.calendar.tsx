@@ -1,4 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
+import { InteractionManager, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { format } from 'date-fns';
 import { useRecoilState } from 'recoil';
@@ -13,37 +20,53 @@ interface MonthData {
 }
 
 const HomeCalendar: React.FC = () => {
-  const flashListRef = useRef(null);
+  const flashListRef = useRef<FlashList<MonthData>>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activatedDates, setActivatedDates] =
     useRecoilState(activatedDatesState);
+  const [isReady, setIsReady] = useState(false);
 
-  const today = format(new Date(), 'yyyy-MM-dd');
-  const startMonth = new Date(APP_LAUNCH_DATE);
-  startMonth.setMonth(startMonth.getMonth() + 1);
-  const endMonth = new Date(today);
-  endMonth.setMonth(endMonth.getMonth() + 10);
+  const today = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
 
-  const months = getMonthsInRange(startMonth, endMonth);
+  const { startMonth, endMonth } = useMemo(() => {
+    const start = new Date(APP_LAUNCH_DATE);
+    start.setMonth(start.getMonth() + 1);
+    const end = new Date(today);
+    end.setMonth(end.getMonth() + 10);
+    return { startMonth: start, endMonth: end };
+  }, [today]);
+
+  const getMonthsInRange = useCallback(
+    (start: Date, end: Date): MonthData[] => {
+      const current = new Date(start.getFullYear(), start.getMonth(), 1);
+      const months: MonthData[] = [];
+
+      while (current <= end) {
+        months.push({ month: current.getMonth(), year: current.getFullYear() });
+        current.setMonth(current.getMonth() + 1);
+      }
+
+      return months;
+    },
+    [],
+  );
+
+  const months = useMemo(
+    () => getMonthsInRange(startMonth, endMonth),
+    [getMonthsInRange, startMonth, endMonth],
+  );
+
+  const currentMonthIndex = useMemo(() => {
+    const now = new Date();
+    return months.findIndex(
+      (item) =>
+        item.month === now.getMonth() && item.year === now.getFullYear(),
+    );
+  }, [months]);
 
   const { data: homeCalendarInfo } = useHomeCalendar({
     missionDate: format(currentDate, 'yyyy-MM-dd'),
   });
-
-  const handleViewableItemsChanged = ({ viewableItems }: any) => {
-    if (viewableItems.length > 0) {
-      const middleIndex = Math.floor(viewableItems.length / 2);
-      const middleVisibleItem = viewableItems[middleIndex]?.item;
-      if (middleVisibleItem) {
-        const newDate = new Date(
-          middleVisibleItem.year,
-          middleVisibleItem.month,
-          1,
-        );
-        setCurrentDate(newDate);
-      }
-    }
-  };
 
   useEffect(() => {
     if (!homeCalendarInfo) return;
@@ -53,28 +76,41 @@ const HomeCalendar: React.FC = () => {
     setActivatedDates((prevDates) => [...prevDates, ...newDates]);
   }, [homeCalendarInfo, setActivatedDates]);
 
+  useEffect(() => {
+    const prepare = async () => {
+      await InteractionManager.runAfterInteractions();
+      setIsReady(true);
+    };
+
+    prepare();
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: MonthData }) => (
+      <View style={{ height: 300 }}>
+        <Month month={item.month} year={item.year} />
+      </View>
+    ),
+    [],
+  );
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <FlashList
       ref={flashListRef}
       data={months}
-      renderItem={({ item }) => <Month month={item.month} year={item.year} />}
-      estimatedItemSize={200}
-      onViewableItemsChanged={handleViewableItemsChanged}
-      viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+      renderItem={renderItem}
+      estimatedItemSize={300}
+      overrideItemLayout={(layout, item) => {
+        layout.size = 300;
+      }}
+      keyExtractor={(item) => `${item.year}-${item.month}`}
+      initialScrollIndex={currentMonthIndex !== -1 ? currentMonthIndex : 0}
     />
   );
-};
-
-const getMonthsInRange = (start: Date, end: Date): MonthData[] => {
-  const current = new Date(start.getFullYear(), start.getMonth(), 1);
-  const months: MonthData[] = [];
-
-  while (current <= end) {
-    months.push({ month: current.getMonth(), year: current.getFullYear() });
-    current.setMonth(current.getMonth() + 1);
-  }
-
-  return months;
 };
 
 export default HomeCalendar;
