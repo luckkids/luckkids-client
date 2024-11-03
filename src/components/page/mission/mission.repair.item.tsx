@@ -136,7 +136,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
       pv={22}
       items={'center'}
       justify={'space-between'}
-      bg={missionActive === 'TRUE' ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
+      bg={!luckkidsMissionId ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
     >
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'} w={'69%'}>
