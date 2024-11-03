@@ -57,7 +57,7 @@ export const PageStoryTelling: React.FC = () => {
         w={'100%'}
       >
         <L.Col w={'100%'} items="center">
-          <L.Row items={'center'}>
+          <L.Row items={'center'} mt={24}>
             <ProgressBar progress={step / STORY_TELLING_CONTENTS.length} />
           </L.Row>
           <Font textAlign="center" type={'TITLE2_BOLD'} color={'WHITE'} mt={76}>
