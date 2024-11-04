@@ -109,21 +109,39 @@ export const subscribeBranch = (
         return;
       }
 
-      // 1. 먼저 현재 상태를 리셋
-      navigationRef.dispatch(
-        StackActions.replace('Home', {
-          friendCode: friendCode.params.code,
-        }),
-      );
+      const currentRoute = navigationRef.getCurrentRoute();
+      console.log('3. Current route:', currentRoute?.name);
 
-      // 2. 상태 변경 확인을 위한 타임아웃 설정
+      // Home 화면인 경우 params만 업데이트
+      if (currentRoute?.name === 'Home') {
+        console.log('4. Currently on Home screen, updating params only');
+        navigationRef.dispatch(
+          CommonActions.setParams({
+            friendCode: friendCode.params.code,
+          }),
+        );
+      }
+      // 다른 화면인 경우 기존 로직대로 처리
+      else {
+        console.log('4. Not on Home screen, replacing with Home screen');
+        navigationRef.dispatch(
+          StackActions.replace('Home', {
+            friendCode: friendCode.params.code,
+          }),
+        );
+      }
+
+      // params 전달 확인을 위한 타임아웃 설정
       setTimeout(() => {
-        const currentRoute = navigationRef.getCurrentRoute();
-        console.log('Current route after timeout:', currentRoute);
+        const updatedRoute = navigationRef.getCurrentRoute();
+        console.log('5. Route after update:', {
+          screen: updatedRoute?.name,
+          params: updatedRoute?.params,
+        });
 
-        // 3. params가 없다면 다시 한번 시도
-        if (!(currentRoute?.params as { friendCode?: string })?.friendCode) {
-          console.log('Attempting secondary navigation...');
+        // params가 없는 경우 보조 시도
+        if (!(updatedRoute?.params as { friendCode?: string })?.friendCode) {
+          console.log('6. Attempting secondary navigation...');
           navigationRef.dispatch(
             CommonActions.setParams({
               friendCode: friendCode.params.code,

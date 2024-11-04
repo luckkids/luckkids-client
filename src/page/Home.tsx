@@ -130,7 +130,7 @@ export const Home: React.FC = () => {
     await refetchHomeInfo();
   }, [isFocused]);
 
-  useAsyncEffect(async () => {
+  useEffect(() => {
     if (!friendCode) return;
     onCheckFriend();
   }, [friendCode]);
