@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Animated,
   GestureResponderEvent,
@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
@@ -35,6 +35,7 @@ const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
   const navigationService = useNavigationService();
+
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   const { bottom } = useSafeAreaInsets();

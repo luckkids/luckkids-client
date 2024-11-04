@@ -1,6 +1,10 @@
 import { createElement } from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { NavigationContainerRef } from '@react-navigation/native';
+import {
+  CommonActions,
+  NavigationContainerRef,
+  StackActions,
+} from '@react-navigation/native';
 import { debounce } from 'lodash';
 import branch from 'react-native-branch';
 import { SvgIcon } from '@design-system';
@@ -87,44 +91,64 @@ function extractFriendCodeFromUrl(url: string) {
 export const subscribeBranch = (
   navigationRef: NavigationContainerRef<AppScreensParamList>,
 ) => {
-  const handleBranchUrl = debounce((url: string) => {
-    console.log('Handling Branch params:', url);
+  const handleBranchUrl = debounce(async (url: string) => {
+    console.log('=========== Branch Navigation Debug ===========');
+    console.log('1. URL being handled:', url);
 
     const friendCode = extractFriendCodeFromUrl(url);
+    console.log('2. Extracted friend code:', friendCode);
 
-    console.log('Friend Code:', friendCode);
-
-    if (friendCode?.params && navigationRef.isReady()) {
-      console.log('Friend Code:', friendCode.params.code);
-
-      navigationRef.navigate('Home', {
-        friendCode: friendCode.params.code,
-      });
-    } else {
+    if (!friendCode?.params?.code) {
       console.log('No valid friend code found in Branch params');
+      return;
+    }
+
+    try {
+      if (!navigationRef.isReady()) {
+        console.log('Navigation not ready');
+        return;
+      }
+
+      // 1. 먼저 현재 상태를 리셋
+      navigationRef.dispatch(
+        StackActions.replace('Home', {
+          friendCode: friendCode.params.code,
+        }),
+      );
+
+      // 2. 상태 변경 확인을 위한 타임아웃 설정
+      setTimeout(() => {
+        const currentRoute = navigationRef.getCurrentRoute();
+        console.log('Current route after timeout:', currentRoute);
+
+        // 3. params가 없다면 다시 한번 시도
+        if (!(currentRoute?.params as { friendCode?: string })?.friendCode) {
+          console.log('Attempting secondary navigation...');
+          navigationRef.dispatch(
+            CommonActions.setParams({
+              friendCode: friendCode.params.code,
+            }),
+          );
+        }
+      }, 100);
+    } catch (error) {
+      console.error('Navigation error:', error);
     }
   }, 300);
 
   return branch.subscribe({
-    onOpenStart: ({ uri, cachedInitialEvent }) => {
-      console.log('Branch onOpenStart:', { uri, cachedInitialEvent });
-    },
     onOpenComplete: ({ error, params, uri }) => {
+      console.log('Branch onOpenComplete:', { error, params, uri });
+
       if (error) {
         console.error('Branch onOpenComplete error:', error);
         return;
       }
 
-      if (!params || params['+non_branch_link']) {
-        if (params) {
-          handleBranchUrl(params['+non_branch_link'] as string);
-        }
-      }
-
       if (uri) {
         handleBranchUrl(uri);
-      } else {
-        console.log('No valid link found in Branch params');
+      } else if (params?.['+non_branch_link']) {
+        handleBranchUrl(params['+non_branch_link'] as string);
       }
     },
   });
