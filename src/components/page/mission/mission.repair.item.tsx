@@ -1,6 +1,14 @@
-import React, { createElement, useCallback, useRef, useState } from 'react';
+import React, {
+  createElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   Animated,
+  GestureResponderEvent,
+  LayoutChangeEvent,
   StyleSheet,
   TouchableWithoutFeedback,
   View,
@@ -12,19 +20,24 @@ import { Colors, Font, L, SvgIcon } from '@design-system';
 import { useMissionList, useMissionOutcomeList } from '@queries';
 import { formatMissionTime } from '@utils';
 import { missionApis } from '@apis/mission';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 import MissionItemTimePicker from '@components/page/mission/mission.item.time.picker';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { IMissionDataItem } from '@types-common/page.types';
 
 interface IProps extends IMissionDataItem {
   isSelected: boolean;
   onSelect?: (isSelected: boolean) => void;
+  showAlarmSettingTooltip?: boolean;
 }
 
 export const MissionRepairItem: React.FC<IProps> = ({
   isSelected,
   onSelect,
+  showAlarmSettingTooltip = false,
   ...item
 }) => {
   const {
@@ -41,8 +54,21 @@ export const MissionRepairItem: React.FC<IProps> = ({
   const swipeableRef = useRef<Swipeable>(null);
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
 
+  const [alertTextLayout, setAlertTextLayout] = useState({
+    x: 0,
+    y: 0,
+    height: 0,
+    width: 0,
+  });
+  const hasLayoutBeenMeasured = useRef(false);
+
   const { refetch: refetchMissionData } = useMissionList();
   const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
+
+  const { setValue: setMissionTimeRepairTooltip } =
+    useAsyncStorage<StorageKeys.MissionTimeRepairTooltip>(
+      StorageKeys.MissionTimeRepairTooltip,
+    );
 
   const handleToggleSelect = () => {
     onSelect && onSelect(!isSelected);
@@ -65,49 +91,54 @@ export const MissionRepairItem: React.FC<IProps> = ({
   };
 
   // 알림 설정 바텀 시트
-  const handlePressAlertTime = useCallback(() => {
-    if (!item) return;
-    BottomSheet.show({
-      component: (
-        <MissionItemTimePicker
-          alertTime={item?.alertTime}
-          alertStatus={item?.alertStatus}
-          onConfirm={async ({ alertTime, alertStatus }) => {
-            if (id) {
-              await missionApis.editMission({
-                missionId: id,
-                data: {
-                  alertStatus,
-                  alertTime,
-                },
-              });
-            } else {
-              await missionApis.createMission({
-                luckkidsMissionId: luckkidsMissionId,
-                missionType: missionType,
-                missionDescription: missionDescription,
-                alertStatus: alertStatus,
-                alertTime: alertTime,
-              });
-            }
+  const handlePressAlertTime = useCallback(
+    async (event: GestureResponderEvent) => {
+      if (!item) return;
+      BottomSheet.show({
+        component: (
+          <MissionItemTimePicker
+            alertTime={item?.alertTime}
+            alertStatus={item?.alertStatus}
+            onConfirm={async ({ alertTime, alertStatus }) => {
+              if (id) {
+                await missionApis.editMission({
+                  missionId: id,
+                  data: {
+                    alertStatus,
+                    alertTime,
+                  },
+                });
+              } else {
+                await missionApis.createMission({
+                  luckkidsMissionId: luckkidsMissionId,
+                  missionType: missionType,
+                  missionDescription: missionDescription,
+                  alertStatus: alertStatus,
+                  alertTime: alertTime,
+                });
+              }
 
-            SnackBar.show({
-              leftElement: createElement(SvgIcon, {
-                name: 'lucky_check',
-                size: 20,
-              }),
-              width: 280,
-              title: `습관 알림 시간이 변경되었습니다.`,
-              position: 'bottom',
-            });
+              SnackBar.show({
+                leftElement: createElement(SvgIcon, {
+                  name: 'lucky_check',
+                  size: 20,
+                }),
+                width: 280,
+                title: `습관 알림 시간이 변경되었습니다.`,
+                position: 'bottom',
+              });
 
-            await refetchMissionData();
-            await refetchMissionOutcomeData();
-          }}
-        />
-      ),
-    });
-  }, [item]);
+              await refetchMissionData();
+              await refetchMissionOutcomeData();
+            }}
+          />
+        ),
+      });
+
+      await setMissionTimeRepairTooltip({ viewed: true });
+    },
+    [item],
+  );
 
   const renderRightActions = (
     progress: Animated.AnimatedInterpolation<number>,
@@ -130,33 +161,70 @@ export const MissionRepairItem: React.FC<IProps> = ({
     );
   };
 
+  const handleAlertTextLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      if (!showAlarmSettingTooltip || hasLayoutBeenMeasured.current) return;
+
+      const { layout } = event.nativeEvent;
+      if (layout.width > 0 && layout.height > 0) {
+        setAlertTextLayout({
+          x: layout.x,
+          y: layout.y,
+          width: layout.width,
+          height: layout.height,
+        });
+        hasLayoutBeenMeasured.current = true;
+      }
+    },
+    [showAlarmSettingTooltip],
+  );
+
   const MissionContent = () => (
     <L.Row
       ph={25}
       pv={22}
       items={'center'}
       justify={'space-between'}
-      bg={missionActive === 'TRUE' ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
+      bg={!luckkidsMissionId ? 'LABEL_QUATERNARY' : 'BG_PRIMARY'}
     >
       <L.Row items={'center'} justify={'space-between'} w={'100%'}>
         <L.Row items={'center'} w={'69%'}>
-          <View>
+          <View onLayout={handleAlertTextLayout}>
             <Font type={'BODY_SEMIBOLD'} color={'WHITE'}>
               {missionDescription}
             </Font>
           </View>
+          {showAlarmSettingTooltip && alertTextLayout.width > 0 && (
+            <TouchableWithoutFeedback onPress={handlePressAlertTime}>
+              <L.Absolute
+                b={alertTextLayout.height}
+                l={alertTextLayout.width}
+                style={{
+                  transform: [{ translateX: -50 }],
+                }}
+              >
+                <Tooltip
+                  text={'알림 시간을 설정할 수 있어요'}
+                  bgColor="LUCK_GREEN"
+                  opacity={1}
+                  textColor="BLACK"
+                />
+              </L.Absolute>
+            </TouchableWithoutFeedback>
+          )}
           {/* 알림 */}
           <TouchableWithoutFeedback onPress={handlePressAlertTime}>
-            <Font
-              type={'FOOTNOTE_REGULAR'}
-              color={'GREY2'}
-              ml={13}
-              style={{
-                flexWrap: 'wrap',
-              }}
-            >
-              {getAlertText()}
-            </Font>
+            <L.Col ml={13}>
+              <Font
+                type={'FOOTNOTE_REGULAR'}
+                color={'GREY2'}
+                style={{
+                  flexWrap: 'wrap',
+                }}
+              >
+                {getAlertText()}
+              </Font>
+            </L.Col>
           </TouchableWithoutFeedback>
         </L.Row>
         <TouchableWithoutFeedback onPress={handleToggleSelect}>
@@ -180,6 +248,13 @@ export const MissionRepairItem: React.FC<IProps> = ({
     }
     return '알림 끔';
   };
+
+  // Reset layout measurement when tooltip visibility changes
+  useEffect(() => {
+    if (showAlarmSettingTooltip) {
+      hasLayoutBeenMeasured.current = false;
+    }
+  }, [showAlarmSettingTooltip]);
 
   return luckkidsMissionId ? (
     <MissionContent />

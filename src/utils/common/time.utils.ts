@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export const formatCreatedAt = (createdAt: string) => {
   const now = new Date();
   const createdAtDate = new Date(createdAt);
@@ -7,7 +9,7 @@ export const formatCreatedAt = (createdAt: string) => {
   const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
   if (diffInDays > 1) {
-    return createdAtDate.toLocaleDateString();
+    return format(createdAt, 'yyyy.MM.dd');
   } else if (diffInHours > 0) {
     return `${diffInHours}시간 전`;
   } else if (diffInMinutes > 0) {

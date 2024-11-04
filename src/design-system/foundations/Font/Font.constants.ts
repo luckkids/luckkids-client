@@ -64,7 +64,7 @@ export default {
   },
   BODY_REGULAR: {
     fontSize: 16,
-    lineHeight: 21,
+    lineHeight: 24,
     fontFamily: PretendardFont.Regular,
   },
   BODY_SEMIBOLD: {

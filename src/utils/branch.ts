@@ -1,6 +1,10 @@
 import { createElement } from 'react';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { NavigationContainerRef } from '@react-navigation/native';
+import {
+  CommonActions,
+  NavigationContainerRef,
+  StackActions,
+} from '@react-navigation/native';
 import { debounce } from 'lodash';
 import branch from 'react-native-branch';
 import { SvgIcon } from '@design-system';
@@ -87,44 +91,82 @@ function extractFriendCodeFromUrl(url: string) {
 export const subscribeBranch = (
   navigationRef: NavigationContainerRef<AppScreensParamList>,
 ) => {
-  const handleBranchUrl = debounce((url: string) => {
-    console.log('Handling Branch params:', url);
+  const handleBranchUrl = debounce(async (url: string) => {
+    console.log('=========== Branch Navigation Debug ===========');
+    console.log('1. URL being handled:', url);
 
     const friendCode = extractFriendCodeFromUrl(url);
+    console.log('2. Extracted friend code:', friendCode);
 
-    console.log('Friend Code:', friendCode);
-
-    if (friendCode?.params && navigationRef.isReady()) {
-      console.log('Friend Code:', friendCode.params.code);
-
-      navigationRef.navigate('Home', {
-        friendCode: friendCode.params.code,
-      });
-    } else {
+    if (!friendCode?.params?.code) {
       console.log('No valid friend code found in Branch params');
+      return;
+    }
+
+    try {
+      if (!navigationRef.isReady()) {
+        console.log('Navigation not ready');
+        return;
+      }
+
+      const currentRoute = navigationRef.getCurrentRoute();
+      console.log('3. Current route:', currentRoute?.name);
+
+      // Home 화면인 경우 params만 업데이트
+      if (currentRoute?.name === 'Home') {
+        console.log('4. Currently on Home screen, updating params only');
+        navigationRef.dispatch(
+          CommonActions.setParams({
+            friendCode: friendCode.params.code,
+          }),
+        );
+      }
+      // 다른 화면인 경우 기존 로직대로 처리
+      else {
+        console.log('4. Not on Home screen, replacing with Home screen');
+        navigationRef.dispatch(
+          StackActions.replace('Home', {
+            friendCode: friendCode.params.code,
+          }),
+        );
+      }
+
+      // params 전달 확인을 위한 타임아웃 설정
+      setTimeout(() => {
+        const updatedRoute = navigationRef.getCurrentRoute();
+        console.log('5. Route after update:', {
+          screen: updatedRoute?.name,
+          params: updatedRoute?.params,
+        });
+
+        // params가 없는 경우 보조 시도
+        if (!(updatedRoute?.params as { friendCode?: string })?.friendCode) {
+          console.log('6. Attempting secondary navigation...');
+          navigationRef.dispatch(
+            CommonActions.setParams({
+              friendCode: friendCode.params.code,
+            }),
+          );
+        }
+      }, 100);
+    } catch (error) {
+      console.error('Navigation error:', error);
     }
   }, 300);
 
   return branch.subscribe({
-    onOpenStart: ({ uri, cachedInitialEvent }) => {
-      console.log('Branch onOpenStart:', { uri, cachedInitialEvent });
-    },
     onOpenComplete: ({ error, params, uri }) => {
+      console.log('Branch onOpenComplete:', { error, params, uri });
+
       if (error) {
         console.error('Branch onOpenComplete error:', error);
         return;
       }
 
-      if (!params || params['+non_branch_link']) {
-        if (params) {
-          handleBranchUrl(params['+non_branch_link'] as string);
-        }
-      }
-
       if (uri) {
         handleBranchUrl(uri);
-      } else {
-        console.log('No valid link found in Branch params');
+      } else if (params?.['+non_branch_link']) {
+        handleBranchUrl(params['+non_branch_link'] as string);
       }
     },
   });

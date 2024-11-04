@@ -5,6 +5,7 @@ export enum StorageKeys {
   StoryTelling = 'story_telling',
   RememberMe = 'remember_me',
   AccessToken = 'access_token',
+  MissionTimeRepairTooltip = 'mission_time_repair_tooltip',
   // Add other keys here
 }
 
@@ -35,6 +36,10 @@ interface StoryTellingType {
   viewed: boolean;
 }
 
+interface MissionTimeRepairTooltipType {
+  viewed: boolean;
+}
+
 // Add types for other keys if needed
 // interface OtherKeyType { ... }
 
@@ -43,5 +48,26 @@ export type StorageValues = {
   [StorageKeys.RememberMe]: RememberMeType;
   [StorageKeys.AccessToken]: AccessToken;
   [StorageKeys.StoryTelling]: StoryTellingType;
+  [StorageKeys.MissionTimeRepairTooltip]: MissionTimeRepairTooltipType;
   // Add other key-value mappings here
+};
+
+export const defaultValues = {
+  [StorageKeys.RememberMe]: {
+    isEnabled: false,
+    snsType: 'NORMAL',
+    email: null,
+    credential: '',
+  },
+  [StorageKeys.AccessToken]: {
+    accessToken: '',
+    refreshToken: '',
+  },
+  [StorageKeys.StoryTelling]: {
+    viewed: false,
+  },
+  [StorageKeys.MissionTimeRepairTooltip]: {
+    viewed: false,
+  },
+  // Add other default values here
 };

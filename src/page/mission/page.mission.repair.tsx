@@ -15,6 +15,8 @@ import { FrameLayout } from '@frame/frame.layout';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionData, IMissionDataItem } from '@types-common/page.types';
 
@@ -31,6 +33,11 @@ export const PageMissionRepair = () => {
   const [selectedMissions, setSelectedMissions] = useState<IMissionDataItem[]>(
     [],
   );
+
+  const { storedValue: missionTimeRepairTooltip } =
+    useAsyncStorage<StorageKeys.MissionTimeRepairTooltip>(
+      StorageKeys.MissionTimeRepairTooltip,
+    );
 
   const {
     data: missionData,
@@ -227,12 +234,14 @@ export const PageMissionRepair = () => {
 
   const renderCategoryMissionList = ({
     item,
+    index: categoryIndex,
   }: {
     item: {
       id: string;
       missionType: string;
       missions: IMissionDataItem[];
     };
+    index: number;
   }) => {
     const { missionType, missions } = item;
     const isOpened = openedCategories.includes(missionType);
@@ -265,9 +274,15 @@ export const PageMissionRepair = () => {
             </L.Row>
           </L.Row>
         </TouchableWithoutFeedback>
+
         {isOpened && (
           <L.Col mb={20}>
             {missions.map((mission, i) => {
+              const showAlarmSettingTooltip =
+                categoryIndex === 0 &&
+                i === 0 &&
+                (!missionTimeRepairTooltip ||
+                  missionTimeRepairTooltip.viewed === false);
               const isSelected =
                 type === 'INITIAL_SETTING'
                   ? selectedMissions.some(
@@ -278,8 +293,8 @@ export const PageMissionRepair = () => {
               return (
                 <MissionRepairItem
                   key={i}
-                  {...mission}
                   isSelected={isSelected}
+                  showAlarmSettingTooltip={showAlarmSettingTooltip}
                   onSelect={(isSelected) => {
                     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
                     if (type === 'MISSION_REPAIR') {
@@ -294,6 +309,7 @@ export const PageMissionRepair = () => {
                       }
                     }
                   }}
+                  {...mission}
                 />
               );
             })}
@@ -304,6 +320,10 @@ export const PageMissionRepair = () => {
   };
 
   useEffect(() => {
+    // setMissionTimeRepairTooltip({
+    //   viewed: false,
+    // });
+
     setOpenedCategories(allCategories);
   }, [missionData]);
 

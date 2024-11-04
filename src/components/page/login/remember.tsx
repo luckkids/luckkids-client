@@ -27,7 +27,13 @@ const LoginRemember = ({ onClose, onRemember }: LoginRememberProps) => {
       <Font textAlign="center" type="TITLE2_BOLD" mt={25}>
         {'다음부터\n자동으로 로그인할까요?'}
       </Font>
-      <Font textAlign="center" type="BODY_REGULAR" mt={16} mb={40}>
+      <Font
+        textAlign="center"
+        type="BODY_REGULAR"
+        mt={16}
+        mb={40}
+        color="GREY1"
+      >
         설정에서 언제든 변경할 수 있어요.
       </Font>
       <L.Col g={10} w="100%">

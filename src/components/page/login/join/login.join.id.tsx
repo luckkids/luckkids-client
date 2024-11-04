@@ -113,10 +113,13 @@ export const LoginJoinId: React.FC = () => {
           errorMessage={getErrorMessage()}
           isError={getIsError()}
           RightComponent={
-            email &&
-            isValidEmail && (
+            email && (
               <SvgIcon
-                name={isDuplicate ? 'validation_error' : 'validation_check'}
+                name={
+                  isDuplicate || !isValidEmail
+                    ? 'validation_error'
+                    : 'validation_check'
+                }
                 size={20}
               />
             )

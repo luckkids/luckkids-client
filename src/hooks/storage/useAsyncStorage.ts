@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageValues } from './keys';
+import { defaultValues, StorageValues } from './keys';
 
 type UseAsyncStorage<K extends keyof StorageValues> = {
   storedValue: StorageValues[K] | null;
@@ -13,7 +13,9 @@ type UseAsyncStorage<K extends keyof StorageValues> = {
 const useAsyncStorage = <K extends keyof StorageValues>(
   key: K,
 ): UseAsyncStorage<K> => {
-  const [storedValue, setStoredValue] = useState<StorageValues[K] | null>(null);
+  const [storedValue, setStoredValue] = useState<StorageValues[K] | null>(() =>
+    defaultValues[key] ? (defaultValues[key] as StorageValues[K]) : null,
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,5 +63,4 @@ const useAsyncStorage = <K extends keyof StorageValues>(
     loading,
   };
 };
-
 export default useAsyncStorage;

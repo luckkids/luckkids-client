@@ -91,12 +91,12 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
       </L.Row>
       <L.Layout>
         {isError && !!errorMessage && (
-          <Font mt={10} type="FOOTNOTE_REGULAR" color="RED">
+          <Font mt={10} type="SUBHEADLINE_REGULAR" color="RED">
             {errorMessage}
           </Font>
         )}
         {!!description && (
-          <Font mt={10} type="FOOTNOTE_REGULAR" color="WHITE">
+          <Font mt={10} type="SUBHEADLINE_REGULAR" color="WHITE">
             {description}
           </Font>
         )}

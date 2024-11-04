@@ -49,7 +49,7 @@ export default function MissionItemTimePicker({
   return (
     <S.popupWrap>
       <Font type={'HEADLINE_SEMIBOLD'} style={{ marginBottom: 10 }}>
-        알람 시간을 변경할 수 있어요
+        알림 시간 설정
       </Font>
       <TouchableWithoutFeedback
         onPress={() => {
