@@ -259,7 +259,7 @@ export const PageMissionRepair = () => {
             }
           }}
         >
-          <L.Row items={'center'} justify={'space-between'} mb={30} ph={25}>
+          <L.Row items={'center'} justify={'space-between'} mb={36} ph={25}>
             <L.Row items={'center'}>
               <SvgIcon
                 name={categoryButton(missionType).icon as IconNames}
