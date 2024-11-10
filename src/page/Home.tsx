@@ -26,6 +26,7 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
+import { friendApis } from '@apis/friend';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -43,33 +44,30 @@ export const Home: React.FC = () => {
   const friendCode = params?.friendCode || '';
   const isFocused = useIsFocused();
 
-  const [sendFriend, setSendFriend] = useState<string>('');
   const setStatePopup = useSetRecoilState(RecoilPopupState);
 
-  const { onFetch: addFriend } = useFetch({
-    method: 'POST',
-    url: '/friendcode/create',
-    value: {
-      code: friendCode,
-    },
-    onSuccessCallback: () => {
-      AlertPopup.show({
-        title: `${sendFriend}님이 \n가든 목록에 추가되었어요!`,
-        onPressYes: () => navigationService.push('Garden'),
-        yesText: '가든으로 가기',
-        noText: '닫기',
-      });
-    },
-    onFailCallback: (e) => {
-      console.error('error', e);
-    },
-  });
+  const addFriend = async (code: string, nickname: string) => {
+    try {
+      const res = await friendApis.createFriendByCode({ code });
+
+      if (!res) {
+        AlertPopup.show({
+          title: `${nickname}님이 \n가든 목록에 추가되었어요!`,
+          onPressYes: () => navigationService.push('Garden'),
+          yesText: '가든으로 가기',
+          noText: '닫기',
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const { onFetch: onCheckFriend } = useFetch({
     method: 'GET',
     url: `/friendcode/${friendCode}/nickname`,
     onSuccessCallback: (rtn) => {
-      setSendFriend(rtn.nickName);
+      const { nickName } = rtn;
       if (rtn.status === 'ME') {
         return AlertPopup.show({
           title: '내가 보낸 초대예요!',
@@ -77,7 +75,7 @@ export const Home: React.FC = () => {
         });
       } else if (rtn.status === 'ALREADY') {
         return AlertPopup.show({
-          title: `이미 ${rtn.nickName}님과 친구예요.`,
+          title: `이미 ${nickName}님과 친구예요.`,
           onPressYes: () => {
             navigationService.push('Garden');
           },
@@ -86,9 +84,9 @@ export const Home: React.FC = () => {
         });
       } else {
         return AlertPopup.show({
-          title: `${rtn.nickName}님이 \n친구 초대를 보냈어요!`,
+          title: `${nickName}님이 \n친구 초대를 보냈어요!`,
           body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
-          onPressYes: addFriend,
+          onPressYes: () => addFriend(friendCode, nickName),
           yesText: '친구하기',
           noText: '거절하기',
         });
