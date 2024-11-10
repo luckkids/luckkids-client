@@ -14,7 +14,7 @@ export const Mission: React.FC = () => {
   const navigation = useNavigationService();
   const [hide, setHide] = useState(false);
 
-  const { data: missionOutcomeData } = useMissionOutcomeList();
+  const { data: missionOutcomeData, isLoading } = useMissionOutcomeList();
   const { data: missionOutcomeCount } = useMissionOutcomeCount();
 
   const accumulatedCount = missionOutcomeCount?.count ?? 0;
@@ -79,7 +79,7 @@ export const Mission: React.FC = () => {
         justify={'center'}
       >
         <L.Col g={50}>
-          {missionOutcomeList?.length === 0 && (
+          {!isLoading && missionOutcomeList?.length === 0 && (
             <L.Row w="100%" justify="center">
               <Tooltip
                 text={'습관을 추가해보세요!'}
