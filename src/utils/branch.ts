@@ -59,8 +59,8 @@ export const createAndCopyBranchLink = async (
     );
 
     const chatBalloon = nickName
-      ? `[Luckkids]\n럭키즈 | 💌 [띵동] ${nickName}님이 친구 요청을 보냈어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`
-      : `[Luckkids]\n럭키즈 | 💌 [띵동] 친구 요청이 도착했어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`;
+      ? `[luckkids]\n럭키즈 | 💌 [띵동] ${nickName}님이 친구 요청을 보냈어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`
+      : `[luckkids]\n럭키즈 | 💌 [띵동] 친구 요청이 도착했어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`;
 
     if (url) {
       Clipboard.setString(chatBalloon + url);
