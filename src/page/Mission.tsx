@@ -74,7 +74,7 @@ export const Mission: React.FC = () => {
         </ScrollView>
       </FrameLayout>
       <L.Absolute
-        b={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 20}
+        b={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 35}
         w="100%"
         justify={'center'}
       >
