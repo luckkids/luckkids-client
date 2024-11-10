@@ -77,20 +77,20 @@ export const PageTutorialSettingCharacter: React.FC = () => {
               textAlign="center"
               type={'TITLE2_BOLD'}
               color={'WHITE'}
-              mt={76}
+              mt={84}
             >
               {'함께 키워가게 될\n어떤 럭키즈가 기다릴까?'}
             </Font>
             <Font
               textAlign="center"
-              type={'BODY_SEMIBOLD'}
-              color={'WHITE'}
+              type={'HEADLINE_SEMIBOLD'}
+              color={'GREY1'}
               mt={20}
             >
               {'슬라임을 눌러 럭키즈를 받아보세요'}
             </Font>
             <TouchableWithoutFeedback onPress={handleNext}>
-              <L.Row h={'100%'} flex-1 items="center">
+              <L.Row mt={108} items="center">
                 <Image
                   source={tutorialSettingCharacterImage}
                   style={{
