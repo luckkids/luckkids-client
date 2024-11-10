@@ -13,7 +13,11 @@ import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
-import { getCharacterImage, getLevelToolTipText } from '@utils';
+import {
+  getCharacterImage,
+  getLevelToolTipText,
+  markInviteAsProcessed,
+} from '@utils';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
@@ -50,10 +54,14 @@ export const Home: React.FC = () => {
     try {
       const res = await friendApis.createFriendByCode({ code });
 
-      if (!res) {
+      if (res) {
+        // 친구로 추가했을때에만 초대코드 저장
+        await markInviteAsProcessed(code);
         AlertPopup.show({
           title: `${nickname}님이 \n가든 목록에 추가되었어요!`,
-          onPressYes: () => navigationService.push('Garden'),
+          onPressYes: async () => {
+            navigationService.push('Garden');
+          },
           yesText: '가든으로 가기',
           noText: '닫기',
         });
@@ -66,7 +74,7 @@ export const Home: React.FC = () => {
   const { onFetch: onCheckFriend } = useFetch({
     method: 'GET',
     url: `/friendcode/${friendCode}/nickname`,
-    onSuccessCallback: (rtn) => {
+    onSuccessCallback: async (rtn) => {
       const { nickName } = rtn;
       if (rtn.status === 'ME') {
         return AlertPopup.show({
@@ -74,6 +82,7 @@ export const Home: React.FC = () => {
           onPressYes: () => setStatePopup({ isShow: false }),
         });
       } else if (rtn.status === 'ALREADY') {
+        await markInviteAsProcessed(friendCode);
         return AlertPopup.show({
           title: `이미 ${nickName}님과 친구예요.`,
           onPressYes: () => {

@@ -73,7 +73,10 @@ const HomeCalendar: React.FC = () => {
     const newDates = homeCalendarInfo.calendar
       .filter((c) => c.hasSucceed)
       .map((c) => c.missionDate);
-    setActivatedDates((prevDates) => [...prevDates, ...newDates]);
+
+    setActivatedDates((prevDates) =>
+      Array.from(new Set([...prevDates, ...newDates])),
+    );
   }, [homeCalendarInfo, setActivatedDates]);
 
   useEffect(() => {

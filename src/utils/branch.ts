@@ -1,4 +1,5 @@
 import { createElement } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {
   CommonActions,
@@ -32,7 +33,6 @@ export const createAndCopyBranchLink = async (
   code: string,
   nickName: string | null,
 ) => {
-  // const ImgUrl = 'https://cdn.branch.io/branch-assets/1723979173696-og_image.jpeg';
   const ImgUrl =
     'https://info-luckkids.netlify.app/img/luckkids-invite-share.png';
   try {
@@ -84,6 +84,31 @@ function extractFriendCodeFromUrl(url: string) {
     : null;
 }
 
+// 초대 코드 처리 여부를 확인하는 함수
+export const checkIfInviteProcessed = async (
+  code: string,
+): Promise<boolean> => {
+  try {
+    const processedCode = await AsyncStorage.getItem(
+      `processed_invite_${code}`,
+    );
+    return !!processedCode;
+  } catch (error) {
+    console.error('Error checking processed invite:', error);
+    return false;
+  }
+};
+
+// 초대 코드를 처리 완료로 마크하는 함수
+export const markInviteAsProcessed = async (code: string) => {
+  try {
+    await AsyncStorage.setItem(`processed_invite_${code}`, 'true');
+    console.log(`Invite code ${code} marked as processed`);
+  } catch (error) {
+    console.error('Error marking invite as processed:', error);
+  }
+};
+
 export const subscribeBranch = (
   navigationRef: NavigationContainerRef<AppScreensParamList>,
 ) => {
@@ -100,6 +125,16 @@ export const subscribeBranch = (
     }
 
     try {
+      // 이미 처리된 초대 코드인지 확인
+      const isProcessed = await checkIfInviteProcessed(friendCode.params.code);
+      if (isProcessed) {
+        console.log(
+          'This invite code was already processed:',
+          friendCode.params.code,
+        );
+        return;
+      }
+
       if (!navigationRef.isReady()) {
         console.log('Navigation not ready');
         return;
