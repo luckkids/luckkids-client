@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { format } from 'date-fns';
+import { format, isAfter, startOfDay } from 'date-fns';
 import { useRecoilValue } from 'recoil';
 import { Colors, Font, L } from '@design-system';
 import HomeCalendarDetail from './home.calendar.detail';
@@ -13,7 +13,7 @@ interface DayProps {
 
 const Day: React.FC<DayProps> = ({ day }) => {
   const activatedDates = useRecoilValue(activatedDatesState);
-  const isAfterToday = day && day > new Date();
+  const today = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
 
   const handleDayPress = useCallback((day: Date) => {
     BottomSheet.show({
@@ -34,8 +34,9 @@ const Day: React.FC<DayProps> = ({ day }) => {
     );
   }
 
-  const dateString = day.toISOString().split('T')[0];
+  const dateString = format(day, 'yyyy-MM-dd');
   const isActivated = activatedDates.includes(dateString);
+  const isAfterToday = isAfter(startOfDay(day), today);
 
   const getFontColor = () => {
     if (isActivated) {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {
@@ -14,12 +16,12 @@ import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const PageStoryTelling: React.FC = () => {
   const [step, setStep] = useState(1);
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
+  const [autoPlayEnabled, setAutoPlayEnabled] = useState(true);
 
   const { setValue: setStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
@@ -33,8 +35,20 @@ export const PageStoryTelling: React.FC = () => {
     return navigation.navigate('Login');
   };
 
+  const handlePrevStep = () => {
+    setAutoPlayEnabled(false);
+    setStep((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleNextStep = () => {
+    setAutoPlayEnabled(false);
+    setStep((prev) => Math.min(STORY_TELLING_CONTENTS.length, prev + 1));
+  };
+
   useEffect(() => {
-    const sub = interval(1000)
+    if (!autoPlayEnabled) return;
+
+    const sub = interval(6 * 1000)
       .pipe(take(STORY_TELLING_CONTENTS.length))
       .subscribe((v) => {
         if (v === STORY_TELLING_CONTENTS.length) {
@@ -45,7 +59,7 @@ export const PageStoryTelling: React.FC = () => {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  }, [autoPlayEnabled]);
 
   return (
     <FrameLayout paddingBottom={bottom}>
@@ -63,17 +77,28 @@ export const PageStoryTelling: React.FC = () => {
           <Font textAlign="center" type={'TITLE2_BOLD'} color={'WHITE'} mt={76}>
             {STORY_TELLING_CONTENTS[step - 1]}
           </Font>
+
           {!!STORY_TELLING_LOTTIES[step - 1] && (
-            <LottieView
-              source={STORY_TELLING_LOTTIES[step - 1]}
-              style={{
-                width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
-                height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
-              }}
-              autoPlay
-            />
+            <>
+              <LottieView
+                source={STORY_TELLING_LOTTIES[step - 1]}
+                style={{
+                  width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                  height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                }}
+                autoPlay
+              />
+            </>
           )}
         </L.Col>
+        <L.Absolute h="100%">
+          <TouchableWithoutFeedback onPress={handlePrevStep}>
+            <L.Row w={SCREEN_WIDTH / 2} h="100%" />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={handleNextStep}>
+            <L.Row w={SCREEN_WIDTH / 2} h="100%" />
+          </TouchableWithoutFeedback>
+        </L.Absolute>
         <Button
           type={'action'}
           text={'시작하기'}
