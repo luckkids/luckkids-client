@@ -132,6 +132,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 }),
                 width: 280,
                 title: `습관 알림 시간이 변경되었습니다.`,
+                offsetY: 24,
                 position: 'bottom',
               });
 
