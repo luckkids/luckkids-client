@@ -343,7 +343,7 @@ export const PageMissionRepair = () => {
         </Font>
       </L.Row>
       {/* 습관 추가 / 습관 선택 */}
-      <L.Row ph={25} pv={15} outline="RED">
+      <L.Row ph={25} pv={15}>
         <L.Row mr={8}>
           <MissionRepairCategoryItem
             isAddButton={true}
