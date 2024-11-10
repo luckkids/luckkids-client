@@ -343,12 +343,14 @@ export const PageMissionRepair = () => {
         </Font>
       </L.Row>
       {/* 습관 추가 / 습관 선택 */}
-      <L.Row ph={25} pv={15}>
-        <MissionRepairCategoryItem
-          isAddButton={true}
-          label={'습관추가'}
-          onPress={() => navigation.navigate('MissionAdd')}
-        />
+      <L.Row ph={25} pv={15} outline="RED">
+        <L.Row mr={8}>
+          <MissionRepairCategoryItem
+            isAddButton={true}
+            label={'습관추가'}
+            onPress={() => navigation.navigate('MissionAdd')}
+          />
+        </L.Row>
         {allCategories?.length !== 0 && (
           <FlatList
             data={allCategories}
