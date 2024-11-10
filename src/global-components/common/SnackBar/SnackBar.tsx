@@ -6,14 +6,27 @@ import {
 } from 'react-native-global-components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSettings } from '@design-system';
+import { DEFAULT_MARGIN } from '@constants';
 
 interface Props extends SimpleSnackbarProps {
   rounded?: number;
   width?: number;
+  ph?: number;
+  pv?: number;
+  backgroundColor?: string;
 }
 
 const SnackBar = createPopup(
-  ({ rounded = 40, width, offsetY, styles, ...props }: Props) => {
+  ({
+    rounded = 40,
+    width,
+    backgroundColor,
+    offsetY,
+    styles,
+    ph,
+    pv,
+    ...props
+  }: Props) => {
     const { top, bottom } = useSafeAreaInsets();
 
     const getOffsetY = () => {
@@ -33,16 +46,16 @@ const SnackBar = createPopup(
           },
           container: {
             borderRadius: rounded,
-            width: width || 340,
+            width: width || SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
             minWidth: 50,
-            maxWidth: 340,
-            backgroundColor: Colors['GREY4'],
+            maxWidth: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+            backgroundColor: backgroundColor || Colors['GREY4'],
             display: 'flex',
             flexWrap: 'nowrap',
             flex: 1,
             gap: 10,
-            paddingHorizontal: 20,
-            paddingVertical: 16,
+            paddingHorizontal: ph || 20,
+            paddingVertical: pv || 16,
           },
           ...styles,
         }}

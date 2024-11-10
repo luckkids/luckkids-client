@@ -320,10 +320,6 @@ export const PageMissionRepair = () => {
   };
 
   useEffect(() => {
-    // setMissionTimeRepairTooltip({
-    //   viewed: false,
-    // });
-
     setOpenedCategories(allCategories);
   }, [missionData]);
 
@@ -348,7 +344,9 @@ export const PageMissionRepair = () => {
           <MissionRepairCategoryItem
             isAddButton={true}
             label={'습관추가'}
-            onPress={() => navigation.navigate('MissionAdd')}
+            onPress={() => {
+              navigation.navigate('MissionAdd');
+            }}
           />
         </L.Row>
         {allCategories?.length !== 0 && (
