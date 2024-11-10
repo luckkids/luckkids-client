@@ -21,14 +21,10 @@ const onSnackBarHandler = () => {
       size: 20,
     }),
     width: 185,
-    title: `링크가 복사됐어요`,
+    title: '링크가 복사됐어요!',
     position: 'bottom',
-    styles: {
-      titleContainer: {
-        flex: 0,
-        paddingHorizontal: 4,
-      },
-    },
+    rounded: 25,
+    offsetY: 52 + 24,
   });
 };
 
@@ -68,8 +64,8 @@ export const createAndCopyBranchLink = async (
 
     if (url) {
       Clipboard.setString(chatBalloon + url);
-      BottomSheet.hide();
       onSnackBarHandler();
+      BottomSheet.hide();
     }
     return { url, message: chatBalloon, icon: ImgUrl };
   } catch (err) {

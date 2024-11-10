@@ -1,3 +1,4 @@
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import {
   createPopup,
   SimpleSnackbarProps,
@@ -5,8 +6,6 @@ import {
 } from 'react-native-global-components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors, FontSettings } from '@design-system';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { DEFAULT_MARGIN } from '@constants';
 
 interface Props extends SimpleSnackbarProps {
   rounded?: number;
@@ -14,28 +13,37 @@ interface Props extends SimpleSnackbarProps {
 }
 
 const SnackBar = createPopup(
-  ({ rounded = 40, width, styles, ...props }: Props) => {
-    const { top } = useSafeAreaInsets();
+  ({ rounded = 40, width, offsetY, styles, ...props }: Props) => {
+    const { top, bottom } = useSafeAreaInsets();
+
+    const getOffsetY = () => {
+      const baseOffset = offsetY || 0;
+      if (props.position === 'top') return top + baseOffset;
+      if (props.position === 'bottom') return bottom + baseOffset;
+      return baseOffset;
+    };
 
     return (
       <SimpleSnackbarUI
-        offsetY={top || 8}
+        offsetY={getOffsetY()}
         styles={{
-          title: FontSettings['SUBHEADLINE_REGULAR'],
+          title: {
+            ...FontSettings['SUBHEADLINE_REGULAR'],
+            textAlign: 'left',
+          },
           container: {
             borderRadius: rounded,
-            width,
-            maxWidth: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+            width: width || 340,
+            minWidth: 50,
+            maxWidth: 340,
             backgroundColor: Colors['GREY4'],
-            gap: 10,
             display: 'flex',
             flexWrap: 'nowrap',
             flex: 1,
+            gap: 10,
             paddingHorizontal: 20,
             paddingVertical: 16,
-            height: 52,
           },
-
           ...styles,
         }}
         {...props}
