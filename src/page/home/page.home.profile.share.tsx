@@ -45,6 +45,7 @@ export const PageHomeProfileShare: React.FC = () => {
         position: 'bottom',
         rounded: 100,
         offsetY: bottom,
+        width: 200,
       });
     } catch (error) {
       console.error('handleSaveImage', error);

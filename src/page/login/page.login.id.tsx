@@ -51,8 +51,11 @@ export const PageLoginId: React.FC = () => {
           name: 'yellow_info',
           size: 20,
         }),
-        title: `아이디를 입력해 주세요.`,
+        title: `아이디를 입력해 주세요!`,
         position: 'bottom',
+        rounded: 25,
+        width: 208,
+        offsetY: 52 + 24,
       });
     }
     return sendTempPassword();
@@ -112,9 +115,9 @@ export const PageLoginId: React.FC = () => {
       }),
       title: `이메일 또는 비밀번호가 잘못 입력되었어요!`,
       position: 'bottom',
-      width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
+      width: 323,
       rounded: 25,
-      offsetY: 110,
+      offsetY: 52 + 24,
     });
   };
 
@@ -144,19 +147,17 @@ export const PageLoginId: React.FC = () => {
       SnackBar.show({
         title: `${resultData.email} 주소로 임시 비밀번호가 전송되었습니다.`,
         position: 'bottom',
-        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
         rounded: 25,
-        offsetY: 110,
+        offsetY: 52 + 24,
       });
     },
     onFailCallback: () => {
       console.log('이메일 전송 실패');
       SnackBar.show({
-        title: `이메일 전송에 실패했습니다. 다시 시도해 주세요.`,
+        title: `일시적인 오류로 잠시 후 다시 이용해주세요!`,
         position: 'bottom',
-        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
         rounded: 25,
-        offsetY: 110,
+        offsetY: 52 + 24,
       });
     },
   });

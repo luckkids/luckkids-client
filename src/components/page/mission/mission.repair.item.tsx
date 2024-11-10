@@ -76,18 +76,25 @@ export const MissionRepairItem: React.FC<IProps> = ({
 
   const handleDelete = async () => {
     if (!item) return;
-    await missionApis.deleteMission(id);
+    try {
+      await missionApis.deleteMission(id);
+      SnackBar.show({
+        title: '습관이 삭제되었어요',
+        rounded: 15,
+        position: 'bottom',
+        offsetY: 24,
+        pv: 20,
+        ph: 20,
+        backgroundColor: '#444444',
+      });
+
+      setIsSwiping(false);
+    } catch (e) {
+      console.error(e);
+    }
 
     await refetchMissionData();
     await refetchMissionOutcomeData();
-
-    SnackBar.show({
-      title: `습관이 삭제되었습니다.`,
-      width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
-      position: 'bottom',
-      rounded: 25,
-      offsetY: 110,
-    });
   };
 
   // 알림 설정 바텀 시트
@@ -125,6 +132,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 }),
                 width: 280,
                 title: `습관 알림 시간이 변경되었습니다.`,
+                offsetY: 24,
                 position: 'bottom',
               });
 

@@ -14,7 +14,7 @@ export const Mission: React.FC = () => {
   const navigation = useNavigationService();
   const [hide, setHide] = useState(false);
 
-  const { data: missionOutcomeData } = useMissionOutcomeList();
+  const { data: missionOutcomeData, isLoading } = useMissionOutcomeList();
   const { data: missionOutcomeCount } = useMissionOutcomeCount();
 
   const accumulatedCount = missionOutcomeCount?.count ?? 0;
@@ -37,13 +37,13 @@ export const Mission: React.FC = () => {
             누적된 수행 습관 {accumulatedCount}
           </Font>
         </L.Row>
-        <L.Row p={24} pt={40} justify={'space-between'}>
+        <L.Row ph={24} mt={40} justify={'space-between'}>
           <Font type={'LARGE_TITLE_BOLD'}>오늘의 습관</Font>
           <Font type={'LARGE_TITLE_REGULAR'} color={'LUCK_GREEN'}>
             {count}/{total}
           </Font>
         </L.Row>
-        <L.Row ph={24} pt={48} pb={10} justify={'space-between'}>
+        <L.Row ph={24} pt={50} pb={10} justify={'space-between'}>
           <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
             지금까지 {count}개 완료했어요!
           </Font>
@@ -62,7 +62,7 @@ export const Mission: React.FC = () => {
           }}
         >
           {missionOutcomeList?.length === 0 && (
-            <L.Col w={'100%'} items={'center'} mt={100}>
+            <L.Col w={'100%'} items={'center'} mt={190}>
               <Font type={'SUBHEADLINE_REGULAR'} color={'GREY1'}>
                 아직 선택한 습관이 없어요.
               </Font>
@@ -74,12 +74,12 @@ export const Mission: React.FC = () => {
         </ScrollView>
       </FrameLayout>
       <L.Absolute
-        b={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 20}
+        b={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 35}
         w="100%"
         justify={'center'}
       >
         <L.Col g={50}>
-          {missionOutcomeList?.length === 0 && (
+          {!isLoading && missionOutcomeList?.length === 0 && (
             <L.Row w="100%" justify="center">
               <Tooltip
                 text={'습관을 추가해보세요!'}

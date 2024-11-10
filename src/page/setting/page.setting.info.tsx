@@ -39,17 +39,6 @@ export const PageSettingInfo: React.FC = () => {
         credential: loginInfo.password || oauthLoginInfo.token,
         snsType: oauthLoginInfo.snsType || 'NORMAL',
       });
-
-      SnackBar.show({
-        leftElement: createElement(SvgIcon, {
-          name: 'lucky_check',
-          size: 20,
-        }),
-        title: `자동 로그인이 설정되었어요.`,
-        width: SCREEN_WIDTH - DEFAULT_MARGIN * 2,
-        position: 'bottom',
-        rounded: 25,
-      });
     } else {
       setRememberMe(null);
     }

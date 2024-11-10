@@ -21,14 +21,10 @@ const onSnackBarHandler = () => {
       size: 20,
     }),
     width: 185,
-    title: `링크가 복사됐어요`,
+    title: '링크가 복사됐어요!',
     position: 'bottom',
-    styles: {
-      titleContainer: {
-        flex: 0,
-        paddingHorizontal: 4,
-      },
-    },
+    rounded: 25,
+    offsetY: 52 + 24,
   });
 };
 
@@ -63,13 +59,13 @@ export const createAndCopyBranchLink = async (
     );
 
     const chatBalloon = nickName
-      ? `[Luckkids]\n럭키즈 | 💌 [띵동] ${nickName}님이 친구 요청을 보냈어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`
-      : `[Luckkids]\n럭키즈 | 💌 [띵동] 친구 요청이 도착했어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`;
+      ? `[luckkids]\n럭키즈 | 💌 [띵동] ${nickName}님이 친구 요청을 보냈어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`
+      : `[luckkids]\n럭키즈 | 💌 [띵동] 친구 요청이 도착했어요!\n링크를 누르고 함께 행운을 키워나가 보아요.\n`;
 
     if (url) {
       Clipboard.setString(chatBalloon + url);
-      BottomSheet.hide();
       onSnackBarHandler();
+      BottomSheet.hide();
     }
     return { url, message: chatBalloon, icon: ImgUrl };
   } catch (err) {

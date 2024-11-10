@@ -259,7 +259,7 @@ export const PageMissionRepair = () => {
             }
           }}
         >
-          <L.Row items={'center'} justify={'space-between'} mb={30} ph={25}>
+          <L.Row items={'center'} justify={'space-between'} mb={36} ph={25}>
             <L.Row items={'center'}>
               <SvgIcon
                 name={categoryButton(missionType).icon as IconNames}
@@ -320,10 +320,6 @@ export const PageMissionRepair = () => {
   };
 
   useEffect(() => {
-    // setMissionTimeRepairTooltip({
-    //   viewed: false,
-    // });
-
     setOpenedCategories(allCategories);
   }, [missionData]);
 
@@ -344,11 +340,15 @@ export const PageMissionRepair = () => {
       </L.Row>
       {/* 습관 추가 / 습관 선택 */}
       <L.Row ph={25} pv={15}>
-        <MissionRepairCategoryItem
-          isAddButton={true}
-          label={'습관추가'}
-          onPress={() => navigation.navigate('MissionAdd')}
-        />
+        <L.Row mr={8}>
+          <MissionRepairCategoryItem
+            isAddButton={true}
+            label={'습관추가'}
+            onPress={() => {
+              navigation.navigate('MissionAdd');
+            }}
+          />
+        </L.Row>
         {allCategories?.length !== 0 && (
           <FlatList
             data={allCategories}

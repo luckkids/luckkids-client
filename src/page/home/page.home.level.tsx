@@ -44,10 +44,10 @@ export const PageHomeLevel: React.FC = () => {
 
   return (
     <FrameLayout
-      statusBarColor={step === 2 ? 'TUTORIAL_SETTING_BG' : 'BLACK'}
-      backgroundColor={step === 2 ? 'TUTORIAL_SETTING_BG' : 'BLACK'}
+      statusBarColor={'TUTORIAL_SETTING_BG'}
+      backgroundColor={'TUTORIAL_SETTING_BG'}
     >
-      <StackNavbar useBackButton onBackPress={handlePressBack} />
+      {/* step 1 : 레벨업 애니메이션 */}
       {step === 1 ? (
         <L.Col mt={60} ph={DEFAULT_MARGIN}>
           <Font type="TITLE1_BOLD" color="WHITE">
@@ -56,7 +56,7 @@ export const PageHomeLevel: React.FC = () => {
           <Font type="TITLE1_BOLD" color="WHITE">
             럭키즈가 한단계 성장해요
           </Font>
-          <L.Row w={'100%'} h="100%" justify="center" mt={200}>
+          <L.Row w={'100%'} justify="center" mt={100}>
             <LottieView
               source={levelUpMotion1}
               style={{
@@ -69,6 +69,7 @@ export const PageHomeLevel: React.FC = () => {
         </L.Col>
       ) : (
         <L.Col items="center" pt={42} h="100%">
+          {/* step 2 : 레벨업 결과 */}
           <Image
             source={{
               uri: getCharacterImage(type, level, 'normal'),

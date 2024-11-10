@@ -15,6 +15,7 @@ import {
   MissionAddCategory,
 } from '@components/page/mission/mission.add.category';
 import { FrameLayout } from '@frame/frame.layout';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const category: Array<IAddCategory> = [
@@ -101,6 +102,15 @@ export const PageMissionAdd: React.FC = () => {
     });
 
     if (res) {
+      SnackBar.show({
+        title: '습관이 추가되었어요',
+        rounded: 15,
+        position: 'bottom',
+        offsetY: 24,
+        pv: 20,
+        ph: 20,
+        backgroundColor: '#444444',
+      });
       navigation.navigate('MissionRepair', {});
       refetchMissionData();
     }

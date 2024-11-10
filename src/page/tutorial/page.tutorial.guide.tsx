@@ -71,7 +71,7 @@ export const PageTutorialGuide: React.FC = () => {
                 {TUTORIAL_GUIDE_CONTENTS[step].description}
               </Font>
             )}
-            <L.Row w={'100%'} justify="center" mt={90}>
+            <L.Row w={'100%'} justify="center" mt={step === 2 ? 32 : 90}>
               <LottieView
                 source={TUTORIAL_GUIDE_CONTENTS[step].lottieFile}
                 autoPlay
