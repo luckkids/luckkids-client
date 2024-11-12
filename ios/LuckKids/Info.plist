@@ -37,6 +37,8 @@
 			<array>
 				<string>com.googleusercontent.apps.564720223619-vanh9jftelcfmi8eig88cgpb20425efl</string>
 			</array>
+			<key>CFBundleURLName</key>
+        	<string>googleauth</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
@@ -63,6 +65,8 @@
 		<string>instagram</string>
 		<string>instagramstories</string>
 		<string>instagram-stories</string>
+		<string>googlechromes</string>
+    	<string>googlechrome</string>
 	</array>
 	<key>LSMinimumSystemVersion</key>
 	<string>12.0</string>

@@ -2,30 +2,29 @@ import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { defaultValues, StorageValues } from './keys';
 
-type UseAsyncStorage<K extends keyof StorageValues> = {
-  storedValue: StorageValues[K] | null;
-  setValue: (value: StorageValues[K] | null) => Promise<void>;
-  removeValue: () => Promise<void>;
-  loading: boolean;
-};
-
-// Custom hook to manage async storage with a given key and value as an object
 const useAsyncStorage = <K extends keyof StorageValues>(
   key: K,
 ): UseAsyncStorage<K> => {
-  const [storedValue, setStoredValue] = useState<StorageValues[K] | null>(() =>
-    defaultValues[key] ? (defaultValues[key] as StorageValues[K]) : null,
-  );
+  const [storedValue, setStoredValue] = useState<StorageValues[K] | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // 현재 값을 직접 가져오는 함수 추가
+  const getCurrentValue = async (): Promise<StorageValues[K] | null> => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue != null
+        ? (JSON.parse(jsonValue) as StorageValues[K])
+        : null;
+    } catch (e) {
+      console.error(`Error getting current value for key ${key}: `, e);
+      return null;
+    }
+  };
 
   useEffect(() => {
     const loadStoredValue = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem(key);
-        const value =
-          jsonValue != null
-            ? (JSON.parse(jsonValue) as StorageValues[K])
-            : null;
+        const value = await getCurrentValue();
         setStoredValue(value);
       } catch (e) {
         console.error(`Error loading value for key ${key}: `, e);
@@ -61,6 +60,16 @@ const useAsyncStorage = <K extends keyof StorageValues>(
     setValue,
     removeValue,
     loading,
+    getCurrentValue, // 새로 추가된 함수 반환
   };
 };
+
+type UseAsyncStorage<K extends keyof StorageValues> = {
+  storedValue: StorageValues[K] | null;
+  setValue: (value: StorageValues[K] | null) => Promise<void>;
+  removeValue: () => Promise<void>;
+  loading: boolean;
+  getCurrentValue: () => Promise<StorageValues[K] | null>; // 타입 정의 추가
+};
+
 export default useAsyncStorage;

@@ -8,7 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon, TextInputField } from '@design-system';
 import { SettingStatus } from '@types-index';
-import { LoginResponse } from '@apis/auth';
+import { authApis, LoginResponse } from '@apis/auth';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
@@ -18,7 +18,6 @@ import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { useFetch } from '@hooks/useFetch';
 import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLoginId: React.FC = () => {
@@ -40,8 +39,11 @@ export const PageLoginId: React.FC = () => {
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
   const { login } = useAuth();
   const [visiblityMode, setVisiblityMode] = useState(false);
-  const { storedValue: rememberMe, setValue: setRememberMe } =
-    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const {
+    getCurrentValue: getCurrentRememberMe,
+
+    setValue: setRememberMe,
+  } = useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const handlePressForgotPassword = () => {
     Keyboard.dismiss();
@@ -54,11 +56,11 @@ export const PageLoginId: React.FC = () => {
         title: `아이디를 입력해 주세요!`,
         position: 'bottom',
         rounded: 25,
-        width: 208,
+        width: 220,
         offsetY: 52 + 24,
       });
     }
-    return sendTempPassword();
+    return handleSendTempPassword();
   };
 
   const handleAfterLogin = (settingStatus: SettingStatus) => {
@@ -69,10 +71,12 @@ export const PageLoginId: React.FC = () => {
     }
   };
 
-  const onSuccessCallback = (result: LoginResponse) => {
+  const onSuccessCallback = async (result: LoginResponse) => {
     const { settingStatus } = result;
 
     Keyboard.dismiss();
+
+    const rememberMe = await getCurrentRememberMe();
 
     // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
     if (!rememberMe || rememberMe?.snsType !== 'NORMAL') {
@@ -136,31 +140,47 @@ export const PageLoginId: React.FC = () => {
     }
   };
 
-  const { onFetch: sendTempPassword } = useFetch({
-    method: 'POST',
-    url: '/mail/password',
-    value: {
-      email: loginInfo.email,
-    },
-    onSuccessCallback: (resultData) => {
+  const handleSendTempPassword = async () => {
+    try {
+      const res = await authApis.sendTemporaryPassword(loginInfo.email);
+
+      const { email } = res;
+
       console.log('이메일 전송 성공');
       SnackBar.show({
-        title: `${resultData.email} 주소로 임시 비밀번호가 전송되었습니다.`,
+        title: `${email} 주소로 임시 비밀번호가 전송되었습니다.`,
         position: 'bottom',
         rounded: 25,
         offsetY: 52 + 24,
       });
-    },
-    onFailCallback: () => {
-      console.log('이메일 전송 실패');
+    } catch (error: any) {
+      console.log('이메일 전송 실패', error.response.data);
+      if (error.response.data.message) {
+        SnackBar.show({
+          leftElement: createElement(SvgIcon, {
+            name: 'yellow_info',
+            size: 20,
+          }),
+          title: error.response.data.message,
+          position: 'bottom',
+          rounded: 25,
+          offsetY: 52 + 24,
+        });
+        return;
+      }
       SnackBar.show({
+        leftElement: createElement(SvgIcon, {
+          name: 'yellow_info',
+          size: 20,
+        }),
         title: `일시적인 오류로 잠시 후 다시 이용해주세요!`,
         position: 'bottom',
         rounded: 25,
+        width: 330,
         offsetY: 52 + 24,
       });
-    },
-  });
+    }
+  };
 
   const handleEmailChange = (text: string) => {
     setLoginInfo((prev) => ({ ...prev, email: text }));

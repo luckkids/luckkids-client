@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {
   NavigationContainer,
   NavigationState,
@@ -35,6 +36,14 @@ const codePushOptions = {
   mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
 };
 
+GoogleSignin.configure({
+  webClientId:
+    '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com',
+  offlineAccess: true,
+  iosClientId:
+    '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com', // iOS를 위해 추가
+});
+
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
@@ -66,8 +75,11 @@ const RootNavigator = () => {
     screenParams: undefined,
   });
 
-  const { storedValue: rememberMe, loading: isLoadingRememberMe } =
-    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const {
+    getCurrentValue: getCurrentRememberMe,
+
+    loading: isLoadingRememberMe,
+  } = useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const { storedValue: storyTelling, loading: isLoadingStoryTelling } =
     useAsyncStorage<StorageKeys.StoryTelling>(StorageKeys.StoryTelling);
@@ -165,18 +177,18 @@ const RootNavigator = () => {
 
   useAsyncEffect(async () => {
     if (isLoadingRememberMe || isLoadingStoryTelling) return;
+    const currentRememberMe = await getCurrentRememberMe();
 
     if (!storyTelling || !storyTelling.viewed) {
       setInitialRoute({
         screenName: 'StoryTelling',
         screenParams: undefined,
       });
-    }
+    } else if (currentRememberMe && !!currentRememberMe.isEnabled) {
+      console.log('[currentRememberMe]', currentRememberMe);
 
-    // NOTE 자동 로그인 로직에 잠시 오류가 있어서 주석 처리
-    else if (rememberMe) {
       await handleRememberMeLogin({
-        ...rememberMe,
+        ...currentRememberMe,
       });
     } else {
       setInitialRoute({
@@ -189,7 +201,7 @@ const RootNavigator = () => {
     setTimeout(() => {
       setIsNavigationReady(true);
     }, 2000);
-  }, [rememberMe, storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
+  }, [storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
 
   useAsyncEffect(async () => {
     // 최초에 한번 notification permission 요청
