@@ -40,6 +40,17 @@ export type RefreshTokenResponse = {
   refreshToken: string;
 };
 
+export type SendTemporaryPasswordResponse = {
+  email: string;
+};
+
+const sendTemporaryPassword = async (email: string) => {
+  const res = await API.post<SendTemporaryPasswordResponse>('/mail/password', {
+    email,
+  });
+  return res.data;
+};
+
 const refreshToken = async (refreshTokenInfo: RefreshTokenRequest) => {
   const res = await API.post<RefreshTokenResponse>(
     '/auth/refresh',
@@ -177,4 +188,5 @@ export const authApis = {
   findEmail,
   deleteUser,
   registerWithdrawReason,
+  sendTemporaryPassword,
 };
