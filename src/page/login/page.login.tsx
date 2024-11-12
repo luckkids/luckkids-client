@@ -25,7 +25,7 @@ export const PageLogin: React.FC = () => {
   const { handleGoogleLogin } = useGoogleLogin();
   const { handleKakaoLogin } = useKakaoLogin();
   const navigation = useNavigationService();
-  const { storedValue: rememberMe, setValue: setRememberMe } =
+  const { getCurrentValue: getCurrentRememberMe, setValue: setRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
   const { deviceId } = useRecoilValue(RecoilDevice);
   const { getToken } = useFirebaseMessage();
@@ -81,6 +81,8 @@ export const PageLogin: React.FC = () => {
         if (typeof res === 'string') {
           throw new Error(res);
         }
+
+        const rememberMe = await getCurrentRememberMe();
 
         // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
         if (!rememberMe || rememberMe?.snsType === 'NORMAL') {

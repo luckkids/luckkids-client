@@ -24,7 +24,7 @@ const useAuth = () => {
   const [token, setToken] = useRecoilState(RecoilToken);
   const setLoginInfo = useSetRecoilState(RecoilLoignInfo);
   const setOauthLoginInfo = useSetRecoilState(RecoilOauthLoginInfo);
-  const { storedValue: rememberMe, setValue: setRememberMe } =
+  const { setValue: setRememberMe, getCurrentValue: getCurrentRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const login = async (
@@ -85,15 +85,18 @@ const useAuth = () => {
             console.log('Kakao token may be invalid. Trying to re-login...');
             const newAccessToken = await checkKakaoTokenValidity();
             if (newAccessToken) {
+              const currentRememberMe = await getCurrentRememberMe();
+
               await oauthLogin({
                 ...loginInfo,
                 token: newAccessToken,
               });
 
               // 자동 로그인 설정이 되어있으면 새로운 토큰으로 갱신
-              if (rememberMe?.isEnabled) {
-                setRememberMe({
-                  ...rememberMe,
+              console.log('currentRememberMe', currentRememberMe);
+              if (currentRememberMe?.isEnabled) {
+                await setRememberMe({
+                  ...currentRememberMe,
                   credential: newAccessToken,
                 });
               }
@@ -106,6 +109,8 @@ const useAuth = () => {
             console.log('Google token may be invalid. Trying to re-login...');
             const newAccessToken = await checkGoogleTokenValidity();
             if (newAccessToken) {
+              const currentRememberMe = await getCurrentRememberMe();
+
               // 새로운 토큰을 받아서 다시 로그인 시도
               await oauthLogin({
                 ...loginInfo,
@@ -113,9 +118,9 @@ const useAuth = () => {
               });
 
               // 자동 로그인 설정이 되어있으면 새로운 토큰으로 갱신
-              if (rememberMe?.isEnabled) {
-                setRememberMe({
-                  ...rememberMe,
+              if (currentRememberMe?.isEnabled) {
+                await setRememberMe({
+                  ...currentRememberMe,
                   credential: newAccessToken,
                 });
               }

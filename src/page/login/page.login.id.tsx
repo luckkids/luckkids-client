@@ -40,8 +40,11 @@ export const PageLoginId: React.FC = () => {
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
   const { login } = useAuth();
   const [visiblityMode, setVisiblityMode] = useState(false);
-  const { storedValue: rememberMe, setValue: setRememberMe } =
-    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const {
+    getCurrentValue: getCurrentRememberMe,
+
+    setValue: setRememberMe,
+  } = useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const handlePressForgotPassword = () => {
     Keyboard.dismiss();
@@ -69,10 +72,12 @@ export const PageLoginId: React.FC = () => {
     }
   };
 
-  const onSuccessCallback = (result: LoginResponse) => {
+  const onSuccessCallback = async (result: LoginResponse) => {
     const { settingStatus } = result;
 
     Keyboard.dismiss();
+
+    const rememberMe = await getCurrentRememberMe();
 
     // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
     if (!rememberMe || rememberMe?.snsType !== 'NORMAL') {
