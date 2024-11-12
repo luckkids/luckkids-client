@@ -37,8 +37,6 @@
 			<array>
 				<string>com.googleusercontent.apps.564720223619-vanh9jftelcfmi8eig88cgpb20425efl</string>
 			</array>
-			<key>CFBundleURLName</key>
-        	<string>googleauth</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
