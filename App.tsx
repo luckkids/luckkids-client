@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import {
   NavigationContainer,
   NavigationState,
@@ -34,6 +35,14 @@ const codePushOptions = {
   installMode: CodePush.InstallMode.IMMEDIATE,
   mandatoryInstallMode: CodePush.InstallMode.IMMEDIATE,
 };
+
+GoogleSignin.configure({
+  webClientId:
+    '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com',
+  offlineAccess: true,
+  iosClientId:
+    '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com', // iOS를 위해 추가
+});
 
 const Stack = createNativeStackNavigator();
 

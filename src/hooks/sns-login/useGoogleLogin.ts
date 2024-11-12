@@ -28,14 +28,6 @@ export function useGoogleLogin() {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com',
-      offlineAccess: true,
-    });
-  }, []);
-
   const handleGoogleLogin = useCallback(async () => {
     try {
       console.log('Starting Google login process');
