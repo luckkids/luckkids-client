@@ -30,14 +30,37 @@ export default function SettingAlarmLuckTimePicker({
   onConfirmTime,
   initialTime,
 }: IProps) {
-  const [meridiem, setMeridiem] = useState<string>(
-    12 <= Number(initialTime.split(':')[0]) ? '오후' : '오전',
-  );
-  const [hour, setHour] = useState(Number(initialTime.split(':')[0]) + 12);
+  // Convert HH:mm:ss format to hour and meridiem
+  const convertInitialTime = (timeString: string) => {
+    const hour = parseInt(timeString.split(':')[0]);
+    if (hour === 0) {
+      return { meridiem: '오전', hour: 12 };
+    } else if (hour === 12) {
+      return { meridiem: '오후', hour: 12 };
+    } else if (hour > 12) {
+      return { meridiem: '오후', hour: hour - 12 };
+    } else {
+      return { meridiem: '오전', hour: hour };
+    }
+  };
 
-  const handlConfirmTime = () => {
-    const time = `${meridiem === '오후' ? hour + 12 : hour}:00:00`;
-    onConfirmTime(time);
+  const initialValues = convertInitialTime(initialTime);
+  const [meridiem, setMeridiem] = useState<string>(initialValues.meridiem);
+  const [hour, setHour] = useState(initialValues.hour);
+
+  const handleConfirmTime = () => {
+    let finalHour;
+    if (meridiem === '오후' && hour !== 12) {
+      finalHour = hour + 12;
+    } else if (meridiem === '오전' && hour === 12) {
+      finalHour = 0;
+    } else {
+      finalHour = hour;
+    }
+
+    // Pad with leading zeros to ensure HH format
+    const timeString = `${finalHour.toString().padStart(2, '0')}:00:00`;
+    onConfirmTime(timeString);
     BottomSheet.hide();
   };
 
@@ -49,11 +72,7 @@ export default function SettingAlarmLuckTimePicker({
       <L.Row w="100%" justify="center" g={30}>
         {/* meridiem */}
         <WheelPicker
-          selectedIndex={
-            0 <= MERIDIEM_OPTIONS.indexOf(meridiem)
-              ? MERIDIEM_OPTIONS.indexOf(meridiem)
-              : 0
-          }
+          selectedIndex={MERIDIEM_OPTIONS.indexOf(meridiem)}
           options={MERIDIEM_OPTIONS}
           onChange={(index) => {
             setMeridiem(MERIDIEM_OPTIONS[index]);
@@ -72,9 +91,7 @@ export default function SettingAlarmLuckTimePicker({
         />
         {/* 시간 */}
         <WheelPicker
-          selectedIndex={
-            0 <= HOUR_OPTIONS.indexOf(hour) ? HOUR_OPTIONS.indexOf(hour) : 0
-          }
+          selectedIndex={hour - 1}
           options={HOUR_OPTIONS.map(String)}
           onChange={(index) => {
             setHour(index + 1);
@@ -95,9 +112,7 @@ export default function SettingAlarmLuckTimePicker({
         <WheelPicker
           selectedIndex={0}
           options={['00']}
-          onChange={(index) => {
-            //
-          }}
+          onChange={() => {}}
           visibleRest={2}
           itemTextStyle={{
             ...FontSettings.TITLE2_REGULAR,
@@ -116,7 +131,7 @@ export default function SettingAlarmLuckTimePicker({
           type={'action'}
           text={'확인'}
           bgColor={'LUCK_GREEN'}
-          onPress={handlConfirmTime}
+          onPress={handleConfirmTime}
         />
       </S.buttonWrap>
     </S.popupWrap>
