@@ -57,7 +57,7 @@ export const PageLoginId: React.FC = () => {
         title: `아이디를 입력해 주세요!`,
         position: 'bottom',
         rounded: 25,
-        width: 208,
+        width: 220,
         offsetY: 52 + 24,
       });
     }
