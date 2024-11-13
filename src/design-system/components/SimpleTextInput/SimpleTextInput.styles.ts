@@ -9,9 +9,7 @@ export const defaultStyles = StyleSheet.create({
   },
   textInput: {
     width: '100%',
-    height: 60,
+    height: 65,
     flex: 1,
-    padding: 20,
-    fontWeight: 'normal',
   },
 });
