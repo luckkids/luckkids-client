@@ -1,9 +1,3 @@
-export type Mission = {
-  missionType: MissionType;
-  missionDescription: string;
-  alertTime: string;
-};
-
 export type MissionType =
   | 'HOUSEKEEPING'
   | 'SELF_CARE'

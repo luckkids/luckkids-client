@@ -1,11 +1,6 @@
-import { Mission } from '@types-index';
 import API from './API';
-import {
-  IMissionData,
-  IMissionDataItem,
-  IMissionListData,
-} from '@types-common/page.types';
 import { CharacterType } from '@types-common/character.types';
+import { IMissionData, IMissionListData } from '@types-common/page.types';
 
 export type GetMissionsResponse = {
   userMissions: IMissionData;

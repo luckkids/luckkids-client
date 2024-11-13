@@ -13,9 +13,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
-import { DEFAULT_MARGIN } from '@constants';
 import { Colors, Font, L, SvgIcon } from '@design-system';
 import { useMissionList, useMissionOutcomeList } from '@queries';
 import { formatMissionTime } from '@utils';

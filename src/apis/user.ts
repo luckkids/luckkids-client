@@ -1,4 +1,9 @@
-import { InitialSetting, SettingStatus, SocialType } from '@types-index';
+import {
+  InitialSetting,
+  MissionType,
+  SettingStatus,
+  SocialType,
+} from '@types-index';
 import API from './API';
 import { CharacterType } from '@types-common/character.types';
 
@@ -31,6 +36,20 @@ const getInitialCharacter = async () => {
   return res.data;
 };
 
+export type GetInitialLuckkidsMissionsResponse = {
+  id: number;
+  missionType: MissionType;
+  missionDescription: string;
+  alertTime: string;
+}[];
+
+const getInitialLuckkidsMissions = async () => {
+  const res = await API.get<GetInitialLuckkidsMissionsResponse>(
+    '/initialSetting/luckMission',
+  );
+  return res;
+};
+
 const setInitialSetting = async (initialSetting: InitialSetting) => {
   const res = await API.post('/initialSetting', initialSetting);
   return res;
@@ -53,4 +72,5 @@ export const userApis = {
   getMe,
   setInitialSetting,
   getUserInfo,
+  getInitialLuckkidsMissions,
 };
