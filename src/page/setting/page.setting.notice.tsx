@@ -11,7 +11,7 @@ import { ISettingNotice } from '@types-common/page.types';
 
 export const PageSettingNotice: React.FC = () => {
   const navigation = useNavigationService();
-  const { data: notices = [] } = useSettingNotices();
+  const { data: notices = [], isLoading } = useSettingNotices();
 
   const handlePressNotice = (notice: ISettingNotice) => {
     navigation.navigate('WebView', {
@@ -19,9 +19,11 @@ export const PageSettingNotice: React.FC = () => {
     });
   };
 
+  if (isLoading) return <></>;
+
   return (
     <FrameLayout NavBar={<StackNavBar title={'공지사항'} useBackButton />}>
-      {notices?.map((item, i) => {
+      {(notices || [])?.map((item, i) => {
         return (
           <TouchableWithoutFeedback
             onPress={() => handlePressNotice(item)}
