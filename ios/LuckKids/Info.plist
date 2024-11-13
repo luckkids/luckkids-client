@@ -35,7 +35,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.564720223619-vanh9jftelcfmi8eig88cgpb20425efl</string>
+        		<string>com.googleusercontent.apps.564720223619-gvfibb7hfl1j6kktgmr2g9v9pbqs9lm7</string>
 			</array>
 		</dict>
 		<dict>
@@ -51,6 +51,8 @@
 	<string>58</string>
 	<key>CodePushDeploymentKey</key>
 	<string>$(CODEPUSH_KEY)</string>
+	<key>GIDClientID</key>
+	<string>564720223619-gvfibb7hfl1j6kktgmr2g9v9pbqs9lm7.apps.googleusercontent.com</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>KAKAO_APP_KEY</key>
