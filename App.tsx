@@ -37,11 +37,11 @@ const codePushOptions = {
 };
 
 GoogleSignin.configure({
-  webClientId:
-    '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com',
-  offlineAccess: true,
   iosClientId:
-    '564720223619-9hvi10q37ad5a68gcco8mdcbo3l4dbs1.apps.googleusercontent.com', // iOS를 위해 추가
+    '564720223619-gvfibb7hfl1j6kktgmr2g9v9pbqs9lm7.apps.googleusercontent.com',
+  webClientId:
+    '564720223619-gvfibb7hfl1j6kktgmr2g9v9pbqs9lm7.apps.googleusercontent.com',
+  offlineAccess: true,
 });
 
 const Stack = createNativeStackNavigator();
