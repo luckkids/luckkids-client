@@ -49,24 +49,17 @@ export const PageMissionRepair = () => {
     isFetching,
   } = useMissionList();
 
-  const { data: initialLuckkidsMissionData } = useInitialLuckkidsMissionList();
+  // FIXME: 초기 셋팅을 위한 미션 리스트 조회 (미사용)
+  // const { data: initialLuckkidsMissionData } = useInitialLuckkidsMissionList();
 
   const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
 
-  const allCategories =
-    type === 'INITIAL_SETTING'
-      ? Array.from(
-          new Set(
-            initialLuckkidsMissionData?.map((mission) => mission.missionType) ||
-              [],
-          ),
-        )
-      : Array.from(
-          new Set([
-            ...Object.keys(missionData?.userMissions || {}),
-            ...Object.keys(missionData?.luckkidsMissions || {}),
-          ]),
-        );
+  const allCategories = Array.from(
+    new Set([
+      ...Object.keys(missionData?.userMissions || {}),
+      ...Object.keys(missionData?.luckkidsMissions || {}),
+    ]),
+  );
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
     allCategories[0],
@@ -139,52 +132,37 @@ export const PageMissionRepair = () => {
     missions: IMissionDataItem[];
   }[] => {
     return allCategories.map((item) => {
-      // INITIAL_SETTING인 경우에는 초기 설정 미션 데이터를 사용
-      if (type === 'INITIAL_SETTING') {
-        return {
-          id: item,
-          missionType: item,
-          missions: (initialLuckkidsMissionData || [])
-            ?.filter((mission) => mission.missionType === item)
-            .map((mission) => ({
-              ...mission,
-              isLuckkidsMission: true,
-            })) as IMissionDataItem[],
-        };
-      } else {
-        // MISSION_REPAIR인 경우에는 /missions에서 가져온 데이터를 사용
-        const userMissions =
-          missionData?.userMissions[item as keyof IMissionData];
-        const luckkidsMissions =
-          missionData?.luckkidsMissions[item as keyof IMissionData];
+      const userMissions =
+        missionData?.userMissions[item as keyof IMissionData];
+      const luckkidsMissions =
+        missionData?.luckkidsMissions[item as keyof IMissionData];
 
-        // NOTE: 미션 필터링 로직 추가
-        // 만약 userMissions와 luckkidsMissions에 둘 다 luckkidsMissionId가 똑같은게 존재한다면,
-        // luckkidsMissions에서 해당 미션 제거
-        const filteredLuckkidsMissions = luckkidsMissions?.filter(
-          (luckkidsMission) => {
-            return !userMissions?.some(
-              (userMission) =>
-                userMission.luckkidsMissionId ===
-                luckkidsMission.luckkidsMissionId,
-            );
-          },
-        );
+      // NOTE: 미션 필터링 로직 추가
+      // 만약 userMissions와 luckkidsMissions에 둘 다 luckkidsMissionId가 똑같은게 존재한다면,
+      // luckkidsMissions에서 해당 미션 제거
+      const filteredLuckkidsMissions = luckkidsMissions?.filter(
+        (luckkidsMission) => {
+          return !userMissions?.some(
+            (userMission) =>
+              userMission.luckkidsMissionId ===
+              luckkidsMission.luckkidsMissionId,
+          );
+        },
+      );
 
-        const missions = [
-          ...(userMissions || []),
-          ...(filteredLuckkidsMissions?.map((mission) => ({
-            ...mission,
-            isLuckkidsMission: true, // 대표 미션 여부
-          })) || []),
-        ] as IMissionDataItem[];
+      const missions = [
+        ...(userMissions || []),
+        ...(filteredLuckkidsMissions?.map((mission) => ({
+          ...mission,
+          isLuckkidsMission: true, // 대표 미션 여부
+        })) || []),
+      ] as IMissionDataItem[];
 
-        return {
-          id: item,
-          missionType: item,
-          missions: missions,
-        };
-      }
+      return {
+        id: item,
+        missionType: item,
+        missions: missions,
+      };
     });
   };
 
@@ -365,7 +343,7 @@ export const PageMissionRepair = () => {
 
   useEffect(() => {
     setOpenedCategories(allCategories);
-  }, [missionData, type, initialLuckkidsMissionData]);
+  }, [missionData]);
 
   useEffect(() => {
     if (isFetching) return LoadingIndicator.show({});
