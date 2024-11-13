@@ -129,9 +129,22 @@ export const PageMissionRepair = () => {
       const luckkidsMissions =
         missionData?.luckkidsMissions[item as keyof IMissionData];
 
+      // NOTE: 미션 필터링 로직 추가
+      // 만약 userMissions와 luckkidsMissions에 둘 다 luckkidsMissionId가 똑같은게 존재한다면,
+      // luckkidsMissions에서 해당 미션 제거
+      const filteredLuckkidsMissions = luckkidsMissions?.filter(
+        (luckkidsMission) => {
+          return !userMissions?.some(
+            (userMission) =>
+              userMission.luckkidsMissionId ===
+              luckkidsMission.luckkidsMissionId,
+          );
+        },
+      );
+
       const missions = [
         ...(userMissions || []),
-        ...(luckkidsMissions?.map((mission) => ({
+        ...(filteredLuckkidsMissions?.map((mission) => ({
           ...mission,
           isLuckkidsMission: true, // 대표 미션 여부
         })) || []),
