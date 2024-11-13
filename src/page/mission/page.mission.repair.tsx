@@ -279,6 +279,7 @@ export const PageMissionRepair = () => {
           <L.Col mb={20}>
             {missions.map((mission, i) => {
               const showAlarmSettingTooltip =
+                type !== 'INITIAL_SETTING' &&
                 categoryIndex === 0 &&
                 i === 0 &&
                 (!missionTimeRepairTooltip ||
