@@ -4,7 +4,7 @@ import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
 // Google 토큰 유효성 검사 함수
 export const checkGoogleTokenValidity = async () => {
   try {
-    const isSignedIn = await GoogleSignin.isSignedIn();
+    const isSignedIn = await GoogleSignin.signInSilently();
     if (isSignedIn) {
       const tokens = await GoogleSignin.getTokens();
       console.log('AccessToken is still valid:', tokens.accessToken);
