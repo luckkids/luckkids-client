@@ -5,7 +5,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
-import { useMissionList, useMissionOutcomeList } from '@queries';
+import {
+  useInitialLuckkidsMissionList,
+  useMissionList,
+  useMissionOutcomeList,
+} from '@queries';
 import { MissionType } from '@types-index';
 import { missionApis } from '@apis/mission';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
@@ -19,6 +23,7 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionData, IMissionDataItem } from '@types-common/page.types';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 
 export const PageMissionRepair = () => {
   const {
@@ -28,6 +33,7 @@ export const PageMissionRepair = () => {
   const { bottom } = useSafeAreaInsets();
   const [initialSetting, setInitialSetting] =
     useRecoilState(RecoilInitialSetting);
+  const [showTimeRepairTooltip, setShowTimeRepairTooltip] = useState(true);
 
   // 초기 셋팅을 위헤 선택한 미션 리스트
   const [selectedMissions, setSelectedMissions] = useState<IMissionDataItem[]>(
@@ -40,12 +46,26 @@ export const PageMissionRepair = () => {
     );
 
   const {
+    storedValue: missionDeleteTooltip,
+    setValue: setMissionDeleteTooltip,
+  } = useAsyncStorage<StorageKeys.MissionDeleteTooltip>(
+    StorageKeys.MissionDeleteTooltip,
+  );
+
+  const {
     data: missionData,
     refetch: refetchMissionData,
     isFetching,
+    isLoading: isLoadingMissionList,
   } = useMissionList();
 
-  const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
+  // FIXME: 초기 셋팅을 위한 미션 리스트 조회 (미사용)
+  // const { data: initialLuckkidsMissionData } = useInitialLuckkidsMissionList();
+
+  const {
+    refetch: refetchMissionOutcomeData,
+    isLoading: isLoadingMissionOutcomeList,
+  } = useMissionOutcomeList();
 
   const allCategories = Array.from(
     new Set([
@@ -70,6 +90,7 @@ export const PageMissionRepair = () => {
           missionType: selectedMission.missionType as MissionType,
           missionDescription: selectedMission.missionDescription || '',
           alertTime: selectedMission.alertTime,
+          luckkidsMissionId: selectedMission.luckkidsMissionId,
         })),
       });
       return navigation.navigate('TutorialSettingNoti');
@@ -129,9 +150,22 @@ export const PageMissionRepair = () => {
       const luckkidsMissions =
         missionData?.luckkidsMissions[item as keyof IMissionData];
 
+      // NOTE: 미션 필터링 로직 추가
+      // 만약 userMissions와 luckkidsMissions에 둘 다 luckkidsMissionId가 똑같은게 존재한다면,
+      // luckkidsMissions에서 해당 미션 제거
+      const filteredLuckkidsMissions = luckkidsMissions?.filter(
+        (luckkidsMission) => {
+          return !userMissions?.some(
+            (userMission) =>
+              userMission.luckkidsMissionId ===
+              luckkidsMission.luckkidsMissionId,
+          );
+        },
+      );
+
       const missions = [
         ...(userMissions || []),
-        ...(luckkidsMissions?.map((mission) => ({
+        ...(filteredLuckkidsMissions?.map((mission) => ({
           ...mission,
           isLuckkidsMission: true, // 대표 미션 여부
         })) || []),
@@ -166,6 +200,10 @@ export const PageMissionRepair = () => {
     },
     [allCategories, openedCategories, setOpenedCategories],
   );
+
+  const handleTooltipDismiss = useCallback(() => {
+    setShowTimeRepairTooltip(false);
+  }, []);
 
   const renderCategoryItem = useCallback(
     ({ item }: { item: string }) => (
@@ -246,6 +284,29 @@ export const PageMissionRepair = () => {
     const { missionType, missions } = item;
     const isOpened = openedCategories.includes(missionType);
 
+    const showAlarmSettingTooltip =
+      type !== 'INITIAL_SETTING' &&
+      categoryIndex === 0 &&
+      showTimeRepairTooltip &&
+      (!missionTimeRepairTooltip || missionTimeRepairTooltip.viewed === false);
+
+    // user가 직접 추가한 미션만 필터링
+    const userMissions = missionData?.userMissions
+      ? Object.keys(missionData.userMissions)
+          .map((key) => missionData.userMissions[key as keyof IMissionData])
+          .flat()
+          .filter((m) => m.luckkidsMissionId === null)
+      : [];
+
+    const showDeleteMissionTooltip =
+      !isLoadingMissionList &&
+      !isLoadingMissionOutcomeList &&
+      !showAlarmSettingTooltip &&
+      type !== 'INITIAL_SETTING' &&
+      userMissions.length === 1 &&
+      missionType === userMissions[0].missionType &&
+      (!missionDeleteTooltip || missionDeleteTooltip.viewed === false);
+
     return (
       <React.Fragment>
         <TouchableWithoutFeedback
@@ -260,6 +321,18 @@ export const PageMissionRepair = () => {
           }}
         >
           <L.Row items={'center'} justify={'space-between'} mb={36} ph={25}>
+            {showDeleteMissionTooltip && (
+              <L.Absolute b={-20} r={16} z={2}>
+                <Tooltip
+                  text={'추가한 습관은 밀어서 삭제할 수 있어요'}
+                  bgColor="LUCK_GREEN"
+                  opacity={1}
+                  textColor="BLACK"
+                  arrowPosition="right"
+                  arrowOffset={-20}
+                />
+              </L.Absolute>
+            )}
             <L.Row items={'center'}>
               <SvgIcon
                 name={categoryButton(missionType).icon as IconNames}
@@ -278,11 +351,6 @@ export const PageMissionRepair = () => {
         {isOpened && (
           <L.Col mb={20}>
             {missions.map((mission, i) => {
-              const showAlarmSettingTooltip =
-                categoryIndex === 0 &&
-                i === 0 &&
-                (!missionTimeRepairTooltip ||
-                  missionTimeRepairTooltip.viewed === false);
               const isSelected =
                 type === 'INITIAL_SETTING'
                   ? selectedMissions.some(
@@ -294,7 +362,9 @@ export const PageMissionRepair = () => {
                 <MissionRepairItem
                   key={i}
                   isSelected={isSelected}
-                  showAlarmSettingTooltip={showAlarmSettingTooltip}
+                  enableAlertTimeEdit={type === 'MISSION_REPAIR'}
+                  showAlarmSettingTooltip={showAlarmSettingTooltip && i === 0}
+                  onTooltipDismiss={handleTooltipDismiss} // Add this prop
                   onSelect={(isSelected) => {
                     // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
                     if (type === 'MISSION_REPAIR') {
@@ -302,7 +372,10 @@ export const PageMissionRepair = () => {
                     } else {
                       if (!isSelected) {
                         setSelectedMissions(
-                          selectedMissions.filter((m) => m.id !== mission.id),
+                          selectedMissions.filter(
+                            (m) =>
+                              m.luckkidsMissionId !== mission.luckkidsMissionId,
+                          ),
                         );
                       } else {
                         setSelectedMissions([...selectedMissions, mission]);
@@ -331,6 +404,20 @@ export const PageMissionRepair = () => {
     }
   }, [isFetching]);
 
+  const missionDataRef = useRef(missionData);
+  useEffect(() => {
+    missionDataRef.current = missionData;
+  }, [missionData]);
+
+  const setMissionDeleteTooltipRef = useRef(setMissionDeleteTooltip);
+  useEffect(() => {
+    setMissionDeleteTooltipRef.current = setMissionDeleteTooltip;
+  }, [setMissionDeleteTooltip]);
+
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50,
+  });
+
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
       <L.Row pv={20} ph={25}>
@@ -340,15 +427,17 @@ export const PageMissionRepair = () => {
       </L.Row>
       {/* 습관 추가 / 습관 선택 */}
       <L.Row ph={25} pv={15}>
-        <L.Row mr={8}>
-          <MissionRepairCategoryItem
-            isAddButton={true}
-            label={'습관추가'}
-            onPress={() => {
-              navigation.navigate('MissionAdd');
-            }}
-          />
-        </L.Row>
+        {type === 'MISSION_REPAIR' && (
+          <L.Row mr={8}>
+            <MissionRepairCategoryItem
+              isAddButton={true}
+              label={'습관추가'}
+              onPress={() => {
+                navigation.navigate('MissionAdd');
+              }}
+            />
+          </L.Row>
+        )}
         {allCategories?.length !== 0 && (
           <FlatList
             data={allCategories}

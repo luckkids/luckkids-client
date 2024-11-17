@@ -12,8 +12,10 @@ import { checkGoogleTokenValidity } from '@hooks/sns-login/useGoogleLogin';
 import { checkKakaoTokenValidity } from '@hooks/sns-login/useKakaoLogin';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
+import { RecoilLoginInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
+import LoginRemember from '@components/page/login/remember';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 
 const useAuth = () => {
   const {
@@ -22,7 +24,7 @@ const useAuth = () => {
     removeValue: removeAccessToken,
   } = useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
   const [token, setToken] = useRecoilState(RecoilToken);
-  const setLoginInfo = useSetRecoilState(RecoilLoignInfo);
+  const setLoginInfo = useSetRecoilState(RecoilLoginInfo);
   const setOauthLoginInfo = useSetRecoilState(RecoilOauthLoginInfo);
   const { setValue: setRememberMe, getCurrentValue: getCurrentRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
@@ -34,7 +36,7 @@ const useAuth = () => {
       .login({
         ...loginInfo,
       })
-      .then((res) => {
+      .then(async (res) => {
         const { accessToken, refreshToken } = res.data;
         // token 저장
         setAccessToken({ accessToken, refreshToken });
@@ -44,6 +46,34 @@ const useAuth = () => {
           email: loginInfo.email,
           password: loginInfo.password,
         });
+
+        const rememberMe = await getCurrentRememberMe();
+
+        if (!rememberMe || rememberMe?.snsType !== 'NORMAL') {
+          BottomSheet.show({
+            component: (
+              <LoginRemember
+                onClose={() => {
+                  setRememberMe({
+                    isEnabled: false,
+                    snsType: 'NORMAL',
+                    email: loginInfo.email,
+                    credential: loginInfo.password,
+                  });
+                }}
+                onRemember={() => {
+                  setRememberMe({
+                    isEnabled: true,
+                    snsType: 'NORMAL',
+                    email: loginInfo.email,
+                    credential: loginInfo.password,
+                  });
+                }}
+              />
+            ),
+          });
+        }
+
         return res.data;
       })
       .catch((error) => {
@@ -59,7 +89,7 @@ const useAuth = () => {
       .oauthLogin({
         ...loginInfo,
       })
-      .then((res) => {
+      .then(async (res) => {
         const { accessToken, refreshToken } = res.data;
         // token 저장
         setAccessToken({ accessToken, refreshToken });
@@ -69,6 +99,34 @@ const useAuth = () => {
           snsType: loginInfo.snsType,
           token: loginInfo.token,
         });
+
+        const rememberMe = await getCurrentRememberMe();
+
+        if (!rememberMe || rememberMe?.snsType === 'NORMAL') {
+          BottomSheet.show({
+            component: (
+              <LoginRemember
+                onClose={() => {
+                  setRememberMe({
+                    isEnabled: false,
+                    snsType: loginInfo.snsType,
+                    email: null,
+                    credential: loginInfo.token,
+                  });
+                }}
+                onRemember={() => {
+                  setRememberMe({
+                    isEnabled: true,
+                    snsType: loginInfo.snsType,
+                    email: null,
+                    credential: loginInfo.token,
+                  });
+                }}
+              />
+            ),
+          });
+        }
+
         return res.data;
       })
       .catch(async (error) => {
@@ -93,7 +151,6 @@ const useAuth = () => {
               });
 
               // 자동 로그인 설정이 되어있으면 새로운 토큰으로 갱신
-              console.log('currentRememberMe', currentRememberMe);
               if (currentRememberMe?.isEnabled) {
                 await setRememberMe({
                   ...currentRememberMe,
@@ -110,6 +167,7 @@ const useAuth = () => {
             const newAccessToken = await checkGoogleTokenValidity();
             if (newAccessToken) {
               const currentRememberMe = await getCurrentRememberMe();
+              console.log('[currentRememberMe]', currentRememberMe);
 
               // 새로운 토큰을 받아서 다시 로그인 시도
               await oauthLogin({

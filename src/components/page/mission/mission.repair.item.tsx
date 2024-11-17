@@ -13,9 +13,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
-import { DEFAULT_MARGIN } from '@constants';
 import { Colors, Font, L, SvgIcon } from '@design-system';
 import { useMissionList, useMissionOutcomeList } from '@queries';
 import { formatMissionTime } from '@utils';
@@ -32,12 +30,16 @@ interface IProps extends IMissionDataItem {
   isSelected: boolean;
   onSelect?: (isSelected: boolean) => void;
   showAlarmSettingTooltip?: boolean;
+  enableAlertTimeEdit?: boolean;
+  onTooltipDismiss?: () => void; // Add new prop for tooltip dismiss callback
 }
 
 export const MissionRepairItem: React.FC<IProps> = ({
   isSelected,
   onSelect,
   showAlarmSettingTooltip = false,
+  enableAlertTimeEdit = true,
+  onTooltipDismiss,
   ...item
 }) => {
   const {
@@ -60,7 +62,8 @@ export const MissionRepairItem: React.FC<IProps> = ({
     height: 0,
     width: 0,
   });
-  const hasLayoutBeenMeasured = useRef(false);
+
+  const hasAlertTextLayoutBeenMeasured = useRef(false);
 
   const { refetch: refetchMissionData } = useMissionList();
   const { refetch: refetchMissionOutcomeData } = useMissionOutcomeList();
@@ -101,6 +104,10 @@ export const MissionRepairItem: React.FC<IProps> = ({
   const handlePressAlertTime = useCallback(
     async (event: GestureResponderEvent) => {
       if (!item) return;
+
+      // Update tooltip storage and notify parent component
+      await setMissionTimeRepairTooltip({ viewed: true });
+      onTooltipDismiss?.();
       BottomSheet.show({
         component: (
           <MissionItemTimePicker
@@ -142,8 +149,6 @@ export const MissionRepairItem: React.FC<IProps> = ({
           />
         ),
       });
-
-      await setMissionTimeRepairTooltip({ viewed: true });
     },
     [item],
   );
@@ -171,7 +176,8 @@ export const MissionRepairItem: React.FC<IProps> = ({
 
   const handleAlertTextLayout = useCallback(
     (event: LayoutChangeEvent) => {
-      if (!showAlarmSettingTooltip || hasLayoutBeenMeasured.current) return;
+      if (!showAlarmSettingTooltip || hasAlertTextLayoutBeenMeasured.current)
+        return;
 
       const { layout } = event.nativeEvent;
       if (layout.width > 0 && layout.height > 0) {
@@ -181,7 +187,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
           width: layout.width,
           height: layout.height,
         });
-        hasLayoutBeenMeasured.current = true;
+        hasAlertTextLayoutBeenMeasured.current = true;
       }
     },
     [showAlarmSettingTooltip],
@@ -220,8 +226,23 @@ export const MissionRepairItem: React.FC<IProps> = ({
               </L.Absolute>
             </TouchableWithoutFeedback>
           )}
+
           {/* 알림 */}
-          <TouchableWithoutFeedback onPress={handlePressAlertTime}>
+          {enableAlertTimeEdit ? (
+            <TouchableWithoutFeedback onPress={handlePressAlertTime}>
+              <L.Col ml={13}>
+                <Font
+                  type={'FOOTNOTE_REGULAR'}
+                  color={'GREY2'}
+                  style={{
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {getAlertText()}
+                </Font>
+              </L.Col>
+            </TouchableWithoutFeedback>
+          ) : (
             <L.Col ml={13}>
               <Font
                 type={'FOOTNOTE_REGULAR'}
@@ -233,8 +254,9 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 {getAlertText()}
               </Font>
             </L.Col>
-          </TouchableWithoutFeedback>
+          )}
         </L.Row>
+
         <TouchableWithoutFeedback onPress={handleToggleSelect}>
           <View>
             <SvgIcon
@@ -260,7 +282,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
   // Reset layout measurement when tooltip visibility changes
   useEffect(() => {
     if (showAlarmSettingTooltip) {
-      hasLayoutBeenMeasured.current = false;
+      hasAlertTextLayoutBeenMeasured.current = false;
     }
   }, [showAlarmSettingTooltip]);
 

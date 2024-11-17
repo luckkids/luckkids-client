@@ -54,6 +54,13 @@ const useFirebaseMessage = () => {
   }, []);
 
   const getToken = useCallback(async () => {
+    const isSimulator = await DeviceInfo.isEmulator();
+    if (isSimulator) {
+      console.log(
+        '[Firebase Token] Running on simulator - skipping token fetch',
+      );
+      return 'simulator_fcm_token_' + Math.random().toString(36).substring(7);
+    }
     const pushToken = await messaging().getToken();
     console.log('[Firebase Device Token] :', pushToken);
     return pushToken;

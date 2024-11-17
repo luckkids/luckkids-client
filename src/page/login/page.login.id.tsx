@@ -39,11 +39,8 @@ export const PageLoginId: React.FC = () => {
   const isButtonDisabled = !loginInfo.email || !loginInfo.password;
   const { login } = useAuth();
   const [visiblityMode, setVisiblityMode] = useState(false);
-  const {
-    getCurrentValue: getCurrentRememberMe,
-
-    setValue: setRememberMe,
-  } = useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const { getCurrentValue: getCurrentRememberMe, setValue: setRememberMe } =
+    useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
   const handlePressForgotPassword = () => {
     Keyboard.dismiss();

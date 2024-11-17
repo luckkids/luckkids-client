@@ -77,7 +77,6 @@ const RootNavigator = () => {
 
   const {
     getCurrentValue: getCurrentRememberMe,
-
     loading: isLoadingRememberMe,
   } = useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
@@ -89,6 +88,7 @@ const RootNavigator = () => {
 
   const handleRememberMeLogin = async (rememberMe: RememberMeType) => {
     const pushKey = await getToken();
+
     if (!deviceId) return;
     const res =
       rememberMe.snsType === 'NORMAL'
@@ -146,7 +146,7 @@ const RootNavigator = () => {
     try {
       if (!initializing) {
         // push 관련 initializing
-        initializeFirebaseMessage();
+        await initializeFirebaseMessage();
         initializeLocalMessage();
 
         // status bar 색은 항상 light-content
@@ -185,7 +185,7 @@ const RootNavigator = () => {
         screenParams: undefined,
       });
     } else if (currentRememberMe && !!currentRememberMe.isEnabled) {
-      console.log('[currentRememberMe]', currentRememberMe);
+      console.log('[currentRemermberMe]', currentRememberMe);
 
       await handleRememberMeLogin({
         ...currentRememberMe,
@@ -201,7 +201,7 @@ const RootNavigator = () => {
     setTimeout(() => {
       setIsNavigationReady(true);
     }, 2000);
-  }, [storyTelling, isLoadingRememberMe, isLoadingStoryTelling]);
+  }, [storyTelling, isLoadingRememberMe, isLoadingStoryTelling, initializing]);
 
   useAsyncEffect(async () => {
     // 최초에 한번 notification permission 요청
