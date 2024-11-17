@@ -18,7 +18,7 @@ export const checkGoogleTokenValidity = async () => {
   } catch (error) {
     console.error('Error checking Google token validity:', error);
     // 재로그인 시도
-    const userInfo = await GoogleSignin.signIn();
+    const userInfo = await GoogleSignin.signInSilently();
     const tokens = await GoogleSignin.getTokens();
     return tokens ? tokens.accessToken : null;
   }

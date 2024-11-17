@@ -12,7 +12,7 @@ import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { RecoilLoignInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
+import { RecoilLoginInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 
 const S = {
   Border: styled.View({
@@ -25,7 +25,7 @@ export const PageSettingInfo: React.FC = () => {
   const navigation = useNavigationService();
   const { storedValue: rememberMe, setValue: setRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
-  const loginInfo = useRecoilValue(RecoilLoignInfo);
+  const loginInfo = useRecoilValue(RecoilLoginInfo);
   const oauthLoginInfo = useRecoilValue(RecoilOauthLoginInfo);
 
   const { data: me } = useMe();

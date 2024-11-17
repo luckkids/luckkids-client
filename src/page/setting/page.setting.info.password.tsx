@@ -13,7 +13,7 @@ import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { useFetch } from '@hooks/useFetch';
-import { RecoilLoignInfo } from '@recoil/recoil.login';
+import { RecoilLoginInfo } from '@recoil/recoil.login';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
 export const PageSettingInfoPassword: React.FC = () => {
@@ -30,7 +30,7 @@ export const PageSettingInfoPassword: React.FC = () => {
   const { data: me } = useMe();
   const { email = '' } = me || {};
   const navigation = useNavigationService();
-  const [savedLoginInfo, setSavedLoginInfo] = useRecoilState(RecoilLoignInfo);
+  const [savedLoginInfo, setSavedLoginInfo] = useRecoilState(RecoilLoginInfo);
 
   useEffect(() => {
     const newPassSubscription = of(newPass)
