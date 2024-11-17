@@ -372,7 +372,10 @@ export const PageMissionRepair = () => {
                     } else {
                       if (!isSelected) {
                         setSelectedMissions(
-                          selectedMissions.filter((m) => m.id !== mission.id),
+                          selectedMissions.filter(
+                            (m) =>
+                              m.luckkidsMissionId !== mission.luckkidsMissionId,
+                          ),
                         );
                       } else {
                         setSelectedMissions([...selectedMissions, mission]);
