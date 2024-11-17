@@ -39,7 +39,10 @@ export const PageSettingAccount: React.FC = () => {
 
         setRememberMe(null);
 
-        return navigation.replace('Login');
+        return navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
       },
       onPressYes: async () => {
         AlertPopup.hide();

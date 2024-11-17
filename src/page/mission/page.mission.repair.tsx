@@ -404,20 +404,6 @@ export const PageMissionRepair = () => {
     }
   }, [isFetching]);
 
-  const missionDataRef = useRef(missionData);
-  useEffect(() => {
-    missionDataRef.current = missionData;
-  }, [missionData]);
-
-  const setMissionDeleteTooltipRef = useRef(setMissionDeleteTooltip);
-  useEffect(() => {
-    setMissionDeleteTooltipRef.current = setMissionDeleteTooltip;
-  }, [setMissionDeleteTooltip]);
-
-  const viewabilityConfig = useRef({
-    itemVisiblePercentThreshold: 50,
-  });
-
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
       <L.Row pv={20} ph={25}>

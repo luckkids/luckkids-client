@@ -11,6 +11,10 @@ export const useMissionList = () => {
     },
     {
       select: (response) => response,
+      refetchOnMount: 'always',
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      staleTime: 0,
     },
   );
 };
