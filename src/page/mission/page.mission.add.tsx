@@ -25,19 +25,14 @@ const category: Array<IAddCategory> = [
     type: 'HOUSEKEEPING',
   },
   {
-    label: '셀프케어',
-    icon: 'iconAddCategorySelfCare',
-    type: 'SELF_CARE',
-  },
-  {
     label: '건강',
     icon: 'iconAddCategoryHealth',
     type: 'HEALTH',
   },
   {
-    label: '일',
-    icon: 'iconAddCategoryWork',
-    type: 'WORK',
+    label: '셀프케어',
+    icon: 'iconAddCategorySelfCare',
+    type: 'SELF_CARE',
   },
   {
     label: '마인드셋',
@@ -48,6 +43,11 @@ const category: Array<IAddCategory> = [
     label: '자기계발',
     icon: 'iconAddCategorySelfDevelopment',
     type: 'SELF_DEVELOPMENT',
+  },
+  {
+    label: '일',
+    icon: 'iconAddCategoryWork',
+    type: 'WORK',
   },
 ];
 
