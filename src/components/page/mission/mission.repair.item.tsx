@@ -228,7 +228,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
           )}
 
           {/* 알림 */}
-          {enableAlertTimeEdit && (
+          {enableAlertTimeEdit ? (
             <TouchableWithoutFeedback onPress={handlePressAlertTime}>
               <L.Col ml={13}>
                 <Font
@@ -242,6 +242,18 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 </Font>
               </L.Col>
             </TouchableWithoutFeedback>
+          ) : (
+            <L.Col ml={13}>
+              <Font
+                type={'FOOTNOTE_REGULAR'}
+                color={'GREY2'}
+                style={{
+                  flexWrap: 'wrap',
+                }}
+              >
+                {getAlertText()}
+              </Font>
+            </L.Col>
           )}
         </L.Row>
 
