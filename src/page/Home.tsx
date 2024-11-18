@@ -54,20 +54,26 @@ export const Home: React.FC = () => {
     try {
       const res = await friendApis.createFriendByCode({ code });
 
+      console.log('friends~~->',res);
+
       if (res) {
         // 친구로 추가했을때에만 초대코드 저장
+        console.log('res In!',res);
+        setTimeout(() => {
+          AlertPopup.show({
+            title: `${nickname}님이 \n가든 목록에 추가되었어요!`,
+            onPressYes: async () => {
+              navigationService.push('Garden');
+            },
+            yesText: '가든으로 가기',
+            noText: '닫기',
+          });
+        }, 0);
         await markInviteAsProcessed(code);
-        AlertPopup.show({
-          title: `${nickname}님이 \n가든 목록에 추가되었어요!`,
-          onPressYes: async () => {
-            navigationService.push('Garden');
-          },
-          yesText: '가든으로 가기',
-          noText: '닫기',
-        });
+        console.log('res Out!',res);
       }
     } catch (e) {
-      console.error(e);
+      console.error('friends error',e);
     }
   };
 
@@ -88,7 +94,7 @@ export const Home: React.FC = () => {
           onPressYes: () => {
             navigationService.push('Garden');
           },
-          yesText: '가든으로 가기',
+          yesText:'가든으로 가기',
           noText: '닫기',
         });
       } else {

@@ -55,9 +55,7 @@ const Button: React.FC<ButtonProps> = ({
         <L.Row pr={iconGap} ml={18} w={20} h={20}>
           {!!iconName && iconPosition === 'leading' ? (
             <SvgIcon name={iconName} size={20} color={textColor} />
-          ) : (
-            <L.Row />
-          )}
+          ) : null}
         </L.Row>
         <Font type={'BODY_SEMIBOLD'} color={isDisabled ? 'GREY2' : textColor}>
           {text}
@@ -65,9 +63,9 @@ const Button: React.FC<ButtonProps> = ({
         <L.Row pl={iconGap} mr={18} w={20} h={20}>
           {!!iconName && iconPosition === 'trailing' ? (
             <SvgIcon name={iconName} size={20} color={textColor} />
-          ) : (
-            <L.Row />
-          )}
+          ) :
+            null
+          }
         </L.Row>
       </Container>
     </TouchableWithoutFeedback>

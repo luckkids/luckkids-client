@@ -21,6 +21,7 @@ interface AlertPopupProps {
   onPressNo?: () => void;
   headerComponent?: React.ReactElement;
   footerComponent?: React.ReactElement;
+  IsIconDisabled?:boolean;
 }
 
 const AlertPopupContent: React.FC<AlertPopupProps> = ({

@@ -43,6 +43,7 @@ export const createAndCopyBranchLink = async (
         title: 'LUCKKIDS : 행운을 키우는 습관앱, 럭키즈',
         contentDescription: '우리는 행운아! 행운을 키우지!',
         contentImageUrl: ImgUrl,
+        publiclyIndex: true, // 검색엔진 인덱싱 허용
         contentMetadata: {
           customMetadata: { friendCode: code },
         },
