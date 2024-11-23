@@ -7,17 +7,22 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useIsFocused, useRoute } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { ChipButton, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
 import {
+  checkPendingInviteProcessed,
+  FRIEND_CODE_PENDING_ACTION,
   getCharacterImage,
   getLevelToolTipText,
   markInviteAsProcessed,
+  pendingInviteProcessed,
+  POPUP_FRIEND_STATUS,
 } from '@utils';
+import { friendApis } from '@apis/friend';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
@@ -30,7 +35,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
-import { friendApis } from '@apis/friend';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -40,67 +44,117 @@ const luckkidsWaterDrop = require('assets/images/luckkids-waterdrop.png');
 
 export const Home: React.FC = () => {
   const navigationService = useNavigationService();
-
   const scrollViewRef = useRef<ScrollView>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const [checkPending, setCheckPending] = useState<string | null>(null);
   const { bottom } = useSafeAreaInsets();
   const { params } = useNavigationRoute('Home');
   const friendCode = params?.friendCode || '';
   const isFocused = useIsFocused();
-
   const setStatePopup = useSetRecoilState(RecoilPopupState);
+
+  useEffect(() => {
+    const getPendingInvite = async () => {
+      const pending = await checkPendingInviteProcessed();
+      setCheckPending(pending);
+    };
+
+    getPendingInvite();
+  }, []);
 
   const addFriend = async (code: string, nickname: string) => {
     try {
+      // 기존 팝업을 먼저 닫기
+      setStatePopup({ isShow: false });
+
       const res = await friendApis.createFriendByCode({ code });
 
       if (res) {
-        // 친구로 추가했을때에만 초대코드 저장
-        await markInviteAsProcessed(code);
+        await markInviteAsProcessed(code, POPUP_FRIEND_STATUS.FRIEND);
+        await pendingInviteProcessed(
+          friendCode,
+          FRIEND_CODE_PENDING_ACTION.REMOVE,
+        );
+        setTimeout(() => {
+          AlertPopup.show({
+            title: `${nickname}님이 \n가든 목록에 추가되었어요!`,
+            onPressYes: async () => {
+              navigationService.navigate('Garden', {
+                isAddFriend: true,
+              });
+            },
+            yesText: '가든으로 가기',
+            noText: '닫기',
+            isIconDisabled: true,
+          });
+        }, 200);
+      }
+    } catch (e) {
+      console.error('friends error', e);
+    }
+  };
+
+  const onAlertHandler = async (
+    rtn: { status: string; nickName: string },
+    sendCode?: string,
+  ) => {
+    const { nickName } = rtn;
+    const sendFriendCode = sendCode || friendCode;
+    switch (true) {
+      case rtn.status === 'ME':
         AlertPopup.show({
-          title: `${nickname}님이 \n가든 목록에 추가되었어요!`,
+          title: '내가 보낸 초대예요!',
           onPressYes: async () => {
-            navigationService.push('Garden');
+            setStatePopup({ isShow: false });
+            await markInviteAsProcessed(sendFriendCode, POPUP_FRIEND_STATUS.ME);
+          },
+        });
+        return;
+      case rtn.status === 'ALREADY':
+        await markInviteAsProcessed(
+          sendFriendCode,
+          POPUP_FRIEND_STATUS.ALREADY,
+        );
+        AlertPopup.show({
+          title: `이미 ${nickName}님과 친구예요.`,
+          onPressYes: () => {
+            navigationService.navigate('Garden', {});
           },
           yesText: '가든으로 가기',
           noText: '닫기',
+          isIconDisabled: true,
         });
-      }
-    } catch (e) {
-      console.error(e);
+        return;
+      default:
+        await pendingInviteProcessed(
+          sendFriendCode,
+          FRIEND_CODE_PENDING_ACTION.SAVE,
+        );
+        AlertPopup.show({
+          title: `${nickName}님이 \n친구 초대를 보냈어요!`,
+          body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
+          onPressYes: () => addFriend(sendFriendCode, nickName),
+          yesText: '친구하기',
+          noText: '거절하기',
+          onPressNo: async () => {
+            await markInviteAsProcessed(
+              sendFriendCode,
+              POPUP_FRIEND_STATUS.NEGATIVE,
+            );
+            await pendingInviteProcessed(
+              sendFriendCode,
+              FRIEND_CODE_PENDING_ACTION.REMOVE,
+            );
+          },
+        });
+        return;
     }
   };
 
   const { onFetch: onCheckFriend } = useFetch({
     method: 'GET',
     url: `/friendcode/${friendCode}/nickname`,
-    onSuccessCallback: async (rtn) => {
-      const { nickName } = rtn;
-      if (rtn.status === 'ME') {
-        return AlertPopup.show({
-          title: '내가 보낸 초대예요!',
-          onPressYes: () => setStatePopup({ isShow: false }),
-        });
-      } else if (rtn.status === 'ALREADY') {
-        await markInviteAsProcessed(friendCode);
-        return AlertPopup.show({
-          title: `이미 ${nickName}님과 친구예요.`,
-          onPressYes: () => {
-            navigationService.push('Garden');
-          },
-          yesText: '가든으로 가기',
-          noText: '닫기',
-        });
-      } else {
-        return AlertPopup.show({
-          title: `${nickName}님이 \n친구 초대를 보냈어요!`,
-          body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
-          onPressYes: () => addFriend(friendCode, nickName),
-          yesText: '친구하기',
-          noText: '거절하기',
-        });
-      }
-    },
+    onSuccessCallback: async (rtn) => onAlertHandler(rtn, checkPending),
   });
 
   const handleViewProfile = (_e: GestureResponderEvent) => {
@@ -137,10 +191,13 @@ export const Home: React.FC = () => {
     await refetchHomeInfo();
   }, [isFocused]);
 
-  useEffect(() => {
-    if (!friendCode) return;
-    onCheckFriend();
-  }, [friendCode]);
+  useAsyncEffect(async () => {
+    if (friendCode && !checkPending) {
+      onCheckFriend();
+    } else if (checkPending) {
+      onCheckFriend(`/friendcode/${checkPending}/nickname`);
+    }
+  }, [friendCode, checkPending]);
 
   return (
     <>

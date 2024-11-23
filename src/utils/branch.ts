@@ -9,11 +9,26 @@ import {
 import { debounce } from 'lodash';
 import branch from 'react-native-branch';
 import { SvgIcon } from '@design-system';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { AppScreensParamList } from '@types-common/page.types';
 
 const BASE_URL = 'luckkids://';
+
+const FRIEND_PENDING_KEY = 'friend_invite_pending';
+
+export enum FRIEND_CODE_PENDING_ACTION {
+  SAVE,
+  REMOVE,
+}
+
+export enum POPUP_FRIEND_STATUS {
+  ME = 'me',
+  FRIEND = 'friend',
+  NEGATIVE = 'negative',
+  ALREADY = 'already',
+}
 
 const onSnackBarHandler = () => {
   SnackBar.show({
@@ -43,6 +58,7 @@ export const createAndCopyBranchLink = async (
         title: 'LUCKKIDS : 행운을 키우는 습관앱, 럭키즈',
         contentDescription: '우리는 행운아! 행운을 키우지!',
         contentImageUrl: ImgUrl,
+        publiclyIndex: true, // 검색엔진 인덱싱 허용
         contentMetadata: {
           customMetadata: { friendCode: code },
         },
@@ -87,22 +103,61 @@ function extractFriendCodeFromUrl(url: string) {
 // 초대 코드 처리 여부를 확인하는 함수
 export const checkIfInviteProcessed = async (
   code: string,
-): Promise<boolean> => {
+): Promise<string | null> => {
   try {
     const processedCode = await AsyncStorage.getItem(
       `processed_invite_${code}`,
     );
-    return !!processedCode;
+    if (processedCode !== null) {
+      return processedCode;
+    } else {
+      return null;
+    }
   } catch (error) {
     console.error('Error checking processed invite:', error);
-    return false;
+    return null;
   }
 };
 
-// 초대 코드를 처리 완료로 마크하는 함수
-export const markInviteAsProcessed = async (code: string) => {
+export const pendingInviteProcessed = async (
+  code: string,
+  action: FRIEND_CODE_PENDING_ACTION,
+) => {
+  if (action === FRIEND_CODE_PENDING_ACTION.SAVE) {
+    try {
+      await AsyncStorage.setItem(FRIEND_PENDING_KEY, code);
+    } catch (error) {
+      console.log('invite Pending Set Processed:', error);
+    }
+  } else {
+    try {
+      await AsyncStorage.removeItem(FRIEND_PENDING_KEY);
+    } catch (error) {
+      console.log('invite Pending Remove Processed:', error);
+    }
+  }
+};
+
+export const checkPendingInviteProcessed = async (): Promise<string | null> => {
   try {
-    await AsyncStorage.setItem(`processed_invite_${code}`, 'true');
+    const pendingCode = await AsyncStorage.getItem(FRIEND_PENDING_KEY);
+    if (pendingCode) {
+      return pendingCode;
+    }
+    return null;
+  } catch (error) {
+    console.log('invite Pending Processed:', error);
+    return null;
+  }
+};
+
+// 초대 코드 상태값 저장 함수
+export const markInviteAsProcessed = async (
+  code: string,
+  state: POPUP_FRIEND_STATUS,
+) => {
+  try {
+    await AsyncStorage.setItem(`processed_invite_${code}`, state);
     console.log(`Invite code ${code} marked as processed`);
   } catch (error) {
     console.error('Error marking invite as processed:', error);
@@ -125,14 +180,28 @@ export const subscribeBranch = (
     }
 
     try {
-      // 이미 처리된 초대 코드인지 확인
+      const currentRoute = navigationRef.getCurrentRoute();
+      // 코드 STATE 체크
       const isProcessed = await checkIfInviteProcessed(friendCode.params.code);
-      if (isProcessed) {
-        console.log(
-          'This invite code was already processed:',
-          friendCode.params.code,
-        );
-        return;
+      console.log('3. Friend code State:', isProcessed);
+
+      if (
+        currentRoute?.name.includes('Login') ||
+        currentRoute?.name.includes('Tutorial')
+      ) {
+        return AlertPopup.show({
+          title: currentRoute?.name.includes('Login')
+            ? '로그인 후 다시 시도해 주세요.'
+            : '튜토리얼을 모두 진행 후 다시 시도해 주세요.',
+          yesText: '확인',
+        });
+      }
+
+      if (isProcessed === POPUP_FRIEND_STATUS.NEGATIVE) {
+        return AlertPopup.show({
+          title: '이전에 거절했던 초대예요.\n친구 초대를 다시 요청해주세요!',
+          yesText: '확인',
+        });
       }
 
       if (!navigationRef.isReady()) {
@@ -140,8 +209,7 @@ export const subscribeBranch = (
         return;
       }
 
-      const currentRoute = navigationRef.getCurrentRoute();
-      console.log('3. Current route:', currentRoute?.name);
+      console.log('4. Current route:', currentRoute?.name);
 
       // Home 화면인 경우 params만 업데이트
       if (currentRoute?.name === 'Home') {
@@ -154,7 +222,7 @@ export const subscribeBranch = (
       }
       // 다른 화면인 경우 기존 로직대로 처리
       else {
-        console.log('4. Not on Home screen, replacing with Home screen');
+        console.log('5. Not on Home screen, replacing with Home screen');
         navigationRef.dispatch(
           StackActions.replace('Home', {
             friendCode: friendCode.params.code,
@@ -165,14 +233,14 @@ export const subscribeBranch = (
       // params 전달 확인을 위한 타임아웃 설정
       setTimeout(() => {
         const updatedRoute = navigationRef.getCurrentRoute();
-        console.log('5. Route after update:', {
+        console.log('6. Route after update:', {
           screen: updatedRoute?.name,
           params: updatedRoute?.params,
         });
 
         // params가 없는 경우 보조 시도
         if (!(updatedRoute?.params as { friendCode?: string })?.friendCode) {
-          console.log('6. Attempting secondary navigation...');
+          console.log('7. Attempting secondary navigation...');
           navigationRef.dispatch(
             CommonActions.setParams({
               friendCode: friendCode.params.code,

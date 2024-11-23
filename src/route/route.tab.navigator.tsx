@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 export const BottomTabNavigator = () => {
-  const { top, bottom } = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
 
   const { haptic } = useHapticFeedback();
 
@@ -62,9 +61,10 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={'습관'}
+        name={'Mission'}
         component={Mission}
         options={{
+          tabBarLabel: '습관',
           tabBarIcon: ({ focused }) => (
             <SvgIcon
               name={focused ? 'iconMissionOn' : 'iconMissionOff'}
@@ -77,9 +77,10 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={'가든'}
+        name={'Garden'}
         component={Garden}
         options={{
+          tabBarLabel: '가든',
           tabBarIcon: ({ focused }) => (
             <SvgIcon
               name={focused ? 'iconGardenOn' : 'iconGardenOff'}
@@ -92,9 +93,10 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={'설정'}
+        name={'Setting'}
         component={PageSetting}
         options={{
+          tabBarLabel: '설정',
           tabBarIcon: ({ focused }) => (
             <SvgIcon
               name={focused ? 'iconSettingOn' : 'iconSettingOff'}

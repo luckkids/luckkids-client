@@ -53,6 +53,8 @@ export const useInfiniteHomeNotification = (deviceId: string | null) => {
       getNextPageParam: (lastPage) => getNextPageParam(lastPage),
       refetchOnReconnect: true,
       enabled: !!deviceId,
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
     },
   );
 };

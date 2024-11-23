@@ -26,16 +26,18 @@ export const useFetch = (args: {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [resultData, setResultData] = useState<IResponse>();
+  const [switchUrl, setSwitchUrl] = useState<string>();
 
   const { setValue: setAccessToken } = useAsyncStorage<StorageKeys.AccessToken>(
     StorageKeys.AccessToken,
   );
 
   const onFetch = useCallback(
-    (value?: IStringDictionary) => {
+    (changeUrl?: string) => {
+      setSwitchUrl(changeUrl);
       setIsSubmit(true);
       // Use provided value or default to args.value
-      const requestData = value ? value : args.value;
+      const requestData = args.value;
 
       console.log('RequestData ====>', requestData);
       const loadData = async () => {
@@ -54,7 +56,10 @@ export const useFetch = (args: {
             requestOptions.body = JSON.stringify(requestData);
           }
 
-          const rtnData = await fetch(host + args.url, requestOptions);
+          const rtnData = await fetch(
+            host + (changeUrl ? changeUrl : args.url),
+            requestOptions,
+          );
           // console.log('rtnData ====>', rtnData);
           return await rtnData.json();
         } catch (e) {
@@ -123,14 +128,17 @@ export const useFetch = (args: {
 
   const reIsueedAccessToken = async (refreshToken: string) => {
     try {
-      const rtnData: IResponse = await fetch(host + args.url, {
-        method: args.method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${refreshToken}`,
+      const rtnData: IResponse = await fetch(
+        host + (switchUrl ? switchUrl : args.url),
+        {
+          method: args.method,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${refreshToken}`,
+          },
+          body: JSON.stringify(args.value),
         },
-        body: JSON.stringify(args.value),
-      });
+      );
 
       if (
         rtnData.statusCode !== STATUS.SUCCESS ||

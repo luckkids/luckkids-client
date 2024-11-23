@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { createElement, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -16,6 +16,8 @@ import { GardenNavbar } from '@components/page/garden/garden.navbar';
 import { GardenPopup } from '@components/page/garden/garden.popup';
 import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
+import SnackBar from '@global-components/common/SnackBar/SnackBar';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
 import { IGarden, IGardenItem } from '@types-common/page.types';
@@ -46,6 +48,7 @@ const onInviteHandler = () => {
 
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
+  const { params } = useNavigationRoute('Garden');
   const [data, setData] = useState<IGarden>();
   const isFocusScreen = useIsFocused();
   const { onFetch } = useFetch({
@@ -78,7 +81,7 @@ export const Garden: React.FC = () => {
       }
     } else {
       for (let i = 0; i < 15 - (friendData.length + 1); i++) {
-        temArray.push(<GardenItem item={null} key={i} isSelf={false}/>);
+        temArray.push(<GardenItem item={null} key={i} isSelf={false} />);
       }
     }
     return temArray;
@@ -90,7 +93,7 @@ export const Garden: React.FC = () => {
 
     if (!friendId) return;
 
-   /* return navigation.navigate('GardenFriendProfile', {
+    /* return navigation.navigate('GardenFriendProfile', {
       friendId,
     });*/
   };
@@ -98,6 +101,21 @@ export const Garden: React.FC = () => {
   useEffect(() => {
     if (isFocusScreen) onFetch();
   }, [isFocusScreen]);
+
+  useEffect(() => {
+    if (params && params.isAddFriend)
+      SnackBar.show({
+        leftElement: createElement(SvgIcon, {
+          name: 'lucky_check',
+          size: 20,
+        }),
+        width: 200,
+        title: '친구가 추가되었어요',
+        position: 'bottom',
+        rounded: 25,
+        offsetY: 76,
+      });
+  }, [params, params?.isAddFriend]);
 
   return (
     <FrameLayout NavBar={<GardenNavbar />}>

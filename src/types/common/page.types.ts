@@ -63,7 +63,7 @@ export type AppScreensParamList = {
   SettingInfoPassword: undefined;
   SettingAccount: undefined;
   WebView: { url: string; title?: string };
-  Garden: undefined;
+  Garden: { isAddFriend?: boolean };
   My: undefined;
   HomeComment: undefined;
   UpdateScreen: { remotePackage: RemotePackage };
