@@ -21,7 +21,7 @@ interface AlertPopupProps {
   onPressNo?: () => void;
   headerComponent?: React.ReactElement;
   footerComponent?: React.ReactElement;
-  IsIconDisabled?:boolean;
+  isIconDisabled?:boolean;
 }
 
 const AlertPopupContent: React.FC<AlertPopupProps> = ({
@@ -30,6 +30,7 @@ const AlertPopupContent: React.FC<AlertPopupProps> = ({
   noText,
   onPressNo,
   onPressYes,
+  isIconDisabled,
   yesText = '확인',
   headerComponent,
   footerComponent,
@@ -79,6 +80,7 @@ const AlertPopupContent: React.FC<AlertPopupProps> = ({
                   type={'action'}
                   text={noText}
                   sizing="stretch"
+                  isIconDisabled={isIconDisabled}
                   onPress={handlePressNo}
                   bgColor="BG_TERTIARY"
                   textColor="WHITE"
@@ -90,6 +92,7 @@ const AlertPopupContent: React.FC<AlertPopupProps> = ({
                 type={'action'}
                 text={yesText}
                 sizing="stretch"
+                isIconDisabled={isIconDisabled}
                 onPress={handlePressYes}
                 bgColor="LUCK_GREEN"
               />

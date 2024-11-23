@@ -62,9 +62,10 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={'습관'}
+        name={'Mission'}
         component={Mission}
         options={{
+          tabBarLabel: '습관',
           tabBarIcon: ({ focused }) => (
             <SvgIcon
               name={focused ? 'iconMissionOn' : 'iconMissionOff'}
@@ -77,9 +78,10 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={'가든'}
+        name={'Garden'}
         component={Garden}
         options={{
+          tabBarLabel: '가든',
           tabBarIcon: ({ focused }) => (
             <SvgIcon
               name={focused ? 'iconGardenOn' : 'iconGardenOff'}
@@ -92,9 +94,10 @@ export const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name={'설정'}
+        name={'Setting'}
         component={PageSetting}
         options={{
+          tabBarLabel: '설정',
           tabBarIcon: ({ focused }) => (
             <SvgIcon
               name={focused ? 'iconSettingOn' : 'iconSettingOff'}

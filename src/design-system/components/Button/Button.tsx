@@ -15,6 +15,7 @@ type ButtonProps = {
   sizing?: ButtonSizing;
   status?: ButtonStatus;
   onPress?: (status?: ButtonStatus) => void;
+  isIconDisabled?: boolean;
   iconName?: IconNames;
   iconPosition?: 'leading' | 'trailing';
   iconGap?: number;
@@ -26,6 +27,7 @@ const Button: React.FC<ButtonProps> = ({
   text,
   onPress,
   iconName,
+  isIconDisabled,
   sizing = 'fit-content',
   status = 'normal',
   bgColor = 'WHITE',
@@ -37,6 +39,31 @@ const Button: React.FC<ButtonProps> = ({
   const [pressed, setPressed] = useState<boolean>(false);
   const isDisabled = status === 'disabled';
 
+  if (isIconDisabled){
+    return <TouchableWithoutFeedback
+      disabled={isDisabled}
+      onPressIn={() => setPressed(true)}
+      onPressOut={() => setPressed(false)}
+      onPress={() => onPress && onPress(status)}
+    >
+      <Container
+        type={type}
+        sizing={sizing}
+        bgColor={bgColor}
+        status={status}
+        pressed={pressed}
+        outline={outline}
+      >
+        <L.Row mh={10}>
+          <L.Row justify="center" w={'100%'}>
+            <Font type={'BODY_SEMIBOLD'} color={isDisabled ? 'GREY2' : textColor} textAlign={'center'}>
+              {text}
+            </Font>
+          </L.Row>
+        </L.Row>
+      </Container>
+    </TouchableWithoutFeedback>
+  }
   return (
     <TouchableWithoutFeedback
       disabled={isDisabled}
