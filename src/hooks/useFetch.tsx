@@ -33,7 +33,7 @@ export const useFetch = (args: {
   );
 
   const onFetch = useCallback(
-    (changeUrl?: string, addParam?: string) => {
+    (changeUrl?: string) => {
       setSwitchUrl(changeUrl);
       setIsSubmit(true);
       // Use provided value or default to args.value

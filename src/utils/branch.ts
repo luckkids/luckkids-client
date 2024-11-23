@@ -9,10 +9,10 @@ import {
 import { debounce } from 'lodash';
 import branch from 'react-native-branch';
 import { SvgIcon } from '@design-system';
+import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import { AppScreensParamList } from '@types-common/page.types';
-import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 
 const BASE_URL = 'luckkids://';
 

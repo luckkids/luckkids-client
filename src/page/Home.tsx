@@ -22,6 +22,7 @@ import {
   pendingInviteProcessed,
   POPUP_FRIEND_STATUS,
 } from '@utils';
+import { friendApis } from '@apis/friend';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
@@ -34,7 +35,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
-import { friendApis } from '@apis/friend';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
 const luckkidsClover = require('assets/images/luckkids-clover.png');
@@ -195,7 +195,6 @@ export const Home: React.FC = () => {
     if (friendCode && !checkPending) {
       onCheckFriend();
     } else if (checkPending) {
-      console.log('checkPending ---->', checkPending);
       onCheckFriend(`/friendcode/${checkPending}/nickname`);
     }
   }, [friendCode, checkPending]);
