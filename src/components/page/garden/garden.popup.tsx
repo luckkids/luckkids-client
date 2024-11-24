@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import { Font, L } from '@design-system';
-import { IGardenItem } from '@types-common/page.types';
 import { getCharacterImage } from '@utils';
-import FastImage from 'react-native-fast-image';
+import { IGardenItem } from '@types-common/page.types';
 
 interface IGardenPopup {
   show: IGardenItem;
