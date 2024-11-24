@@ -96,7 +96,7 @@ export const Home: React.FC = () => {
 
   const onAlertHandler = async (
     rtn: { status: string; nickName: string },
-    sendCode?: string,
+    sendCode: string | null,
   ) => {
     const { nickName } = rtn;
     const sendFriendCode = sendCode || friendCode;
