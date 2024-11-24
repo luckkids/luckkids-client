@@ -5,14 +5,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, IconNames, L, SvgIcon } from '@design-system';
-import {
-  useInitialLuckkidsMissionList,
-  useMissionList,
-  useMissionOutcomeList,
-} from '@queries';
+import { useMissionList, useMissionOutcomeList } from '@queries';
 import { MissionType } from '@types-index';
 import { missionApis } from '@apis/mission';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
+import Tooltip from '@components/common/Tooltip/Tooltip';
 import { MissionRepairCategoryItem } from '@components/page/mission/mission.repair.category.item';
 import { MissionRepairItem } from '@components/page/mission/mission.repair.item';
 import { FrameLayout } from '@frame/frame.layout';
@@ -23,7 +20,6 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
 import { IMissionData, IMissionDataItem } from '@types-common/page.types';
-import Tooltip from '@components/common/Tooltip/Tooltip';
 
 export const PageMissionRepair = () => {
   const {
