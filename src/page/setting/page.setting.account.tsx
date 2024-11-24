@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
@@ -8,8 +9,6 @@ import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import useAsyncStorage from '@hooks/storage/useAsyncStorage';
-import { StorageKeys } from '@hooks/storage/keys';
 
 const WITHDRAW_REASON_LIST = [
   '잘 사용하지 않는 앱이에요',
@@ -23,10 +22,6 @@ export const PageSettingAccount: React.FC = () => {
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
   const [reason, setReason] = useState<string>('');
-  const { setValue: setRememberMe } = useAsyncStorage<StorageKeys.RememberMe>(
-    StorageKeys.RememberMe,
-  );
-
   const handleConfirm = async () => {
     AlertPopup.show({
       title: '정말 탈퇴하실 건가요..?',
@@ -37,7 +32,8 @@ export const PageSettingAccount: React.FC = () => {
         await authApis.registerWithdrawReason(reason);
         await authApis.deleteUser();
 
-        setRememberMe(null);
+        // AsyncStorage에 저장된 데이터 삭제
+        await AsyncStorage.clear();
 
         return navigation.reset({
           index: 0,
