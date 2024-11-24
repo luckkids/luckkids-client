@@ -30,7 +30,6 @@ interface IProps extends IMissionDataItem {
   isSelected: boolean;
   onSelect?: (isSelected: boolean) => void;
   showAlarmSettingTooltip?: boolean;
-  enableAlertTimeEdit?: boolean;
   onTooltipDismiss?: () => void; // Add new prop for tooltip dismiss callback
 }
 
@@ -38,7 +37,6 @@ export const MissionRepairItem: React.FC<IProps> = ({
   isSelected,
   onSelect,
   showAlarmSettingTooltip = false,
-  enableAlertTimeEdit = true,
   onTooltipDismiss,
   ...item
 }) => {
@@ -228,21 +226,8 @@ export const MissionRepairItem: React.FC<IProps> = ({
           )}
 
           {/* 알림 */}
-          {enableAlertTimeEdit ? (
-            <TouchableWithoutFeedback onPress={handlePressAlertTime}>
-              <L.Col ml={13}>
-                <Font
-                  type={'FOOTNOTE_REGULAR'}
-                  color={'GREY2'}
-                  style={{
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  {getAlertText()}
-                </Font>
-              </L.Col>
-            </TouchableWithoutFeedback>
-          ) : (
+
+          <TouchableWithoutFeedback onPress={handlePressAlertTime}>
             <L.Col ml={13}>
               <Font
                 type={'FOOTNOTE_REGULAR'}
@@ -254,7 +239,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 {getAlertText()}
               </Font>
             </L.Col>
-          )}
+          </TouchableWithoutFeedback>
         </L.Row>
 
         <TouchableWithoutFeedback onPress={handleToggleSelect}>
