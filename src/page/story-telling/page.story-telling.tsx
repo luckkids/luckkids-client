@@ -74,21 +74,20 @@ export const PageStoryTelling: React.FC = () => {
           <L.Row items={'center'} mt={24}>
             <ProgressBar progress={step / STORY_TELLING_CONTENTS.length} />
           </L.Row>
-          <Font textAlign="center" type={'TITLE2_BOLD'} color={'WHITE'} mt={76}>
+          <Font textAlign="center" type={'TITLE2_BOLD'} color={'WHITE'} mt={56}>
             {STORY_TELLING_CONTENTS[step - 1]}
           </Font>
-
           {!!STORY_TELLING_LOTTIES[step - 1] && (
-            <>
+            <L.Row mt={90}>
               <LottieView
                 source={STORY_TELLING_LOTTIES[step - 1]}
                 style={{
-                  width: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
-                  height: SCREEN_WIDTH - 2 * DEFAULT_MARGIN,
+                  width: 300,
+                  height: 300,
                 }}
                 autoPlay
               />
-            </>
+            </L.Row>
           )}
         </L.Col>
         <L.Absolute h="100%">
