@@ -261,6 +261,7 @@ export const PageMissionRepair = () => {
     const showDeleteMissionTooltip =
       !isLoadingMissionList &&
       !isLoadingMissionOutcomeList &&
+      openedCategories.includes(missionType) &&
       !showAlarmSettingTooltip &&
       userMissions.length === 1 &&
       missionType === userMissions[0].missionType &&

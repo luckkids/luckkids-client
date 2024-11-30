@@ -212,21 +212,21 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 b={alertTextLayout.height}
                 l={alertTextLayout.width}
                 style={{
-                  transform: [{ translateX: -50 }],
+                  transform: [{ translateX: -100 }],
                 }}
               >
                 <Tooltip
                   text={'알림 시간을 설정할 수 있어요'}
                   bgColor="LUCK_GREEN"
                   opacity={1}
+                  arrowPosition={'right'}
+                  arrowOffset={-50}
                   textColor="BLACK"
                 />
               </L.Absolute>
             </TouchableWithoutFeedback>
           )}
-
           {/* 알림 */}
-
           <TouchableWithoutFeedback onPress={handlePressAlertTime}>
             <L.Col ml={13}>
               <Font
