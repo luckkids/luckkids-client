@@ -8,14 +8,14 @@ import {
   SocialTypeValues,
   authApis,
 } from '@apis/auth';
+import LoginRemember from '@components/page/login/remember';
+import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { checkGoogleTokenValidity } from '@hooks/sns-login/useGoogleLogin';
 import { checkKakaoTokenValidity } from '@hooks/sns-login/useKakaoLogin';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilLoginInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
-import LoginRemember from '@components/page/login/remember';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 
 const useAuth = () => {
   const {
@@ -49,7 +49,8 @@ const useAuth = () => {
 
         const rememberMe = await getCurrentRememberMe();
 
-        if (!rememberMe || rememberMe?.snsType !== 'NORMAL') {
+        // Only show bottom sheet if rememberMe doesn't exist or is enabled
+        if (!rememberMe || (rememberMe && !rememberMe.isEnabled)) {
           BottomSheet.show({
             component: (
               <LoginRemember
@@ -102,7 +103,8 @@ const useAuth = () => {
 
         const rememberMe = await getCurrentRememberMe();
 
-        if (!rememberMe || rememberMe?.snsType === 'NORMAL') {
+        // Show bottom sheet if rememberMe doesn't exist or (rememberMe exists and isEnabled is false)
+        if (!rememberMe || (rememberMe && !rememberMe.isEnabled)) {
           BottomSheet.show({
             component: (
               <LoginRemember
