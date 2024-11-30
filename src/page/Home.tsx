@@ -7,11 +7,11 @@ import {
   View,
 } from 'react-native';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSetRecoilState } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
-import { ChipButton, Font, L, SvgIcon } from '@design-system';
+import { ChipButton, CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import { useHomeInfo } from '@queries';
 import {
   checkPendingInviteProcessed,
@@ -32,6 +32,8 @@ import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
 import { RecoilPopupState } from '@recoil/recoil.popup';
@@ -52,6 +54,16 @@ export const Home: React.FC = () => {
   const friendCode = params?.friendCode || '';
   const isFocused = useIsFocused();
   const setStatePopup = useSetRecoilState(RecoilPopupState);
+  const [tooltipViewed, setTooltipViewed] = useState<boolean | undefined>(
+    undefined,
+  );
+
+  const {
+    storedValue: missionRepairAvailableTooltip,
+    getCurrentValue: getMissionRepairAvailableTooltip,
+  } = useAsyncStorage<StorageKeys.MissionRepairAvailableTooltip>(
+    StorageKeys.MissionRepairAvailableTooltip,
+  );
 
   useEffect(() => {
     const getPendingInvite = async () => {
@@ -198,6 +210,14 @@ export const Home: React.FC = () => {
       onCheckFriend(`/friendcode/${checkPending}/nickname`);
     }
   }, [friendCode, checkPending]);
+
+  useFocusEffect(() => {
+    const checkTooltip = async () => {
+      const tooltip = await getMissionRepairAvailableTooltip();
+      setTooltipViewed(tooltip?.viewed ?? false);
+    };
+    checkTooltip();
+  });
 
   return (
     <>
@@ -392,6 +412,20 @@ export const Home: React.FC = () => {
             </L.Row>
           </Animated.View>
         </Animated.ScrollView>
+        {tooltipViewed === false && (
+          <L.Absolute
+            b={CONSTANTS.BOTTOM_TABBAR_HEIGHT + 8}
+            l={SCREEN_WIDTH / 4 - 20}
+            z={2}
+          >
+            <Tooltip
+              text={'먼저, 행운의 습관을\n설정해주세요!'}
+              bgColor="LUCK_GREEN"
+              opacity={1}
+              textColor="BLACK"
+            />
+          </L.Absolute>
+        )}
       </FrameLayout>
     </>
   );

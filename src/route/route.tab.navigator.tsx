@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CONSTANTS, Colors, FontSettings, SvgIcon } from '@design-system';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useHapticFeedback from '@hooks/useHapticFeedback';
 import { Garden } from '@page/Garden';
 import { Home } from '@page/Home';
@@ -16,6 +18,11 @@ export const BottomTabNavigator = () => {
   const { bottom } = useSafeAreaInsets();
 
   const { haptic } = useHapticFeedback();
+
+  const { setValue: setMissionRepairAvailableTooltip } =
+    useAsyncStorage<StorageKeys.MissionRepairAvailableTooltip>(
+      StorageKeys.MissionRepairAvailableTooltip,
+    );
 
   return (
     <Tab.Navigator
@@ -73,7 +80,12 @@ export const BottomTabNavigator = () => {
           ),
         }}
         listeners={{
-          tabPress: haptic,
+          tabPress: async (e) => {
+            haptic();
+            await setMissionRepairAvailableTooltip({
+              viewed: true,
+            });
+          },
         }}
       />
       <Tab.Screen
