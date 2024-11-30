@@ -33,7 +33,6 @@ export const PageMissionRepair = () => {
   const {
     data: missionData,
     refetch: refetchMissionData,
-    isFetching,
     isLoading: isLoadingMissionList,
   } = useMissionList();
 
@@ -336,12 +335,13 @@ export const PageMissionRepair = () => {
   }, [missionData]);
 
   useEffect(() => {
-    if (isFetching) return LoadingIndicator.show({});
+    if (isLoadingMissionList || isLoadingMissionOutcomeList)
+      return LoadingIndicator.show({});
     else {
       LoadingIndicator.hide();
       setSelectedCategory(allCategories[0]);
     }
-  }, [isFetching]);
+  }, [isLoadingMissionList, isLoadingMissionOutcomeList]);
 
   return (
     <FrameLayout NavBar={<StackNavBar useBackButton />}>
