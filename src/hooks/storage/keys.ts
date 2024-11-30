@@ -7,6 +7,7 @@ export enum StorageKeys {
   AccessToken = 'access_token',
   MissionTimeRepairTooltip = 'mission_time_repair_tooltip',
   MissionDeleteTooltip = 'mission_delete_tooltip',
+  MissionRepairAvailableTooltip = 'mission_repair_available_tooltip',
   // Add other keys here
 }
 
@@ -45,6 +46,10 @@ interface MissionDeleteTooltipType {
   viewed: boolean;
 }
 
+interface MissionRepairAvailableTooltipType {
+  viewed: boolean;
+}
+
 // Add types for other keys if needed
 // interface OtherKeyType { ... }
 
@@ -55,6 +60,7 @@ export type StorageValues = {
   [StorageKeys.StoryTelling]: StoryTellingType;
   [StorageKeys.MissionTimeRepairTooltip]: MissionTimeRepairTooltipType;
   [StorageKeys.MissionDeleteTooltip]: MissionDeleteTooltipType;
+  [StorageKeys.MissionRepairAvailableTooltip]: MissionRepairAvailableTooltipType;
   // Add other key-value mappings here
 };
 
@@ -76,6 +82,9 @@ export const defaultValues = {
     viewed: false,
   },
   [StorageKeys.MissionDeleteTooltip]: {
+    viewed: false,
+  },
+  [StorageKeys.MissionRepairAvailableTooltip]: {
     viewed: false,
   },
   // Add other default values here

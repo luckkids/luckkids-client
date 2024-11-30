@@ -1,7 +1,4 @@
 import { BottomTabNavigator } from '../route/route.tab.navigator';
-import { PageCharacterMake } from '@page/character/page.character.make';
-import { PageCharacterName } from '@page/character/page.character.name';
-import { PageCharacterSelect } from '@page/character/page.character.select';
 import PageUpdateScreen from '@page/common/page.common.update';
 import { PageWebView } from '@page/common/page.common.webview';
 import { Garden } from '@page/Garden';
@@ -94,18 +91,6 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'TutorialSettingNoti',
     component: PageTutorialSettingNoti,
-  },
-  {
-    name: 'CharacterMake',
-    component: PageCharacterMake,
-  },
-  {
-    name: 'CharacterSelect',
-    component: PageCharacterSelect,
-  },
-  {
-    name: 'CharacterName',
-    component: PageCharacterName,
   },
   {
     name: 'HomeAlarm',

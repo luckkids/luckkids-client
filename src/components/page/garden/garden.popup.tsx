@@ -1,10 +1,11 @@
-import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import Dim from 'react-native-linear-gradient';
 import styled from 'styled-components/native';
 import { Font, L } from '@design-system';
-import { IGardenItem } from '@types-common/page.types';
 import { getCharacterImage } from '@utils';
+import { IGardenItem } from '@types-common/page.types';
 
 interface IGardenPopup {
   show: IGardenItem;
@@ -29,10 +30,8 @@ const S = {
     height: 200,
     marginTop: 40,
     marginBottom: 36,
-  }),
-  imgEl: styled.Image({
-    width: '100%',
-    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   }),
   Dim: styled.View({
     position: 'absolute',
@@ -51,6 +50,7 @@ const S = {
 };
 export const GardenPopup: React.FC<IGardenPopup> = ({ show, setShow }) => {
   const { luckPhrase, nickname, characterType, level } = show;
+  const [loading, setLoading] = useState(true);
 
   const characterImageUrl = getCharacterImage(characterType, level, 'normal');
   return (
@@ -78,7 +78,21 @@ export const GardenPopup: React.FC<IGardenPopup> = ({ show, setShow }) => {
           </S.commentWrap>
         </L.Col>
         <S.imgWrap>
-          <S.imgEl source={{ uri: characterImageUrl }} />
+          {loading && <ActivityIndicator size="large" color={'white'} />}
+          <FastImage
+            source={{
+              uri: characterImageUrl,
+              priority: FastImage.priority.high,
+            }}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+            resizeMode={FastImage.resizeMode.contain}
+            onLoadEnd={() => {
+              setLoading(false);
+            }}
+          />
         </S.imgWrap>
         <Font type={'TITLE3_SEMIBOLD'}>{nickname}</Font>
       </S.popupWrap>

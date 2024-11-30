@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Image,
-  ImageBackground,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { Image, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilState } from 'recoil';
@@ -31,14 +26,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
   const [initialSetting, setInitialSetting] =
     useRecoilState(RecoilInitialSetting);
 
-  const handleConfirm = () => {
-    return navigation.navigate('MissionRepair', {
-      type: 'INITIAL_SETTING',
-    });
-  };
-
   const handleNext = async () => {
-    // getInitialCharacter
     const initialCharacter = await userApis.getInitialCharacter();
     const { id } = initialCharacter;
 
@@ -52,11 +40,17 @@ export const PageTutorialSettingCharacter: React.FC = () => {
         },
       });
     }
+
+    if (step === 3) {
+      navigation.navigate('TutorialSettingNoti');
+    }
+
     setStep((prev) => prev + 1);
   };
 
   useEffect(() => {
-    if (step !== 1) return;
+    // step이 1이거나 3일때만 타이머 실행
+    if (step !== 1 && step !== 3) return;
     const subscription = interval(3000)
       .pipe(take(1))
       .subscribe(() => {
@@ -108,7 +102,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
             <Font textAlign="left" type={'TITLE1_BOLD'} color={'WHITE'} mt={76}>
               {'두근두근,\n럭키즈가 탄생하고 있어요!'}
             </Font>
-            <L.Row h={'100%'} flex-1 items="center">
+            <L.Row mt={108} items="center">
               <LottieView
                 source={require(
                   `../../../assets/lotties/tutorial-character-change.json`,
@@ -239,20 +233,6 @@ export const PageTutorialSettingCharacter: React.FC = () => {
               type={'action'}
               text={'럭키즈를 만나볼래요'}
               onPress={handleNext}
-              sizing="stretch"
-              textColor="BLACK"
-              bgColor={'LUCK_GREEN'}
-            />
-          </L.Row>
-        </L.Absolute>
-      )}
-      {step === 3 && (
-        <L.Absolute b={bottom} w={SCREEN_WIDTH}>
-          <L.Row ph={DEFAULT_MARGIN}>
-            <Button
-              type={'action'}
-              text={'습관을 세팅할게요'}
-              onPress={handleConfirm}
               sizing="stretch"
               textColor="BLACK"
               bgColor={'LUCK_GREEN'}

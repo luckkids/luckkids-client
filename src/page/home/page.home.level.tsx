@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { ActivityIndicator, Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import LottieView from 'lottie-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import FastImage from 'react-native-fast-image';
 
 const levelUpMotion1 = require('assets/lotties/levelup-motion-1.json');
 
@@ -21,6 +22,7 @@ export const PageHomeLevel: React.FC = () => {
   const [step, setStep] = useState(1);
   const { bottom } = useSafeAreaInsets();
   const navigation = useNavigationService();
+  const [loading, setLoading] = useState(true);
 
   const handleNext = () => {
     navigation.navigate('Home', {});
@@ -68,17 +70,31 @@ export const PageHomeLevel: React.FC = () => {
           </L.Row>
         </L.Col>
       ) : (
-        <L.Col items="center" pt={42} h="100%">
+        <L.Col items="center" pt={42}>
           {/* step 2 : 레벨업 결과 */}
-          <Image
-            source={{
-              uri: getCharacterImage(type, level, 'normal'),
-            }}
-            style={{
-              width: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
-              height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
-            }}
-          />
+          <L.Row
+            w={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
+            h={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
+          >
+            {loading && (
+              <L.Row w={'100%'} h={'100%'} justify="center" items="center">
+                <ActivityIndicator size="large" color={'white'} />
+              </L.Row>
+            )}
+            <FastImage
+              source={{
+                uri: getCharacterImage(type, level, 'normal'),
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              resizeMode={FastImage.resizeMode.contain}
+              onLoadEnd={() => {
+                setLoading(false);
+              }}
+            />
+          </L.Row>
           <Font type="TITLE2_BOLD" color="WHITE" mt={30}>
             {levelup_contents[level - 1].title}
           </Font>

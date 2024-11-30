@@ -1,6 +1,7 @@
-import React from 'react';
-import { Image, TouchableWithoutFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import FastImage from 'react-native-fast-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L, SvgIcon } from '@design-system';
@@ -9,11 +10,11 @@ import { getCharacterImage } from '@utils';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
-import FastImage from 'react-native-fast-image';
 
 export const PageHomeProfile: React.FC = () => {
   const navigation = useNavigationService();
   const { bottom } = useSafeAreaInsets();
+  const [loading, setLoading] = useState(true);
 
   const { data: me } = useMe();
   const { luckPhrase, nickname } = me || {};
@@ -87,7 +88,13 @@ export const PageHomeProfile: React.FC = () => {
           </L.Row>
         </TouchableWithoutFeedback>
         {/* 캐릭터 */}
-        <L.Row w="100%" justify="center">
+        <L.Row
+          justify="center"
+          items="center"
+          w={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
+          h={SCREEN_WIDTH - 2 * CHARACTER_MARGIN}
+        >
+          {loading && <ActivityIndicator size="large" color={'white'} />}
           {inProgressCharacter && (
             <FastImage
               source={{
@@ -95,10 +102,15 @@ export const PageHomeProfile: React.FC = () => {
                   inProgressCharacter?.characterType,
                   inProgressCharacter?.level,
                 ),
+                priority: FastImage.priority.high,
               }}
               style={{
                 width: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
                 height: SCREEN_WIDTH - 2 * CHARACTER_MARGIN,
+              }}
+              resizeMode={FastImage.resizeMode.contain}
+              onLoadEnd={() => {
+                setLoading(false);
               }}
             />
           )}

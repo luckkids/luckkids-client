@@ -73,38 +73,7 @@ export const PageLoginId: React.FC = () => {
 
     Keyboard.dismiss();
 
-    const rememberMe = await getCurrentRememberMe();
-
-    // rememberMe 정보가 없으면 자동 로그인 bottom sheet 띄우기
-    if (!rememberMe || rememberMe?.snsType !== 'NORMAL') {
-      BottomSheet.show({
-        component: (
-          <LoginRemember
-            onClose={() => {
-              handleAfterLogin(settingStatus);
-              setRememberMe({
-                isEnabled: false,
-                snsType: 'NORMAL',
-                email: loginInfo.email,
-                credential: loginInfo.password,
-              });
-            }}
-            onRemember={() => {
-              handleAfterLogin(settingStatus);
-              setRememberMe({
-                isEnabled: true,
-                snsType: 'NORMAL',
-                email: loginInfo.email,
-                credential: loginInfo.password,
-              });
-            }}
-          />
-        ),
-      });
-      // rememberMe 정보가 있으면 바로 홈으로 이동
-    } else {
-      return handleAfterLogin(settingStatus);
-    }
+    handleAfterLogin(settingStatus);
   };
 
   const onFailCallback = () => {

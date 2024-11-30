@@ -90,7 +90,7 @@ export const Mission: React.FC = () => {
             </L.Row>
           )}
           <FloatingButton
-            onPress={() => navigation.push('MissionRepair', {})}
+            onPress={() => navigation.push('MissionRepair')}
             containerStyle={{
               width: 36,
               height: 36,

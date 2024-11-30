@@ -9,8 +9,5 @@ export const useSettingNotices = () => {
       const res = await settingApis.getNotices();
       return res.data;
     },
-    {
-      select: (response) => response,
-    },
   );
 };

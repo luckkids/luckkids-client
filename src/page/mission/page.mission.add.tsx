@@ -111,7 +111,7 @@ export const PageMissionAdd: React.FC = () => {
         ph: 20,
         backgroundColor: '#444444',
       });
-      navigation.navigate('MissionRepair', {});
+      navigation.navigate('MissionRepair');
       refetchMissionData();
     }
   };

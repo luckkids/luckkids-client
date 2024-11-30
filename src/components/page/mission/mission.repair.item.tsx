@@ -30,7 +30,6 @@ interface IProps extends IMissionDataItem {
   isSelected: boolean;
   onSelect?: (isSelected: boolean) => void;
   showAlarmSettingTooltip?: boolean;
-  enableAlertTimeEdit?: boolean;
   onTooltipDismiss?: () => void; // Add new prop for tooltip dismiss callback
 }
 
@@ -38,7 +37,6 @@ export const MissionRepairItem: React.FC<IProps> = ({
   isSelected,
   onSelect,
   showAlarmSettingTooltip = false,
-  enableAlertTimeEdit = true,
   onTooltipDismiss,
   ...item
 }) => {
@@ -214,35 +212,22 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 b={alertTextLayout.height}
                 l={alertTextLayout.width}
                 style={{
-                  transform: [{ translateX: -50 }],
+                  transform: [{ translateX: -100 }],
                 }}
               >
                 <Tooltip
                   text={'알림 시간을 설정할 수 있어요'}
                   bgColor="LUCK_GREEN"
                   opacity={1}
+                  arrowPosition={'right'}
+                  arrowOffset={-50}
                   textColor="BLACK"
                 />
               </L.Absolute>
             </TouchableWithoutFeedback>
           )}
-
           {/* 알림 */}
-          {enableAlertTimeEdit ? (
-            <TouchableWithoutFeedback onPress={handlePressAlertTime}>
-              <L.Col ml={13}>
-                <Font
-                  type={'FOOTNOTE_REGULAR'}
-                  color={'GREY2'}
-                  style={{
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  {getAlertText()}
-                </Font>
-              </L.Col>
-            </TouchableWithoutFeedback>
-          ) : (
+          <TouchableWithoutFeedback onPress={handlePressAlertTime}>
             <L.Col ml={13}>
               <Font
                 type={'FOOTNOTE_REGULAR'}
@@ -254,7 +239,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
                 {getAlertText()}
               </Font>
             </L.Col>
-          )}
+          </TouchableWithoutFeedback>
         </L.Row>
 
         <TouchableWithoutFeedback onPress={handleToggleSelect}>
