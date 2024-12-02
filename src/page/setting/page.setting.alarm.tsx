@@ -35,7 +35,7 @@ const S = {
   itemContainer: styled.View({}),
 };
 
-const luckAlarmSound = new Sound('noti_luckluck.wav', Sound.MAIN_BUNDLE);
+const luckAlarmSound = new Sound('noti_drop.wav', Sound.MAIN_BUNDLE);
 
 export const PageSettingAlarm: React.FC = () => {
   const { hasPermission } = useFirebaseMessage();
