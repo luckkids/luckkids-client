@@ -20,54 +20,6 @@ const Tooltip: React.FC<TooltipProps> = ({
 }) => {
   if (!text) return null;
 
-  const getArrowStyle = () => {
-    const baseStyle = {
-      width: 0,
-      height: 0,
-      backgroundColor: 'transparent',
-      borderStyle: 'solid',
-      borderLeftWidth: 6,
-      borderRightWidth: 6,
-      borderTopWidth: 10,
-      borderLeftColor: 'transparent',
-      borderRightColor: 'transparent',
-      borderTopColor: Colors[bgColor],
-      opacity,
-    };
-
-    const positionStyle = {
-      center: {},
-      left: {
-        marginLeft: arrowOffset,
-      },
-      right: {
-        marginRight: -arrowOffset,
-      },
-    };
-
-    return {
-      ...baseStyle,
-      ...positionStyle[arrowPosition],
-    };
-  };
-
-  const getArrowContainerStyle = () => {
-    const baseStyle = {
-      width: '100%',
-    };
-
-    const positionStyle = {
-      center: { justifyContent: 'center' },
-      left: { justifyContent: 'flex-start' },
-      right: { justifyContent: 'flex-end' },
-    };
-
-    return {
-      ...baseStyle,
-      ...positionStyle[arrowPosition],
-    };
-  };
-
   return (
     <L.Col items="center">
       {/* container */}
@@ -107,15 +59,16 @@ const Tooltip: React.FC<TooltipProps> = ({
             height: 0,
             backgroundColor: 'transparent',
             borderStyle: 'solid',
-            borderLeftWidth: 6,
-            borderRightWidth: 6,
-            borderTopWidth: 10,
+            borderLeftWidth: 8, // 화살표 너비 증가
+            borderRightWidth: 8, // 화살표 너비 증가
+            borderTopWidth: 8, // 화살표 높이 감소하여 덜 뾰족하게
             borderLeftColor: 'transparent',
             borderRightColor: 'transparent',
             borderTopColor: Colors[bgColor],
             opacity,
             marginLeft: arrowPosition === 'left' ? arrowOffset : 0,
             marginRight: arrowPosition === 'right' ? -arrowOffset : 0,
+            marginTop: -1, // 말풍선과 화살표 사이의 간격 조정
           }}
         />
       </L.Row>
