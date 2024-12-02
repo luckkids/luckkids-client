@@ -21,6 +21,7 @@
 		2B81D42C2C71DC7800686F89 /* libreact-native-branch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B81D42B2C71DC7800686F89 /* libreact-native-branch.a */; };
 		2DFE8DA9824246B285CB6D61 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 36A122E7D5F8422AB0D89BB5 /* Pretendard-Regular.otf */; };
 		32E74D8427914262B8234823 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = D26EB5F29FD14B05A0F09AE1 /* Pretendard-Black.otf */; };
+		33B2F3762CFDE955001DC074 /* noti_drop.wav in Resources */ = {isa = PBXBuildFile; fileRef = 33B2F3752CFDE955001DC074 /* noti_drop.wav */; };
 		550A9591632F02408763B8C4 /* libPods-LuckKids.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7255EA4AB5ACE5166B98BE92 /* libPods-LuckKids.a */; };
 		8CC6B98EF5399277FDB8B914 /* libPods-LuckKids-LuckKidsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74C4AD668F3BA422C9B803A7 /* libPods-LuckKids-LuckKidsTests.a */; };
 		AE9FA95167B349B68CD0139F /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = EF55EE1D0CAE418DA8676BBE /* Pretendard-Medium.otf */; };
@@ -71,6 +72,7 @@
 		2B1B976C2C14C97300156BD1 /* RNShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNShare.h; path = "../node_modules/react-native-share/ios/RNShare.h"; sourceTree = "<group>"; };
 		2B81D42B2C71DC7800686F89 /* libreact-native-branch.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-branch.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		32FD6BBAC1CE53FAE3EFDFF1 /* Pods-LuckKids.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LuckKids.staging.xcconfig"; path = "Target Support Files/Pods-LuckKids/Pods-LuckKids.staging.xcconfig"; sourceTree = "<group>"; };
+		33B2F3752CFDE955001DC074 /* noti_drop.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = noti_drop.wav; sourceTree = "<group>"; };
 		36A122E7D5F8422AB0D89BB5 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.otf"; path = "../assets/fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		7255EA4AB5ACE5166B98BE92 /* libPods-LuckKids.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LuckKids.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		74C4AD668F3BA422C9B803A7 /* libPods-LuckKids-LuckKidsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LuckKids-LuckKidsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -207,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				0769B8A82B7631CA00EE3AF6 /* noti_luckluck.wav */,
+				33B2F3752CFDE955001DC074 /* noti_drop.wav */,
 				D26EB5F29FD14B05A0F09AE1 /* Pretendard-Black.otf */,
 				C090505A2B3748329B6C9841 /* Pretendard-Bold.otf */,
 				EF55EE1D0CAE418DA8676BBE /* Pretendard-Medium.otf */,
@@ -317,6 +320,7 @@
 				0789C3D52AF072B100285C72 /* Images.xcassets in Resources */,
 				0769B8A92B7631CA00EE3AF6 /* noti_luckluck.wav in Resources */,
 				32E74D8427914262B8234823 /* Pretendard-Black.otf in Resources */,
+				33B2F3762CFDE955001DC074 /* noti_drop.wav in Resources */,
 				15272065431E438B9D45E64E /* Pretendard-Bold.otf in Resources */,
 				AE9FA95167B349B68CD0139F /* Pretendard-Medium.otf in Resources */,
 				07A447FB2B5E575400C2AC6B /* GoogleService-Info.plist in Resources */,
