@@ -41,16 +41,8 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
         return navigation.navigate('WebView', {
           url: String(alertDestinationInfo),
         });
-      case 'FRIEND_CODE': {
-        // 친구 팝업 띄우기
-        return AlertPopup.show({
-          title: alertDescription,
-          body: '친구 초대에 응하면 가든 목록에 추가됩니다.',
-          yesText: '친구하기',
-          noText: '거절하기',
-          onPressYes: () => {},
-        });
-      }
+      case 'FRIEND_CODE':
+        return;
     }
   };
 
