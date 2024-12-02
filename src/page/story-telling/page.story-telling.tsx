@@ -45,6 +45,13 @@ export const PageStoryTelling: React.FC = () => {
     setStep((prev) => Math.min(STORY_TELLING_CONTENTS.length, prev + 1));
   };
 
+  const handlePressCTA = () => {
+    if (step === STORY_TELLING_CONTENTS.length) {
+      return handlePressStart();
+    }
+    return handleNextStep();
+  };
+
   useEffect(() => {
     if (!autoPlayEnabled) return;
 
@@ -86,6 +93,7 @@ export const PageStoryTelling: React.FC = () => {
                   height: 300,
                 }}
                 autoPlay
+                renderMode="HARDWARE"
               />
             </L.Row>
           )}
@@ -103,7 +111,7 @@ export const PageStoryTelling: React.FC = () => {
           text={
             step === STORY_TELLING_CONTENTS.length ? '시작하기' : '다음으로'
           }
-          onPress={handlePressStart}
+          onPress={handlePressCTA}
           sizing="stretch"
           bgColor={'LUCK_GREEN'}
           textColor={'BLACK'}
