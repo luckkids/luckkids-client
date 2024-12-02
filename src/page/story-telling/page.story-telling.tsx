@@ -100,7 +100,9 @@ export const PageStoryTelling: React.FC = () => {
         </L.Absolute>
         <Button
           type={'action'}
-          text={'시작하기'}
+          text={
+            step === STORY_TELLING_CONTENTS.length ? '시작하기' : '다음으로'
+          }
           onPress={handlePressStart}
           sizing="stretch"
           bgColor={'LUCK_GREEN'}
