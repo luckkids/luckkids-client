@@ -6,9 +6,7 @@ import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
 import { SettingStatus, SocialType } from '@types-index';
 import { SocialTypeValues } from '@apis/auth';
-import LoginRemember from '@components/page/login/remember';
 import { FrameLayout } from '@frame/frame.layout';
-import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
@@ -17,6 +15,8 @@ import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import Logger from '@libs/LoggerService';
 import { RecoilDevice } from '@recoil/recoil.device';
 
 export const PageLogin: React.FC = () => {
@@ -96,6 +96,18 @@ export const PageLogin: React.FC = () => {
       }
     }
   };
+
+  useAsyncEffect(async () => {
+    // NOTE: 로그인 화면에서 rememberMe 정보 로깅
+    const rememberMe = await getCurrentRememberMe();
+
+    Logger.info('Arrived Login Page', {
+      email: rememberMe?.email,
+      snsType: rememberMe?.snsType,
+      isEnabled: rememberMe?.isEnabled,
+      credential: rememberMe?.credential,
+    });
+  }, []);
 
   return (
     <FrameLayout>

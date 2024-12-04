@@ -27,6 +27,7 @@ import useLocalMessage from '@hooks/notification/useLocalMessage';
 import { RememberMeType, StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import Logger from '@libs/LoggerService';
 import NavigationService from '@libs/NavigationService';
 import { RecoilDevice } from '@recoil/recoil.device';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
@@ -90,6 +91,11 @@ const RootNavigator = () => {
   const handleRememberMeLogin = async (rememberMe: RememberMeType) => {
     const pushKey = await getToken();
 
+    Logger.info('handleRememberMeLogin', {
+      deviceId: deviceId,
+      rememberMe: rememberMe,
+    });
+
     if (!deviceId) return;
     const res =
       rememberMe.snsType === 'NORMAL'
@@ -105,6 +111,10 @@ const RootNavigator = () => {
             pushKey,
             deviceId,
           });
+
+    Logger.info('handleRememberMeLogin result', {
+      res,
+    });
 
     if (!res) {
       return setInitialRoute({
@@ -180,6 +190,13 @@ const RootNavigator = () => {
     if (isLoadingRememberMe || isLoadingStoryTelling) return;
     const currentRememberMe = await getCurrentRememberMe();
 
+    Logger.info('Arrived App.tsx & checking currentRememberMe', {
+      email: currentRememberMe?.email,
+      snsType: currentRememberMe?.snsType,
+      isEnabled: currentRememberMe?.isEnabled,
+      credential: currentRememberMe?.credential,
+    });
+
     if (!storyTelling || !storyTelling.viewed) {
       setInitialRoute({
         screenName: 'StoryTelling',
@@ -187,6 +204,13 @@ const RootNavigator = () => {
       });
     } else if (currentRememberMe && !!currentRememberMe.isEnabled) {
       console.log('[currentRemermberMe]', currentRememberMe);
+
+      Logger.info('Arrived App.tsx & trying to login with rememberMe', {
+        email: currentRememberMe?.email,
+        snsType: currentRememberMe?.snsType,
+        isEnabled: currentRememberMe?.isEnabled,
+        credential: currentRememberMe?.credential,
+      });
 
       await handleRememberMeLogin({
         ...currentRememberMe,
