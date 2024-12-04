@@ -7,6 +7,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as Sentry from '@sentry/react-native';
 import LottieView from 'lottie-react-native';
 import CodePush from 'react-native-code-push';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -278,4 +279,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CodePush(codePushOptions)(App);
+export default Sentry.wrap(CodePush(codePushOptions)(App));
