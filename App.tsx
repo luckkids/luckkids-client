@@ -112,6 +112,7 @@ const RootNavigator = () => {
             deviceId,
           });
 
+    console.log('handleRememberMeLogin result', res);
     Logger.info('handleRememberMeLogin result', {
       res,
     });
@@ -122,6 +123,8 @@ const RootNavigator = () => {
         screenParams: undefined,
       });
     } else {
+      console.log('typeof res', typeof res);
+
       if (typeof res === 'string') return;
       return setInitialRoute({
         screenName: res.settingStatus === 'COMPLETE' ? 'Home' : 'TutorialStart',
