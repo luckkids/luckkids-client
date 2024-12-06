@@ -184,17 +184,21 @@ const useAuth = () => {
         if (newAccessToken) {
           const currentRememberMe = await getCurrentRememberMe();
 
-          await oauthLogin({
+          const res = await oauthLogin({
             ...loginInfo,
             token: newAccessToken,
           });
 
-          if (currentRememberMe?.isEnabled) {
-            await setRememberMe({
-              ...currentRememberMe,
-              credential: newAccessToken,
-            });
+          if (res) {
+            if (currentRememberMe?.isEnabled) {
+              await setRememberMe({
+                ...currentRememberMe,
+                credential: newAccessToken,
+              });
+            }
           }
+
+          return res;
         }
       }
 
