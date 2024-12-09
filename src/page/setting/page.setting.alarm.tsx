@@ -116,7 +116,7 @@ export const PageSettingAlarm: React.FC = () => {
             luckAlarmSound.setCategory('Playback');
             luckAlarmSound.play();
           }}
-          text={'럭럭'}
+          text={'Lucky Drop'}
           textColor={'LUCK_GREEN'}
         />
       </L.Row>
