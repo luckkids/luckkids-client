@@ -1,6 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font } from '@design-system';
 import { getCharacterImage } from '@utils';
@@ -46,22 +45,19 @@ export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
     'normal',
   );
 
-
   return (
     <S.Container>
       <TouchableWithoutFeedback onPress={onPress}>
         <S.Wrapper>
-          <FastImage
+          <Image
             source={{
-              uri: characterImageUrl,
-              priority: FastImage.priority.normal,
+              uri: `${characterImageUrl}`,
             }}
             style={{
               width: '100%',
               height: '100%',
               opacity: isSelf || item !== null ? 1 : 0.3,
             }}
-            resizeMode={FastImage.resizeMode.contain}
           />
         </S.Wrapper>
       </TouchableWithoutFeedback>

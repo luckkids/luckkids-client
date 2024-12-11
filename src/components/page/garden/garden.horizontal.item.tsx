@@ -1,6 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Image, TouchableWithoutFeedback } from 'react-native';
 import styled from 'styled-components/native';
 import { Colors, Font, L, SvgIcon } from '@design-system';
 import { getCharacterImage } from '@utils';
@@ -11,7 +10,7 @@ const S = {
     {
       width: '100%',
       paddingHorizontal: 25,
-      paddingRight:22
+      paddingRight: 22,
     },
     (props: { isSelf?: boolean }) => {
       return {
@@ -65,12 +64,8 @@ export const GardenHorizontalItem: React.FC<IProps> = ({
         <L.Row justify={'space-between'} items={'center'}>
           <L.Row>
             <S.Wrapper>
-              <FastImage
-                source={
-                  isSelf
-                    ? { uri: characterImageUrl }
-                    : require('assets/images/garden/garden-character-disabled.png')
-                }
+              <Image
+                source={{ uri: characterImageUrl }}
                 style={{
                   width: '100%',
                   height: '100%',
