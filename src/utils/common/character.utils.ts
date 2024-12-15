@@ -5,13 +5,15 @@ import { CharacterType } from '@types-common/character.types';
 export const getCharacterImage = (
   characterType: CharacterType | null,
   level: number | null,
-  type?: 'normal' | 'back' | 'wood',
+  type?: 'normal' | 'back' | 'wood' | 'garden',
 ) => {
   let folderPath = 'characters';
   if (type === 'back') {
     folderPath = 'characters-with-back';
   } else if (type === 'wood') {
     folderPath = 'characters-with-wood';
+  } else if (type === 'garden') {
+    folderPath = 'characters-garden';
   }
 
   if (!characterType || !level) {

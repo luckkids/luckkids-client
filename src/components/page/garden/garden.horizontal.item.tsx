@@ -55,7 +55,7 @@ export const GardenHorizontalItem: React.FC<IProps> = ({
   const characterImageUrl = getCharacterImage(
     !item ? null : item.characterType,
     !item ? null : item.level,
-    'normal',
+    'garden',
   );
 
   return (

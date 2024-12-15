@@ -42,7 +42,7 @@ export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
   const characterImageUrl = getCharacterImage(
     !item ? null : item.characterType,
     !item ? null : item.level,
-    'normal',
+    'garden',
   );
 
   return (
