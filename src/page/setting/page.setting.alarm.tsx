@@ -35,7 +35,17 @@ const S = {
   itemContainer: styled.View({}),
 };
 
-const luckAlarmSound = new Sound('noti_drop.wav', Sound.MAIN_BUNDLE);
+const luckAlarmSound = new Sound(
+  'noti_drop.wav',
+  Sound.MAIN_BUNDLE,
+  (error) => {
+    if (error) {
+      console.log('failed to load sound', error);
+      return;
+    }
+    luckAlarmSound.setCategory('Playback');
+  },
+);
 
 export const PageSettingAlarm: React.FC = () => {
   const { hasPermission } = useFirebaseMessage();
@@ -113,8 +123,9 @@ export const PageSettingAlarm: React.FC = () => {
         <Font type={'BODY_REGULAR'}>알림음</Font>
         <ButtonText
           onPress={() => {
-            luckAlarmSound.setCategory('Playback');
-            luckAlarmSound.play();
+            luckAlarmSound.stop(() => {
+              luckAlarmSound.play();
+            });
           }}
           text={'Lucky Drop'}
           textColor={'LUCK_GREEN'}
