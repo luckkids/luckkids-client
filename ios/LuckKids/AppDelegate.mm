@@ -29,7 +29,9 @@
   [FIRApp configure];
   [application registerForRemoteNotifications];
   [RNBranch initSessionWithLaunchOptions:launchOptions isReferrable:YES];
-  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+  [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback 
+                                 withOptions:AVAudioSessionCategoryOptionMixWithOthers 
+                                     error:nil];
   self.moduleName = @"LuckKids";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
