@@ -123,7 +123,9 @@ export const PageSettingAlarm: React.FC = () => {
         <Font type={'BODY_REGULAR'}>알림음</Font>
         <ButtonText
           onPress={() => {
-            luckAlarmSound.play();
+            luckAlarmSound.stop(() => {
+              luckAlarmSound.play();
+            });
           }}
           text={'Lucky Drop'}
           textColor={'LUCK_GREEN'}
