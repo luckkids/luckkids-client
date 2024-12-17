@@ -21,7 +21,7 @@ export const PageSettingNotice: React.FC = () => {
 
   return (
     <FrameLayout NavBar={<StackNavBar title={'공지사항'} useBackButton />}>
-      {notices.map((item, i) => {
+      {notices?.map((item, i) => {
         return (
           <TouchableWithoutFeedback
             onPress={() => handlePressNotice(item)}
