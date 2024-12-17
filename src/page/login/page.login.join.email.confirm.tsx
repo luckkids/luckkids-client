@@ -23,12 +23,14 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
   const resetJoinInfo = useResetRecoilState(RecoilJoinInfo);
   const [emailConfirmed, setEmailConfirmed] = useState<boolean>(false);
   const { bottom } = useSafeAreaInsets();
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const handlePressBack = () => {
     navigation.goBack();
   };
 
   const handleChangeEmail = () => {
+    setIsNavigating(true);
     resetJoinInfo();
     navigation.navigate('LoginJoin', {
       step: 'Id',
@@ -36,6 +38,7 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
   };
 
   const handlePressConfirm = () => {
+    setIsNavigating(true);
     navigation.push('LoginJoin', {
       step: 'Password',
     });
@@ -61,12 +64,16 @@ export const PageLoginJoinEmailConfirm: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if (isNavigating) {
+      return;
+    }
+
     const subscription = interval(5000).subscribe(() => {
       handleConfirmEmail();
     });
 
     return () => subscription.unsubscribe();
-  }, [handleConfirmEmail]);
+  }, [handleConfirmEmail, isNavigating]);
 
   return (
     <FrameLayout>
