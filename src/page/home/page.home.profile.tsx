@@ -118,8 +118,8 @@ export const PageHomeProfile: React.FC = () => {
 
         {/* 이름 수정 */}
         <TouchableWithoutFeedback onPress={handleEditName}>
-          <L.Row mt={36} items="center">
-            <Font type={'TITLE1_BOLD'} color={'WHITE'} mr={9}>
+          <L.Row mt={36} items="center" mh={20}>
+            <Font type={'TITLE1_BOLD'} color={'WHITE'} mr={9} numberOfLines={1}>
               {nickname}
             </Font>
             <SvgIcon name={'icon_edit'} size={16} />

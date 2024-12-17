@@ -26,6 +26,10 @@ export const LoginJoinPass: React.FC<IProps> = ({ onSuccess }) => {
   const [isError, setIsError] = useState(false);
 
   const handlePressConfirm = () => {
+    if (!password) {
+      setIsError(true);
+      return;
+    }
     if (isError) return;
     onSuccess();
   };

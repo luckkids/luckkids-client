@@ -39,7 +39,6 @@ export const PageSettingProfile: React.FC = () => {
           <Font type={'HEADLINE_SEMIBOLD'}>프로필 수정하기</Font>
           <ButtonText
             onPress={() => {
-              console.log('texttext');
               onFetch();
             }}
             fontType={'HEADLINE_SEMIBOLD'}
@@ -54,6 +53,7 @@ export const PageSettingProfile: React.FC = () => {
           text={text}
           onChangeText={setText}
           placeholder="프로필"
+          numberOfLines={1}
         />
       </L.Row>
     </FrameLayout>
