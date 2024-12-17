@@ -82,7 +82,6 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
           autoCorrect={false}
           spellCheck={false}
           value={text}
-          numberOfLines={1}
           selectionColor={theme.LUCK_GREEN}
           placeholderTextColor={theme.GREY1}
           {...textInputProps}

@@ -8,7 +8,6 @@ export const defaultStyles = StyleSheet.create({
   },
   textInput: {
     width: '100%',
-    height: 52,
     flex: 1,
   },
 });

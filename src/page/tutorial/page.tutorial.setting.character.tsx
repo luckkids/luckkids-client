@@ -143,6 +143,7 @@ export const PageTutorialSettingCharacter: React.FC = () => {
                 placeholder="행운럭키"
                 backgroundColor="rgba(128, 244, 102, 0.2)"
                 outline={nickname ? 'LUCK_GREEN' : undefined}
+                maxLength={20}
               />
             </L.Row>
           </>
