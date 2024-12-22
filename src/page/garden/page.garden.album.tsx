@@ -12,6 +12,7 @@ const S = {
 
 export const PageGardenAlbum: React.FC = () => {
   const navigation = useNavigationService();
+
   return (
     <FrameLayout>
       <S.Text>Luck Kids(로그인메인)</S.Text>
