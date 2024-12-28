@@ -17,6 +17,8 @@ setup_permissions([
   'PhotoLibraryAddOnly',
 ])
 
+$RNFirebaseAnalyticsWithoutAdIdSupport = true 
+
 flipper_config = FlipperConfiguration.disabled
 
 linkage = ENV['USE_FRAMEWORKS']

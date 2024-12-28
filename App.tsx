@@ -26,7 +26,9 @@ import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import useLocalMessage from '@hooks/notification/useLocalMessage';
 import { RememberMeType, StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import useAppStateEffect from '@hooks/useAppStateEffect';
 import useAsyncEffect from '@hooks/useAsyncEffect';
+import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import Logger from '@libs/LoggerService';
 import NavigationService from '@libs/NavigationService';
 import { RecoilDevice } from '@recoil/recoil.device';
@@ -55,18 +57,38 @@ const RootNavigator = () => {
   const [isNavigationReady, setIsNavigationReady] = useState(false);
 
   const { getToken } = useFirebaseMessage();
+  const { logScreenView, logEvent } = useGoogleAnalytics();
+  const screenEntryTime = useRef<number | null>(null);
 
   const onStateChange = (state: NavigationState | undefined) => {
     if (!state) return;
 
     const routeName = navigationRef.current?.getCurrentRoute()?.name || null;
 
+    // 이전 화면의 조회 시간과 체류 시간을 함께 기록
+    if (screenName.current && screenEntryTime.current) {
+      const timeSpent = Date.now() - screenEntryTime.current;
+      logEvent({
+        eventName: 'VIEW_PAGE',
+        params: {
+          screen_name: screenName.current,
+          duration: timeSpent,
+        },
+      });
+    }
+
+    // 새로운 화면 진입 시간 기록
+    screenEntryTime.current = Date.now();
+    screenName.current = routeName;
+
+    if (routeName) {
+      logScreenView(routeName);
+    }
+
     NavigationService.setScreenContext({
       prevScreenName: screenName.current || 'never',
       currentScreenName: routeName || 'never',
     });
-
-    screenName.current = routeName;
   };
 
   const { initialize: initializeFirebaseMessage, requestPermissionIfNot } =
@@ -237,6 +259,32 @@ const RootNavigator = () => {
     await requestPermissionIfNot();
   }, []);
 
+  useAppStateEffect((event) => {
+    if (event === 'background' || event === 'inactive') {
+      if (screenName.current && screenEntryTime.current) {
+        const timeSpent = Date.now() - screenEntryTime.current;
+        // 현재 화면의 조회와 체류 시간 기록
+        logEvent({
+          eventName: 'VIEW_PAGE',
+          params: {
+            screen_name: screenName.current,
+            duration: timeSpent,
+          },
+        });
+        // 앱 종료 이벤트 기록
+        logEvent({
+          eventName: 'EXIT_APP',
+          params: {
+            screen_name: screenName.current,
+          },
+        });
+      }
+    } else if (event === 'active') {
+      // 앱이 다시 활성화될 때 시간 리셋
+      screenEntryTime.current = Date.now();
+    }
+  }, []);
+
   if (!isNavigationReady) {
     return (
       <View style={styles.lottieContainer}>
@@ -278,19 +326,21 @@ const RootNavigator = () => {
 
 const WrappedRootNavigator = withGlobalComponents(RootNavigator);
 
-const App = () => (
-  <GestureHandlerRootView style={{ flex: 1 }}>
-    <QueryClientProvider>
-      <SafeAreaProvider>
-        <ThemeProvider theme={Colors}>
-          <RecoilRoot>
-            <WrappedRootNavigator />
-          </RecoilRoot>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </QueryClientProvider>
-  </GestureHandlerRootView>
-);
+const App = () => {
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider>
+        <SafeAreaProvider>
+          <ThemeProvider theme={Colors}>
+            <RecoilRoot>
+              <WrappedRootNavigator />
+            </RecoilRoot>
+          </ThemeProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
+  );
+};
 
 const styles = StyleSheet.create({
   lottieContainer: {

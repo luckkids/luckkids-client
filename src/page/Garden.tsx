@@ -20,6 +20,7 @@ import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { useFetch } from '@hooks/useFetch';
+import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import { IGarden, IGardenItem } from '@types-common/page.types';
 
 const S = {
@@ -40,12 +41,6 @@ const S = {
   ),
 };
 
-const onInviteHandler = () => {
-  BottomSheet.show({
-    component: <GardenBottomSheet />,
-  });
-};
-
 export const Garden: React.FC = () => {
   const navigation = useNavigationService();
   const { params } = useNavigationRoute('Garden');
@@ -61,6 +56,8 @@ export const Garden: React.FC = () => {
       navigation.goBack();
     },
   });
+
+  const { logEvent } = useGoogleAnalytics();
 
   const friendData: Array<IGardenItem> | undefined = data?.friendList.content;
 
@@ -96,6 +93,16 @@ export const Garden: React.FC = () => {
     /* return navigation.navigate('GardenFriendProfile', {
       friendId,
     });*/
+  };
+
+  const onInviteHandler = () => {
+    BottomSheet.show({
+      component: <GardenBottomSheet />,
+    });
+
+    logEvent({
+      eventName: 'INVITE_FRIEND',
+    });
   };
 
   useEffect(() => {
