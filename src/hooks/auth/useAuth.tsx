@@ -17,6 +17,7 @@ import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import Logger from '@libs/LoggerService';
 import { RecoilLoginInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
+import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 
 const useAuth = () => {
   const {
@@ -29,6 +30,7 @@ const useAuth = () => {
   const setOauthLoginInfo = useSetRecoilState(RecoilOauthLoginInfo);
   const { setValue: setRememberMe, getCurrentValue: getCurrentRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const { setUserProperty } = useGoogleAnalytics();
 
   const login = async (
     loginInfo: LoginRequest,
@@ -56,6 +58,8 @@ const useAuth = () => {
         email: loginInfo.email,
         deviceId: loginInfo.deviceId,
       });
+
+      await setUserProperty('email', loginInfo.email);
 
       const rememberMe = await getCurrentRememberMe();
 
