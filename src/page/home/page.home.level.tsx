@@ -95,7 +95,7 @@ export const PageHomeLevel: React.FC = () => {
               }}
             />
           </L.Row>
-          <Font type="TITLE2_BOLD" color="WHITE" mt={30}>
+          <Font type="TITLE2_BOLD" color="WHITE" mt={30} textAlign="center">
             {levelup_contents[level - 1].title}
           </Font>
           <Font type="BODY_REGULAR" color="GREY0" mt={16} textAlign="center">
