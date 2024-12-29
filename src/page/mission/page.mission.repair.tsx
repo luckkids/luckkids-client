@@ -13,6 +13,7 @@ import LoadingIndicator from '@global-components/common/LoadingIndicator/Loading
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import { IMissionData, IMissionDataItem } from '@types-common/page.types';
 
 export const PageMissionRepair = () => {
@@ -43,6 +44,8 @@ export const PageMissionRepair = () => {
     refetch: refetchMissionOutcomeData,
     isLoading: isLoadingMissionOutcomeList,
   } = useMissionOutcomeList();
+
+  const { logEvent } = useGoogleAnalytics();
 
   const allCategories = Array.from(
     new Set([
@@ -183,7 +186,6 @@ export const PageMissionRepair = () => {
     mission: IMissionDataItem,
     isSelected: boolean,
   ) => {
-    // 일반 미션 수정 페이지인 경우는 바로 변경 사항 수행
     if (isSelected) {
       // 새로 추가하는 미션일 경우
 
@@ -207,6 +209,14 @@ export const PageMissionRepair = () => {
             },
           });
         }
+
+        logEvent({
+          eventName: 'ADD_LUCKKIDS_MISSION',
+          params: {
+            category: mission.missionType,
+            name: mission.missionDescription,
+          },
+        });
       } else {
         // 유저가 직접 추가한 미션
         await missionApis.editMission({

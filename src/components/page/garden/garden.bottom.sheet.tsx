@@ -7,6 +7,7 @@ import { useMe } from '@queries';
 import { createAndCopyBranchLink } from '@utils';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import { useFetch } from '@hooks/useFetch';
+import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 
 const S = {
   popupWrap: styled.View({
@@ -43,6 +44,7 @@ const S = {
 
 export default function GardenBottomSheet() {
   const [code, setCode] = useState<string>('');
+  const { logEvent } = useGoogleAnalytics();
 
   useEffect(() => {
     onFetch();
@@ -59,14 +61,22 @@ export default function GardenBottomSheet() {
 
   const Me = useMe().data;
 
+  const onCopyLink = async () => {
+    await createAndCopyBranchLink(code, Me ? Me.nickname : null);
+    logEvent({
+      eventName: 'INVITE_FRIEND_COPY_LINK',
+    });
+  };
 
   const onShare = async () => {
     try {
-      const branchData = await createAndCopyBranchLink(code, Me ? Me.nickname : null);
+      const branchData = await createAndCopyBranchLink(
+        code,
+        Me ? Me.nickname : null,
+      );
       if (branchData) {
-
-        const shareOptions:ShareOptions = {
-          activityItemSources:[
+        const shareOptions: ShareOptions = {
+          activityItemSources: [
             {
               placeholderItem: {
                 type: 'url',
@@ -79,7 +89,7 @@ export default function GardenBottomSheet() {
                 },
               },
               linkMetadata: {
-                title:branchData.message,
+                title: branchData.message,
                 icon: branchData.icon,
               },
             },
@@ -87,6 +97,9 @@ export default function GardenBottomSheet() {
         };
 
         const ShareResponse = await Share.open(shareOptions);
+        logEvent({
+          eventName: 'INVITE_FRIEND_SHARE_LINK',
+        });
         console.log(JSON.stringify(ShareResponse));
       }
     } catch (error) {
@@ -112,9 +125,7 @@ export default function GardenBottomSheet() {
           <SvgIcon name={'arrow_right_gray'} size={14} />
         </S.popupItemContainer>
       </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={() => createAndCopyBranchLink(code, Me ? Me.nickname : null)}
-      >
+      <TouchableWithoutFeedback onPress={onCopyLink}>
         <S.popupItemContainer>
           <S.popupItemWrap>
             <S.popupItemLogo>
