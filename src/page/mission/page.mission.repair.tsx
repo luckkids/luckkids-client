@@ -200,13 +200,6 @@ export const PageMissionRepair = () => {
             alertStatus: 'CHECKED',
             alertTime: mission.alertTime,
           });
-
-          logEvent({
-            eventName: 'ADD_LUCKKIDS_MISSION',
-            params: {
-              category: mission.missionType,
-            },
-          });
         } else {
           // 대표 미션을 이용해서 만든 미션 체크
           await missionApis.editMission({
@@ -216,6 +209,14 @@ export const PageMissionRepair = () => {
             },
           });
         }
+
+        logEvent({
+          eventName: 'ADD_LUCKKIDS_MISSION',
+          params: {
+            category: mission.missionType,
+            name: mission.missionDescription,
+          },
+        });
       } else {
         // 유저가 직접 추가한 미션
         await missionApis.editMission({

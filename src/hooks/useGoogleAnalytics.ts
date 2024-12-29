@@ -13,6 +13,7 @@ type Analytics = {
   // 습관 추가
   ADD_LUCKKIDS_MISSION: {
     category: string; // 습관 카테고리
+    name: string; // 습관 이름
   };
   // 친구를 초대할게요! 버튼 클릭
   INVITE_FRIEND: undefined;
