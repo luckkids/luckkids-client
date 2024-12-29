@@ -17,6 +17,7 @@ export const useHomeCalendarDetail = ({
     },
     {
       select: (response) => response,
+      refetchOnMount: 'always',
     },
   );
 };
