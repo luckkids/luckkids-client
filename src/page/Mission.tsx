@@ -58,7 +58,7 @@ export const Mission: React.FC = () => {
         </L.Row>
         <ScrollView
           contentInset={{
-            bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
+            bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT + 35 + 50,
           }}
         >
           {missionOutcomeList?.length === 0 && (
