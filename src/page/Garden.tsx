@@ -5,7 +5,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import styled from 'styled-components/native';
 import { CONSTANTS, Font, L, SvgIcon } from '@design-system';
 import { useInfiniteGardenList } from '@queries';
 import { ActionIcon } from '@components/common/ActionIcon';
@@ -21,39 +20,8 @@ import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import { IGardenItem } from '@types-common/page.types';
 
-const S = {
-  listWrap: styled.View(
-    {
-      display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      alignItems: 'flex-start',
-      marginTop: 8,
-    },
-    (props: { isList: boolean }) => {
-      return {
-        rowGap: props.isList ? 0 : 8,
-        paddingHorizontal: props.isList ? 0 : 21,
-      };
-    },
-  ),
-};
-
 export const Garden: React.FC = () => {
   const { params } = useNavigationRoute('Garden');
-  // const [data, setData] = useState<IGarden>();
-  // const isFocusScreen = useIsFocused();
-  // const { onFetch } = useFetch({
-  //   method: 'GET',
-  //   url: '/garden/list?page=1&size=12',
-  //   value: {},
-  //   onSuccessCallback: (rtn) => setData(rtn),
-  //   onFailCallback: () => {
-  //     Alert.alert('데이터가 없습니다.');
-  //     navigation.goBack();
-  //   },
-  // });
-
   const { logEvent } = useGoogleAnalytics();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -67,22 +35,19 @@ export const Garden: React.FC = () => {
 
   const [show, setShow] = useState<IGardenItem | null>(null);
 
-  // const dimProfile = useMemo(() => {
-  //   if (!friendData) return [];
-  //   const temArray = [];
-  //   if (isList) {
-  //     for (let i = 0; i < 5 - (friendData.length + 1); i++) {
-  //       temArray.push(
-  //         <GardenHorizontalItem item={null} key={i} isSelf={false} />,
-  //       );
-  //     }
-  //   } else {
-  //     for (let i = 0; i < 15 - (friendData.length + 1); i++) {
-  //       temArray.push(<GardenItem item={null} key={i} isSelf={false} />);
-  //     }
-  //   }
-  //   return temArray;
-  // }, [isList, friendData]);
+  const calculateItemsToShow = () => {
+    const itemList = myData ? [myData, ...friendData] : friendData;
+    const currentPage =
+      data?.pages[data.pages.length - 1]?.friendList.pageInfo.currentPage || 1;
+    const targetLength = 12 * currentPage;
+
+    // 현재 페이지가 마지막 페이지가 아닐 경우에만 빈 아이템을 추가
+    if (!hasNextPage && itemList.length < targetLength) {
+      return [...itemList, ...Array(targetLength - itemList.length).fill(null)];
+    }
+
+    return itemList;
+  };
 
   const onInviteHandler = () => {
     BottomSheet.show({
@@ -165,7 +130,7 @@ export const Garden: React.FC = () => {
 
   return (
     <FrameLayout NavBar={<GardenNavbar />}>
-      <L.Row pt={20} pb={24} ph={25} justify={'space-between'} outline="RED">
+      <L.Row pt={20} pb={20} ph={25} justify={'space-between'}>
         <Font type={'TITLE1_BOLD'}>가든</Font>
         <TouchableWithoutFeedback onPress={() => setIsList(!isList)}>
           <View>
@@ -180,34 +145,24 @@ export const Garden: React.FC = () => {
           contentInset={{
             bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT + 132,
           }}
-          data={(() => {
-            const itemList = myData ? [myData, ...friendData] : friendData;
-            const currentPage =
-              data?.pages[data.pages.length - 1]?.friendList.pageInfo
-                .currentPage || 1;
-            const targetLength = 12 * currentPage;
-            if (itemList.length < targetLength) {
-              return [
-                ...itemList,
-                ...Array(targetLength - itemList.length).fill(null),
-              ];
-            }
-            return itemList;
-          })()}
+          data={calculateItemsToShow()}
           renderItem={renderItem}
           key={isList ? 'list' : 'grid'}
           horizontal={isList}
           numColumns={!isList ? 3 : 1}
-          keyExtractor={(item, index) =>
-            item?.myId?.toString() ||
-            item?.friendId?.toString() ||
-            index.toString()
+          keyExtractor={
+            (item, index) =>
+              item?.myId?.toString() ||
+              item?.friendId?.toString() ||
+              `empty-${index}` // 빈 아이템을 위한 고유 키 추가
           }
           onEndReached={loadMore}
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.3}
           style={{
             rowGap: isList ? 0 : 8,
-            backgroundColor: 'red',
+          }}
+          contentContainerStyle={{
+            marginTop: 8,
           }}
         />
       )}
