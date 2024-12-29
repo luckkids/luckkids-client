@@ -119,6 +119,11 @@ export interface IGarden {
   myProfile: IGardenItem;
   friendList: {
     content: IGardenItem[];
+    pageInfo: {
+      currentPage: number;
+      totalPage: number;
+      totalElement: number;
+    };
   };
 }
 

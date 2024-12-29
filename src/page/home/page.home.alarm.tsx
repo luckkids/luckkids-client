@@ -18,7 +18,7 @@ export const PageHomeAlarm: React.FC = () => {
   const [showPushSetting, setShowPushSetting] = useState(false);
   const { deviceId } = useRecoilValue(RecoilDevice);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading} =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteHomeNotification(deviceId);
 
   const handlePressAllowAlarm = () => {
@@ -47,7 +47,6 @@ export const PageHomeAlarm: React.FC = () => {
 
   useAsyncEffect(syncHasPermission, []);
   useAppStateEffect(syncHasPermission, []);
-  // refresh();
 
   return (
     <FrameLayout NavBar={<StackNavbar title="알림" />}>

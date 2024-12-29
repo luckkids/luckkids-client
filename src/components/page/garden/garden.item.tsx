@@ -12,12 +12,14 @@ const S = {
     flexShrink: 1,
     flexBasis: '33.33%',
     paddingHorizontal: 4,
+    marginBottom: 8,
   }),
   Wrapper: styled.View({
     width: '100%',
     height: '100%',
     background: Colors.BG_TERTIARY,
     borderRadius: 12,
+    overflow: 'visible',
   }),
   BadgeWrap: styled.View({
     width: 27,
@@ -47,8 +49,8 @@ export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
 
   return (
     <S.Container>
-      <TouchableWithoutFeedback onPress={onPress}>
-        <S.Wrapper>
+      <S.Wrapper>
+        <TouchableWithoutFeedback onPress={onPress}>
           <Image
             source={{
               uri: `${characterImageUrl}`,
@@ -59,20 +61,20 @@ export const GardenItem: React.FC<IProps> = ({ onPress, isSelf, item }) => {
               opacity: isSelf || item !== null ? 1 : 0.3,
             }}
           />
-        </S.Wrapper>
-      </TouchableWithoutFeedback>
-      {isSelf && (
-        <S.BadgeWrap>
-          <Font
-            type={'CAPTION1_SEMIBOLD'}
-            justify-content={'center'}
-            textAlign={'center'}
-            color={'BLACK'}
-          >
-            나
-          </Font>
-        </S.BadgeWrap>
-      )}
+        </TouchableWithoutFeedback>
+        {isSelf && (
+          <S.BadgeWrap>
+            <Font
+              type={'CAPTION1_SEMIBOLD'}
+              justify-content={'center'}
+              textAlign={'center'}
+              color={'BLACK'}
+            >
+              나
+            </Font>
+          </S.BadgeWrap>
+        )}
+      </S.Wrapper>
     </S.Container>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useMe } from '@queries';
 import {
   LoginRequest,
   LoginResponse,
@@ -14,10 +15,10 @@ import { checkGoogleTokenValidity } from '@hooks/sns-login/useGoogleLogin';
 import { checkKakaoTokenValidity } from '@hooks/sns-login/useKakaoLogin';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
+import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import Logger from '@libs/LoggerService';
 import { RecoilLoginInfo, RecoilOauthLoginInfo } from '@recoil/recoil.login';
 import { RecoilToken } from '@recoil/recoil.token';
-import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 
 const useAuth = () => {
   const {
@@ -31,6 +32,8 @@ const useAuth = () => {
   const { setValue: setRememberMe, getCurrentValue: getCurrentRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
   const { setUserProperty } = useGoogleAnalytics();
+
+  const { refetch: refetchMe } = useMe();
 
   const login = async (
     loginInfo: LoginRequest,
@@ -97,6 +100,8 @@ const useAuth = () => {
         error,
       });
       return null;
+    } finally {
+      refetchMe();
     }
   };
 

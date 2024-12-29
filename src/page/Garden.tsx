@@ -1,13 +1,14 @@
-import React, { createElement, useEffect, useMemo, useState } from 'react';
+import React, { createElement, useEffect, useRef, useState } from 'react';
 import {
-  Alert,
-  ScrollView,
+  ActivityIndicator,
+  FlatList,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import styled from 'styled-components/native';
+import { useQueryClient } from '@tanstack/react-query';
 import { CONSTANTS, Font, L, SvgIcon } from '@design-system';
+import { useInfiniteGardenList } from '@queries';
 import { ActionIcon } from '@components/common/ActionIcon';
 import GardenBottomSheet from '@components/page/garden/garden.bottom.sheet';
 import { GardenHorizontalItem } from '@components/page/garden/garden.horizontal.item';
@@ -18,81 +19,55 @@ import { FrameLayout } from '@frame/frame.layout';
 import BottomSheet from '@global-components/common/BottomSheet/BottomSheet';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
-import useNavigationService from '@hooks/navigation/useNavigationService';
-import { useFetch } from '@hooks/useFetch';
 import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
-import { IGarden, IGardenItem } from '@types-common/page.types';
-
-const S = {
-  listWrap: styled.View(
-    {
-      display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      alignItems: 'flex-start',
-      marginTop: 8,
-    },
-    (props: { isList: boolean }) => {
-      return {
-        rowGap: props.isList ? 0 : 8,
-        paddingHorizontal: props.isList ? 0 : 21,
-      };
-    },
-  ),
-};
+import { IGardenItem } from '@types-common/page.types';
 
 export const Garden: React.FC = () => {
-  const navigation = useNavigationService();
   const { params } = useNavigationRoute('Garden');
-  const [data, setData] = useState<IGarden>();
-  const isFocusScreen = useIsFocused();
-  const { onFetch } = useFetch({
-    method: 'GET',
-    url: '/garden/list?page=1&size=12',
-    value: {},
-    onSuccessCallback: (rtn) => setData(rtn),
-    onFailCallback: () => {
-      Alert.alert('데이터가 없습니다.');
-      navigation.goBack();
-    },
+  const { logEvent } = useGoogleAnalytics();
+  const queryClient = useQueryClient();
+  const isFocused = useIsFocused();
+  const listRef = useRef<FlatList>(null);
+  const [isList, setIsList] = useState<boolean>(false);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    isLoading,
+  } = useInfiniteGardenList({
+    size: isList ? 4 : 15,
   });
 
-  const { logEvent } = useGoogleAnalytics();
-
-  const friendData: Array<IGardenItem> | undefined = data?.friendList.content;
-
-  const [isList, setIsList] = useState<boolean>(false);
+  const friendData: Array<IGardenItem> | undefined =
+    data?.pages.flatMap((page) => page.friendList.content) || [];
+  const myData = data?.pages[0]?.myProfile;
 
   const [show, setShow] = useState<IGardenItem | null>(null);
 
-  const myData = data?.myProfile;
+  const calculateItemsToShow = () => {
+    const itemList = myData ? [myData, ...friendData] : friendData;
+    const currentPage =
+      data?.pages[data.pages.length - 1]?.friendList.pageInfo.currentPage || 1;
+    const targetLength = 15 * currentPage;
 
-  const dimProfile = useMemo(() => {
-    if (!friendData) return [];
-    const temArray = [];
     if (isList) {
-      for (let i = 0; i < 5 - (friendData.length + 1); i++) {
-        temArray.push(
-          <GardenHorizontalItem item={null} key={i} isSelf={false} />,
-        );
+      // For list view, add empty items to make total length divisible by 5
+      const remainder = itemList.length % 4;
+      if (remainder > 0) {
+        return [...itemList, ...Array(5 - remainder).fill(null)];
       }
-    } else {
-      for (let i = 0; i < 15 - (friendData.length + 1); i++) {
-        temArray.push(<GardenItem item={null} key={i} isSelf={false} />);
-      }
+      return itemList;
     }
-    return temArray;
-  }, [isList, friendData]);
 
-  const handlePressFriendProfile = (friendItem: IGardenItem) => {
-    setShow({ ...friendItem });
-    const { friendId } = friendItem;
+    // For grid view, keep original logic
+    if (!hasNextPage && itemList.length < targetLength) {
+      return [...itemList, ...Array(targetLength - itemList.length).fill(null)];
+    }
 
-    if (!friendId) return;
-
-    /* return navigation.navigate('GardenFriendProfile', {
-      friendId,
-    });*/
+    return itemList;
   };
 
   const onInviteHandler = () => {
@@ -105,9 +80,60 @@ export const Garden: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (isFocusScreen) onFetch();
-  }, [isFocusScreen]);
+  const handlePressFriendProfile = (friendItem: IGardenItem) => {
+    setShow({ ...friendItem });
+    const { friendId } = friendItem;
+
+    if (!friendId) return;
+  };
+
+  const renderItem = ({ item }: { item: IGardenItem | null }) => {
+    if (!item) {
+      if (isList) {
+        return <GardenHorizontalItem item={null} isSelf={false} />;
+      }
+      return <GardenItem item={null} isSelf={false} />;
+    }
+    // 나
+    if (item.myId) {
+      if (!myData) return null;
+      return isList ? (
+        <GardenHorizontalItem
+          item={myData}
+          onPress={() => setShow({ ...myData })}
+          isSelf={true}
+        />
+      ) : (
+        <GardenItem
+          item={myData}
+          onPress={() => setShow({ ...myData })}
+          isSelf={true}
+        />
+      );
+    } else {
+      if (isList) {
+        return (
+          <GardenHorizontalItem
+            item={item}
+            onPress={() => handlePressFriendProfile(item)}
+          />
+        );
+      }
+      return (
+        <GardenItem
+          item={item}
+          onPress={() => handlePressFriendProfile(item)}
+        />
+      );
+    }
+  };
+
+  const loadMore = () => {
+    if (isLoading || hasNextPage === undefined) return;
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
   useEffect(() => {
     if (params && params.isAddFriend)
@@ -124,9 +150,16 @@ export const Garden: React.FC = () => {
       });
   }, [params, params?.isAddFriend]);
 
+  useEffect(() => {
+    if (isFocused) {
+      queryClient.invalidateQueries(['GARDEN_LIST']);
+      listRef.current?.scrollToOffset({ offset: 0, animated: false });
+    }
+  }, [isFocused, isList]);
+
   return (
     <FrameLayout NavBar={<GardenNavbar />}>
-      <L.Row pt={20} pb={24} ph={25} justify={'space-between'}>
+      <L.Row pt={20} pb={20} ph={25} justify={'space-between'}>
         <Font type={'TITLE1_BOLD'}>가든</Font>
         <TouchableWithoutFeedback onPress={() => setIsList(!isList)}>
           <View>
@@ -134,48 +167,34 @@ export const Garden: React.FC = () => {
           </View>
         </TouchableWithoutFeedback>
       </L.Row>
-      <ScrollView
-        contentInset={{
-          bottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT + 132,
+      <FlatList
+        ref={listRef}
+        data={calculateItemsToShow()}
+        renderItem={renderItem}
+        key={isList ? 'list' : 'grid'}
+        numColumns={!isList ? 3 : 1}
+        keyExtractor={(item, index) =>
+          item?.myId?.toString() ||
+          item?.friendId?.toString() ||
+          `empty-${index}`
+        }
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        scrollEventThrottle={16}
+        style={{
+          rowGap: isList ? 0 : 8,
+          flex: 1,
+          marginHorizontal: 15,
+          marginBottom: CONSTANTS.BOTTOM_TABBAR_HEIGHT,
         }}
-      >
-        <S.listWrap isList={isList}>
-          {myData &&
-            (isList ? (
-              <GardenHorizontalItem
-                item={myData}
-                onPress={() => setShow({ ...myData })}
-                isSelf={true}
-              />
-            ) : (
-              <GardenItem
-                item={myData}
-                onPress={() => setShow({ ...myData })}
-                isSelf={true}
-              />
-            ))}
-          {friendData?.map((item, i) => {
-            if (isList) {
-              return (
-                <GardenHorizontalItem
-                  item={item}
-                  onPress={() => handlePressFriendProfile(item)}
-                  key={i}
-                />
-              );
-            } else {
-              return (
-                <GardenItem
-                  item={item}
-                  onPress={() => handlePressFriendProfile(item)}
-                  key={i}
-                />
-              );
-            }
-          })}
-          {dimProfile}
-        </S.listWrap>
-      </ScrollView>
+        contentContainerStyle={{
+          marginTop: 8,
+          paddingBottom: 132,
+        }}
+        ListFooterComponent={() => (
+          <View>{isFetchingNextPage && <ActivityIndicator />}</View>
+        )}
+      />
       <ActionIcon
         title={'친구를 초대할게요!'}
         isIcon={true}

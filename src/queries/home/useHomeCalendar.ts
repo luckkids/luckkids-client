@@ -13,6 +13,8 @@ export const useHomeCalendar = ({ missionDate }: { missionDate?: string }) => {
     },
     {
       select: (response) => response,
+      refetchOnMount: 'always',
+      refetchOnReconnect: true,
     },
   );
 };

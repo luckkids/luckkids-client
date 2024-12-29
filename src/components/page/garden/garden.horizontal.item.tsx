@@ -9,7 +9,7 @@ const S = {
   Container: styled.View(
     {
       width: '100%',
-      paddingHorizontal: 25,
+      paddingHorizontal: 10,
       paddingRight: 22,
     },
     (props: { isSelf?: boolean }) => {

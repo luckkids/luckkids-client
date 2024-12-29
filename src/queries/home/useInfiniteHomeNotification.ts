@@ -54,7 +54,8 @@ export const useInfiniteHomeNotification = (deviceId: string | null) => {
       refetchOnReconnect: true,
       enabled: !!deviceId,
       refetchOnWindowFocus: true,
-      refetchOnMount: true,
+      refetchOnMount: 'always',
+      staleTime: 0,
     },
   );
 };
