@@ -1,7 +1,9 @@
 import { createQueryKeyFactory } from '../queries.utils';
 
 export type GardenQueryList = {
-  GARDEN_LIST: undefined;
+  GARDEN_LIST: {
+    size: number;
+  };
 };
 
 export default createQueryKeyFactory<GardenQueryList>();

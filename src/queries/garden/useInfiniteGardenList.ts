@@ -3,16 +3,22 @@ import { getNextPageParam, withTypedInfiniteLoad } from '@utils';
 import getGardenQueryKey from './getGardenQueryKey';
 import { GetGardenListResponse, getGardenList } from '@apis/garden';
 
-const PAGE_SIZE = 12;
+interface GardenListParams {
+  size?: number;
+}
 
-export const useInfiniteGardenList = () => {
+export const useInfiniteGardenList = (
+  params: GardenListParams = { size: 12 },
+) => {
+  const { size = 12 } = params;
+
   return useInfiniteQuery<
     GetGardenListResponse,
     Error,
     GetGardenListResponse,
     ReturnType<typeof getGardenQueryKey>
   >(
-    getGardenQueryKey('GARDEN_LIST'),
+    getGardenQueryKey('GARDEN_LIST', { size }),
     withTypedInfiniteLoad(
       async ({ offset, limit }: { offset: number; limit: number }) => {
         const res = await getGardenList({
@@ -29,7 +35,7 @@ export const useInfiniteGardenList = () => {
         };
       },
       {},
-      PAGE_SIZE,
+      size,
     ),
     {
       getNextPageParam: (lastPage) => getNextPageParam(lastPage.friendList),
