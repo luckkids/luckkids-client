@@ -51,9 +51,9 @@ export const PageSettingComment: React.FC = () => {
           text={text}
           onChangeText={setText}
           placeholder={PHRASE_PLACEHOLDER}
-          maxLength={25}
+          maxLength={16}
         />
-        <Font type={'BODY_REGULAR'} mt={10} color={'GREY1'}>{text === '' ? 0 : text.length}/25</Font>
+        <Font type={'BODY_REGULAR'} mt={10} color={'GREY1'}>{text === '' ? 0 : text.length}/16</Font>
       </L.Col>
     </FrameLayout>
   );
