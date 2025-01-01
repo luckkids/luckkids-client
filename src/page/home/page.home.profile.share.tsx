@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Font, L, SvgIcon } from '@design-system';
