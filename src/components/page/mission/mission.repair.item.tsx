@@ -231,7 +231,7 @@ export const MissionRepairItem: React.FC<IProps> = ({
             <L.Col ml={13}>
               <Font
                 type={'FOOTNOTE_REGULAR'}
-                color={'GREY2'}
+                color={'GREY1'}
                 style={{
                   flexWrap: 'wrap',
                 }}
