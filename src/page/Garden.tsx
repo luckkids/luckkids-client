@@ -35,7 +35,6 @@ export const Garden: React.FC = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    refetch,
     isLoading,
   } = useInfiniteGardenList({
     size: isList ? 4 : 15,

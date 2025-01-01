@@ -69,6 +69,7 @@ const TextInputField: React.FC<TextInputFieldProps> = ({
         outline={isError ? 'RED' : undefined}
       >
         <TextInput
+            multiline={false}
           ref={inputRef}
           style={StyleSheet.flatten([
             S.defaultStyles.textInput,

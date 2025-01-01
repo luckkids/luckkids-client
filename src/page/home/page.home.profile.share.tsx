@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, TouchableWithoutFeedback } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DEFAULT_MARGIN } from '@constants';
 import { Font, L, SvgIcon } from '@design-system';
@@ -89,7 +88,7 @@ export const PageHomeProfileShare: React.FC = () => {
             <L.Col
               bg="GREY5"
               flex-1
-              ph={46}
+              ph={20}
               pv={15}
               items="center"
               rounded={15}
@@ -97,7 +96,7 @@ export const PageHomeProfileShare: React.FC = () => {
             >
               <SvgIcon name="icon_share_green" size={20} color="WHITE" />
               <Font type="FOOTNOTE_SEMIBOLD" color="WHITE">
-                공유
+                인스타그램 공유
               </Font>
             </L.Col>
           </TouchableWithoutFeedback>
@@ -106,7 +105,7 @@ export const PageHomeProfileShare: React.FC = () => {
             <L.Col
               bg="GREY5"
               flex-1
-              ph={46}
+              ph={20}
               pv={15}
               items="center"
               rounded={15}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Font, L, TextInputField } from '@design-system';
-import { useHomeInfo, useMe } from '@queries';
+import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
 import { FrameLayout } from '@frame/frame.layout';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -14,7 +14,7 @@ export const PageSettingComment: React.FC = () => {
 
   const [text, setText] = useState<string>(luckPhrase || '');
 
-  const { onFetch, isSuccess } = useFetch({
+  const { onFetch } = useFetch({
     method: 'PATCH',
     url: '/user/phrase',
     value: {
@@ -46,13 +46,15 @@ export const PageSettingComment: React.FC = () => {
         </L.Row>
       }
     >
-      <L.Row ph={25} mt={30}>
+      <L.Col ph={25} mt={30}>
         <TextInputField
           text={text}
           onChangeText={setText}
           placeholder={PHRASE_PLACEHOLDER}
+          maxLength={25}
         />
-      </L.Row>
+        <Font type={'BODY_REGULAR'} mt={10} color={'GREY1'}>{text === '' ? 0 : text.length}/25</Font>
+      </L.Col>
     </FrameLayout>
   );
 };
