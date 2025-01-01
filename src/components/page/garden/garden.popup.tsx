@@ -70,13 +70,13 @@ export const GardenPopup: React.FC<IGardenPopup> = ({ show, setShow }) => {
             <S.Dim />
           </Dim>
         </TouchableWithoutFeedback>
-        <L.Col w={'100%'} ph={35}>
+        {luckPhrase && luckPhrase.length > 0 && <L.Col w={'100%'} ph={35}>
           <S.commentWrap>
             <Font type={'BODY_REGULAR'} textAlign={'center'}>
               {luckPhrase}
             </Font>
           </S.commentWrap>
-        </L.Col>
+        </L.Col>}
         <S.imgWrap>
           {loading && <ActivityIndicator size="large" color={'white'} />}
           <FastImage
