@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import { Font, L } from '@design-system';
 import { useInfiniteHomeNotification } from '@queries';
 import { formatCreatedAt } from '@utils';
+import { friendApis } from '@apis/friend';
 import { readNotification } from '@apis/home';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -41,8 +42,17 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
         return navigation.navigate('WebView', {
           url: String(alertDestinationInfo),
         });
-      case 'FRIEND_CODE':
+      case 'FRIEND_CODE': {
+        const friendCode = alertDescription;
+        const friendNickname =
+          await friendApis.getNicknameByFriendCode(friendCode);
+        if (!friendNickname) {
+          return AlertPopup.show({
+            title: '탈퇴한 친구입니다. 🥲',
+          });
+        }
         return;
+      }
     }
   };
 

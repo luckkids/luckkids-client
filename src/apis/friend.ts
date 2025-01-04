@@ -17,6 +17,19 @@ export const createFriendByCode = async (data: CreateFriendByCodeRequest) => {
   return res;
 };
 
+export const getNicknameByFriendCode = async (code: string) => {
+  try {
+    const res = await API.get(`/friendcode/${code}/nickname`);
+    return res;
+  } catch (error: any) {
+    if (error?.response?.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+};
+
 export const friendApis = {
   createFriendByCode,
+  getNicknameByFriendCode,
 };
