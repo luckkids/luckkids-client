@@ -22,6 +22,7 @@ export const getNicknameByFriendCode = async (code: string) => {
     const res = await API.get(`/friendcode/${code}/nickname`);
     return res;
   } catch (error: any) {
+    // 404 일 경우 탈퇴 등 예외 처리
     if (error?.response?.status === 404) {
       return null;
     }
