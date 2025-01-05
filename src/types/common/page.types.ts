@@ -3,6 +3,7 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { RemotePackage } from 'react-native-code-push';
 import { CharacterType } from './character.types';
 import { SocialType } from '../user';
+import { GetUserResponse } from '@apis/user';
 
 export const DefaultTypeUnit = {
   CHECKED: 'CHECKED',
@@ -50,7 +51,7 @@ export type AppScreensParamList = {
   GardenAlbum: undefined;
   GardenRank: undefined;
   GardenFriendProfile: {
-    friendId: number;
+    friendInfo: GetUserResponse;
   };
   Setting: undefined;
   SettingProfile: undefined;

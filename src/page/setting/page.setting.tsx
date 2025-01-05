@@ -120,7 +120,7 @@ export const PageSetting: React.FC = () => {
         <ButtonText
           onPress={() =>
             navigation.navigate('WebView', {
-              url: 'https://brunch.co.kr/magazine/luckkids-about',
+              url: 'https://info-luckkids.netlify.app/',
               title: '브랜드 스토리',
             })
           }
