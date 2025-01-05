@@ -4,8 +4,8 @@ import { useRecoilValue } from 'recoil';
 import { Font, L } from '@design-system';
 import { useInfiniteHomeNotification } from '@queries';
 import { formatCreatedAt } from '@utils';
-import { friendApis } from '@apis/friend';
 import { readNotification } from '@apis/home';
+import { userApis } from '@apis/user';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 import { RecoilDevice } from '@recoil/recoil.device';
@@ -32,27 +32,32 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
     await refetch();
 
     switch (alertDestinationType) {
-      case 'FRIEND':
-        return navigation.navigate('GardenFriendProfile', {
-          friendId: Number(alertDestinationInfo),
-        });
+      case 'FRIEND': {
+        const friendInfo = await userApis.getUserInfo(
+          Number(alertDestinationInfo),
+        );
+
+        // 조회한 유저가 없는 경우
+        if (!friendInfo) {
+          return AlertPopup.show({
+            title: '탈퇴한 친구예요! 🥹',
+          });
+        } else {
+          return navigation.navigate('GardenFriendProfile', {
+            friendInfo,
+          });
+        }
+      }
+
       case 'MISSION':
         return navigation.navigate('Mission');
       case 'WEBVIEW':
         return navigation.navigate('WebView', {
           url: String(alertDestinationInfo),
         });
-      case 'FRIEND_CODE': {
-        const friendCode = alertDescription;
-        const friendNickname =
-          await friendApis.getNicknameByFriendCode(friendCode);
-        if (!friendNickname) {
-          return AlertPopup.show({
-            title: '탈퇴한 친구입니다. 🥲',
-          });
-        }
+      case 'FRIEND_CODE':
+        // 이 경우 아무런 동작 안하도록 함
         return;
-      }
     }
   };
 

@@ -63,8 +63,12 @@ export type GetUserResponse = GetMeResponse & {
 };
 
 const getUserInfo = async (id: number) => {
-  const res = await API.get<GetUserResponse>(`/user/${id}`);
-  return res;
+  try {
+    const res = await API.get<GetUserResponse>(`/user/${id}`);
+    return res.data;
+  } catch (e) {
+    return null;
+  }
 };
 
 export const userApis = {
