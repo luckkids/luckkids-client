@@ -31,6 +31,7 @@ import useAsyncEffect from '@hooks/useAsyncEffect';
 import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import Logger from '@libs/LoggerService';
 import NavigationService from '@libs/NavigationService';
+import MaintenanceProvider from '@providers/MaintenanceProvider';
 import { RecoilDevice } from '@recoil/recoil.device';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 
@@ -328,17 +329,19 @@ const WrappedRootNavigator = withGlobalComponents(RootNavigator);
 
 const App = () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <QueryClientProvider>
-        <SafeAreaProvider>
-          <ThemeProvider theme={Colors}>
-            <RecoilRoot>
-              <WrappedRootNavigator />
-            </RecoilRoot>
-          </ThemeProvider>
-        </SafeAreaProvider>
-      </QueryClientProvider>
-    </GestureHandlerRootView>
+    <MaintenanceProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <QueryClientProvider>
+          <SafeAreaProvider>
+            <ThemeProvider theme={Colors}>
+              <RecoilRoot>
+                <WrappedRootNavigator />
+              </RecoilRoot>
+            </ThemeProvider>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </GestureHandlerRootView>
+    </MaintenanceProvider>
   );
 };
 

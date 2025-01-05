@@ -1,10 +1,10 @@
 PODS:
-  - Alamofire (5.10.1)
-  - AppAuth (1.7.5):
-    - AppAuth/Core (= 1.7.5)
-    - AppAuth/ExternalUserAgent (= 1.7.5)
-  - AppAuth/Core (1.7.5)
-  - AppAuth/ExternalUserAgent (1.7.5):
+  - Alamofire (5.10.2)
+  - AppAuth (1.7.6):
+    - AppAuth/Core (= 1.7.6)
+    - AppAuth/ExternalUserAgent (= 1.7.6)
+  - AppAuth/Core (1.7.6)
+  - AppAuth/ExternalUserAgent (1.7.6):
     - AppAuth/Core
   - Base64 (1.1.2)
   - boost (1.76.0)
@@ -36,6 +36,11 @@ PODS:
   - Firebase/Messaging (10.19.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.19.0)
+  - Firebase/RemoteConfig (10.19.0):
+    - Firebase/CoreOnly
+    - FirebaseRemoteConfig (~> 10.19.0)
+  - FirebaseABTesting (10.29.0):
+    - FirebaseCore (~> 10.0)
   - FirebaseAnalytics/WithoutAdIdSupport (10.19.0):
     - FirebaseCore (~> 10.0)
     - FirebaseInstallations (~> 10.0)
@@ -75,6 +80,13 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseRemoteConfig (10.19.0):
+    - FirebaseABTesting (~> 10.0)
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - FirebaseSharedSwift (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseSessions (10.29.0):
     - FirebaseCore (~> 10.5)
     - FirebaseCoreExtension (~> 10.0)
@@ -84,6 +96,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.13)
     - nanopb (< 2.30911.0, >= 2.30908.0)
     - PromisesSwift (~> 2.1)
+  - FirebaseSharedSwift (10.29.0)
   - fmt (6.2.1)
   - glog (0.3.5)
   - GoogleAppMeasurement/WithoutAdIdSupport (10.19.0):
@@ -647,6 +660,10 @@ PODS:
     - FirebaseCoreExtension (= 10.19.0)
     - React-Core
     - RNFBApp
+  - RNFBRemoteConfig (18.7.3):
+    - Firebase/RemoteConfig (= 10.19.0)
+    - React-Core
+    - RNFBApp
   - RNFlashList (1.7.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -790,6 +807,7 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - "RNFBRemoteConfig (from `../node_modules/@react-native-firebase/remote-config`)"
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
@@ -811,6 +829,7 @@ SPEC REPOS:
     - Base64
     - BranchSDK
     - Firebase
+    - FirebaseABTesting
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseCoreExtension
@@ -818,7 +837,9 @@ SPEC REPOS:
     - FirebaseCrashlytics
     - FirebaseInstallations
     - FirebaseMessaging
+    - FirebaseRemoteConfig
     - FirebaseSessions
+    - FirebaseSharedSwift
     - fmt
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -958,6 +979,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/crashlytics"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNFBRemoteConfig:
+    :path: "../node_modules/@react-native-firebase/remote-config"
   RNFlashList:
     :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
@@ -986,8 +1009,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Alamofire: 840d2a1ad82355b536ec6ba5f97e5bfa54600ca3
-  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
+  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BranchSDK: a5418b5fde1b837567cf00a4a7f2ed45abf2e26c
@@ -997,6 +1020,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 71803c074f6325f10b5ec891c443b6bbabef0ca7
   FBReactNativeSpec: 448e08a759d29a96e15725ae532445bf4343567c
   Firebase: 63ce8ece0d43743dc28eacac0c6867a2d7fd5a9d
+  FirebaseABTesting: d87f56707159bae64e269757a6e963d490f2eebe
   FirebaseAnalytics: 87513010b13b7c8610164d3602ea10571f76afc1
   FirebaseCore: dc5c7badf99d47613c52b2e3a57a64cd187f8554
   FirebaseCoreExtension: c08d14c7b22e07994e876d837e6f58642f340087
@@ -1004,7 +1028,9 @@ SPEC CHECKSUMS:
   FirebaseCrashlytics: a4d2ad12f5c07ec8ee0ebc89133a45498a293ba6
   FirebaseInstallations: 913cf60d0400ebd5d6b63a28b290372ab44590dd
   FirebaseMessaging: d322bd030a0e97398bf134746e087b88e6ba0074
+  FirebaseRemoteConfig: a7fcc7a5941faa7e09248e91c8797340aa4c85f6
   FirebaseSessions: dbd14adac65ce996228652c1fc3a3f576bdf3ecc
+  FirebaseSharedSwift: 20530f495084b8d840f78a100d8c5ee613375f6e
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   GoogleAppMeasurement: 68afe759316673c6554dac35a0c7ae8f5d6cb4ed
@@ -1073,6 +1099,7 @@ SPEC CHECKSUMS:
   RNFBApp: c21258de1485419a845efbba9c09ec946c89891d
   RNFBCrashlytics: 6545209f7ec165bb437f9f2160b4f800c71b79b8
   RNFBMessaging: e52a76a97ec5ff75e186c150e2bfab86c9e655d1
+  RNFBRemoteConfig: 41350e225ae6ce585dbb6c314602fb2d86b890b6
   RNFlashList: fadf593d8e195ce2fe261980ac59e9f49808b68c
   RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
   RNGoogleSignin: aac5c1ec73422109dec1da770247a1e410dcc620
@@ -1092,6 +1119,6 @@ SPEC CHECKSUMS:
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Yoga: 86fed2e4d425ee4c6eab3813ba1791101ee153c6
 
-PODFILE CHECKSUM: 0d92707119174c4bb0a846622490b1f1edd866f1
+PODFILE CHECKSUM: 9f2b98a37060d5dbd7555db638605a3c3bfc2ff2
 
 COCOAPODS: 1.14.3

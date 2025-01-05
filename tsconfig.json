@@ -20,7 +20,8 @@
       "@frame/*": ["src/frame/*"],
       "@libs/*": ["src/libs/*"],
       "@apis/*": ["src/apis/*"],
-      "@assets/*": ["src/assets/*"]
+      "@assets/*": ["src/assets/*"],
+      "@providers/*": ["src/providers/*"]
     },
     "types": ["styled-components-react-native"]
   },
