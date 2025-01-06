@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import remoteConfig from '@react-native-firebase/remote-config';
+import FastImage from 'react-native-fast-image';
+import { DEFAULT_MARGIN } from '@constants';
+import { Font, L } from '@design-system';
+import { FrameLayout } from '@frame/frame.layout';
 
 const DEFAULT_VALUES = {
-  is_maintenance: false,
-  maintenance_message: '',
+  maintenance_on: false,
+  maintenance_message:
+    '더 나은 서비스를 위해 시스템 점검을 진행 중이에요.\n조금만 기다려주시면 빠르게 돌아올게요!',
+  maintenance_start_at: '',
+  maintenance_end_at: '',
 };
+
+const bgImage = require('assets/images/home-calendar-bg.png');
+const systemCheckerIcon = require('assets/images/system-checker-icon.png');
 
 const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isInMaintenance, setIsInMaintenance] = useState(false);
   const [maintenanceMessage, setMaintenanceMessage] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   useEffect(() => {
     const initializeRemoteConfig = async () => {
@@ -30,68 +40,60 @@ const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // 값 적용
         const maintenance = remoteConfig()
-          .getValue('is_maintenance')
+          .getValue('maintenance_on')
           .asBoolean();
         const message = remoteConfig()
           .getValue('maintenance_message')
           .asString();
+        const startTime = remoteConfig()
+          .getValue('maintenance_start_at')
+          .asString();
+        const endTime = remoteConfig()
+          .getValue('maintenance_end_at')
+          .asString();
 
         setIsInMaintenance(maintenance);
         setMaintenanceMessage(message);
-        setIsLoading(false);
+        setStartTime(startTime);
+        setEndTime(endTime);
       } catch (error) {
         console.error('Remote config fetch failed:', error);
-        setIsLoading(false);
       }
     };
 
     initializeRemoteConfig();
   }, []);
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
   if (isInMaintenance) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>시스템 점검 안내</Text>
-        <Text style={styles.message}>{maintenanceMessage}</Text>
-      </View>
+      <FrameLayout statusBarColor="HOME_CALENDAR_BG" backgroundImage={bgImage}>
+        <L.Col ph={DEFAULT_MARGIN} items="center" justify="center" mt={200}>
+          <L.Row w={80} h={60}>
+            <FastImage
+              source={systemCheckerIcon}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </L.Row>
+          <Font type="TITLE2_BOLD" color="WHITE" mt={30} mb={20}>
+            럭키즈는 점검 중
+          </Font>
+          <Font type="SUBHEADLINE_REGULAR" color="GREY0" textAlign="center">
+            {maintenanceMessage}
+          </Font>
+          {startTime && endTime && (
+            <Font type="SUBHEADLINE_REGULAR" color="GREY0" mt={20}>
+              {'점검 시간 : ' + startTime + ' ~ ' + endTime}
+            </Font>
+          )}
+        </L.Col>
+      </FrameLayout>
     );
   }
 
   return children;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  message: {
-    fontSize: 16,
-    textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  endTime: {
-    fontSize: 14,
-    color: '#666666',
-    marginTop: 8,
-  },
-});
 
 export default MaintenanceProvider;

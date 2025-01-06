@@ -329,19 +329,19 @@ const WrappedRootNavigator = withGlobalComponents(RootNavigator);
 
 const App = () => {
   return (
-    <MaintenanceProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <QueryClientProvider>
-          <SafeAreaProvider>
-            <ThemeProvider theme={Colors}>
-              <RecoilRoot>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider>
+        <SafeAreaProvider>
+          <ThemeProvider theme={Colors}>
+            <RecoilRoot>
+              <MaintenanceProvider>
                 <WrappedRootNavigator />
-              </RecoilRoot>
-            </ThemeProvider>
-          </SafeAreaProvider>
-        </QueryClientProvider>
-      </GestureHandlerRootView>
-    </MaintenanceProvider>
+              </MaintenanceProvider>
+            </RecoilRoot>
+          </ThemeProvider>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 };
 
