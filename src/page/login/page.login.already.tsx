@@ -8,6 +8,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import useAuth from '@hooks/auth/useAuth';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { useAppleLogin } from '@hooks/sns-login/useAppleLogin';
 import { useGoogleLogin } from '@hooks/sns-login/useGoogleLogin';
 import { useKakaoLogin } from '@hooks/sns-login/useKakaoLogin';
@@ -18,6 +19,7 @@ export const PageLoginAlready: React.FC = () => {
     params: { type, email },
   } = useNavigationRoute('LoginAlready');
   const { oauthLogin } = useAuth();
+  const { getToken } = useFirebaseMessage();
 
   const { handleAppleLogin } = useAppleLogin();
   const { handleGoogleLogin } = useGoogleLogin();
@@ -49,12 +51,13 @@ export const PageLoginAlready: React.FC = () => {
   const handleOauthLogin = async (type: SocialType) => {
     if (!deviceId) return;
     const token = await getOauthHandler?.(type);
+    const pushKey = await getToken();
     if (token) {
       try {
         const res = await oauthLogin({
           snsType: type,
           deviceId,
-          pushKey: null,
+          pushKey: pushKey,
           token,
         });
 
