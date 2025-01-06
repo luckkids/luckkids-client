@@ -3,6 +3,8 @@ import arrowDown from '../../assets/icons/arrow_down.svg';
 import arrow_left from '../../assets/icons/arrow_left.svg';
 import arrow_right from '../../assets/icons/arrow_right.svg';
 import arrow_right_gray from '../../assets/icons/arrow_right_gray.svg';
+import arrow_right_green from '../../assets/icons/arrow_right_green.svg';
+
 import arrowUp from '../../assets/icons/arrow_up.svg';
 import bell from '../../assets/icons/bell.svg';
 import bell_badge from '../../assets/icons/bell_badge.svg';
@@ -68,6 +70,7 @@ import validation_error from '../../assets/icons/validation_error.svg';
 import yellow_info from '../../assets/icons/yellow_info.svg';
 
 export {
+  arrow_right_green,
   bell,
   bell_badge,
   bell_off,
