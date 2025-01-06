@@ -76,11 +76,23 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
         w="100%"
         ph={25}
         justify="space-between"
-        h={72}
+        pt={!hasNavigation ? 25 : 15}
+        pb={!hasNavigation ? 25 : 10}
         items="center"
         bg={alertHistoryStatus === 'CHECKED' ? 'TRANSPARENT' : 'BG_SECONDARY'}
+        g={10}
       >
-        <Font type="BODY_REGULAR">{alertDescription}</Font>
+        <L.Col justify="center" flex-1>
+          <Font type="BODY_REGULAR">{alertDescription}</Font>
+          {hasNavigation && (
+            <L.Row g={7} mt={10} items="center">
+              <Font type="BODY_REGULAR" color="LUCK_GREEN">
+                {'자세히 보기'}
+              </Font>
+              <SvgIcon name="arrow_right_green" size={12} />
+            </L.Row>
+          )}
+        </L.Col>
         <Font type="BODY_REGULAR" color="GREY1">
           {formatCreatedAt(createdDate)}
         </Font>
