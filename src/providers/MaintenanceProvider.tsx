@@ -32,7 +32,7 @@ const MaintenanceProvider: React.FC<{ children: React.ReactNode }> = ({
 
         // 빠른 fetch를 위한 설정 (개발 환경에서는 0으로 설정)
         await remoteConfig().setConfigSettings({
-          minimumFetchIntervalMillis: __DEV__ ? 0 : 3600000, // 프로덕션에서 1시간
+          minimumFetchIntervalMillis: __DEV__ ? 0 : 900000, // 프로덕션에서 1시간
         });
 
         // Remote Config 데이터 가져오기
