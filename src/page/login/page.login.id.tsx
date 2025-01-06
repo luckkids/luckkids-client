@@ -14,6 +14,7 @@ import { FrameLayout } from '@frame/frame.layout';
 import SnackBar from '@global-components/common/SnackBar/SnackBar';
 import useAuth from '@hooks/auth/useAuth';
 import useNavigationService from '@hooks/navigation/useNavigationService';
+import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import { RecoilDevice } from '@recoil/recoil.device';
@@ -25,6 +26,7 @@ export const PageLoginId: React.FC = () => {
 
   const navigation = useNavigationService();
   const { deviceId } = useRecoilValue(RecoilDevice);
+  const { getToken } = useFirebaseMessage();
 
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
@@ -91,10 +93,12 @@ export const PageLoginId: React.FC = () => {
 
   const handleLogin = async () => {
     if (!deviceId) return;
+    const pushKey = await getToken();
+
     const res = await login({
       ...loginInfo,
       deviceId: deviceId,
-      pushKey: null,
+      pushKey,
     });
 
     if (!res) {

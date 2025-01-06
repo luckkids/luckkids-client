@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { useRecoilValue } from 'recoil';
-import { Font, L } from '@design-system';
+import { Colors, Font, L, SvgIcon } from '@design-system';
 import { useInfiniteHomeNotification } from '@queries';
 import { formatCreatedAt } from '@utils';
 import { readNotification } from '@apis/home';
@@ -26,6 +26,11 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
     alertDestinationType,
   } = notification;
 
+  const hasNavigation =
+    alertDestinationType === 'FRIEND' ||
+    alertDestinationType === 'MISSION' ||
+    alertDestinationType === 'WEBVIEW';
+
   const handlePressAlarmItem = async () => {
     await readNotification(id);
 
@@ -40,7 +45,8 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
         // 조회한 유저가 없는 경우
         if (!friendInfo) {
           return AlertPopup.show({
-            title: '탈퇴한 친구예요! 🥹',
+            title: '아쉽게도,\n이 친구는 럭키즈를 떠났어요. 🥹',
+            body: '다시 만날 날을 기다리며, 행운 가득한 하루 되세요!',
           });
         } else {
           return navigation.navigate('GardenFriendProfile', {
@@ -56,7 +62,10 @@ const HomeAlarmItem: React.FC<NotificationItem> = (notification) => {
           url: String(alertDestinationInfo),
         });
       case 'FRIEND_CODE':
+      case 'WELCOME':
         // 이 경우 아무런 동작 안하도록 함
+        return;
+      default:
         return;
     }
   };
