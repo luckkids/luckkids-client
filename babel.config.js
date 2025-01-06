@@ -39,6 +39,7 @@ module.exports = {
           '@libs': './src/libs',
           '@apis': './src/apis',
           '@assets': './src/assets',
+          '@providers': './src/providers',
         },
       },
     ],

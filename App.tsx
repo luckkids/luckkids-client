@@ -31,6 +31,7 @@ import useAsyncEffect from '@hooks/useAsyncEffect';
 import useGoogleAnalytics from '@hooks/useGoogleAnalytics';
 import Logger from '@libs/LoggerService';
 import NavigationService from '@libs/NavigationService';
+import MaintenanceProvider from '@providers/MaintenanceProvider';
 import { RecoilDevice } from '@recoil/recoil.device';
 import { AppScreensParamList, InitialRoute } from '@types-common/page.types';
 
@@ -333,7 +334,9 @@ const App = () => {
         <SafeAreaProvider>
           <ThemeProvider theme={Colors}>
             <RecoilRoot>
-              <WrappedRootNavigator />
+              <MaintenanceProvider>
+                <WrappedRootNavigator />
+              </MaintenanceProvider>
             </RecoilRoot>
           </ThemeProvider>
         </SafeAreaProvider>
