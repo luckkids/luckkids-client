@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { Linking, Platform, ScrollView } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useResetRecoilState } from 'recoil';
 import styled from 'styled-components/native';
@@ -70,6 +70,26 @@ export const PageSetting: React.FC = () => {
         AlertPopup.hide();
       },
     });
+  };
+
+  const openStore = async () => {
+    const appStoreId = '6475259179';
+
+    try {
+      if (Platform.OS === 'ios') {
+        // App Store로 이동
+        await Linking.openURL(`itms-apps://apps.apple.com/app/id${appStoreId}`);
+      } else {
+        // FIXME: 안드로이드 출시되면 Play Store로 이동
+      }
+    } catch (error) {
+      // 스토어 앱이 설치되지 않은 경우 웹 URL로 이동
+      if (Platform.OS === 'ios') {
+        await Linking.openURL(`https://apps.apple.com/app/id${appStoreId}`);
+      } else {
+        // FIXME: 안드로이드 출시되면 Play Store로 이동 (웹)
+      }
+    }
   };
 
   useEffect(() => {
@@ -148,23 +168,31 @@ export const PageSetting: React.FC = () => {
             <SvgIcon name={'arrow_right_gray'} size={14} />
           </L.Row>
         </ButtonText>
-        <L.Row justify={'space-between'} ph={25} pv={20} items="center">
-          <L.Col g={7}>
-            <Font type={'BODY_REGULAR'}>앱 버전</Font>
-            {needUpdate && (
-              <Font type={'FOOTNOTE_REGULAR'} color="GREY1">
-                업데이트가 필요해요!
+        <ButtonText
+          onPress={() => {
+            if (!needUpdate) return;
+            openStore();
+          }}
+        >
+          <L.Row justify={'space-between'} ph={25} pv={20} items="center">
+            <L.Col g={7}>
+              <Font type={'BODY_REGULAR'}>앱 버전</Font>
+              {needUpdate && (
+                <Font type={'FOOTNOTE_REGULAR'} color="GREY1">
+                  업데이트가 필요해요!
+                </Font>
+              )}
+            </L.Col>
+            {needUpdate ? (
+              <SvgIcon name={'arrow_right_gray'} size={14} />
+            ) : (
+              <Font type={'SUBHEADLINE_REGULAR'} color="GREY1">
+                최신 버전이에요!
               </Font>
             )}
-          </L.Col>
-          {needUpdate ? (
-            <SvgIcon name={'arrow_right_gray'} size={14} />
-          ) : (
-            <Font type={'SUBHEADLINE_REGULAR'} color="GREY1">
-              최신 버전이에요!
-            </Font>
-          )}
-        </L.Row>
+          </L.Row>
+        </ButtonText>
+
         <ButtonText
           text={'로그아웃'}
           textColor={'WHITE'}
