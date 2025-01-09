@@ -58,6 +58,9 @@ export const PageTutorialSettingNoti: React.FC = () => {
           })
           .then(() => {
             navigation.navigate('Home', {});
+          })
+          .catch((error) => {
+            console.error('Error setting initial setting:', error);
           });
       });
     }
