@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image } from 'react-native';
 import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRecoilValue } from 'recoil';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, Font, L } from '@design-system';
@@ -11,7 +12,6 @@ import useNavigationService from '@hooks/navigation/useNavigationService';
 import useFirebaseMessage from '@hooks/notification/useFirebaseMessage';
 import { RecoilDevice } from '@recoil/recoil.device';
 import { RecoilInitialSetting } from '@recoil/recoil.initialSetting';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const bgImage = require('assets/images/tutorial-setting-bg.png');
 const exampleImage = require('assets/images/tutorial-setting-noti-example.png');
@@ -48,13 +48,12 @@ export const PageTutorialSettingNoti: React.FC = () => {
     } else {
       // 알림 허용이 되어있지 않으면 알림 허용 요청
       requestPermissionIfNot().then((result) => {
-        if (!result) return navigation.navigate('Home', {});
         userApis
           .setInitialSetting({
             ...initialSetting,
             alertSetting: {
               deviceId,
-              alertStatus: 'CHECKED',
+              alertStatus: result ? 'CHECKED' : 'UNCHECKED',
             },
           })
           .then(() => {
@@ -76,7 +75,7 @@ export const PageTutorialSettingNoti: React.FC = () => {
         },
       })
       .then(() => {
-        // 네비게이션 이동
+        // setInitialSetting 호출 후에는 settingStatus가 COMPLETE로 변경되므로 바로 Home으로 이동
         navigation.navigate('Home', {});
       });
   };
