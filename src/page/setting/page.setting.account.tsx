@@ -8,6 +8,7 @@ import { authApis } from '@apis/auth';
 import StackNavBar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
+import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationService from '@hooks/navigation/useNavigationService';
 
 const WITHDRAW_REASON_LIST = [
@@ -29,16 +30,21 @@ export const PageSettingAccount: React.FC = () => {
       noText: '탈퇴할게요',
       yesText: '안할게요!',
       onPressNo: async () => {
-        await authApis.registerWithdrawReason(reason);
-        await authApis.deleteUser();
+        LoadingIndicator.show({});
+        try {
+          await authApis.registerWithdrawReason(reason);
+          await authApis.deleteUser();
 
-        // AsyncStorage에 저장된 데이터 삭제
-        await AsyncStorage.clear();
+          // AsyncStorage에 저장된 데이터 삭제
+          await AsyncStorage.clear();
 
-        return navigation.reset({
-          index: 0,
-          routes: [{ name: 'Login' }],
-        });
+          return navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+          });
+        } finally {
+          LoadingIndicator.hide();
+        }
       },
       onPressYes: async () => {
         AlertPopup.hide();
