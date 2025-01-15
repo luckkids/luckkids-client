@@ -6,7 +6,6 @@ import styled from 'styled-components/native';
 import { Font, SvgIcon, L, CONSTANTS } from '@design-system';
 import { useMe } from '@queries';
 import ButtonText from '../../design-system/components/Button/ButtonText';
-import { settingApis } from '@apis/setting';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -28,11 +27,39 @@ const S = {
 
 export const PageSetting: React.FC = () => {
   const navigation = useNavigationService();
-  const applicationVersion = DeviceInfo.getVersion();
   const { removeValue: removeRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
 
-  const [needUpdate, setNeedUpdate] = useState(false);
+  const [versionInfo, setVersionInfo] = useState<{
+    hasUpdate: boolean;
+    storeVersion?: string;
+    currentVersion?: string;
+  }>({
+    hasUpdate: false,
+  });
+
+  const checkIOSVersion = async () => {
+    try {
+      const response = await fetch(
+        'https://itunes.apple.com/lookup?bundleId=com.app.luck-kids',
+      );
+      const json = await response.json();
+      const storeVersion = json.results[0].version;
+      const currentVersion = DeviceInfo.getVersion();
+
+      return {
+        hasUpdate: storeVersion !== currentVersion,
+        storeVersion,
+        currentVersion,
+      };
+    } catch (error) {
+      console.error('Version check failed:', error);
+      return {
+        hasUpdate: false,
+        currentVersion: DeviceInfo.getVersion(),
+      };
+    }
+  };
 
   const { removeValue: removeAccessToken } =
     useAsyncStorage<StorageKeys.AccessToken>(StorageKeys.AccessToken);
@@ -41,14 +68,6 @@ export const PageSetting: React.FC = () => {
   const { data: me } = useMe();
   const { nickname } = me || {};
   const { getToken } = useFirebaseMessage();
-
-  const fetchVersionInfo = async () => {
-    settingApis.getVersion().then((res) => {
-      if (res.data.versionNum !== applicationVersion) {
-        setNeedUpdate(true);
-      }
-    });
-  };
 
   const handleLogout = () => {
     // 정말 로그아웃?
@@ -93,7 +112,11 @@ export const PageSetting: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchVersionInfo();
+    checkIOSVersion().then((res) => {
+      if (res) {
+        setVersionInfo(res);
+      }
+    });
   }, []);
 
   return (
@@ -170,20 +193,20 @@ export const PageSetting: React.FC = () => {
         </ButtonText>
         <ButtonText
           onPress={() => {
-            if (!needUpdate) return;
+            if (!versionInfo.hasUpdate) return;
             openStore();
           }}
         >
           <L.Row justify={'space-between'} ph={25} pv={20} items="center">
             <L.Col g={7}>
               <Font type={'BODY_REGULAR'}>앱 버전</Font>
-              {needUpdate && (
+              {versionInfo.hasUpdate && (
                 <Font type={'FOOTNOTE_REGULAR'} color="GREY1">
                   업데이트가 필요해요!
                 </Font>
               )}
             </L.Col>
-            {needUpdate ? (
+            {versionInfo.hasUpdate ? (
               <SvgIcon name={'arrow_right_gray'} size={14} />
             ) : (
               <Font type={'SUBHEADLINE_REGULAR'} color="GREY1">
