@@ -8,6 +8,7 @@ export enum StorageKeys {
   MissionTimeRepairTooltip = 'mission_time_repair_tooltip',
   MissionDeleteTooltip = 'mission_delete_tooltip',
   MissionRepairAvailableTooltip = 'mission_repair_available_tooltip',
+  Environment = 'environment',
   // Add other keys here
 }
 
@@ -50,6 +51,10 @@ interface MissionRepairAvailableTooltipType {
   viewed: boolean;
 }
 
+interface EnvironmentType {
+  type: 'PROD' | 'STAGE';
+}
+
 // Add types for other keys if needed
 // interface OtherKeyType { ... }
 
@@ -61,6 +66,7 @@ export type StorageValues = {
   [StorageKeys.MissionTimeRepairTooltip]: MissionTimeRepairTooltipType;
   [StorageKeys.MissionDeleteTooltip]: MissionDeleteTooltipType;
   [StorageKeys.MissionRepairAvailableTooltip]: MissionRepairAvailableTooltipType;
+  [StorageKeys.Environment]: EnvironmentType;
   // Add other key-value mappings here
 };
 
@@ -86,6 +92,9 @@ export const defaultValues = {
   },
   [StorageKeys.MissionRepairAvailableTooltip]: {
     viewed: false,
+  },
+  [StorageKeys.Environment]: {
+    type: 'PROD',
   },
   // Add other default values here
 };

@@ -22,6 +22,7 @@ import { PageMissionRepair } from '@page/mission/page.mission.repair';
 import { My } from '@page/My';
 import { PageSetting } from '@page/setting/page.setting';
 import { PageSettingAccount } from '@page/setting/page.setting.account';
+import { PageSettingAdmin } from '@page/setting/page.setting.admin';
 import { PageSettingAlarm } from '@page/setting/page.setting.alarm';
 import { PageSettingComment } from '@page/setting/page.setting.comment';
 import { PageSettingInfo } from '@page/setting/page.setting.info';
@@ -184,5 +185,9 @@ export const DataStackScreen: Array<IStackScreen> = [
   {
     name: 'UpdateScreen',
     component: PageUpdateScreen,
+  },
+  {
+    name: 'SettingAdmin',
+    component: PageSettingAdmin,
   },
 ];

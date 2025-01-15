@@ -29,6 +29,11 @@ export const PageSetting: React.FC = () => {
   const navigation = useNavigationService();
   const { removeValue: removeRememberMe } =
     useAsyncStorage<StorageKeys.RememberMe>(StorageKeys.RememberMe);
+  const { getCurrentValue: getEnvironment, setValue: setEnvironment } =
+    useAsyncStorage<StorageKeys.Environment>(StorageKeys.Environment);
+  const [isStage, setIsStage] = useState(false);
+
+  const { data: userInfo } = useMe();
 
   const [versionInfo, setVersionInfo] = useState<{
     hasUpdate: boolean;
@@ -37,6 +42,29 @@ export const PageSetting: React.FC = () => {
   }>({
     hasUpdate: false,
   });
+
+  useEffect(() => {
+    const checkEnvironment = async () => {
+      const env = await getEnvironment();
+      setIsStage(env?.type === 'STAGE');
+    };
+    checkEnvironment();
+  }, []);
+
+  const toggleEnvironment = async () => {
+    const newEnv = isStage ? 'PROD' : 'STAGE';
+    await setEnvironment({ type: newEnv });
+    setIsStage(!isStage);
+    AlertPopup.show({
+      title: `서버 환경이 ${newEnv}로 변경되었습니다.`,
+      noText: '확인',
+      onPressNo: () => {
+        AlertPopup.hide();
+        // Reload the app to apply new environment
+        navigation.replace('Login');
+      },
+    });
+  };
 
   const checkIOSVersion = async () => {
     try {
@@ -234,22 +262,15 @@ export const PageSetting: React.FC = () => {
           }}
           onPress={() => navigation.navigate('SettingAccount')}
         />
-        {/* TODO admin인 경우 추가 */}
-        {/* <ButtonText
-          text={'내 푸시 토큰 복사하기'}
-          textColor={'WHITE'}
-          cssProp={{
-            paddingVertical: 20,
-            paddingHorizontal: 25,
-          }}
-          onPress={async () => {
-            const pushToken = await getToken();
-            if (pushToken) {
-              Clipboard.setString(pushToken);
-              Alert.alert('푸시 토큰이 복사되었습니다.');
-            } else Alert.alert('푸시 토큰이 없습니다.');
-          }}
-        /> */}
+        {/* admin 메뉴 */}
+        {/* {userInfo?.role === 'ADMIN' && (
+        <ButtonText onPress={() => navigation.navigate('SettingAdmin')}>
+          <L.Row justify={'space-between'} ph={25} pv={20} items="center">
+            <Font type={'BODY_REGULAR'}>어드민 메뉴</Font>
+            <SvgIcon name={'arrow_right_gray'} size={14} />
+          </L.Row>
+        </ButtonText>
+        )} */}
       </ScrollView>
     </FrameLayout>
   );

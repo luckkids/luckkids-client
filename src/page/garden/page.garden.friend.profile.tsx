@@ -3,18 +3,14 @@ import { SCREEN_WIDTH } from '@gorhom/bottom-sheet';
 import FastImage from 'react-native-fast-image';
 import { Font, L } from '@design-system';
 import { getCharacterImage } from '@utils';
-import { GetUserResponse } from '@apis/user';
 import StackNavbar from '@components/common/StackNavBar/StackNavBar';
 import { FrameLayout } from '@frame/frame.layout';
+import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 
-type PageGardenFriendProfileProps = {
-  friendInfo: GetUserResponse;
-};
-
-export const PageGardenFriendProfile: React.FC<
-  PageGardenFriendProfileProps
-> = ({ friendInfo }) => {
-  const { luckPhrase, nickname, inProgressCharacter } = friendInfo || {};
+export const PageGardenFriendProfile: React.FC = () => {
+  const { params } = useNavigationRoute('GardenFriendProfile');
+  const { luckPhrase, nickname, inProgressCharacter } =
+    params?.friendInfo || {};
 
   return (
     <FrameLayout
