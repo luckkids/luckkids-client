@@ -11,6 +11,7 @@ export const useMe = () => {
     },
     {
       select: (response) => response,
+      refetchOnMount: true,
     },
   );
 };
