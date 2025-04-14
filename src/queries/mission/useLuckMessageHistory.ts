@@ -19,6 +19,8 @@ export const useLuckMessageHistory = () => {
     },
     {
       select: (response) => response,
+      enabled: !!deviceId,
+      refetchOnMount: true,
     },
   );
 };
