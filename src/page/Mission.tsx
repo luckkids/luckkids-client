@@ -33,8 +33,6 @@ export const Mission: React.FC = () => {
       ) || []
     : missionOutcomeData || [];
 
-  console.log(luckMessageHistory);
-
   return (
     <>
       <FrameLayout>
@@ -44,20 +42,24 @@ export const Mission: React.FC = () => {
           </Font>
         </L.Row>
         {/* 행운의 한마디 */}
-        <L.Row
-          mh={25}
-          mt={12}
-          style={{
-            backgroundColor: 'rgba(128, 244, 102, 0.15)',
-          }}
-          rounded={15}
-          p={15}
-        >
-          <L.Row w={'100%'} items={'center'} g={10}>
+        {luckMessageHistory && luckMessageHistory?.messageDescription && (
+          <L.Row
+            mh={25}
+            mt={12}
+            style={{
+              backgroundColor: 'rgba(128, 244, 102, 0.15)',
+            }}
+            rounded={15}
+            p={15}
+          >
             <SvgIcon name={'luck_message'} width={26} height={20} />
-            <Font type={'SUBHEADLINE_REGULAR'}>행운의 한마디</Font>
+            <L.Col flex-1 ml={10}>
+              <Font type={'SUBHEADLINE_REGULAR'}>
+                {luckMessageHistory?.messageDescription}
+              </Font>
+            </L.Col>
           </L.Row>
-        </L.Row>
+        )}
         <L.Row ph={24} mt={40} justify={'space-between'}>
           <Font type={'LARGE_TITLE_BOLD'}>오늘의 습관</Font>
           <Font type={'LARGE_TITLE_REGULAR'} color={'LUCK_GREEN'}>

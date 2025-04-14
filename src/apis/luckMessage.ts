@@ -5,10 +5,10 @@ export type GetLuckMessageHistoryResponse = {
 };
 
 const getLuckMessageHistory = async (deviceId: string) => {
-  const res = await API.get<GetLuckMessageHistoryResponse>(
+  const { data } = await API.get<GetLuckMessageHistoryResponse>(
     `/luckMessageHistory?deviceId=${deviceId}`,
   );
-  return res;
+  return data;
 };
 
 export const luckMessageApis = {

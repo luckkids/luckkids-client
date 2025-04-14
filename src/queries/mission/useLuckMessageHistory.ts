@@ -15,7 +15,7 @@ export const useLuckMessageHistory = () => {
     async () => {
       if (!deviceId) return null;
       const res = await luckMessageApis.getLuckMessageHistory(deviceId);
-      return res.data;
+      return res;
     },
     {
       select: (response) => response,
