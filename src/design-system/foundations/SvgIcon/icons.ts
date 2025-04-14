@@ -59,6 +59,7 @@ import icon_edit_comment from '../../assets/icons/icon_edit_comment.svg';
 import icon_lock from '../../assets/icons/icon_lock.svg';
 import icon_share_green from '../../assets/icons/icon_share_green.svg';
 import list from '../../assets/icons/list.svg';
+import luck_message from '../../assets/icons/luck_message.svg';
 import lucky_check from '../../assets/icons/lucky_check.svg';
 import lucky_check_gray from '../../assets/icons/lucky_check_gray.svg';
 import lucky_uncheck from '../../assets/icons/lucky_uncheck.svg';
@@ -102,6 +103,7 @@ export {
   iconApple,
   validation_error,
   yellow_info,
+  luck_message,
   iconHomeLuckkids,
   icon_lock,
   iconCheckAlarmOn,

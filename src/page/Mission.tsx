@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import { Colors, CONSTANTS, Font, L, SvgIcon } from '@design-system';
-import { useMissionOutcomeCount, useMissionOutcomeList } from '@queries';
+import {
+  useLuckMessageHistory,
+  useMissionOutcomeCount,
+  useMissionOutcomeList,
+} from '@queries';
 import ButtonText from '../design-system/components/Button/ButtonText';
 import FloatingButton from '@components/common/FloatingButton/FloatingButton';
 import Tooltip from '@components/common/Tooltip/Tooltip';
@@ -16,7 +20,7 @@ export const Mission: React.FC = () => {
 
   const { data: missionOutcomeData, isLoading } = useMissionOutcomeList();
   const { data: missionOutcomeCount } = useMissionOutcomeCount();
-
+  const { data: luckMessageHistory } = useLuckMessageHistory();
   const accumulatedCount = missionOutcomeCount?.count ?? 0;
   const total = missionOutcomeData?.length || 0;
   const count = missionOutcomeData?.filter(
@@ -37,6 +41,25 @@ export const Mission: React.FC = () => {
             누적된 수행 습관 {accumulatedCount}
           </Font>
         </L.Row>
+        {/* 행운의 한마디 */}
+        {luckMessageHistory && luckMessageHistory?.messageDescription && (
+          <L.Row
+            mh={25}
+            mt={12}
+            style={{
+              backgroundColor: 'rgba(128, 244, 102, 0.15)',
+            }}
+            rounded={15}
+            p={15}
+          >
+            <SvgIcon name={'luck_message'} width={26} height={20} />
+            <L.Col flex-1 ml={10}>
+              <Font type={'SUBHEADLINE_REGULAR'}>
+                {luckMessageHistory?.messageDescription}
+              </Font>
+            </L.Col>
+          </L.Row>
+        )}
         <L.Row ph={24} mt={40} justify={'space-between'}>
           <Font type={'LARGE_TITLE_BOLD'}>오늘의 습관</Font>
           <Font type={'LARGE_TITLE_REGULAR'} color={'LUCK_GREEN'}>

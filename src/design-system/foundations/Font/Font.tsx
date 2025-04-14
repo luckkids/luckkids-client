@@ -11,10 +11,15 @@ const Font: React.FC<PropsWithChildren<FontProps>> = ({
   type,
   ...props
 }) => {
+  const { color, hexColor, underline, textAlign, ...restProps } = props;
+
   return (
     <StyledFont
       {...fontSettings[type]}
-      {...props}
+      color={color}
+      hexColor={hexColor}
+      underline={underline}
+      textAlign={textAlign}
       lineBreakStrategyIOS={'hangul-word'}
     >
       {children}
@@ -34,6 +39,7 @@ interface FontStyle {
   hexColor?: string;
   underline?: boolean;
   textAlign?: 'left' | 'center' | 'right';
+  lineBreakStrategyIOS?: 'none' | 'standard' | 'hangul-word' | 'push-out';
 }
 
 const StyledFont = styled.Text<
