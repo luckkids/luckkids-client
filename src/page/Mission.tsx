@@ -51,6 +51,7 @@ export const Mission: React.FC = () => {
             }}
             rounded={15}
             p={15}
+            items={'center'}
           >
             <SvgIcon name={'luck_message'} width={26} height={20} />
             <L.Col flex-1 ml={10}>
