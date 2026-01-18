@@ -43,7 +43,7 @@ export const getPopup = async (): Promise<GetPopupResponse> => {
       },
       {
         bgColor: 'BG_TERTIARY',
-        link: 'https://www.naver.com',
+        link: null,
         text: '다음에 보기',
         textColor: 'WHITE',
       },

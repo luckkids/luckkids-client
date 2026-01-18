@@ -1,4 +1,5 @@
 import { Linking, Platform, StyleSheet } from 'react-native';
+import { format } from 'date-fns';
 import FastImage from 'react-native-fast-image';
 import {
   createPopup,
@@ -12,6 +13,8 @@ import Animated from 'react-native-reanimated';
 import { DEFAULT_MARGIN } from '@constants';
 import { Button, ColorKeys, Font, L } from '@design-system';
 import { PopupButton } from '@apis/popup';
+import { StorageKeys } from '@hooks/storage/keys';
+import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 
 interface IContentPopup {
   label: string;
@@ -34,8 +37,27 @@ const ContentPopupContent: React.FC<IContentPopup> = ({
 
   const { style: slide } = useSlideAnimationStyle({ translateY: -30 });
 
+  const {
+    getCurrentValue: getPopupViewed,
+    setValue: setPopupViewed,
+  } = useAsyncStorage<StorageKeys.PopupViewed>(StorageKeys.PopupViewed);
+
   const handlePressButton = async (button: PopupButton) => {
-    if (button.link) {
+    // "다음에 보기" 버튼 (link가 null)일 때 오늘 날짜를 저장
+    if (!button.link) {
+      const currentViewed = await getPopupViewed();
+      const viewedTitles = currentViewed?.viewedTitles || {};
+      const today = format(new Date(), 'yyyy-MM-dd');
+      
+      // 오늘 날짜로 업데이트
+      await setPopupViewed({
+        viewedTitles: {
+          ...viewedTitles,
+          [title]: today,
+        },
+      });
+    } else {
+      // link가 있으면 링크 열기
       Linking.openURL(button.link);
     }
     hide();

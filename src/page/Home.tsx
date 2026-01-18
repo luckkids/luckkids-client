@@ -23,14 +23,12 @@ import {
   POPUP_FRIEND_STATUS,
 } from '@utils';
 import { friendApis } from '@apis/friend';
-import { popupApis } from '@apis/popup';
 import ProgressBar from '@components/common/ProgressBar/ProgressBar';
 import Tooltip from '@components/common/Tooltip/Tooltip';
 import HomeNavbar from '@components/page/home/home.navbar';
 import HomeWeekCalendar from '@components/page/home/home.week.calendar';
 import { FrameLayout } from '@frame/frame.layout';
 import AlertPopup from '@global-components/common/AlertPopup/AlertPopup';
-import ContentPopup from '@global-components/common/ContentPopup/ContentPopup';
 import LoadingIndicator from '@global-components/common/LoadingIndicator/LoadingIndicator';
 import useNavigationRoute from '@hooks/navigation/useNavigationRoute';
 import useNavigationService from '@hooks/navigation/useNavigationService';
@@ -38,6 +36,7 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
+import usePopup from '@hooks/usePopup';
 import { RecoilPopupState } from '@recoil/recoil.popup';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -221,26 +220,8 @@ export const Home: React.FC = () => {
     checkTooltip();
   });
 
-  // 팝업 정보 가져오기
-  useAsyncEffect(async () => {
-    if (!isFocused) return;
-
-    try {
-      const popupData = await popupApis.getPopup();
-      
-      if (popupData) {
-        ContentPopup.show({
-          label: popupData.label,
-          title: popupData.title,
-          description: popupData.description,
-          imageUrl: popupData.imageUrl,
-          buttons: popupData.buttons,
-        });
-      }
-    } catch (error) {
-      console.error('Failed to fetch popup:', error);
-    }
-  }, [isFocused]);
+  // 팝업 표시
+  usePopup(isFocused);
 
   return (
     <>
