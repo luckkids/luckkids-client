@@ -1,4 +1,5 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Linking, Platform, StyleSheet } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {
   createPopup,
   FullScreenOverlay,
@@ -9,27 +10,23 @@ import {
 } from 'react-native-global-components';
 import Animated from 'react-native-reanimated';
 import { DEFAULT_MARGIN } from '@constants';
-import { Button, Font, L } from '@design-system';
+import { Button, ColorKeys, Font, L } from '@design-system';
+import { PopupButton } from '@apis/popup';
 
 interface IContentPopup {
   label: string;
   title: string;
   description: string;
-  imageUrl: string;
-  noText: string;
-  onPressNo: () => void;
-  yesText: string;
-  onPressYes: () => void;
+  imageUrl: string | null;
+  buttons: PopupButton[];
 }
 
 const ContentPopupContent: React.FC<IContentPopup> = ({
   label,
   title,
   description,
-  onPressNo,
-  onPressYes,
-  yesText,
-  noText,
+  imageUrl,
+  buttons,
 }: IContentPopup) => {
   const { hide } = usePopupContext();
 
@@ -37,13 +34,10 @@ const ContentPopupContent: React.FC<IContentPopup> = ({
 
   const { style: slide } = useSlideAnimationStyle({ translateY: -30 });
 
-  const handlePressNo = async () => {
-    if (onPressNo) onPressNo();
-    hide();
-  };
-
-  const handlePressYes = async () => {
-    if (onPressYes) onPressYes();
+  const handlePressButton = async (button: PopupButton) => {
+    if (button.link) {
+      Linking.openURL(button.link);
+    }
     hide();
   };
 
@@ -54,41 +48,50 @@ const ContentPopupContent: React.FC<IContentPopup> = ({
     >
       <FullScreenOverlay hideOnPressOverlay />
       <Animated.View style={[styles.container, style, slide]}>
-        <L.Col p={16} w={'100%'} rounded={15} bg="BG_SECONDARY">
+        <L.Col pt={30} pb={30} ph={16} w={'100%'} items='center' rounded={15} bg='WHITE'>
           <L.Row>
             <Font type={'BODY_SEMIBOLD'} color={'LUCK_GREEN'}>
               {label}
             </Font>
           </L.Row>
           {!!title && (
-            <L.Layout pv={15}>
-              <Font type={'TITLE2_BOLD'}>{title}</Font>
+            <L.Layout pb={8} pt={6}>
+              <Font type={'TITLE2_BOLD'} color='BLACK'>{title}</Font>
             </L.Layout>
           )}
           {!!description && (
-            <L.Layout pv={15}>
-              <Font type={'SUBHEADLINE_REGULAR'} color={'GREY2'}>
+            <L.Layout>
+              <Font type={'SUBHEADLINE_REGULAR'} color={'GREY2'} textAlign='center'>
                 {description}
               </Font>
             </L.Layout>
           )}
+          {!!imageUrl && (
+            <L.Layout pv={20} items="center">
+              <FastImage
+                source={{
+                  uri: imageUrl,
+                  priority: FastImage.priority.high,
+                }}
+                style={styles.image}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            </L.Layout>
+          )}
           <L.Row g={8} w={'100%'} mt={24}>
-            <Button
-              type={'action'}
-              text={yesText}
-              sizing="stretch"
-              onPress={handlePressNo}
-              bgColor="LUCK_GREEN"
-              textColor="BLACK"
-            />
-            <Button
-              type={'action'}
-              text={noText}
-              sizing="stretch"
-              onPress={handlePressYes}
-              bgColor="BG_TERTIARY"
-              textColor="WHITE"
-            />
+            {buttons.map((button) => (
+              <L.Row key={button.text} flex={1}>
+                <Button
+                  type={'action'}
+                  text={button.text}
+                  sizing="stretch"
+                  onPress={() => handlePressButton(button)}
+                  bgColor={button.bgColor as ColorKeys}
+                  textColor={button.textColor as ColorKeys}
+                  isIconDisabled={true}
+                />
+              </L.Row>
+            ))}
           </L.Row>
         </L.Col>
       </Animated.View>
@@ -103,6 +106,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: DEFAULT_MARGIN,
+  },
+  image: {
+    width: 235,
+    height: 235,
+    maxWidth: '100%',
   },
 });
 
