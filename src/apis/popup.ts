@@ -1,5 +1,7 @@
 // import API from './API'; // TODO: 실제 API 사용 시 주석 해제
 
+import API from './API';
+
 export type PopupButton = {
   bgColor: string; // 버튼 배경색
   link: string | null; // 버튼 링크
@@ -23,16 +25,15 @@ export type GetPopupResponse = PopupContent | null;
  */
 export const getPopup = async (): Promise<GetPopupResponse> => {
   // TODO: 실제 API 엔드포인트로 변경 필요
-  // const res = await API.get<GetPopupResponse>('/popup');
-  // return res;
+  const res = await API.get<GetPopupResponse>('/popup');
+  return res.data;
 
   // 테스트용: 실제 데이터가 오는 것처럼 테스트 데이터 반환
   // 팝업이 있을 때와 없을 때를 테스트하려면 아래 주석을 해제/해제하여 테스트 가능
   return {
     label: '개운법 테스트 OPEN!',
     title: '내 운이 트이는 방법은?',
-    description:
-      '운이 트이는, 나만의 개운법(開運法)을\n지금 확인해보세요!',
+    description: '운이 트이는, 나만의 개운법(開運法)을\n지금 확인해보세요!',
     imageUrl: 'https://api-luckkids.kro.kr/api/v1/images/popup-test-sun.png', // 테스트용 이미지 URL (실제 이미지 URL로 변경 필요)
     buttons: [
       {
