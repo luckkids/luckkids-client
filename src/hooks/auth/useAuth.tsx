@@ -190,7 +190,11 @@ const useAuth = () => {
             : checkGoogleTokenValidity;
 
         const newAccessToken = await checkTokenValidity();
-        if (newAccessToken) {
+
+        // Retry only when we got a different token; same token would cause infinite loop
+        const isSameToken = !!newAccessToken && newAccessToken === loginInfo.token;
+
+        if (newAccessToken && !isSameToken) {
           const currentRememberMe = await getCurrentRememberMe();
 
           const res = await oauthLogin({

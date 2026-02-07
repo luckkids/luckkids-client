@@ -9,6 +9,7 @@ export enum StorageKeys {
   MissionDeleteTooltip = 'mission_delete_tooltip',
   MissionRepairAvailableTooltip = 'mission_repair_available_tooltip',
   Environment = 'environment',
+  PopupViewed = 'popup_viewed',
   // Add other keys here
 }
 
@@ -55,6 +56,10 @@ interface EnvironmentType {
   type: 'PROD' | 'STAGE';
 }
 
+interface PopupViewedType {
+  viewedTitles: { [title: string]: string }; // title을 키로 하고, 마지막으로 본 날짜(YYYY-MM-DD)를 값으로 저장
+}
+
 // Add types for other keys if needed
 // interface OtherKeyType { ... }
 
@@ -67,6 +72,7 @@ export type StorageValues = {
   [StorageKeys.MissionDeleteTooltip]: MissionDeleteTooltipType;
   [StorageKeys.MissionRepairAvailableTooltip]: MissionRepairAvailableTooltipType;
   [StorageKeys.Environment]: EnvironmentType;
+  [StorageKeys.PopupViewed]: PopupViewedType;
   // Add other key-value mappings here
 };
 
@@ -95,6 +101,9 @@ export const defaultValues = {
   },
   [StorageKeys.Environment]: {
     type: 'PROD',
+  },
+  [StorageKeys.PopupViewed]: {
+    viewedTitles: {},
   },
   // Add other default values here
 };

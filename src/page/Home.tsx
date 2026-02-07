@@ -36,6 +36,7 @@ import { StorageKeys } from '@hooks/storage/keys';
 import useAsyncStorage from '@hooks/storage/useAsyncStorage';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import { useFetch } from '@hooks/useFetch';
+import usePopup from '@hooks/usePopup';
 import { RecoilPopupState } from '@recoil/recoil.popup';
 
 const luckkidsCloud = require('assets/images/luckkids-cloud.png');
@@ -218,6 +219,9 @@ export const Home: React.FC = () => {
     };
     checkTooltip();
   });
+
+  // 팝업 표시
+  usePopup(isFocused);
 
   return (
     <>
