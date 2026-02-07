@@ -24,7 +24,6 @@ export type GetPopupResponse = PopupContent | null;
  * @returns 팝업 정보 또는 null
  */
 export const getPopup = async (): Promise<GetPopupResponse> => {
-  // TODO: 실제 API 엔드포인트로 변경 필요
   const res = await API.get<GetPopupResponse>('/popup');
   return res.data;
 
