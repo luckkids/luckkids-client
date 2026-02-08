@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getAccessToken } from '@utils';
 
-export const API_BASE_URL = 'https://api-luckkids.kro.kr/api/v1';
+export const API_BASE_URL = 'https://api.luckkids.co.kr/api/v1';
 
 const JSON_DEFAULT_OPTIONS: AxiosRequestConfig = {
   baseURL: API_BASE_URL,
